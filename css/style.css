@@ -129,18 +129,17 @@ body, html {
 .bc-title { font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0; line-height: 1.4; letter-spacing: -0.5px; }
 
 /* ==========================================================================
-   ⭐️ Goods Section (Grid Version)
+   ⭐️ Goods Section (Grid Version + Buy Buttons)
    ========================================================================== */
 .goods-grid-v2 { 
     display: grid; 
-    grid-template-columns: repeat(3, 1fr); /* 3열 그리드 */
+    grid-template-columns: repeat(3, 1fr); 
     gap: 60px 20px; 
 }
 .goods-item { 
     display: flex; 
     flex-direction: column; 
     align-items: center; 
-    text-align: center; 
 }
 .goods-img { 
     width: 100%; 
@@ -158,7 +157,6 @@ body, html {
     object-fit: contain; 
 }
 
-/* 품절 표시 텍스트 */
 .goods-sold-out-big { 
     font-family: var(--font-head); 
     font-size: 26px; 
@@ -168,7 +166,6 @@ body, html {
     letter-spacing: 2px;
 }
 
-/* 가격 및 재고 텍스트 */
 .goods-price-text { 
     font-family: var(--font-num); 
     font-size: 17px; 
@@ -178,21 +175,59 @@ body, html {
 }
 .goods-stock-list { 
     width: 100%; 
-    max-width: 200px; 
+    max-width: 260px; 
     display: flex; 
     flex-direction: column; 
-    gap: 8px; 
+    gap: 12px; 
 }
+
+/* 판매처 행 레이아웃 */
 .stock-row { 
     display: flex; 
     justify-content: space-between; 
+    align-items: center;
     font-size: 13px; 
     color: var(--text-secondary); 
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
 }
-.stock-row span:last-child { 
+.stock-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.shop-name { 
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+.stock-num { 
     font-family: var(--font-body); 
     font-weight: 400; 
+    font-size: 11px;
     color: var(--text-muted);
+}
+
+/* 바로가기 버튼 스타일 */
+.buy-btn {
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.2s ease;
+}
+.buy-btn:hover {
+    background: var(--c-accent);
+    color: var(--bg-base);
+}
+.buy-btn.sold-out {
+    background: transparent;
+    color: #ff4757;
+    border: 1px solid #ff4757;
+    pointer-events: none; /* 클릭 방지 */
 }
 
 /* ==========================================================================
@@ -220,7 +255,7 @@ body, html {
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
 .weekday { text-align: center; color: var(--text-muted); font-family: var(--font-head); font-size: 11px; font-weight: 600; padding-bottom: 10px; letter-spacing: 1px; }
 
-/* 달력 셀 설정 */
+/* ⭐️ 달력 셀 설정 (overflow: hidden 삭제하여 뱃지가 밖으로 나오도록 허용) */
 .day-cell { 
     position: relative;
     border-radius: 12px; 
@@ -234,27 +269,33 @@ body, html {
     cursor: pointer; 
     transition: 0.3s; 
     box-sizing: border-box;         
-    overflow: hidden;               
+    /* overflow: hidden; 삭제됨 */
 }
 .day-cell.has-event { background: rgba(255,255,255,0.03); border-color: var(--border-light); }
 .day-cell.has-event:hover { background: rgba(255,255,255,0.07); border-color: var(--border-highlight); transform: translateY(-2px); }
 .day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
 
-.day-number { font-family: var(--font-num); font-size: 14px; color: var(--text-secondary); font-weight: 500; align-self: flex-start; margin-bottom: 2px; flex-shrink: 0;}
+.day-number { font-family: var(--font-num); font-size: 14px; color: var(--text-secondary); font-weight: 500; align-self: flex-start; margin-bottom: 6px; flex-shrink: 0;}
 .day-cell.has-event .day-number { color: var(--text-primary); font-weight: 700; }
 
-/* ⭐️ 캘린더 손글씨 폰트 스타일 */
+/* ⭐️ 캘린더 모서리 바깥으로 나가는 손글씨 뱃지 설정 */
 .cal-handwritten {
+    position: absolute;
+    top: -14px;       /* 위쪽 테두리 바깥으로 빼기 */
+    right: -10px;     /* 우측 테두리 바깥으로 빼기 */
     font-family: 'Nanum Pen Script', cursive;
-    font-size: 17px;
+    font-size: 18px;
     color: var(--c-accent);
-    margin-bottom: 6px;
+    background: var(--bg-base); /* 경계선을 가리기 위해 배경색과 동일하게 지정 */
+    padding: 0 4px;
     letter-spacing: 1px;
-    transform: rotate(-3deg); /* 살짝 기울여서 손글씨 느낌 강조 */
-    flex-shrink: 0;
+    transform: rotate(6deg); /* 약간 기울여서 포스트잇 느낌 */
+    z-index: 10;
+    white-space: nowrap;
 }
 
-.cell-event-list { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+/* 내부 내용이 아래로 삐져나가는 것만 막기 위해 리스트에 overflow 적용 */
+.cell-event-list { display: flex; flex-direction: column; gap: 5px; width: 100%; overflow: hidden; flex: 1; }
 .cal-event-row { display: flex; align-items: center; gap: 8px; width: 100%; overflow: hidden; }
 .cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 .cal-event-time { font-size: 11px; font-weight: 600; font-family: var(--font-num); flex-shrink: 0; }
@@ -292,17 +333,17 @@ body, html {
     .top-nav { padding: 15px 20px; }
     .desktop-menu { display: none; }
     
-    /* 모바일에서는 굿즈 그리드를 2열, 혹은 1열로 조정 */
     .goods-grid-v2 { grid-template-columns: repeat(2, 1fr); gap: 40px 15px; }
 
     .calendar-popup-wrapper { width: 95%; padding: 25px 15px; }
     .calendar-grid { gap: 6px; }
     .day-cell { height: 95px !important; min-height: 95px !important; padding: 8px; }
-    .cal-handwritten { font-size: 14px; } /* 모바일에서 폰트 사이즈 살짝 축소 */
+    
+    .cal-handwritten { font-size: 15px; top: -10px; right: -5px; } 
     
     .modal-wrapper { width: 100%; padding: 40px 20px; }
 }
 
 @media (max-width: 500px) {
-    .goods-grid-v2 { grid-template-columns: 1fr; } /* 좁은 모바일에서는 1열 */
+    .goods-grid-v2 { grid-template-columns: 1fr; } 
 }

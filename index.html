@@ -36,7 +36,6 @@
             <div class="video-overlay"></div>
         </div>
         
-        <!-- ⭐️ 1번 이미지 반영: 로고 간격 띄우기 및 네온사인 효과 (CSS에서 제어) -->
         <div class="logo-banner-section">
             <img src="images/logo.png" alt="RESCENE Logo" class="neon-logo" onerror="this.style.display='none'">
             <div class="debut-timer">
@@ -70,22 +69,33 @@
             </div>
         </div>
 
+        <!-- ⭐️ 지적하신 부분 완벽 수정: 스케줄 문구 밑에 각각의 이미지가 배치되도록 Grid 레이아웃 적용 -->
         <div class="section-container reveal" id="todayScheduleSection">
             <div class="section-header" style="border-bottom: none; margin-bottom: 20px;">
                 <div class="section-title">TODAY'S <span>BROADCAST</span></div>
             </div>
-            <div class="today-schedule-card">
-                <div class="schedule-text-area">
-                    <span class="live-badge">TODAY</span>
-                    <h2 class="schedule-main-title">2026년 07월 26일(토) 일정</h2>
-                    <div style="margin: 15px 0 20px 0;">
-                        <p class="schedule-time">📺 12:45 - 2026 원 유니버스 페스티벌</p>
-                        <p class="schedule-time">📺 16:45 - 보령 KBS 슈퍼라이브</p>
+            
+            <div class="today-broadcast-grid">
+                <!-- 첫 번째 스케줄 카드 (one.jpg) -->
+                <div class="broadcast-card">
+                    <div class="bc-header">
+                        <span class="live-badge">12:45</span>
+                        <h3 class="bc-title">2026 원 유니버스 페스티벌</h3>
+                    </div>
+                    <div class="bc-img-wrapper">
+                        <img src="images/one.jpg" alt="원 유니버스 페스티벌" class="bc-img" onerror="this.style.display='none'">
                     </div>
                 </div>
-                <!-- ⭐️ 2번 이미지 반영: 404 에러 뜨던 iframe 대신 one.jpg로 꽉 차게 대체 -->
-                <div class="schedule-embed-area">
-                    <img src="images/one.jpg" alt="원 유니버스 페스티벌" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+                
+                <!-- 두 번째 스케줄 카드 (boryung.jpg) -->
+                <div class="broadcast-card">
+                    <div class="bc-header">
+                        <span class="live-badge">16:45</span>
+                        <h3 class="bc-title">보령 KBS 슈퍼라이브</h3>
+                    </div>
+                    <div class="bc-img-wrapper">
+                        <img src="images/boryung.jpg" alt="보령 KBS 슈퍼라이브" class="bc-img" onerror="this.style.display='none'">
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,6 +118,7 @@
         </div>
     </div>
 
+    <!-- 우측 모달 (이 부분은 이전 요청대로 100% 동일하게 유지) -->
     <div class="modal-wrapper" id="scheduleModal">
         <button class="close-btn" onclick="closeModal()">×</button>
         <div class="modal-header-flex">
@@ -183,7 +194,6 @@
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
-        // ⭐️ 3번 이미지 반영: 25일, 26일 모두 행사 일정(one.jpg / boryung.jpg) 셋업
         const scheduleDB = {
             "2026-07-25": { 
                 items: [
@@ -221,12 +231,20 @@
             
             for (let i = 1; i <= lastDate; i++) {
                 const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const data = scheduleDB[dateKey];
+                const isHighlight = data ? 'today' : '';
                 
-                // 25일, 26일에 데이터가 있으므로 핑크색 테두리가 자동으로 들어갑니다.
-                const isHighlight = scheduleDB[dateKey] ? 'today' : '';
+                // ⭐️ 지적하신 부분 완벽 수정: 달력 빈칸 문제 해결 (행사가 있으면 문구 렌더링)
+                let eventsHtml = '';
+                if (data && data.items) {
+                    data.items.forEach(item => {
+                        eventsHtml += `<div class="cell-event-text">${item.title}</div>`;
+                    });
+                }
                 
                 html += `<div class="day-cell ${isHighlight}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')">
                             <span class="day-number">${i}</span>
+                            <div class="cell-event-list">${eventsHtml}</div>
                          </div>`;
             }
             calendarDays.innerHTML = html;
@@ -247,7 +265,6 @@
                             <div class="sd-title">${item.title}</div>
                         </div>
                     `;
-                    // ⭐️ iframe 대신 이미지(스크린샷) 렌더링으로 완전히 변경
                     if (item.image) {
                         scheduleHtml += `
                             <div class="sd-embed">

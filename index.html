@@ -23,15 +23,14 @@
             <li><a href="archive.html">ARCHIVE</a></li>
         </ul>
         <div class="sns-links">
-            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.style.display='none'"></a>
-            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
-            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
+            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.onerror=null; this.style.display='none'"></a>
+            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.onerror=null; this.style.display='none'"></a>
+            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.onerror=null; this.style.display='none'"></a>
         </div>
     </nav>
 
     <div id="mainWrapper">
         
-        <!-- ⭐️ 메인 배경 동영상 (강제 재생 세팅) -->
         <div class="video-container" id="homeSection">
             <video src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
@@ -58,7 +57,6 @@
             </div>
         </div>
 
-        <!-- ⭐️ 2번 이미지 반영: 차트 헤더 완벽 구현 -->
         <div class="section-container reveal" id="chartSection">
             <div class="section-header chart-header">
                 <div class="section-title">음원 사이트 <span>HOT 100 차트</span></div>
@@ -71,7 +69,7 @@
             </div>
         </div>
 
-        <!-- ⭐️ 1번 이미지 반영: TODAY'S BROADCAST 좌측 정렬 -->
+        <!-- ⭐️ 인기가요 문구 삭제 및 보령 머드축제(16:45) 추가 적용 -->
         <div class="section-container reveal" id="todayScheduleSection">
             <div class="section-header" style="border-bottom: none; margin-bottom: 20px;">
                 <div class="section-title">TODAY'S <span>BROADCAST</span></div>
@@ -79,9 +77,12 @@
             <div class="today-schedule-card">
                 <div class="schedule-text-area">
                     <span class="live-badge">ON AIR</span>
-                    <h2 class="schedule-main-title">인기가요 컴백 무대 & 사전녹화 비하인드</h2>
-                    <p class="schedule-time">📺 내일 오후 12:45</p>
-                    <p class="schedule-desc">RESCENE의 무대와 대기실 비하인드를 가장 먼저 확인하세요.</p>
+                    <h2 class="schedule-main-title">2026 원 유니버스 페스티벌 & 보령 머드축제</h2>
+                    <div style="margin: 15px 0 20px 0;">
+                        <p class="schedule-time">📺 12:45 - 2026 원 유니버스 페스티벌</p>
+                        <p class="schedule-time">📺 16:45 - 보령 KBS 슈퍼라이브</p>
+                    </div>
+                    <p class="schedule-desc">오늘 진행되는 RESCENE의 스케줄 릴스를 확인하세요.</p>
                     <a href="https://www.instagram.com/reel/DbAa-iMO42j/" target="_blank" class="insta-btn">인스타그램 릴스 보러가기 ↗</a>
                 </div>
                 <div class="schedule-embed-area">
@@ -90,15 +91,10 @@
             </div>
         </div>
 
-        <!-- ⭐️ 3번 이미지 반영: RESCENE CALENDAR 중앙 정렬 -->
+        <!-- ⭐️ 불필요한 안내 문구(Mnet/센플릭스) 완전 삭제 -->
         <div class="section-container reveal" id="calendarSection" style="padding-bottom: 80px;">
             <div class="section-header center-header" style="border-bottom: none; margin-bottom: 20px;">
                 <div class="section-title">RESCENE <span>CALENDAR</span></div>
-            </div>
-            
-            <div class="schedule-disclaimer">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                스케줄은 공식 채널 Mnet Plus 정보를 기반으로 표시됩니다. 실시간 스케줄 확인은 Mnet Plus에서 가능합니다.
             </div>
 
             <div class="calendar-header-controls">
@@ -114,7 +110,7 @@
         </div>
     </div>
 
-    <!-- ⭐️ 우측 팝업: 완벽하게 스케줄(녹색 점) 리스트만 출력 -->
+    <!-- 우측 팝업 모달 -->
     <div class="modal-wrapper" id="scheduleModal">
         <button class="close-btn" onclick="closeModal()">×</button>
         <div class="modal-header-flex">
@@ -135,14 +131,13 @@
             document.getElementById('timeFlowText').innerText = `${String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0')}:${String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0')}:${String(Math.floor((diff / 1000) % 60)).padStart(2, '0')}`;
         }, 1000);
 
-        // ⭐️ 차트 롤링 버그 수정 및 벅스 연동 복구
+        // ⭐️ 차트 화살표 (상승/하락/유지) 원래 로직 완벽 복구
         let tickerInterval;
         async function fetchSongCharts() {
             try {
                 const response = await fetch('chart_data.json?t=' + new Date().getTime());
                 const data = await response.json();
                 
-                // 2번 이미지 우측 상단 텍스트 구조 맞춤 ("기준" 포함)
                 document.getElementById('currentTime').innerText = (data.update_time || new Date().toLocaleTimeString('ko-KR')) + "기준";
                 
                 let tickerHtml = '';
@@ -154,7 +149,18 @@
                             const pd = data.songs[songTitle][platform];
                             if (pd) {
                                 let rec = pd["실시간 (HOT100)"] || pd["실시간"] || pd["24시간"];
-                                if (rec) songsHtml += `<div class="ticker-song-info"><span class="title">${songTitle}</span><span class="rank">${rec.rank}위</span></div>`;
+                                if (rec) {
+                                    // 기존 화살표 로직 복구
+                                    let diffClass = 'diff-none';
+                                    let diffText = rec.diff;
+                                    if (diffText === 'NEW' || diffText === '0' || diffText === '유지' || diffText === '') diffText = '-';
+                                    if (diffText.includes('▲')) diffClass = 'diff-up';
+                                    else if (diffText.includes('▼')) diffClass = 'diff-down';
+                                    else if (diffText === 'NEW') diffClass = 'diff-new';
+                                    else if (diffText === '-') diffClass = 'diff-none';
+
+                                    songsHtml += `<div class="ticker-song-info"><span class="title">${songTitle}</span><span class="rank">${rec.rank}위</span><span class="rank-diff ${diffClass}">${diffText}</span></div>`;
+                                }
                             }
                         }
                     }
@@ -168,7 +174,6 @@
                 const wrapper = document.getElementById('tickerWrapper');
                 wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#aaa; font-size:13px;">데이터 없음</div></div>`;
 
-                // 롤링 애니메이션 활성화
                 clearInterval(tickerInterval);
                 if (validCount > 1) {
                     let cIdx = 0;
@@ -183,36 +188,20 @@
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
-        // ⭐️ 실제 Mnet Plus API 연동용 구조 및 보령 스케줄 적용
-        let scheduleDB = {};
-        
-        async function fetchMnetSchedule() {
-            try {
-                // 백엔드 완성 전까지는 아래 json 파일을 fetch한다고 가정 (경로에 실제 API URL 삽입)
-                const response = await fetch('mnet_schedule_api.json'); 
-                if(!response.ok) throw new Error("API 연동 대기 중");
-                const data = await response.json();
-                scheduleDB = data;
-            } catch (error) {
-                // 통신 실패 시 (또는 API 없을 시) 로드될 기본 데이터 
-                // (7월 25일, 26일에 인스타 릴스 + 보령 머드축제 데이터 할당)
-                scheduleDB = {
-                    "2026-07-25": { 
-                        items: [
-                            { time: "12:45", title: "2026 원 유니버스 페스티벌", embed: "https://www.instagram.com/p/DbAa-iMO42j/embed/" },
-                            { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
-                        ] 
-                    },
-                    "2026-07-26": { 
-                        items: [
-                            { time: "12:45", title: "2026 원 유니버스 페스티벌", embed: "https://www.instagram.com/p/DbAa-iMO42j/embed/" },
-                            { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
-                        ] 
-                    }
-                };
+        const scheduleDB = {
+            "2026-07-25": { 
+                items: [
+                    { time: "12:45", title: "2026 원 유니버스 페스티벌", embed: "https://www.instagram.com/p/DbAa-iMO42j/embed/" },
+                    { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
+                ] 
+            },
+            "2026-07-26": { 
+                items: [
+                    { time: "12:45", title: "2026 원 유니버스 페스티벌", embed: "https://www.instagram.com/p/DbAa-iMO42j/embed/" },
+                    { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
+                ] 
             }
-            renderCalendar();
-        }
+        };
 
         let currentCalYear = 2026;
         let currentCalMonth = 7;
@@ -236,8 +225,6 @@
             
             for (let i = 1; i <= lastDate; i++) {
                 const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-                
-                // 일정이 있는 날은 핑크색 테두리 활성화
                 const isHighlight = scheduleDB[dateKey] ? 'today' : '';
                 
                 html += `<div class="day-cell ${isHighlight}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')">
@@ -247,16 +234,13 @@
             calendarDays.innerHTML = html;
         }
 
-        // ⭐️ 우측 팝업: 보령 축제 이미지와 스케줄 렌더링
         function openModal(year, month, day, dateKey) {
             document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`;
-            
             const data = scheduleDB[dateKey];
             let scheduleHtml = '';
 
             if (data && data.items) {
                 scheduleHtml += `<div class="schedule-detail-card"><div class="sd-body">`;
-                
                 data.items.forEach(item => {
                     scheduleHtml += `
                         <div class="sd-row">
@@ -265,7 +249,6 @@
                             <div class="sd-title">${item.title}</div>
                         </div>
                     `;
-                    
                     if (item.embed) {
                         scheduleHtml += `
                             <div class="sd-embed">
@@ -301,8 +284,7 @@
             setTimeout(() => { document.getElementById('modalScheduleText').innerHTML = ''; }, 300);
         }
 
-        // 로드 시 Mnet API 연동 함수(임시 대체됨) 실행
-        window.addEventListener('DOMContentLoaded', () => { fetchMnetSchedule(); });
+        window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
     </script>
 </body>
 </html>

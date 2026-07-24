@@ -287,11 +287,60 @@ body, html {
 .schedule-detail-empty { text-align: center; color: var(--text-muted); font-size: 14px; padding: 40px 0; font-weight: 300; }
 
 /* ==========================================================================
+   ⭐️ 모바일 햄버거 메뉴
+   ========================================================================== */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+}
+.hamburger-btn span {
+    display: block;
+    width: 16px;
+    height: 2px;
+    background: var(--text-primary);
+    margin: 0 auto;
+    transition: 0.3s ease;
+}
+.hamburger-btn.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger-btn.active span:nth-child(2) { opacity: 0; }
+.hamburger-btn.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-menu-backdrop {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
+    z-index: 8500; opacity: 0; pointer-events: none; transition: 0.3s ease;
+}
+.mobile-menu-backdrop.active { opacity: 1; pointer-events: auto; }
+
+.mobile-menu-panel {
+    position: fixed; top: 0; right: 0; width: 260px; height: 100vh;
+    background: #15161a; border-left: 1px solid var(--border-light);
+    z-index: 8600; transform: translateX(100%); transition: var(--transition-smooth);
+    padding: 100px 30px; box-sizing: border-box;
+}
+.mobile-menu-panel.active { transform: translateX(0); }
+.mobile-menu-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 28px; }
+.mobile-menu-list a {
+    color: var(--text-primary); text-decoration: none;
+    font-family: var(--font-head); font-size: 16px; font-weight: 600; letter-spacing: 1px;
+}
+
+/* ==========================================================================
    ⭐️ Responsive & Mobile UI Fixes
    ========================================================================== */
 @media (max-width: 800px) {
     .top-nav { padding: 15px 20px; }
     .desktop-menu { display: none; }
+    .hamburger-btn { display: flex; }
     
     .nav-right { gap: 8px !important; }
     .sns-links { gap: 6px !important; }

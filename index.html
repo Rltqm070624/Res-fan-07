@@ -23,6 +23,9 @@
             <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection')">SCHEDULE</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('goodsSection')">GOODS</a></li>
         </ul>
+        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="메뉴 열기">
+            <span></span><span></span><span></span>
+        </button>
         <div class="nav-right">
             <!-- 캘린더 팝업 호출 아이콘 -->
             <button class="cal-icon-btn" onclick="openCalendarPopup()" title="Calendar">
@@ -35,6 +38,18 @@
             </div>
         </div>
     </nav>
+
+    <!-- 모바일 전용 메뉴 패널 -->
+    <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-menu-panel" id="mobileMenuPanel">
+        <ul class="mobile-menu-list">
+            <li><a href="javascript:void(0)" onclick="scrollToSection('homeSection'); toggleMobileMenu();">HOME</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('memberSection'); toggleMobileMenu();">MEMBERS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection'); toggleMobileMenu();">CHARTS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection'); toggleMobileMenu();">SCHEDULE</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('goodsSection'); toggleMobileMenu();">GOODS</a></li>
+        </ul>
+    </div>
 
     <div id="mainWrapper">
         <!-- 메인 비주얼 -->
@@ -243,6 +258,13 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
 
+        function toggleMobileMenu() {
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+            document.getElementById('mobileMenuPanel').classList.toggle('active');
+            document.getElementById('mobileMenuBackdrop').classList.toggle('active');
+            document.body.style.overflow = document.getElementById('mobileMenuPanel').classList.contains('active') ? 'hidden' : 'auto';
+        }
+
         const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
         setInterval(() => {
             const diff = new Date() - debutDate;
@@ -302,57 +324,57 @@
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
         // ⭐️ 굿즈 데이터 DOM 제어 (전체 품절 시 도장 찍기 로직 추가)
-async function fetchGoodsInventory() {
-    try {
-        const response = await fetch('goods/goods_data.json?t=' + new Date().getTime());
-        const data = await response.json();
+        async function fetchGoodsInventory() {
+            try {
+                const response = await fetch('goods/goods_data.json?t=' + new Date().getTime());
+                const data = await response.json();
 
-        // ⭐️ 아이템별 실제 쇼핑몰 키 이름 매핑 (goods_data.json의 진짜 필드명)
-        const itemShopMap = {
-            remini: 'withmuu',
-            jota: 'kream',
-            ming: 'kream',
-            ribbu: 'kream',
-            jjaero: 'kream',
-            yam: 'kream'
-        };
+                // ⭐️ 아이템별 실제 쇼핑몰 키 이름 매핑 (goods_data.json의 진짜 필드명)
+                const itemShopMap = {
+                    remini: 'withmuu',
+                    jota: 'kream',
+                    ming: 'kream',
+                    ribbu: 'kream',
+                    jjaero: 'kream',
+                    yam: 'kream'
+                };
 
-        const items = ['remini', 'jota', 'ming', 'ribbu', 'jjaero', 'yam'];
+                const items = ['remini', 'jota', 'ming', 'ribbu', 'jjaero', 'yam'];
 
-        items.forEach(item => {
-            if (data[item]) {
-                // 1. 가격 업데이트
-                if (data[item].price) {
-                    const priceElem = document.getElementById(`${item}-price`);
-                    if (priceElem) priceElem.innerText = data[item].price;
-                }
+                items.forEach(item => {
+                    if (data[item]) {
+                        // 1. 가격 업데이트
+                        if (data[item].price) {
+                            const priceElem = document.getElementById(`${item}-price`);
+                            if (priceElem) priceElem.innerText = data[item].price;
+                        }
 
-                // 2. 실제 쇼핑몰 키로 상태 조회 (HTML id는 여전히 -weverse- 그대로 사용)
-                const realShop = itemShopMap[item];
-                const status = data[item][realShop];
-                const statusElem = document.getElementById(`${item}-weverse-status`);
-                const btnElem = document.getElementById(`${item}-weverse-btn`);
-                const imgWrapper = document.getElementById(`${item}-img-wrap`);
+                        // 2. 실제 쇼핑몰 키로 상태 조회 (HTML id는 여전히 -weverse- 그대로 사용)
+                        const realShop = itemShopMap[item];
+                        const status = data[item][realShop];
+                        const statusElem = document.getElementById(`${item}-weverse-status`);
+                        const btnElem = document.getElementById(`${item}-weverse-btn`);
+                        const imgWrapper = document.getElementById(`${item}-img-wrap`);
 
-                if (status !== undefined && statusElem && btnElem) {
-                    if (status === "soldout") {
-                        statusElem.innerText = "(품절)";
-                        btnElem.innerText = "품절";
-                        btnElem.classList.add("sold-out");
-                        if (imgWrapper) imgWrapper.classList.add('is-soldout');
-                    } else {
-                        statusElem.innerText = "(재고: 여유)";
-                        btnElem.innerText = "바로가기";
-                        btnElem.classList.remove("sold-out");
-                        if (imgWrapper) imgWrapper.classList.remove('is-soldout');
+                        if (status !== undefined && statusElem && btnElem) {
+                            if (status === "soldout") {
+                                statusElem.innerText = "(품절)";
+                                btnElem.innerText = "품절";
+                                btnElem.classList.add("sold-out");
+                                if (imgWrapper) imgWrapper.classList.add('is-soldout');
+                            } else {
+                                statusElem.innerText = "(재고: 여유)";
+                                btnElem.innerText = "바로가기";
+                                btnElem.classList.remove("sold-out");
+                                if (imgWrapper) imgWrapper.classList.remove('is-soldout');
+                            }
+                        }
                     }
-                }
+                });
+            } catch (e) {
+                console.log("굿즈 데이터 JSON을 기다리는 중이거나 경로가 다릅니다.");
             }
-        });
-    } catch (e) {
-        console.log("굿즈 데이터 JSON을 기다리는 중이거나 경로가 다릅니다.");
-    }
-}
+        }
         fetchGoodsInventory();
 
         // 스케줄 데이터 

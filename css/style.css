@@ -18,7 +18,6 @@ body, html { margin: 0; padding: 0; font-family: var(--font-body); background-co
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
 .reveal.active { opacity: 1; transform: translateY(0); }
 
-/* --- 상단 네비게이션 --- */
 .top-nav { 
     position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; 
     padding: 15px 40px; box-sizing: border-box; z-index: 10000; 
@@ -41,14 +40,12 @@ body.modal-open #mainWrapper { transform: translateX(-350px); opacity: 0.5; }
 .section-header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
 .section-header.center-header { justify-content: center; flex-direction: column; align-items: center; }
 
-/* 2번 이미지 차트 헤더 스타일 동기화 */
 .chart-header { border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 15px; }
 
 .section-title { font-family: var(--font-head); font-size: 26px; font-weight: 900; color: #fff; }
 .section-title span { color: var(--c-pink); }
 .update-time { font-family: var(--font-num); font-size: 12px; color: #555; font-weight: 500; }
 
-/* 메인 비디오 영역을 위한 강제 스타일 */
 .video-container { position: relative; width: 100%; height: 60vh; overflow: hidden; background: #000; }
 .bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; pointer-events: none; }
 .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(16,17,21,0.2) 0%, rgba(16,17,21,0.8) 70%, var(--bg-body) 100%); z-index: 2; }
@@ -68,7 +65,7 @@ body.modal-open #mainWrapper { transform: translateX(-350px); opacity: 0.5; }
 .info-area { padding: 0 0 15px 0; display: flex; flex-direction: column; align-items: center; }
 .info-area .bday { color: var(--text-sub); font-family: var(--font-num); font-size: 12px; }
 
-/* 차트 영역 */
+/* ⭐️ 차트 영역 (화살표 CSS 클래스 복원) */
 .ticker-container { height: 50px; overflow: hidden; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-color); }
 .ticker-wrapper { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
 .ticker-item { height: 50px; display: flex; align-items: center; padding: 0 20px; gap: 20px; width: 100%; box-sizing: border-box; }
@@ -76,29 +73,26 @@ body.modal-open #mainWrapper { transform: translateX(-350px); opacity: 0.5; }
 .p-logo { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 900; }
 .p-logo.melon { background: #00cd3c; color: #fff; }
 .p-logo.bugs { background: #ff2a2a; color: #fff; }
-.ticker-songs { display: flex; gap: 20px; overflow: hidden; white-space: nowrap; flex: 1; align-items: center; }
-.ticker-song-info { display: flex; align-items: center; gap: 8px; font-size: 13px; font-family: var(--font-num); }
+.ticker-songs { display: flex; gap: 25px; overflow: hidden; white-space: nowrap; flex: 1; align-items: center; }
+.ticker-song-info { display: flex; align-items: center; gap: 6px; font-size: 13px; font-family: var(--font-num); }
 .ticker-song-info .title { color: #fff; font-weight: 500; font-family: var(--font-body); }
 .ticker-song-info .rank { color: var(--c-pink); font-weight: 800; }
+.rank-diff { font-size: 12px; font-weight: 700; margin-left: 2px; }
+.diff-up { color: #ff3b30; } 
+.diff-down { color: #00b4d8; } 
+.diff-new { color: #f4a261; } 
+.diff-none { color: #555; }
 
 /* 오늘의 방송 스케줄 */
 .today-schedule-card { display: flex; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; min-height: 280px; align-items: center; }
 .schedule-text-area { flex: 1; padding: 40px; }
 .live-badge { display: inline-block; background: var(--c-pink); color: #fff; font-size: 11px; font-weight: 900; padding: 4px 10px; border-radius: 4px; margin-bottom: 15px; }
 .schedule-main-title { font-size: 20px; font-weight: 700; color: #fff; margin: 0 0 10px 0; line-height: 1.4; }
-.schedule-time { font-family: var(--font-body); font-size: 14px; color: var(--c-pink); font-weight: 600; margin: 0 0 10px 0; }
+.schedule-time { font-family: var(--font-body); font-size: 14px; color: var(--c-pink); font-weight: 600; margin: 0 0 8px 0; }
 .schedule-desc { font-size: 13px; color: var(--text-sub); line-height: 1.5; margin-bottom: 25px; }
 .insta-btn { display: inline-block; padding: 10px 20px; background: #1a1b21; border: 1px solid #333; color: #fff; text-decoration: none; font-size: 12px; font-weight: 600; border-radius: 6px; transition: 0.2s; }
 .insta-btn:hover { background: #fff; color: #000; }
 .schedule-embed-area { width: 320px; height: 100%; border-left: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; background: #0c0c0f; }
-
-/* 캘린더 안내 문구 */
-.schedule-disclaimer {
-    background: #17181c; border: 1px solid var(--border-color); color: #666; font-size: 12px;
-    padding: 14px 20px; border-radius: 8px; display: flex; align-items: center; gap: 10px;
-    margin-bottom: 30px; line-height: 1.5; font-weight: 500;
-}
-.schedule-disclaimer svg { flex-shrink: 0; color: #555; }
 
 /* 캘린더 */
 .calendar-header-controls { display: flex; justify-content: center; align-items: center; gap: 20px; margin: 0 0 40px 0; }
@@ -128,7 +122,6 @@ body.modal-open #mainWrapper { transform: translateX(-350px); opacity: 0.5; }
 .modal-header-flex { border-bottom: 1px solid var(--border-color); margin-bottom: 25px; padding-bottom: 15px; }
 .modal-date { font-family: var(--font-body); font-size: 18px; font-weight: 700; color: #bbb; padding-left: 10px; }
 
-/* 팝업 내 스케줄 카드 (2번 이미지) */
 .schedule-detail-card {
     background: #18191e; border-radius: 10px; overflow: hidden; margin-bottom: 20px;
 }

@@ -13,6 +13,7 @@
 </head>
 <body id="homeSection">
 
+    <!-- ⭐️ 5번 이미지 반영: 투명한 헤더 -->
     <nav class="top-nav">
         <ul class="desktop-menu">
             <li><a href="javascript:void(0)" onclick="scrollToSection('homeSection')">HOME</a></li>
@@ -31,14 +32,11 @@
 
     <div id="mainWrapper">
         
-        <!-- ⭐️ 1. 메인 영상 배경 (CSS 충돌 방지를 위해 인라인 스타일로 강제 적용) -->
         <div class="video-container" id="homeSection" style="position: relative; width: 100%; height: 60vh; overflow: hidden; background: #000;">
-            <!-- 크롬 자동재생 정책을 위해 muted, playsinline 필수 -->
             <video autoplay loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
                 <source src="video/member.mp4" type="video/mp4">
             </video>
-            <!-- 어두운 오버레이 -->
-            <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(15,16,21,0.2) 0%, rgba(15,16,21,0.9) 80%, #0f1015 100%); z-index: 2;"></div>
+            <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(15,16,21,0.1) 0%, rgba(15,16,21,0.9) 80%, #0f1015 100%); z-index: 2;"></div>
         </div>
         
         <div class="logo-banner-section">
@@ -74,8 +72,11 @@
             </div>
         </div>
 
-        <!-- ⭐️ 2. 차트와 캘린더 사이: 오늘의 방송 스케줄 (인스타 릴스 연동) -->
+        <!-- ⭐️ 3번 이미지 반영: 좌측 정렬 적용 (center-header 클래스 제거) -->
         <div class="section-container reveal" id="todayScheduleSection">
+            <div class="section-header">
+                <div class="section-title">TODAY'S <span>BROADCAST</span></div>
+            </div>
             <div class="today-schedule-card">
                 <div class="schedule-text-area">
                     <span class="live-badge">ON AIR</span>
@@ -85,17 +86,22 @@
                     <a href="https://www.instagram.com/reel/DbAa-iMO42j/" target="_blank" class="insta-btn">인스타그램 릴스 보러가기 ↗</a>
                 </div>
                 <div class="schedule-embed-area">
-                    <!-- 인스타그램 임베드 -->
                     <iframe src="https://www.instagram.com/p/DbAa-iMO42j/embed/" width="100%" height="400" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
                 </div>
             </div>
         </div>
 
-        <!-- ⭐️ 3. 캘린더: 영어 타이틀 변경 및 1번 이미지 100% 동일한 UI 적용 -->
         <div class="section-container reveal" id="calendarSection" style="padding-bottom: 80px;">
-            <div class="section-header center-header" style="margin-bottom: 40px; border:none;">
+            <div class="section-header center-header" style="margin-bottom: 20px; border:none;">
                 <div class="section-title">RESCENE <span>CALENDAR</span></div>
             </div>
+            
+            <!-- ⭐️ 4번 이미지 반영: 스케줄 정보 연동 안내문구 -->
+            <div class="schedule-disclaimer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                스케줄은 공식 채널 Mnet Plus 정보를 기반으로 표시됩니다. 또한 SCENE-FLIX 내의 스케줄은 6시간마다 갱신됩니다. 실시간 스케줄 확인은 Mnet Plus에서 가능합니다.
+            </div>
+
             <div class="calendar-header-controls">
                 <button class="cal-btn" onclick="changeMonth(-1)">◀</button>
                 <div class="calendar-title" id="calendarMonthText">2026. 07</div>
@@ -109,15 +115,14 @@
         </div>
     </div>
 
-    <!-- 우측 스플릿 모달 -->
+    <!-- ⭐️ 1번 이미지 반영: 우측 팝업에서 필요없는 항목 싹 제거하고 SCHEDULE만 남김 -->
     <div class="modal-wrapper" id="scheduleModal">
         <button class="close-btn" onclick="closeModal()">×</button>
         <div class="modal-header-flex">
-            <div class="modal-date" id="modalDateTitle">2026. 07. 04</div>
+            <div class="modal-date" id="modalDateTitle">2026. 07. 25</div>
         </div>
-        <div class="modal-section-title">TODAY'S SCENE (YOUTUBE)</div>
-        <div id="modalVideoContainer"></div>
-        <div class="modal-section-title">SCHEDULE DETAILS</div>
+        
+        <div class="modal-section-title">SCHEDULE</div>
         <div id="modalScheduleText"></div>
     </div>
 
@@ -133,7 +138,6 @@
             document.getElementById('timeFlowText').innerText = `${String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0')}:${String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0')}:${String(Math.floor((diff / 1000) % 60)).padStart(2, '0')}`;
         }, 1000);
 
-        // 차트 스크립트 (UI 슬림화 반영)
         async function fetchSongCharts() {
             try {
                 const response = await fetch('chart_data.json?t=' + new Date().getTime());
@@ -159,9 +163,22 @@
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
-        // 스케줄 데이터 (테스트용)
+        // ⭐️ 25일, 26일 스케줄 데이터 추가 및 세팅
         const scheduleDB = {
-            "2026-07-24": { hasSchedule: true, youtubeId: "ZbO9PBdFRdc", text: "[방송] KBS 뮤직뱅크\n[싸인회] 핫트랙스 영등포점" }
+            "2026-07-25": { 
+                hasSchedule: true, 
+                items: [
+                    { time: "12:45", title: "2026 원 유니버스 페스티벌", embed: "https://www.instagram.com/p/DbAa-iMO42j/embed/" },
+                    { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
+                ] 
+            },
+            "2026-07-26": { 
+                hasSchedule: true, 
+                items: [
+                    { time: "12:45", title: "2026 원 유니버스 페스티벌", embed: "https://www.instagram.com/p/DbAa-iMO42j/embed/" },
+                    { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
+                ] 
+            }
         };
 
         let currentCalYear = 2026;
@@ -174,7 +191,6 @@
             renderCalendar();
         }
 
-        // ⭐️ 3. 캘린더 렌더링 (첨부해주신 스크린샷과 동일한 UI 로직)
         function renderCalendar() {
             const calendarDays = document.getElementById('calendarDays');
             document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`;
@@ -183,14 +199,13 @@
             const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); 
             
             let html = '';
-            // 빈 칸 (이전 달)
             for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; }
             
-            // 실제 날짜
             for (let i = 1; i <= lastDate; i++) {
                 const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-                // 24일에 하이라이트 (이미지 참고)
-                const isHighlight = (i === 24) ? 'today' : '';
+                
+                // DB에 해당 날짜 데이터가 있으면 테두리에 핑크 하이라이트(today 클래스)를 줍니다.
+                const isHighlight = scheduleDB[dateKey] ? 'today' : '';
                 
                 html += `<div class="day-cell ${isHighlight}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')">
                             <span class="day-number">${i}</span>
@@ -199,11 +214,60 @@
             calendarDays.innerHTML = html;
         }
 
+        // ⭐️ 2번 이미지(2026년 7월 25일 형태) 카드 디자인 구현부
         function openModal(year, month, day, dateKey) {
+            // 헤더 날짜 세팅
             document.getElementById('modalDateTitle').innerText = `${year}. ${String(month).padStart(2, '0')}. ${String(day).padStart(2, '0')}`;
-            const data = scheduleDB[dateKey] || { text: "등록된 스케줄이 없습니다." };
-            document.getElementById('modalVideoContainer').innerHTML = data.youtubeId ? `<div class="modal-video-wrapper"><iframe src="https://www.youtube.com/embed/${data.youtubeId}?rel=0" allowfullscreen></iframe></div>` : '<div class="no-data-text">영상이 없습니다.</div>';
-            document.getElementById('modalScheduleText').innerHTML = `<div class="modal-schedule-box">${data.text}</div>`;
+            
+            const data = scheduleDB[dateKey];
+            let scheduleHtml = '';
+
+            if (data && data.items) {
+                scheduleHtml += `
+                    <div class="schedule-detail-card">
+                        <div class="sd-header">${year}년 ${month}월 ${day}일</div>
+                        <div class="sd-body">
+                `;
+                
+                data.items.forEach(item => {
+                    // 항목 줄 추가 (녹색 점 + 시간 + 제목)
+                    scheduleHtml += `
+                        <div class="sd-row">
+                            <div class="sd-dot"></div>
+                            <div class="sd-time">${item.time}</div>
+                            <div class="sd-title">${item.title}</div>
+                        </div>
+                    `;
+                    
+                    // 인스타 릴스 영상이 있으면 첨부
+                    if (item.embed) {
+                        scheduleHtml += `
+                            <div class="sd-embed">
+                                <iframe src="${item.embed}" width="100%" height="400" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+                            </div>
+                        `;
+                    }
+                    
+                    // 보령 머드축제 이미지 파일이 있으면 첨부
+                    if (item.image) {
+                        scheduleHtml += `
+                            <div class="sd-embed">
+                                <img src="${item.image}" alt="${item.title}" style="width:100%; border-radius: 6px; margin-top: 10px;" onerror="this.style.display='none'">
+                            </div>
+                        `;
+                    }
+                });
+                
+                scheduleHtml += `</div></div>`;
+            } else {
+                scheduleHtml = `
+                    <div class="schedule-detail-card">
+                        <div class="sd-body" style="padding: 20px; text-align: center; color: #888;">등록된 스케줄이 없습니다.</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('modalScheduleText').innerHTML = scheduleHtml;
             document.getElementById('scheduleModal').classList.add('active');
             document.body.classList.add('modal-open'); 
         }
@@ -211,7 +275,8 @@
         function closeModal() {
             document.getElementById('scheduleModal').classList.remove('active');
             document.body.classList.remove('modal-open'); 
-            setTimeout(() => { document.getElementById('modalVideoContainer').innerHTML = ''; }, 300);
+            // 닫을 때 iframe 소리 끄기 위해 초기화
+            setTimeout(() => { document.getElementById('modalScheduleText').innerHTML = ''; }, 300);
         }
 
         window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });

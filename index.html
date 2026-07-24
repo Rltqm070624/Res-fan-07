@@ -16,39 +16,41 @@
         .logo-banner-section { width: 100%; background: #121212; text-align: center; padding: 25px 0 10px 0; position: relative; z-index: 5; }
         .logo-banner-section img { max-width: 350px; width: 70%; height: auto; filter: drop-shadow(0px 0px 6px rgba(255, 255, 255, 1)) drop-shadow(0px 0px 15px rgba(255, 51, 153, 0.9)) drop-shadow(0px 0px 30px rgba(255, 51, 153, 0.7)); }
 
-        /* 음원 차트 영역 */
+        /* ⭐️ 가로형 음원 차트 영역 (수정됨) */
         .main-chart-container { padding: 30px 20px 50px 20px; max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
-        .section-header { font-size: 14px; font-weight: 500; color: #888; letter-spacing: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .section-header { font-size: 14px; font-weight: 500; color: #888; letter-spacing: 4px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
         .section-header span.title-hl { color: #fff; font-size: 20px; letter-spacing: 2px; font-weight: 700; margin-left: 10px; }
         .update-time { font-size: 12px; color: #ff3399; font-weight: 400; letter-spacing: 1px; } 
         
-        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; }
+        .chart-list-container { display: flex; flex-direction: column; gap: 15px; }
         
-        .song-card { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 20px; transition: 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .song-card:hover { transform: translateY(-4px); border-color: #ff3399; box-shadow: 0 8px 20px rgba(255,51,153,0.15); }
-        .song-title-header { font-weight: 900; font-size: 22px; color: #fff; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #333; text-align: center; letter-spacing: 1px; }
+        .platform-row { display: flex; background: #1a1a1a; border-radius: 12px; border: 1px solid #333; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.2s; }
+        .platform-row:hover { border-color: #555; }
         
-        .platform-group { margin-bottom: 15px; background: #222; border-radius: 8px; padding: 12px; }
-        .platform-group:last-child { margin-bottom: 0; }
-        .platform-title { font-size: 14px; color: #aaa; font-weight: 700; margin-bottom: 10px; border-bottom: 1px dashed #333; padding-bottom: 5px; }
+        .platform-name-col { width: 140px; background: #222; padding: 20px; font-weight: 900; font-size: 18px; color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; border-right: 1px solid #333; letter-spacing: 1px; }
         
-        .chart-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 0 5px; }
-        .chart-row:last-child { margin-bottom: 0; }
-        .chart-type { font-size: 13px; color: #ddd; font-weight: 500; }
+        .platform-charts-col { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
         
-        .rank-info { display: flex; align-items: center; gap: 12px; }
-        .rank-num { font-size: 15px; color: #fff; font-weight: 700; width: 40px; text-align: right; }
-        .rank-out { font-size: 13px; color: #666; font-weight: 700; width: 40px; text-align: right; }
+        .chart-type-row { display: flex; align-items: center; border-bottom: 1px dashed #333; padding-bottom: 12px; }
+        .chart-type-row:last-child { border-bottom: none; padding-bottom: 0; }
         
-        .rank-diff { font-size: 12px; font-weight: 700; width: 35px; text-align: right; }
+        .chart-type-name { width: 120px; font-size: 14px; color: #aaa; font-weight: 700; flex-shrink: 0; }
+        
+        .chart-songs-list { display: flex; flex-wrap: wrap; gap: 20px; flex: 1; align-items: center; }
+        .song-item { display: flex; align-items: center; gap: 8px; font-size: 14px; background: #111; padding: 6px 12px; border-radius: 20px; border: 1px solid #2a2a2a; }
+        .song-item .title { color: #eee; font-weight: 500; }
+        .song-item .rank { color: #fff; font-weight: 700; }
+        .song-item .out { color: #666; font-weight: 700; }
+        
+        .rank-diff { font-size: 12px; font-weight: 700; }
         .diff-up { color: #ff3b30; }
         .diff-down { color: #007aff; }
         .diff-new { color: #ffd60a; }
         .diff-none { color: #888; }
         
-        .loading-text { color: #ff3399; font-weight: bold; text-align: center; width: 100%; padding: 30px; grid-column: 1 / -1; }
+        .loading-text { color: #ff3399; font-weight: bold; text-align: center; width: 100%; padding: 30px; }
 
-        /* ⭐️ 캘린더 영역 */
+        /* 캘린더 영역 */
         .calendar-container { padding: 50px 20px; max-width: 1000px; margin: 0 auto; }
         .calendar-header { text-align: center; font-size: 14px; font-weight: 500; color: #888; letter-spacing: 4px; margin-bottom: 40px; }
         .calendar-header span { color: #fff; font-size: 24px; font-weight: 700; letter-spacing: 2px; margin-left: 10px; }
@@ -60,33 +62,45 @@
         .day-cell.empty { background: transparent; cursor: default; border: none; }
         .day-number { font-size: 15px; color: #ccc; font-weight: 500; }
         
-        /* 스케줄 있음 뱃지 */
         .schedule-badge { position: absolute; bottom: 15px; left: 15px; background: rgba(255, 51, 153, 0.1); color: #ff3399; font-size: 11px; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255, 51, 153, 0.3); }
 
-        /* ⭐️ 모달(팝업) 영역 */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-overlay.active { display: flex; }
-        .modal-content { background: #1a1a1a; width: 100%; max-width: 500px; border-radius: 12px; padding: 30px; position: relative; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .close-btn { position: absolute; top: 25px; right: 25px; color: #888; font-size: 28px; cursor: pointer; background: none; border: none; line-height: 1; padding: 0; }
-        .close-btn:hover { color: #fff; }
+        /* ⭐️ 우측 슬라이드 팝업창 영역 (수정됨) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; display: flex; justify-content: flex-end; opacity: 0; visibility: hidden; transition: 0.3s ease; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
         
-        .modal-date { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #333; }
+        .modal-content { background: #121212; width: 100%; max-width: 480px; height: 100vh; padding: 40px 30px; position: relative; border-left: 1px solid #333; box-shadow: -10px 0 30px rgba(0,0,0,0.8); transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; box-sizing: border-box; }
+        .modal-overlay.active .modal-content { transform: translateX(0); }
         
-        .modal-section-title { font-size: 13px; color: #888; font-weight: 700; letter-spacing: 2px; margin-bottom: 15px; margin-top: 30px; }
-        .modal-video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000; border: 1px solid #333; }
+        .close-btn { position: absolute; top: 30px; right: 30px; color: #888; font-size: 32px; cursor: pointer; background: none; border: none; line-height: 1; padding: 0; transition: 0.2s; }
+        .close-btn:hover { color: #fff; transform: rotate(90deg); }
+        
+        .modal-date { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #222; }
+        
+        .modal-section-title { font-size: 13px; color: #ff3399; font-weight: 700; letter-spacing: 2px; margin-bottom: 15px; margin-top: 35px; }
+        
+        .modal-video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; border: 1px solid #333; }
         .modal-video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .no-video-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #666; font-size: 14px; }
+        .no-data-text { color: #666; font-size: 14px; background: #1a1a1a; padding: 20px; border-radius: 8px; text-align: center; border: 1px dashed #333; }
         
-        .modal-schedule-box { background: #222; padding: 20px; border-radius: 8px; color: #ddd; font-size: 15px; border: 1px solid #333; white-space: pre-line; }
+        .modal-schedule-box { background: #1a1a1a; padding: 20px; border-radius: 12px; color: #ddd; font-size: 15px; border: 1px solid #333; white-space: pre-line; line-height: 1.6; }
+
+        /* ⭐️ 사진 모아보기 영역 추가 */
+        .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .photo-grid img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; border: 1px solid #333; transition: 0.2s; cursor: pointer; }
+        .photo-grid img:hover { border-color: #ff3399; filter: brightness(1.1); }
 
         @media (max-width: 768px) {
+            .platform-row { flex-direction: column; }
+            .platform-name-col { width: 100%; border-right: none; border-bottom: 1px solid #333; padding: 15px; }
+            .chart-type-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .chart-type-name { width: 100%; border-bottom: 1px solid #222; padding-bottom: 5px; }
             .day-cell { min-height: 80px; padding: 10px; }
             .schedule-badge { font-size: 10px; padding: 2px 4px; bottom: 8px; left: 8px; }
+            .modal-content { max-width: 100%; }
         }
     </style>
 </head>
 <body>
-    <!-- 영상 배너 & 로고 -->
     <div class="video-container">
         <iframe src="https://www.youtube.com/embed/ZbO9PBdFRdc?autoplay=1&mute=1&loop=1&playlist=ZbO9PBdFRdc&controls=0&showinfo=0&rel=0" allow="autoplay; fullscreen"></iframe>
         <div class="video-overlay"></div>
@@ -95,13 +109,13 @@
         <img src="logo.png" alt="RESCENE Logo" onerror="this.style.display='none'">
     </div>
 
-    <!-- 1. 차트 영역 -->
+    <!-- 1. 차트 영역 (가로형) -->
     <div class="main-chart-container">
         <div class="section-header">
             <div>SONG CHARTS <span class="title-hl">TRACKING</span></div>
             <div class="update-time" id="currentTime">업데이트 중...</div>
         </div>
-        <div class="chart-grid" id="mainChartGrid">
+        <div class="chart-list-container" id="mainChartGrid">
             <div class="loading-text">데이터 연동을 기다리는 중입니다...</div>
         </div>
     </div>
@@ -111,7 +125,6 @@
         <div class="calendar-header" id="calendarHeader">
             ARCHIVE SCHEDULE <span id="calendarMonthText">2026. 07</span>
         </div>
-        
         <div class="calendar-grid">
             <div class="weekday">SUN</div>
             <div class="weekday">MON</div>
@@ -121,31 +134,28 @@
             <div class="weekday">FRI</div>
             <div class="weekday">SAT</div>
         </div>
-        <div class="calendar-grid" id="calendarDays">
-            <!-- JS로 렌더링 됩니다 -->
-        </div>
+        <div class="calendar-grid" id="calendarDays"></div>
     </div>
 
-    <!-- 3. 날짜 클릭 모달창 -->
+    <!-- 3. 우측 슬라이드 팝업창 -->
     <div class="modal-overlay" id="scheduleModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">×</button>
             <div class="modal-date" id="modalDateTitle">2026. 07. 04.</div>
             
-            <div class="modal-section-title">TODAY'S SCENE</div>
-            <div class="modal-video-wrapper" id="modalVideoContainer">
-                <!-- JS로 iframe 삽입 -->
-            </div>
+            <div class="modal-section-title">TODAY'S SCENE (VIDEO)</div>
+            <div id="modalVideoContainer"></div>
             
             <div class="modal-section-title">SCHEDULE</div>
-            <div class="modal-schedule-box" id="modalScheduleText">
-                공식 스케줄이 없습니다.
-            </div>
+            <div id="modalScheduleText"></div>
+
+            <div class="modal-section-title">TODAY'S PHOTOS</div>
+            <div class="photo-grid" id="modalPhotoContainer"></div>
         </div>
     </div>
 
     <script>
-        // --- 1. 음원 차트 로직 ---
+        // --- 1. 가로형 음원 차트 로직 ---
         function getDiffClass(diffText) {
             if (!diffText) return 'diff-none';
             if (diffText.includes('▲')) return 'diff-up';
@@ -163,90 +173,102 @@
                 const data = await response.json();
                 
                 timeEl.innerText = data.update_time;
-                chartGrid.innerHTML = '';
                 const songsData = data.songs;
+                const platforms = ["Melon", "Bugs", "Genie", "FLO", "VIBE"]; // 표기할 플랫폼 순서
+                let finalHtml = '';
 
-                for (const [songTitle, platforms] of Object.entries(songsData)) {
-                    let cardHtml = `<div class="song-card"><div class="song-title-header">${songTitle}</div>`;
-                    
-                    for (const [platformName, chartTypes] of Object.entries(platforms)) {
-                        let platformHtml = `<div class="platform-group"><div class="platform-title">${platformName}</div>`;
-                        
-                        for (const [chartName, result] of Object.entries(chartTypes)) {
-                            if (result) {
-                                const diffClass = getDiffClass(result.diff);
-                                platformHtml += `
-                                    <div class="chart-row">
-                                        <span class="chart-type">${chartName}</span>
-                                        <div class="rank-info">
-                                            <span class="rank-num">${result.rank}위</span>
-                                            <span class="rank-diff ${diffClass}">${result.diff}</span>
-                                        </div>
-                                    </div>`;
-                            } else {
-                                platformHtml += `
-                                    <div class="chart-row">
-                                        <span class="chart-type" style="color: #666;">${chartName}</span>
-                                        <div class="rank-info">
-                                            <span class="rank-out">OUT</span>
-                                            <span class="rank-diff diff-none">-</span>
-                                        </div>
-                                    </div>`;
-                            }
+                platforms.forEach(platform => {
+                    // 플랫폼별로 존재하는 차트 종류(HOT100, 일간 등) 수집
+                    const chartTypesSet = new Set();
+                    for (const songTitle in songsData) {
+                        if (songsData[songTitle][platform]) {
+                            Object.keys(songsData[songTitle][platform]).forEach(ct => chartTypesSet.add(ct));
                         }
-                        platformHtml += `</div>`;
-                        cardHtml += platformHtml;
                     }
-                    cardHtml += `</div>`;
-                    chartGrid.innerHTML += cardHtml;
-                }
+
+                    if (chartTypesSet.size > 0) {
+                        let chartsHtml = '';
+                        chartTypesSet.forEach(chartType => {
+                            let songsHtml = '';
+                            
+                            // 모든 곡에 대해 해당 플랫폼/차트타입의 순위 탐색
+                            for (const songTitle in songsData) {
+                                const songRecord = songsData[songTitle][platform]?.[chartType];
+                                if (songRecord) {
+                                    const diffClass = getDiffClass(songRecord.diff);
+                                    songsHtml += `
+                                        <div class="song-item">
+                                            <span class="title">${songTitle}</span> 
+                                            <span class="rank">${songRecord.rank}위</span> 
+                                            <span class="rank-diff ${diffClass}">${songRecord.diff}</span>
+                                        </div>`;
+                                } else {
+                                    songsHtml += `
+                                        <div class="song-item" style="opacity: 0.6;">
+                                            <span class="title" style="color:#aaa;">${songTitle}</span> 
+                                            <span class="out">OUT</span>
+                                        </div>`;
+                                }
+                            }
+                            
+                            chartsHtml += `
+                                <div class="chart-type-row">
+                                    <div class="chart-type-name">${chartType}</div>
+                                    <div class="chart-songs-list">${songsHtml}</div>
+                                </div>`;
+                        });
+
+                        finalHtml += `
+                            <div class="platform-row">
+                                <div class="platform-name-col">${platform}</div>
+                                <div class="platform-charts-col">${chartsHtml}</div>
+                            </div>`;
+                    }
+                });
+                
+                chartGrid.innerHTML = finalHtml || `<div class="loading-text">데이터가 없습니다.</div>`;
+
             } catch (error) {
                 chartGrid.innerHTML = `<div class="loading-text" style="color:#ff3399;">데이터 갱신 대기 중...</div>`;
             }
         }
 
-        // --- 2. 캘린더 및 모달 로직 ---
-        // 하드코딩된 스케줄 데이터 (추후 별도 JSON 파일로 빼서 관리 가능)
+        // --- 2. 캘린더 및 우측 팝업 로직 ---
+        // 하드코딩된 스케줄/영상/사진 데이터 (사진은 이미지 URL 배열로 입력)
         const scheduleDB = {
-            "2026-07-04": {
-                hasSchedule: false,
-                youtubeId: "ZbO9PBdFRdc", // 오류 난 영상 예시처럼 띄울 ID
-                text: "공식 스케줄이 없습니다."
-            },
             "2026-07-24": {
                 hasSchedule: true,
                 youtubeId: "ZbO9PBdFRdc",
-                text: "[방송] KBS 뮤직뱅크\n[싸인회] 핫트랙스 영등포점"
+                text: "[방송] KBS 뮤직뱅크\n[싸인회] 핫트랙스 영등포점",
+                photos: [
+                    "https://pbs.twimg.com/media/GPMQ4YubQAAn9Kj?format=jpg&name=large", 
+                    "https://pbs.twimg.com/media/GPMQ4Yva0AAVn2E?format=jpg&name=large"
+                ] // 임시 예시 이미지 주소
             },
             "2026-07-25": {
                 hasSchedule: true,
                 youtubeId: "",
-                text: "[방송] MBC 쇼! 음악중심\n오후 3시 15분"
+                text: "[방송] MBC 쇼! 음악중심 오후 3시 15분",
+                photos: []
             }
         };
 
         const targetYear = 2026;
-        const targetMonth = 7; // 7월
+        const targetMonth = 7; 
 
         function renderCalendar() {
             const calendarDays = document.getElementById('calendarDays');
             const monthText = document.getElementById('calendarMonthText');
-            
-            // 헤더 텍스트 렌더링 (2026. 07)
             monthText.innerText = `${targetYear}. ${String(targetMonth).padStart(2, '0')}`;
             
-            // 달력 계산 (7월)
-            const firstDayIndex = new Date(targetYear, targetMonth - 1, 1).getDay(); // 0(Sun) ~ 6(Sat)
-            const lastDate = new Date(targetYear, targetMonth, 0).getDate(); // 31
+            const firstDayIndex = new Date(targetYear, targetMonth - 1, 1).getDay(); 
+            const lastDate = new Date(targetYear, targetMonth, 0).getDate(); 
             
             let html = '';
-            
-            // 빈 칸 채우기 (1일 전까지)
             for (let i = 0; i < firstDayIndex; i++) {
                 html += `<div class="day-cell empty"></div>`;
             }
             
-            // 날짜 채우기
             for (let i = 1; i <= lastDate; i++) {
                 const dateKey = `${targetYear}-${String(targetMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 const schedule = scheduleDB[dateKey];
@@ -256,7 +278,6 @@
                     badgeHtml = `<div class="schedule-badge">스케줄 있음</div>`;
                 }
 
-                // 날짜 셀 렌더링 (클릭 이벤트 포함)
                 html += `
                     <div class="day-cell" onclick="openModal('${targetYear}', '${targetMonth}', '${i}', '${dateKey}')">
                         <div class="day-number">${i}</div>
@@ -264,7 +285,6 @@
                     </div>
                 `;
             }
-            
             calendarDays.innerHTML = html;
         }
 
@@ -274,26 +294,36 @@
             const titleEl = document.getElementById('modalDateTitle');
             const videoContainer = document.getElementById('modalVideoContainer');
             const textEl = document.getElementById('modalScheduleText');
+            const photoContainer = document.getElementById('modalPhotoContainer');
             
-            // 날짜 타이틀 세팅 (예: 2026. 07. 04.)
             titleEl.innerText = `${year}. ${String(month).padStart(2, '0')}. ${String(day).padStart(2, '0')}.`;
             
-            // 해당 날짜 데이터 가져오기
-            const data = scheduleDB[dateKey] || { hasSchedule: false, youtubeId: "", text: "공식 스케줄이 없습니다." };
+            const data = scheduleDB[dateKey] || { hasSchedule: false, youtubeId: "", text: "등록된 스케줄이 없습니다.", photos: [] };
             
-            // 유튜브 영상 세팅
+            // 영상 처리
             if (data.youtubeId) {
-                videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${data.youtubeId}?rel=0" allowfullscreen></iframe>`;
+                videoContainer.innerHTML = `<div class="modal-video-wrapper"><iframe src="https://www.youtube.com/embed/${data.youtubeId}?rel=0" allowfullscreen></iframe></div>`;
             } else {
-                videoContainer.innerHTML = `<div class="no-video-text">등록된 영상이 없습니다.</div>`;
+                videoContainer.innerHTML = `<div class="no-data-text">등록된 영상이 없습니다.</div>`;
             }
             
-            // 스케줄 텍스트 세팅
-            textEl.innerText = data.text;
+            // 스케줄 텍스트 처리
+            textEl.innerHTML = `<div class="modal-schedule-box">${data.text}</div>`;
             
-            // 모달 노출
+            // 사진 처리
+            if (data.photos && data.photos.length > 0) {
+                let photoHtml = '';
+                data.photos.forEach(url => {
+                    // 클릭 시 원본 이미지 새 탭에서 열기
+                    photoHtml += `<img src="${url}" alt="Today Photo" onclick="window.open('${url}', '_blank')">`;
+                });
+                photoContainer.innerHTML = photoHtml;
+            } else {
+                photoContainer.innerHTML = `<div class="no-data-text" style="grid-column: 1 / -1;">업로드된 사진이 없습니다.</div>`;
+            }
+            
             modal.classList.add('active');
-            document.body.style.overflow = 'hidden'; // 뒤 배경 스크롤 방지
+            document.body.style.overflow = 'hidden'; 
         }
 
         // 모달 닫기
@@ -302,18 +332,21 @@
             const videoContainer = document.getElementById('modalVideoContainer');
             
             modal.classList.remove('active');
-            document.body.style.overflow = 'auto'; // 스크롤 복구
-            videoContainer.innerHTML = ''; // 영상 소리 끄기를 위해 iframe 날림
+            document.body.style.overflow = 'auto'; 
+            
+            // 애니메이션이 끝난 후 영상 종료 (소리 방지)
+            setTimeout(() => {
+                videoContainer.innerHTML = ''; 
+            }, 300);
         }
 
-        // 모달 바깥 배경 클릭 시 닫기
+        // 검은 배경 클릭 시 닫기
         document.getElementById('scheduleModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeModal();
             }
         });
 
-        // 초기 실행
         window.addEventListener('DOMContentLoaded', () => {
             fetchSongCharts();
             renderCalendar();

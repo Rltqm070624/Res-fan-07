@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 저장소 코드 불러오기
-        uses: actions/checkout@v4 # ⭐️ v3에서 v4로 업데이트
+        uses: actions/checkout@v4
 
       - name: Node.js 세팅
-        uses: actions/setup-node@v4 # ⭐️ v3에서 v4로 업데이트
+        uses: actions/setup-node@v4
         with:
-          node-version: '22' # ⭐️ Node.js 22 버전으로 업데이트
+          node-version: '22
 
       - name: 패키지 설치
         run: |

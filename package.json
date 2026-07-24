@@ -1,0 +1,8 @@
+{
+  "name": "rescene-chart-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "melona": "^1.0.0"
+  }
+}

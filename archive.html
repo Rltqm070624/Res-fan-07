@@ -4,74 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESCENE ARCHIVE - MEDIA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-main: #121215; --bg-card: #1c1c21;
-            --c-pink: #ff3399; --c-mint: #00e5ff; --c-gold: #ffc107; --c-purple: #b388ff;
-            --text-main: #f0f0f0; --text-sub: #a0a0a5; --border-color: rgba(255, 51, 153, 0.2);
+            --bg-body: #f5f6f8; --bg-card: #ffffff; 
+            --c-pink: #ff3399; --c-mint: #00b4d8; --c-gold: #f4a261; --text-main: #222222; --text-sub: #777777; --border-color: rgba(0, 0, 0, 0.08); 
+            --font-head: 'Montserrat', sans-serif; --font-num: 'Plus Jakarta Sans', sans-serif; --font-body: 'Noto Sans KR', sans-serif;
         }
 
-        body, html { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; background: var(--bg-main); color: var(--text-main); }
-        
-        .top-nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; box-sizing: border-box; z-index: 10000; background: rgba(18,18,21,0.95); border-bottom: 1px solid #222; }
+        body, html { margin: 0; padding: 0; font-family: var(--font-body); background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
+
+        .top-nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; box-sizing: border-box; z-index: 10000; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); }
         .desktop-menu { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
-        .desktop-menu li a { color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; transition: 0.2s; }
+        .desktop-menu li a { color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 700; font-family: var(--font-head); transition: all 0.2s ease; }
         .desktop-menu li a:hover { color: var(--c-pink); }
         
-        .sns-links { display: flex; gap: 15px; }
-        .sns-links a { color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; }
-        .sns-links a:hover { border-color: var(--c-pink); color: var(--c-pink); }
+        .sns-links { display: flex; gap: 10px; }
+        .sns-links a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #f0f0f0; border-radius: 50%; border: 1px solid var(--border-color); transition: all 0.2s ease; }
+        .sns-links a img { width: 18px; height: 18px; object-fit: contain; }
+        .sns-links a:hover { background: #fff; border-color: var(--c-pink); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(255,51,153,0.15); }
 
-        .menu-toggle-btn { display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); border-radius: 8px; width: 42px; height: 42px; font-size: 22px; cursor: pointer; }
-        .sidebar { position: fixed; top: 0; left: -260px; width: 260px; height: 100vh; background: var(--bg-main); border-right: 1px solid #333; z-index: 10000; transition: 0.3s ease; padding-top: 80px; box-shadow: 5px 0 20px rgba(0,0,0,0.5); }
+        .menu-toggle-btn { display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: #fff; color: #333; border: 1px solid var(--border-color); border-radius: 8px; width: 42px; height: 42px; font-size: 20px; cursor: pointer; }
+        .sidebar { position: fixed; top: 0; left: -260px; width: 260px; height: 100vh; background: #fff; border-right: 1px solid var(--border-color); z-index: 10000; transition: 0.3s ease; padding-top: 80px; }
         .sidebar.active { left: 0; }
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s ease; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s; }
         .sidebar-overlay.active { opacity: 1; visibility: visible; }
         .sidebar ul { list-style: none; padding: 0; margin: 0; }
-        .sidebar li a { display: block; padding: 18px 30px; color: #eee; text-decoration: none; border-bottom: 1px solid #222; }
+        .sidebar li a { display: block; padding: 18px 30px; color: var(--text-main); text-decoration: none; font-family: var(--font-head); font-weight: 700; border-bottom: 1px solid var(--border-color); }
 
-        .section-container { padding: 120px 20px 50px 20px; max-width: 1200px; margin: 0 auto; }
-        .section-header { font-size: 12px; font-weight: 500; color: var(--text-sub); letter-spacing: 4px; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .section-header span.title-hl { color: #fff; font-size: 24px; letter-spacing: 2px; font-weight: 900; margin-left: 10px; }
+        /* ⭐️ 모달 스플릿 뷰를 위한 메인 래퍼 */
+        body.modal-open #mainWrapper { transform: translateX(-240px); }
+        #mainWrapper { padding: 120px 20px 60px 20px; max-width: 1050px; margin: 0 auto; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; box-sizing: border-box; }
 
-        /* 비디오 카드 그리드 */
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-bottom: 60px; }
-        .video-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; text-decoration: none; display: block; }
-        .video-card:hover { border-color: var(--c-pink); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 51, 153, 0.15); }
+        .section-header { margin-bottom: 30px; border-bottom: 2px solid var(--text-main); padding-bottom: 10px; display: flex; align-items: flex-end; }
+        .section-title { font-family: var(--font-head); font-size: 28px; font-weight: 900; letter-spacing: 1px; color: var(--text-main); }
+        .section-title span { color: var(--c-pink); }
+
+        /* 앨범 그리드 */
+        .album-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .album-card { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .album-card:hover { border-color: var(--c-pink); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 51, 153, 0.1); }
+        .album-cover { width: 100%; aspect-ratio: 1 / 1; background: #eee; position: relative; }
+        .album-cover img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .album-card:hover .album-cover img { transform: scale(1.05); }
+        .album-info { padding: 15px; text-align: center; }
+        .album-title { font-size: 15px; font-weight: 800; color: var(--text-main); font-family: var(--font-head); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* ⭐️ 앨범 팝업 (우측 모달) */
+        .modal-wrapper { position: fixed; top: 0; right: 0; width: 480px; height: 100vh; background: #fff; z-index: 10000; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: -10px 0 30px rgba(0,0,0,0.1); overflow-y: auto; padding: 40px 30px; box-sizing: border-box; border-left: 1px solid var(--border-color); }
+        .modal-wrapper.active { transform: translateX(0); }
+        .close-btn { position: absolute; top: 30px; right: 30px; color: #999; font-size: 32px; cursor: pointer; background: none; border: none; line-height: 1; padding: 0; transition: 0.2s; }
+        .close-btn:hover { color: var(--text-main); transform: rotate(90deg); }
         
-        .video-thumb { width: 100%; aspect-ratio: 16 / 9; background: #000; position: relative; overflow: hidden; }
-        .video-thumb img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
-        .video-card:hover .video-thumb img { transform: scale(1.05); }
-        .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: rgba(255,51,153,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; opacity: 0; transition: 0.3s; }
-        .video-card:hover .play-icon { opacity: 1; }
+        .modal-album-header { display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid var(--text-main); padding-bottom: 20px; margin-bottom: 20px; text-align: center; }
+        .modal-album-cover { width: 180px; height: 180px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 15px; background: #eee; }
+        .modal-album-title { font-family: var(--font-head); font-size: 22px; font-weight: 900; color: var(--text-main); }
+        
+        /* 트랙 리스트 아코디언 */
+        .track-list { display: flex; flex-direction: column; gap: 10px; }
+        .track-item { background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+        .track-title { padding: 15px 20px; font-weight: 700; font-size: 15px; color: var(--text-main); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .track-title:hover { background: #f0f0f0; color: var(--c-pink); }
+        .track-content { display: none; padding: 15px 20px; border-top: 1px dashed var(--border-color); background: #fff; }
+        .track-item.active .track-content { display: block; }
+        
+        /* 비디오 버튼들 */
+        .video-btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .video-btn { background: #fff; border: 1px solid #ddd; color: #555; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .video-btn:hover, .video-btn.active { background: var(--c-pink); color: #fff; border-color: var(--c-pink); }
+        
+        /* 아이프레임 플레이어 */
+        .inline-player-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000; display: none; }
+        .inline-player-wrapper.active { display: block; }
+        .inline-player-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        .video-info { padding: 15px 20px; }
-        .video-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .video-date { font-size: 12px; color: var(--text-sub); }
-
+        @media (max-width: 1000px) {
+            body.modal-open #mainWrapper { transform: translateX(0); }
+            .modal-wrapper { width: 100%; }
+        }
         @media (max-width: 768px) {
             .top-nav { display: none; }
             .menu-toggle-btn { display: flex; align-items: center; justify-content: center; }
-            .section-container { padding-top: 80px; }
+            #mainWrapper { padding-top: 90px; }
+            .album-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .modal-wrapper { padding: 30px 20px; }
+            .modal-album-cover { width: 140px; height: 140px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 네비게이션: 타 페이지로의 앵커는 index.html 주소 포함 -->
     <nav class="top-nav">
         <ul class="desktop-menu">
-            <li><a href="index.html#homeSection">Home</a></li>
-            <li><a href="index.html#memberSection">Members</a></li>
-            <li><a href="index.html#chartSection">Real-time Chart</a></li>
-            <li><a href="index.html#calendarSection">Schedule</a></li>
-            <li><a href="archive.html" style="color: var(--c-gold);">Archive</a></li>
+            <li><a href="index.html#homeSection">HOME</a></li>
+            <li><a href="index.html#memberSection">MEMBERS</a></li>
+            <li><a href="index.html#chartSection">CHARTS</a></li>
+            <li><a href="index.html#calendarSection">SCHEDULE</a></li>
+            <li><a href="goods.html">GOODS</a></li>
+            <li><a href="archive.html" style="color: var(--c-pink);">ARCHIVE</a></li>
         </ul>
         <div class="sns-links">
-            <a href="https://twitter.com/RESCENEofficial" target="_blank">𝕏</a>
-            <a href="https://www.instagram.com/rescene_official" target="_blank">IG</a>
-            <a href="https://www.youtube.com/@RESCENE_official" target="_blank">YT</a>
+            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="x.png" alt="X" onerror="this.src='https://via.placeholder.com/18x18?text=X'"></a>
+            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="instagram.png" alt="IG" onerror="this.src='https://via.placeholder.com/18x18?text=IG'"></a>
+            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="youtube.png" alt="YT" onerror="this.src='https://via.placeholder.com/18x18?text=YT'"></a>
         </div>
     </nav>
 
@@ -79,79 +118,236 @@
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
     <div class="sidebar" id="sidebar">
         <ul>
-            <li><a href="index.html#homeSection">Home</a></li>
-            <li><a href="index.html#memberSection">Members</a></li>
-            <li><a href="index.html#chartSection">실시간 차트</a></li>
-            <li><a href="index.html#calendarSection">스케줄 달력</a></li>
-            <li><a href="archive.html" style="color: var(--c-gold);">아카이브 영상관</a></li>
+            <li><a href="index.html#homeSection">HOME</a></li>
+            <li><a href="index.html#memberSection">MEMBERS</a></li>
+            <li><a href="index.html#chartSection">REAL-TIME CHART</a></li>
+            <li><a href="index.html#calendarSection">SCHEDULE CALENDAR</a></li>
+            <li><a href="goods.html">OFFICIAL GOODS</a></li>
+            <li><a href="archive.html" style="color: var(--c-pink);">ARCHIVE MEDIA</a></li>
         </ul>
     </div>
 
-    <!-- 컨텐츠 영역 -->
-    <div class="section-container">
-        
-        <!-- 뮤직비디오 섹션 -->
+    <!-- ⭐️ 팝업 시 밀리는 전체 화면 래퍼 -->
+    <div id="mainWrapper">
         <div class="section-header">
-            <div>OFFICIAL <span class="title-hl">MUSIC VIDEO</span></div>
+            <div class="section-title">RESCENE <span>DISCOGRAPHY</span></div>
         </div>
-        <div class="video-grid">
-            <a href="https://youtu.be/ZbO9PBdFRdc" target="_blank" class="video-card">
-                <div class="video-thumb">
-                    <!-- 썸네일 주소: 유튜브 고유 ID를 넣으면 썸네일을 가져옵니다 -->
-                    <img src="https://img.youtube.com/vi/ZbO9PBdFRdc/maxresdefault.jpg" alt="LOVE ATTACK MV">
-                    <div class="play-icon">▶</div>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">RESCENE (리센느) 'LOVE ATTACK' Official MV</div>
-                    <div class="video-date">2024. 08. 27</div>
-                </div>
-            </a>
-            
-            <a href="https://youtu.be/some_id" target="_blank" class="video-card">
-                <div class="video-thumb">
-                    <img src="https://via.placeholder.com/640x360/1a1a1a/ff3399?text=Video+Thumbnail" alt="UhUh MV">
-                    <div class="play-icon">▶</div>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">RESCENE (리센느) 'UhUh' Official MV</div>
-                    <div class="video-date">2024. 03. 26</div>
-                </div>
-            </a>
-        </div>
+        
+        <!-- 동적 앨범 렌더링 영역 -->
+        <div class="album-grid" id="albumGridContainer"></div>
+    </div>
 
-        <!-- 외부 컨텐츠 / 자체 예능 섹션 -->
-        <div class="section-header">
-            <div>RESCENE <span class="title-hl">CONTENTS</span></div>
-        </div>
-        <div class="video-grid">
-            <a href="https://youtu.be/some_id" target="_blank" class="video-card">
-                <div class="video-thumb">
-                    <img src="https://via.placeholder.com/640x360/1a1a1a/00e5ff?text=Contents+Thumbnail" alt="Contents">
-                    <div class="play-icon">▶</div>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">[리센느 자체컨텐츠] 제목이 들어갑니다 1화</div>
-                    <div class="video-date">2024. 09. 10</div>
-                </div>
-            </a>
-            
-            <a href="https://youtu.be/some_id" target="_blank" class="video-card">
-                <div class="video-thumb">
-                    <img src="https://via.placeholder.com/640x360/1a1a1a/ffc107?text=Contents+Thumbnail" alt="Contents">
-                    <div class="play-icon">▶</div>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">릴레이댄스 RESCENE(리센느) - LOVE ATTACK</div>
-                    <div class="video-date">2024. 09. 05</div>
-                </div>
-            </a>
+    <!-- 우측 팝업 모달 -->
+    <div class="modal-wrapper" id="albumModal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <div class="modal-album-header">
+            <img src="" alt="Album Cover" class="modal-album-cover" id="modalAlbumCover">
+            <div class="modal-album-title" id="modalAlbumTitle">Album Title</div>
         </div>
         
+        <!-- 동적 트랙 렌더링 영역 -->
+        <div class="track-list" id="modalTrackList"></div>
     </div>
 
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('active'); document.getElementById('sidebarOverlay').classList.remove('active'); }
+
+        // ⭐️ 전달해주신 전체 데이터 구조화
+        const archiveData = [
+            {
+                title: "YoYo", cover: "yoyo.jpg",
+                tracks: [ { title: "YoYo (Title)", videos: [{ label: "MV", id: "uDYy2UyO1X4" }] } ]
+            },
+            {
+                title: "Re:Scene", cover: "uhuh.jpg",
+                tracks: [
+                    { title: "UhUh (Title)", videos: [{ label: "MV", id: "zpSejlkSXLA" }] },
+                    { title: "YoYo", videos: [{ label: "MV", id: "uDYy2UyO1X4" }] }
+                ]
+            },
+            {
+                title: "Counting Star (더 매직스타 X RESCENE)", cover: "Counting Start.jpg",
+                tracks: [
+                    { title: "Counting Star (Title)", videos: [{ label: "음원", id: "mBAEnI5kjdI" }, { label: "첫 팬콘", id: "AzJepX0ujq0" }] },
+                    { title: "Counting Star (Inst.)", videos: [] }
+                ]
+            },
+            {
+                title: "YoYo (Japanese Version)", cover: "yoyo japan.jpg",
+                tracks: [ { title: "YoYo (Japanese Version)", videos: [{ label: "MV", id: "Lle0xkhk_9M" }] } ]
+            },
+            {
+                title: "SCENEDROME", cover: "SCENEDROME.jpg",
+                tracks: [
+                    { title: "Lucky you", videos: [{ label: "Audio", id: "0UMsSFysM8o" }] },
+                    { title: "Love Attack (Title)", videos: [{ label: "MV", id: "9XttLI0oH0I" }, { label: "존박 ver", id: "y1SL3LBCGWg" }, { label: "인기가요 240901", id: "Hv1wQ6nlpNE" }, { label: "엠카 260618", id: "ajhEFz1zNMQ" }] },
+                    { title: "New World", videos: [{ label: "MV", id: "QNXeGm-Wkms" }, { label: "심플리 케이팝", id: "WwGF_sqjH6c" }] },
+                    { title: "Pinball (Title)", videos: [{ label: "MV", id: "B8JJ8RNM-60" }] }
+                ]
+            },
+            {
+                title: "UhUh (Japanese Version)", cover: "uhuh japan.jpg",
+                tracks: [ { title: "UhUh (Japanese Version) (Title)", videos: [{ label: "음원", id: "YcDYrBJ3yjw" }, { label: "TV-LIVE 250528", id: "JRdVfTgwlrQ" }] } ]
+            },
+            {
+                title: "Glow Up", cover: "Glowup.jpg",
+                tracks: [
+                    { title: "CRASH", videos: [{ label: "음원", id: "_ivLUJ3R62U" }, { label: "케이팝-잇", id: "8kRucJDItlQ" }] },
+                    { title: "Glow Up (Title)", videos: [{ label: "MV", id: "h0xUtrb_JBc" }, { label: "Performance ver", id: "WQuoPINWLU8" }, { label: "엠카 250206", id: "FYdghnUJx-Y" }, { label: "뮤뱅 250214", id: "r3I9kJGcn3g" }, { label: "인기가요 250302", id: "bQ24gSDbMqY" }] },
+                    { title: "Going On", videos: [{ label: "음원", id: "SIre1awR938" }] },
+                    { title: "In my lotion", videos: [{ label: "음원", id: "rm3yX5-vusA" }, { label: "쇼챔 250305", id: "DqVwDLWg3ek" }] },
+                    { title: "Cotton Candy", videos: [{ label: "음원", id: "Y8dkJXZmT5M" }, { label: "직캠 250215", id: "pQs7iZS0xoE" }] }
+                ]
+            },
+            {
+                title: "Glow Up (English Version)", cover: "Glowup eng.jpg",
+                tracks: [ { title: "Glow Up (English Version) (Title)", videos: [{ label: "음원", id: "a5_b7KfG15Y" }] } ]
+            },
+            {
+                title: "남주의 첫날밤을 가져버렸다 OST Part.1", cover: "namju.jpg",
+                tracks: [ { title: "밤밤밤 (Title)", videos: [{ label: "MV", id: "AfiBC_VR2K4" }, { label: "음원", id: "UcIt0TBe8pg" }, { label: "직캠 250907", id: "FmJ35OQches" }] } ]
+            },
+            {
+                title: "Dearest", cover: "dejavu.jpg",
+                tracks: [
+                    { title: "Deja vu (Title)", videos: [{ label: "MV", id: "ZbO9PBdFRdc" }, { label: "엠카 250703", id: "jciMWQgUVCA" }, { label: "엠카 250710", id: "vQBtHJVbNeM" }, { label: "뮤뱅 250714", id: "fW8CXaBau-U" }, { label: "뮤뱅 250711", id: "JdYC0Jomkbs" }, { label: "쇼챔 260715", id: "PqpmFwNjDHg" }, { label: "교차편집 1", id: "AXdH0rWOXDg" }, { label: "교차편집 2", id: "K7YYvqVFXn8" }] },
+                    { title: "Mood", videos: [{ label: "MV", id: "v5we0mJpoDM" }] }
+                ]
+            },
+            {
+                title: "Dearest (Speed Up Version)", cover: "dejavu.jpg",
+                tracks: [
+                    { title: "Deja vu (Speed Up) (Title)", videos: [{ label: "음원", id: "PJqWbyNPcqw" }] },
+                    { title: "Mood (Speed Up)", videos: [{ label: "음원", id: "VtRqBzYte2g" }] }
+                ]
+            },
+            {
+                title: "남주의 첫날밤을 가져버렸다 OST Special", cover: "namju2.jpg",
+                tracks: [ { title: "밤밤밤 (Title)", videos: [{ label: "MV", id: "AfiBC_VR2K4" }, { label: "음원", id: "UcIt0TBe8pg" }, { label: "직캠 250907", id: "FmJ35OQches" }] } ]
+            },
+            {
+                title: "고백주파수 (첫사랑 엔딩 X RESCENE)", cover: "go.jpg",
+                tracks: [
+                    { title: "고백주파수 (Title)", videos: [{ label: "음원", id: "39gg4Su8MI8" }, { label: "Clip", id: "Ihsh9VRZLlo" }] },
+                    { title: "고백주파수 (Inst.)", videos: [{ label: "음원", id: "4as776eLYH8" }] }
+                ]
+            },
+            {
+                title: "lip bomb", cover: "lip bomb.jpg",
+                tracks: [
+                    { title: "Heart Drop (Title)", videos: [{ label: "MV", id: "ByX8EZq8500" }, { label: "Perf ver", id: "638f3ttCR20" }, { label: "뮤뱅 251121", id: "2SKGgezncCI" }, { label: "더쇼 251111", id: "dDi-0BaW_8Y" }, { label: "쇼챔 251112", id: "ORiKYmHPVmk" }, { label: "Canvas", id: "WgDRLNgzztU" }, { label: "녹음 비하인드", id: "doGCcKx9F1Q" }] },
+                    { title: "Bloom (Title)", videos: [{ label: "MV", id: "MC6-82GRK5I" }, { label: "Perf ver", id: "_zzAi5x0cXc" }, { label: "더쇼 251213", id: "uCCV5qK0TBM" }, { label: "음중 251220", id: "4ADSzlm18hY" }, { label: "뮤뱅 251128", id: "G-zlWrcj7DU" }, { label: "its Live", id: "tf84FgQgi80" }, { label: "1theK", id: "kjvlrGs5f7c" }] },
+                    { title: "Love Echo", videos: [{ label: "SHOWCASE", id: "rAR6A_y3P68" }, { label: "FANPOPTY 260721", id: "DONLx6eS-e0" }, { label: "FANCAM 260721", id: "TBgpliSowjI" }] },
+                    { title: "Hello XO", videos: [{ label: "음원", id: "jVKfnPIkTwY" }] },
+                    { title: "MVP", videos: [{ label: "음원", id: "TF2y-wSc2ss" }, { label: "Christmas ver", id: "qhLDO3nIYfc" }, { label: "Live Perf", id: "lviLSHBntGQ" }, { label: "직캠 260122", id: "4gwhiaF9zvA" }] }
+                ]
+            },
+            {
+                title: "Pinball (Japanese Ver.)", cover: "pinball japan.jpg",
+                tracks: [ { title: "Pinball (Japanese Ver.) (Title)", videos: [{ label: "음원", id: "Cz-msuk8oqM" }, { label: "Kcon 260508", id: "tXI20ksglDM" }] } ]
+            },
+            {
+                title: "RESCENE X ???", cover: "busy.jpg",
+                tracks: [
+                    { title: "Busy Boy (Title)", videos: [{ label: "MV", id: "MMvTKa3BmXo" }, { label: "Perf ver", id: "ewubELWBMaE" }, { label: "음원", id: "c70TkZH7fr0" }, { label: "음중 260228", id: "bEkXlmGstIo" }, { label: "쇼챔 260304", id: "j1YF0S3CKtw" }, { label: "인기가요 260301", id: "5HwxTQouI-0" }] },
+                    { title: "Busy Boy (Inst.)", videos: [{ label: "음원", id: "1gvTKPTYLE8" }] }
+                ]
+            },
+            {
+                title: "Music from THE SPECIALS", cover: "musicfrom.jpg",
+                tracks: [ { title: "Higher", videos: [{ label: "음원", id: "HlR_f2gHxoo" }] } ]
+            },
+            {
+                title: "Busy Boy (Galantis Remix)", cover: "busy_2.jpg",
+                tracks: [ { title: "Busy Boy (Galantis Remix) (Title)", videos: [{ label: "음원", id: "tSCde4Aa2lg" }] } ]
+            },
+            {
+                title: "Runaway", cover: "run.jpg",
+                tracks: [
+                    { title: "Runaway (Title)", videos: [{ label: "MV", id: "rsZwrTNklos" }, { label: "엠카 260409", id: "qt2FvoXRw1U" }, { label: "its Live", id: "aDHmmrfizIE" }, { label: "음중 260411", id: "F9hbFUr-SmU" }, { label: "엠카 260416", id: "VB_vtps_wus" }, { label: "인기가요 260419", id: "ZoWGyFHTXbI" }, { label: "교차편집", id: "OkZVMQlXpDw" }] }
+                ]
+            },
+            {
+                title: "Pretty Girl - Special Single", cover: "pretty.jpg",
+                tracks: [
+                    { title: "Pretty Girl (Title)", videos: [{ label: "MV", id: "qZlu2j2SiBA" }, { label: "음중 260718", id: "mafe6aEH16k" }, { label: "엠카 260709", id: "Esd-KkxROxA" }, { label: "뮤뱅 260710", id: "3ctIKKzrA9M" }, { label: "음중 260711", id: "j4LlqGxOr2E" }, { label: "뮤뱅 260717", id: "0dWn9wtFr54" }, { label: "인기가요 260719", id: "eK-anMCLuiI" }, { label: "음중 260718", id: "4s5TkXahA8g" }] }
+                ]
+            }
+        ];
+
+        // 그리드 렌더링
+        const gridContainer = document.getElementById('albumGridContainer');
+        archiveData.forEach((album, index) => {
+            const card = document.createElement('div');
+            card.className = 'album-card';
+            card.onclick = () => openModal(index);
+            card.innerHTML = `
+                <div class="album-cover">
+                    <img src="${album.cover}" alt="${album.title}" onerror="this.src='https://via.placeholder.com/300?text=NO+IMAGE'">
+                </div>
+                <div class="album-info"><div class="album-title">${album.title}</div></div>
+            `;
+            gridContainer.appendChild(card);
+        });
+
+        // 모달 조작 및 트랙 렌더링
+        function openModal(albumIndex) {
+            const album = archiveData[albumIndex];
+            document.getElementById('modalAlbumTitle').innerText = album.title;
+            document.getElementById('modalAlbumCover').src = album.cover;
+            
+            const trackListEl = document.getElementById('modalTrackList');
+            let trackHtml = '';
+            
+            album.tracks.forEach((track, tIdx) => {
+                let btnHtml = '';
+                if(track.videos && track.videos.length > 0) {
+                    track.videos.forEach((vid, vIdx) => {
+                        btnHtml += `<button class="video-btn" onclick="playVideo('player_${tIdx}', '${vid.id}', this)">${vid.label}</button>`;
+                    });
+                } else {
+                    btnHtml = `<div style="font-size:12px; color:#888;">등록된 영상이 없습니다.</div>`;
+                }
+
+                trackHtml += `
+                    <div class="track-item" id="track_${tIdx}">
+                        <div class="track-title" onclick="toggleTrack(${tIdx})">${track.title} <span>▼</span></div>
+                        <div class="track-content">
+                            <div class="video-btn-group">${btnHtml}</div>
+                            <div class="inline-player-wrapper" id="player_${tIdx}"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            trackListEl.innerHTML = trackHtml;
+
+            document.getElementById('albumModal').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function toggleTrack(tIdx) {
+            const el = document.getElementById(`track_${tIdx}`);
+            el.classList.toggle('active');
+        }
+
+        // 아이프레임 플레이어 바로 재생
+        function playVideo(playerId, ytId, btnEl) {
+            // 버튼 활성화 표시
+            const siblings = btnEl.parentElement.children;
+            for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
+            btnEl.classList.add('active');
+
+            const player = document.getElementById(playerId);
+            player.classList.add('active');
+            player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; fullscreen"></iframe>`;
+        }
+
+        function closeModal() {
+            document.getElementById('albumModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+            setTimeout(() => { document.getElementById('modalTrackList').innerHTML = ''; }, 300);
+        }
     </script>
 </body>
 </html>

@@ -106,18 +106,9 @@ body, html {
 .ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }
 .ticker-wrapper { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
 .ticker-item { height: 56px; display: flex; align-items: center; padding: 0 25px; gap: 30px; width: 100%; box-sizing: border-box; }
-
-/* ⭐️ 로고 크기 고정 영역 */
 .ticker-platform { width: 70px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .p-logo { font-family: var(--font-head); font-size: 12px; font-weight: 800; color: var(--text-secondary); letter-spacing: 1px; }
-.p-logo-img { 
-    max-height: 20px !important; 
-    max-width: 60px !important; 
-    width: auto !important; 
-    height: auto !important; 
-    object-fit: contain; 
-    display: block; 
-}
+.p-logo-img { max-height: 20px !important; max-width: 60px !important; width: auto !important; height: auto !important; object-fit: contain; display: block; }
 
 .ticker-songs { display: flex; gap: 40px; overflow: hidden; white-space: nowrap; flex: 1; align-items: center; }
 .ticker-song-info { display: flex; align-items: center; gap: 10px; font-size: 14px; font-family: var(--font-num); }
@@ -137,36 +128,79 @@ body, html {
 .live-badge { align-self: flex-start; background: var(--c-accent); color: #000; font-family: var(--font-num); font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 30px; margin-bottom: 15px; letter-spacing: 1px; }
 .bc-title { font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0; line-height: 1.4; letter-spacing: -0.5px; }
 
-
 /* ==========================================================================
-   ⭐️ Goods Section (New)
+   ⭐️ Goods Section (Grid Version)
    ========================================================================== */
-.goods-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
-.goods-card { background: var(--bg-surface); border-radius: 20px; border: 1px solid var(--border-light); display: flex; flex-direction: row; overflow: hidden; transition: var(--transition-smooth); }
-.goods-card:hover { border-color: var(--border-highlight); transform: translateY(-5px); }
-.goods-img-wrapper { width: 40%; position: relative; background: #fff; display: flex; align-items: center; justify-content: center; padding: 10px; }
-.goods-img-wrapper img { width: 100%; height: auto; object-fit: contain; }
-.goods-tag { position: absolute; top: 15px; left: 15px; background: #ff4757; color: #fff; font-size: 10px; font-weight: 800; font-family: var(--font-head); padding: 4px 8px; border-radius: 4px; letter-spacing: 1px;}
-.goods-info { width: 60%; padding: 30px; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; }
-.goods-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0 0 10px 0; line-height: 1.3; }
-.goods-price { font-size: 16px; font-weight: 500; font-family: var(--font-num); color: var(--c-accent); margin-bottom: 25px; }
-.shop-row { margin-bottom: 15px; }
-.shop-row:last-child { margin-bottom: 0; }
-.shop-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-.shop-name { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
-.shop-status { font-size: 11px; font-weight: 700; font-family: var(--font-body); }
-.shop-status.sold-out { color: #ff4757; }
-.shop-status.warning { color: #f4a261; }
-.shop-status.safe { color: #66bb6a; }
-.stock-bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
-.stock-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease-out; }
+.goods-grid-v2 { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); /* 3열 그리드 */
+    gap: 60px 20px; 
+}
+.goods-item { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+}
+.goods-img { 
+    width: 100%; 
+    max-width: 220px; 
+    aspect-ratio: 1; 
+    margin-bottom: 25px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    background: transparent;
+}
+.goods-img img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: contain; 
+}
+
+/* 품절 표시 텍스트 */
+.goods-sold-out-big { 
+    font-family: var(--font-head); 
+    font-size: 26px; 
+    font-weight: 800; 
+    color: #ff4757; 
+    margin-top: 15px; 
+    letter-spacing: 2px;
+}
+
+/* 가격 및 재고 텍스트 */
+.goods-price-text { 
+    font-family: var(--font-num); 
+    font-size: 17px; 
+    font-weight: 600; 
+    color: var(--text-primary); 
+    margin-bottom: 15px; 
+}
+.goods-stock-list { 
+    width: 100%; 
+    max-width: 200px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+}
+.stock-row { 
+    display: flex; 
+    justify-content: space-between; 
+    font-size: 13px; 
+    color: var(--text-secondary); 
+}
+.stock-row span:last-child { 
+    font-family: var(--font-body); 
+    font-weight: 400; 
+    color: var(--text-muted);
+}
 
 /* ==========================================================================
    ⭐️ Calendar Central Popup Modal
    ========================================================================== */
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9998; opacity: 0; pointer-events: none; transition: 0.4s ease; }
 .modal-backdrop.active { opacity: 1; pointer-events: auto; }
-.modal-backdrop.cal-backdrop { z-index: 8900; } /* 캘린더 배경은 Nav(8000)보단 높고 캘린더팝업보단 낮게 */
+.modal-backdrop.cal-backdrop { z-index: 8900; } 
 
 .calendar-popup-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%);
@@ -186,10 +220,11 @@ body, html {
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
 .weekday { text-align: center; color: var(--text-muted); font-family: var(--font-head); font-size: 11px; font-weight: 600; padding-bottom: 10px; letter-spacing: 1px; }
 
-/* ⭐️ 캘린더 날짜 박스 크기 엄격 통일 */
+/* 달력 셀 설정 */
 .day-cell { 
+    position: relative;
     border-radius: 12px; 
-    height: 110px !important;       /* 높이 강제 고정 */
+    height: 110px !important;       
     min-height: 110px !important; 
     max-height: 110px !important;
     padding: 12px; 
@@ -198,23 +233,35 @@ body, html {
     flex-direction: column; 
     cursor: pointer; 
     transition: 0.3s; 
-    box-sizing: border-box;         /* 패딩 포함 크기 유지 */
-    overflow: hidden;               /* 내용 넘침 짤림 처리 */
+    box-sizing: border-box;         
+    overflow: hidden;               
 }
 .day-cell.has-event { background: rgba(255,255,255,0.03); border-color: var(--border-light); }
 .day-cell.has-event:hover { background: rgba(255,255,255,0.07); border-color: var(--border-highlight); transform: translateY(-2px); }
 .day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
 
-.day-number { font-family: var(--font-num); font-size: 14px; color: var(--text-secondary); font-weight: 500; align-self: flex-start; margin-bottom: 10px; flex-shrink: 0;}
+.day-number { font-family: var(--font-num); font-size: 14px; color: var(--text-secondary); font-weight: 500; align-self: flex-start; margin-bottom: 2px; flex-shrink: 0;}
 .day-cell.has-event .day-number { color: var(--text-primary); font-weight: 700; }
-.cell-event-list { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+
+/* ⭐️ 캘린더 손글씨 폰트 스타일 */
+.cal-handwritten {
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 17px;
+    color: var(--c-accent);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    transform: rotate(-3deg); /* 살짝 기울여서 손글씨 느낌 강조 */
+    flex-shrink: 0;
+}
+
+.cell-event-list { display: flex; flex-direction: column; gap: 5px; width: 100%; }
 .cal-event-row { display: flex; align-items: center; gap: 8px; width: 100%; overflow: hidden; }
 .cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 .cal-event-time { font-size: 11px; font-weight: 600; font-family: var(--font-num); flex-shrink: 0; }
 .cal-event-title { color: var(--text-primary); font-size: 11px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
 
 /* ==========================================================================
-   Schedule Detail Modal (Right Slide Panel)
+   Schedule Detail Modal
    ========================================================================== */
 .modal-wrapper { 
     position: fixed; top: 0; right: 0; width: 440px; height: 100vh; 
@@ -244,11 +291,18 @@ body, html {
 @media (max-width: 800px) {
     .top-nav { padding: 15px 20px; }
     .desktop-menu { display: none; }
-    .goods-card { flex-direction: column; }
-    .goods-img-wrapper, .goods-info { width: 100%; }
-    .goods-img-wrapper { height: 250px; }
+    
+    /* 모바일에서는 굿즈 그리드를 2열, 혹은 1열로 조정 */
+    .goods-grid-v2 { grid-template-columns: repeat(2, 1fr); gap: 40px 15px; }
+
     .calendar-popup-wrapper { width: 95%; padding: 25px 15px; }
     .calendar-grid { gap: 6px; }
-    .day-cell { height: 80px !important; min-height: 80px !important; padding: 6px; }
+    .day-cell { height: 95px !important; min-height: 95px !important; padding: 8px; }
+    .cal-handwritten { font-size: 14px; } /* 모바일에서 폰트 사이즈 살짝 축소 */
+    
     .modal-wrapper { width: 100%; padding: 40px 20px; }
+}
+
+@media (max-width: 500px) {
+    .goods-grid-v2 { grid-template-columns: 1fr; } /* 좁은 모바일에서는 1열 */
 }

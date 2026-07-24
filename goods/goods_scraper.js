@@ -62,15 +62,14 @@ async function scrapeGoods() {
                 console.log(`[${member} - ${shop}] 페이지 접속 중...`);
                 await page.goto(config.url, { waitUntil: 'domcontentloaded', timeout: 30000 });
                 
-                await delay(3000); 
+                await delay(4000); 
 
-                // 1. 가격 긁어오기 (⭐️ 수정: 텍스트 전체에서 숫자만 정규식으로 추출)
+                // 1. 가격 긁어오기 (텍스트 전체에서 숫자만 추출)
                 if (!priceSet) {
                     await page.waitForSelector(config.priceSelector, { timeout: 5000 }).catch(() => null);
                     const priceText = await page.$eval(config.priceSelector, el => el.innerText).catch(() => null);
 
                     if (priceText) {
-                        // 콤마 제거 후 세 자리 이상 숫자만 추출 → "판매가" 같은 라벨 텍스트는 무시됨
                         const match = priceText.replace(/,/g, '').match(/\d{3,}/);
                         if (match) {
                             const num = Number(match[0]).toLocaleString('ko-KR');
@@ -80,8 +79,18 @@ async function scrapeGoods() {
                     }
                 }
 
-                // 2. 품절 마크 긁어오기
-                const isSoldOut = await page.$(config.soldoutSelector); 
+                // 2. 품절 마크 긁어오기 (⭐️ 수정: 클래스명 대신 "SOLD OUT" 텍스트로 판별)
+                const isSoldOut = await page.evaluate((sel) => {
+                    // 기존 클래스 셀렉터로도 먼저 확인
+                    if (document.querySelector(sel)) return true;
+                    // 클래스명이 다를 수 있으니, 화면에 "SOLD OUT" / "품절" 글자가 있는 요소도 탐색
+                    const els = Array.from(document.querySelectorAll('button, a, span, div, input'));
+                    return els.some(el => {
+                        const t = (el.innerText || el.value || '').trim().toUpperCase();
+                        return t === 'SOLD OUT' || t === 'SOLDOUT' || t === '품절';
+                    });
+                }, config.soldoutSelector);
+
                 if (isSoldOut) {
                     goodsData[member][shop] = "soldout";
                     console.log(` > 상태: 품절`);

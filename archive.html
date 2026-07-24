@@ -24,9 +24,10 @@
             <li><a href="archive.html" style="color: var(--c-pink);">ARCHIVE</a></li>
         </ul>
         <div class="sns-links">
-            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.src='https://via.placeholder.com/18x18?text=X'"></a>
-            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.src='https://via.placeholder.com/18x18?text=IG'"></a>
-            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.src='https://via.placeholder.com/18x18?text=YT'"></a>
+            <!-- ⭐️ 무한루프 방지 (this.onerror=null;) 적용됨 -->
+            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.onerror=null; this.src='https://via.placeholder.com/18x18?text=X'"></a>
+            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.onerror=null; this.src='https://via.placeholder.com/18x18?text=IG'"></a>
+            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.onerror=null; this.src='https://via.placeholder.com/18x18?text=YT'"></a>
         </div>
     </nav>
 
@@ -44,13 +45,11 @@
     </div>
 
     <!-- 메인 컨텐츠 래퍼 -->
-    <div id="mainWrapper" style="padding-top: 120px; max-width: 900px;"> <!-- 리스트형이므로 가로폭을 살짝 줄여서 가독성 높임 -->
-        
+    <div id="mainWrapper" style="padding-top: 120px; max-width: 900px;">
         <div class="section-header" style="margin-bottom: 20px; border-bottom: none;">
             <div class="section-title">RESCENE <span>DISCOGRAPHY</span></div>
         </div>
 
-        <!-- ⭐️ 상단 카테고리 대분류 탭 -->
         <div class="archive-category-tabs">
             <button class="cat-tab-btn active">앨범</button>
             <button class="cat-tab-btn" onclick="alert('업데이트 예정입니다.')">직캠</button>
@@ -59,9 +58,7 @@
             <button class="cat-tab-btn" onclick="alert('업데이트 예정입니다.')">외부 컨텐츠</button>
         </div>
         
-        <!-- ⭐️ 아코디언 리스트가 렌더링될 공간 -->
         <div class="archive-list" id="archiveListContainer"></div>
-        
     </div>
 
     <script>
@@ -187,7 +184,6 @@
             }
         ];
 
-        // ⭐️ 글로벌 데이터 스토어 (앱처럼 작동하게 만듦)
         let processedData = [];
 
         function renderList() {
@@ -195,7 +191,6 @@
             container.innerHTML = '';
             
             archiveData.forEach((album, albumIdx) => {
-                // 1. 영상 카테고리 자동 분류 로직
                 let categories = { 'MV': [], '무대': [], '직캠': [], '음원': [], '기타': [] };
                 
                 album.tracks.forEach(track => {
@@ -203,13 +198,11 @@
                         track.videos.forEach(vid => {
                             let cat = '기타';
                             const lbl = vid.label.toLowerCase();
-                            // 단어 스캔해서 탭 분류
                             if(lbl.includes('mv')) cat = 'MV';
                             else if(lbl.includes('음원') || lbl.includes('audio')) cat = '음원';
                             else if(lbl.includes('직캠') || lbl.includes('fancam')) cat = '직캠';
                             else if(lbl.includes('엠카') || lbl.includes('뮤뱅') || lbl.includes('인기가요') || lbl.includes('음중') || lbl.includes('쇼챔') || lbl.includes('더쇼') || lbl.includes('perf') || lbl.includes('showcase') || lbl.includes('live')) cat = '무대';
                             
-                            // 여러 곡이 있을 수 있으니 버튼 이름에 곡 제목을 붙여줌
                             categories[cat].push({ 
                                 id: vid.id, 
                                 btnLabel: album.tracks.length > 1 ? `[${track.title}] ${vid.label}` : vid.label 
@@ -218,31 +211,25 @@
                     }
                 });
 
-                // 빈 카테고리는 삭제하고 존재하는 탭만 남김
                 let availableTabs = Object.keys(categories).filter(k => categories[k].length > 0);
-                
-                // 데이터 저장
                 processedData.push({ albumTitle: album.title, categories: categories, availableTabs: availableTabs });
 
-                // 2. 아코디언 리스트 HTML 뼈대 만들기
                 const item = document.createElement('div');
                 item.className = 'archive-item';
                 item.id = `album_item_${albumIdx}`;
                 
+                // ⭐️ 무한루프 방지 (this.onerror=null;) 적용됨
                 item.innerHTML = `
                     <div class="archive-item-header" onclick="toggleAlbum(${albumIdx})">
                         <div class="archive-item-thumb">
-                            <img src="${album.cover}" alt="cover" onerror="this.src='https://via.placeholder.com/100?text=NO+IMG'">
+                            <img src="${album.cover}" alt="cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/100?text=NO+IMG'">
                         </div>
                         <div class="archive-item-title">${album.title}</div>
                         <div class="archive-item-icon">▼</div>
                     </div>
                     <div class="archive-item-content">
-                        <!-- 서브 탭 렌더링 영역 -->
                         <div class="sub-tabs-container" id="tabs_${albumIdx}"></div>
-                        <!-- 비디오 버튼 렌더링 영역 -->
                         <div class="video-btn-list" id="vbtns_${albumIdx}"></div>
-                        <!-- 영상 플레이어 -->
                         <div class="inline-player" id="player_${albumIdx}"></div>
                     </div>
                 `;
@@ -250,24 +237,20 @@
             });
         }
 
-        // 앨범 행(Row) 클릭 시 아코디언 열기
         function toggleAlbum(idx) {
             const el = document.getElementById(`album_item_${idx}`);
             const isOpening = !el.classList.contains('active');
             
-            // 다른 열려있는 앨범 닫기 (깔끔하게 하나만 열리도록)
             document.querySelectorAll('.archive-item').forEach(item => item.classList.remove('active'));
             
             if (isOpening) {
                 el.classList.add('active');
-                renderTabs(idx); // 열릴 때 내부 탭 렌더링
+                renderTabs(idx);
             } else {
-                // 닫을 때 유튜브 소리 꺼지도록 iframe 제거
                 document.getElementById(`player_${idx}`).innerHTML = '';
             }
         }
 
-        // 선택된 앨범 내부의 서브 탭(MV, 음원, 무대 등) 렌더링
         function renderTabs(idx) {
             const data = processedData[idx];
             const tabContainer = document.getElementById(`tabs_${idx}`);
@@ -279,19 +262,15 @@
 
             let tabsHtml = '';
             data.availableTabs.forEach((tabName, tIdx) => {
-                // 첫 번째 탭이 기본으로 선택되도록 (보통 MV나 음원)
                 const isActive = tIdx === 0 ? 'active' : '';
                 tabsHtml += `<button class="sub-tab-btn ${isActive}" onclick="selectTab(${idx}, '${tabName}', this)">${tabName}</button>`;
             });
             tabContainer.innerHTML = tabsHtml;
 
-            // 열리자마자 1순위 탭의 영상 버튼들을 띄우기
             selectTab(idx, data.availableTabs[0], tabContainer.firstElementChild);
         }
 
-        // 서브 탭(MV, 무대 등) 클릭 시 하위 비디오 버튼들 렌더링
         function selectTab(albumIdx, tabName, btnEl) {
-            // 버튼 활성화 스타일
             const siblings = btnEl.parentElement.children;
             for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
             btnEl.classList.add('active');
@@ -306,15 +285,12 @@
             });
             btnContainer.innerHTML = vBtnsHtml;
 
-            // 탭을 누르면 무조건 첫 번째 영상을 바로 틀어줌
             if(videos.length > 0) {
                 playVideo(albumIdx, videos[0].id, btnContainer.firstElementChild);
             }
         }
 
-        // 실제 유튜브 iframe 재생
         function playVideo(albumIdx, ytId, btnEl) {
-            // 버튼 활성화 스타일
             if(btnEl) {
                 const siblings = btnEl.parentElement.children;
                 for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
@@ -325,7 +301,6 @@
             player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; fullscreen"></iframe>`;
         }
 
-        // 초기화 실행
         window.addEventListener('DOMContentLoaded', () => { renderList(); });
 
     </script>

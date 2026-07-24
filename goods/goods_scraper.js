@@ -1,18 +1,32 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 
-// ⭐️ REMINI는 WITHMUU, 나머지는 KREAM으로 타겟 명확화
-const TARGETS = [
-    { member: 'remini', shop: 'withmuu', url: 'https://withmuu.com/goods/goods_view.php?goodsNo=1000014598' },
-    { member: 'jota', shop: 'kream', url: 'https://kream.co.kr/products/985255' },
-    { member: 'ming', shop: 'kream', url: 'https://kream.co.kr/products/985257' },
-    { member: 'ribbu', shop: 'kream', url: 'https://kream.co.kr/products/985256' },
-    { member: 'jjaero', shop: 'kream', url: 'https://kream.co.kr/products/985259' },
-    { member: 'yam', shop: 'kream', url: 'https://kream.co.kr/products/985258' }
-];
+// ⭐️ remini는 withmuu 1개, 나머지는 kream 1개만 돌도록 완벽하게 분리했습니다.
+const SCRAPE_CONFIG = {
+    remini: {
+        withmuu: { url: "https://withmuu.com/goods/goods_view.php?goodsNo=1000014598", priceSelector: ".item_price", soldoutSelector: ".btn_soldout" }
+    },
+    jota: {
+        kream: { url: "https://kream.co.kr/products/985255", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
+    },
+    ming: {
+        kream: { url: "https://kream.co.kr/products/985257", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
+    },
+    ribbu: {
+        kream: { url: "https://kream.co.kr/products/985256", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
+    },
+    jjaero: {
+        kream: { url: "https://kream.co.kr/products/985259", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
+    },
+    yam: {
+        kream: { url: "https://kream.co.kr/products/985258", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
+    }
+};
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function scrapeGoods() {
-    console.log("🤖 굿즈 데이터 스마트 크롤링 시작...");
+    console.log("🤖 굿즈 가격 및 품절 유무 크롤링 시작...");
 
     const browser = await puppeteer.launch({ 
         headless: "new",
@@ -20,75 +34,78 @@ async function scrapeGoods() {
     });
     const page = await browser.newPage();
     
+    // 크롤링 차단 방지용
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
-    // 저장할 데이터 기본 뼈대
+    // ⭐️ 저장할 데이터 뼈대도 딱 각자 들어갈 1곳씩만 남겼습니다.
     const goodsData = {
-        remini: { price: "가격 확인중...", withmuu: "available" },
-        jota: { price: "가격 확인중...", kream: "available" },
-        ming: { price: "가격 확인중...", kream: "available" },
-        ribbu: { price: "가격 확인중...", kream: "available" },
-        jjaero: { price: "가격 확인중...", kream: "available" },
-        yam: { price: "가격 확인중...", kream: "available" }
+        "remini": { "price": "", "withmuu": "available" },
+        "jota": { "price": "", "kream": "available" },
+        "ming": { "price": "", "kream": "available" },
+        "ribbu": { "price": "", "kream": "available" },
+        "jjaero": { "price": "", "kream": "available" },
+        "yam": { "price": "", "kream": "available" }
     };
 
-    for (const target of TARGETS) {
-        try {
-            console.log(`[${target.member} - ${target.shop}] 접속 중...`);
-            await page.goto(target.url, { waitUntil: 'domcontentloaded', timeout: 30000 });
-            await new Promise(r => setTimeout(r, 4000)); // 로딩 4초 여유롭게 대기
+    const members = Object.keys(SCRAPE_CONFIG);
 
-            // 페이지 안의 텍스트를 지능적으로 스캔
-            const result = await page.evaluate(() => {
-                let extractedPrice = null;
-                let soldOut = false;
+    for (const member of members) {
+        let priceSet = false; 
+        
+        // 각 멤버에 할당된 쇼핑몰(1개)만 가져옴
+        const shops = Object.keys(SCRAPE_CONFIG[member]);
 
-                // 1. 가격 찾기 (Kream: .amount, Withmuu: .item_price 또는 .price)
-                const priceEl = document.querySelector('.amount') || document.querySelector('.item_price') || document.querySelector('.price');
-                if (priceEl) extractedPrice = priceEl.innerText;
+        for (const shop of shops) {
+            const config = SCRAPE_CONFIG[member][shop];
 
-                // 2. 품절 찾기 (다양한 품절 마크 및 버튼 검사)
-                const soldOutMark = document.querySelector('.btn_soldout, .soldout, .soldout_mark, .btn_add_soldout');
-                if (soldOutMark) soldOut = true;
+            try {
+                console.log(`[${member} - ${shop}] 페이지 접속 중...`);
+                await page.goto(config.url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+                
+                await delay(3000); 
 
-                const btns = document.querySelectorAll('button, a');
-                for (let b of btns) {
-                    const text = b.innerText || "";
-                    if (text.includes('품절') || text.includes('SOLD OUT')) soldOut = true;
+                // 1. 가격 긁어오기
+                if (!priceSet) {
+                    await page.waitForSelector(config.priceSelector, { timeout: 5000 }).catch(() => null);
+                    const priceText = await page.$eval(config.priceSelector, el => el.innerText).catch(() => null);
+                    
+                    if (priceText && priceText.trim() !== "") {
+                        let cleanText = priceText.trim().split('\n')[0]; 
+                        if (!cleanText.includes('₩') && !cleanText.includes('원')) {
+                            cleanText = `₩ ${cleanText}`;
+                        }
+                        goodsData[member].price = cleanText;
+                        priceSet = true;
+                    }
                 }
 
-                return { extractedPrice, soldOut };
-            });
-
-            // 스캔 결과 반영
-            if (result.soldOut) {
-                goodsData[target.member][target.shop] = "soldout";
-            }
-
-            if (result.extractedPrice) {
-                // 숫자와 쉼표(예: 45,000)만 깔끔하게 추출
-                const match = result.extractedPrice.match(/[0-9,]{4,}/);
-                if (match) {
-                    goodsData[target.member].price = `₩ ${match[0]}`;
+                // 2. 품절 마크 긁어오기
+                const isSoldOut = await page.$(config.soldoutSelector); 
+                if (isSoldOut) {
+                    goodsData[member][shop] = "soldout";
+                    console.log(` > 상태: 품절`);
                 } else {
-                    goodsData[target.member].price = `₩ ${result.extractedPrice.trim()}`;
+                    goodsData[member][shop] = "available";
+                    console.log(` > 상태: 구매 가능`);
                 }
-            } else {
-                goodsData[target.member].price = "₩ 18,000"; // 못 찾으면 기본값
-            }
 
-        } catch (e) {
-            console.error(`[${target.member}] 에러 발생, 기본값 세팅.`);
-            goodsData[target.member].price = "₩ 18,000";
+            } catch (e) {
+                console.error(`[${member} - ${shop}] 크롤링 에러 발생!`);
+                goodsData[member][shop] = "available"; 
+            }
+        }
+
+        if (!priceSet) {
+            goodsData[member].price = "₩ 45,000"; 
         }
     }
 
     await browser.close();
     
-    // JSON 파일 덮어쓰기
+    // JSON 파일 저장
     const savePath = 'goods/goods_data.json';
     fs.writeFileSync(savePath, JSON.stringify(goodsData, null, 4), 'utf-8');
-    console.log(`✅ 데이터 저장 완료: ${savePath}`);
+    console.log(`✅ 크롤링 완료! 데이터가 [${savePath}]에 저장되었습니다.`);
 }
 
 scrapeGoods();

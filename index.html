@@ -7,32 +7,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* ⭐️ 클로드 피드백 반영: 컬러 팔레트 다각화 (핑크 + 민트 + 골드 + 퍼플) */
-            --bg-main: #121215;
-            --bg-card: #1c1c21;
-            --c-pink: #ff3399;
-            --c-mint: #00e5ff;
-            --c-gold: #ffc107;
-            --c-purple: #b388ff;
-            --text-main: #f0f0f0;
-            --text-sub: #a0a0a5;
-            --border-color: rgba(255, 51, 153, 0.2);
+            --bg-main: #121215; --bg-card: #1c1c21;
+            --c-pink: #ff3399; --c-mint: #00e5ff; --c-gold: #ffc107; --c-purple: #b388ff;
+            --text-main: #f0f0f0; --text-sub: #a0a0a5; --border-color: rgba(255, 51, 153, 0.2);
         }
 
         body, html { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; background: var(--bg-main); color: var(--text-main); }
         
-        /* 상단 네비게이션 & SNS 링크 */
         .top-nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; box-sizing: border-box; z-index: 10000; background: linear-gradient(to bottom, rgba(18,18,21,0.9), transparent); }
         .desktop-menu { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
         .desktop-menu li a { color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; transition: 0.2s; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .desktop-menu li a:hover { color: var(--c-pink); }
-        .desktop-menu li .badge { background: rgba(255,255,255,0.2); font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
         
         .sns-links { display: flex; gap: 15px; }
         .sns-links a { color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; }
         .sns-links a:hover { border-color: var(--c-pink); color: var(--c-pink); }
 
-        /* 좌측 햄버거 메뉴 */
         .menu-toggle-btn { display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); border-radius: 8px; width: 42px; height: 42px; font-size: 22px; cursor: pointer; }
         .sidebar { position: fixed; top: 0; left: -260px; width: 260px; height: 100vh; background: var(--bg-main); border-right: 1px solid #333; z-index: 10000; transition: 0.3s ease; padding-top: 80px; box-shadow: 5px 0 20px rgba(0,0,0,0.5); }
         .sidebar.active { left: 0; }
@@ -41,7 +31,6 @@
         .sidebar ul { list-style: none; padding: 0; margin: 0; }
         .sidebar li a { display: block; padding: 18px 30px; color: #eee; text-decoration: none; border-bottom: 1px solid #222; }
 
-        /* ⭐️ 영상 배너 (그라데이션 조절로 화사하게) */
         .video-container { position: relative; width: 100%; height: 50vh; overflow: hidden; background: #000; }
         .video-container iframe { position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 50vh; min-width: 88.88vh; transform: translate(-50%, -50%); pointer-events: none; opacity: 0.95; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(18,18,21,0.1) 40%, rgba(18,18,21,0.6) 80%, var(--bg-main) 100%); }
@@ -57,11 +46,9 @@
         .section-header { font-size: 12px; font-weight: 500; color: var(--text-sub); letter-spacing: 4px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
         .section-header span.title-hl { color: #fff; font-size: 20px; letter-spacing: 2px; font-weight: 700; margin-left: 10px; }
         
-        /* ⭐️ 스켈레톤 UI */
         @keyframes shimmer { 0% { background-position: -468px 0; } 100% { background-position: 468px 0; } }
         .skeleton { background: #2a2a30; background-image: linear-gradient(to right, #2a2a30 0%, #3a3a40 20%, #2a2a30 40%, #2a2a30 100%); background-repeat: no-repeat; background-size: 800px 100%; animation: shimmer 1.5s infinite linear; border-radius: 8px; }
 
-        /* 한 줄 롤링 차트 */
         .ticker-container { height: 60px; overflow: hidden; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
         .ticker-wrapper { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; margin: 0; padding: 0; }
         .ticker-item { height: 60px; display: flex; align-items: center; padding: 0 25px; box-sizing: border-box; gap: 20px; width: 100%; }
@@ -73,15 +60,19 @@
         .rank-diff { font-size: 12px; font-weight: 700; }
         .diff-up { color: #ff3b30; } .diff-down { color: #007aff; } .diff-new { color: var(--c-gold); }
 
-        /* ⭐️ 멤버 프로필 카드 추가 */
-        .member-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .member-card { background: var(--bg-card); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; position: relative; overflow: hidden; }
+        /* ⭐️ 멤버 프로필 사진 포함 버전 */
+        .member-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .member-card { background: var(--bg-card); border-radius: 12px; padding: 25px 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
         .member-card:hover { border-color: var(--c-pink); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 51, 153, 0.1); }
-        .member-card .name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 5px; }
-        .member-card .bday { font-size: 12px; color: var(--c-purple); font-weight: 700; margin-bottom: 10px; }
-        .member-card .desc { font-size: 12px; color: var(--text-sub); line-height: 1.4; }
+        
+        .member-photo { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin-bottom: 15px; border: 2px solid #333; transition: 0.3s; background: #222; }
+        .member-photo img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .member-card:hover .member-photo { border-color: var(--c-pink); }
+        .member-card:hover .member-photo img { transform: scale(1.05); }
 
-        /* ⭐️ 캘린더 영역 (달력 좌우 이동 추가) */
+        .member-card .name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 5px; letter-spacing: 1px; }
+        .member-card .bday { font-size: 12px; color: var(--c-purple); font-weight: 700; }
+
         .calendar-header-controls { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 30px; }
         .cal-btn { background: transparent; border: 1px solid #444; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; transition: 0.2s; }
         .cal-btn:hover { border-color: var(--c-pink); color: var(--c-pink); }
@@ -98,7 +89,6 @@
         .day-number { font-size: 14px; color: #ccc; font-weight: 500; }
         .schedule-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(255, 51, 153, 0.15); color: var(--c-pink); font-size: 10px; padding: 3px 6px; border-radius: 4px; border: 1px solid var(--border-color); }
 
-        /* 우측 슬라이드 팝업창 */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; justify-content: flex-end; opacity: 0; visibility: hidden; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content { background: var(--bg-main); width: 100%; max-width: 500px; height: 100vh; padding: 40px 30px; position: relative; border-left: 1px solid #333; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; box-sizing: border-box; }
@@ -113,7 +103,6 @@
 
         .modal-section-title { font-size: 13px; color: var(--c-pink); font-weight: 700; letter-spacing: 2px; margin-bottom: 15px; margin-top: 30px; display: flex; justify-content: space-between; }
         
-        /* ⭐️ 활동량 그래프 (각 항목별로 다른 색상) */
         .activity-graph-container { background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .graph-row { display: flex; align-items: center; margin-bottom: 12px; }
         .graph-row:last-child { margin-bottom: 0; }
@@ -148,14 +137,14 @@
 </head>
 <body id="homeSection">
 
-    <!-- 네비게이션 -->
+    <!-- ⭐️ 네비게이션: Archive 탭 링크 연결 -->
     <nav class="top-nav">
         <ul class="desktop-menu">
             <li><a href="javascript:void(0)" onclick="scrollToSection('homeSection')">Home</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('memberSection')">Members</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection')">Real-time Chart</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('calendarSection')">Schedule</a></li>
-            <li><a href="javascript:void(0)" style="color: #666; cursor: default;">Archive <span class="badge">준비중</span></a></li>
+            <li><a href="archive.html" style="color: var(--c-gold);">Archive</a></li>
         </ul>
         <div class="sns-links">
             <a href="https://twitter.com/RESCENEofficial" target="_blank">𝕏</a>
@@ -172,7 +161,7 @@
             <li><a href="javascript:void(0)" onclick="scrollToSection('memberSection')">Members</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection')">실시간 차트</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('calendarSection')">스케줄 달력</a></li>
-            <li><a href="javascript:void(0)" style="color: #555;">아카이브 <span style="font-size:11px">(준비중)</span></a></li>
+            <li><a href="archive.html" style="color: var(--c-gold);">아카이브 영상관</a></li>
         </ul>
     </div>
 
@@ -190,31 +179,31 @@
         </div>
     </div>
 
-    <!-- 멤버 프로필 섹션 -->
+    <!-- ⭐️ 멤버 프로필 섹션 (사진 추가 & 텍스트 제거) -->
     <div class="section-container" id="memberSection">
         <div class="section-header">
             <div>RESCENE <span class="title-hl">MEMBERS</span></div>
         </div>
         <div class="member-grid">
             <div class="member-card">
+                <div class="member-photo"><img src="woni.jpg" onerror="this.src='https://via.placeholder.com/150/222/ff3399?text=WONI'" alt="WONI"></div>
                 <div class="name">WONI</div><div class="bday">2004. 05. 25</div>
-                <div class="desc">리더 / 올라운더</div>
             </div>
             <div class="member-card">
+                <div class="member-photo"><img src="liv.jpg" onerror="this.src='https://via.placeholder.com/150/222/00e5ff?text=LIV'" alt="LIV"></div>
                 <div class="name">LIV</div><div class="bday">2006. 02. 22</div>
-                <div class="desc">메인댄서 / 카리스마</div>
             </div>
             <div class="member-card">
+                <div class="member-photo"><img src="minami.jpg" onerror="this.src='https://via.placeholder.com/150/222/ffc107?text=MINAMI'" alt="MINAMI"></div>
                 <div class="name">MINAMI</div><div class="bday">2006. 11. 29</div>
-                <div class="desc">보컬 / 요정</div>
             </div>
             <div class="member-card">
+                <div class="member-photo"><img src="may.jpg" onerror="this.src='https://via.placeholder.com/150/222/b388ff?text=MAY'" alt="MAY"></div>
                 <div class="name">MAY</div><div class="bday">2008. 08. 19</div>
-                <div class="desc">비주얼 / 엉뚱매력</div>
             </div>
             <div class="member-card">
+                <div class="member-photo"><img src="zena.jpg" onerror="this.src='https://via.placeholder.com/150/222/ff3399?text=ZENA'" alt="ZENA"></div>
                 <div class="name">ZENA</div><div class="bday">2008. 11. 27</div>
-                <div class="desc">막내 / 메인보컬</div>
             </div>
         </div>
     </div>
@@ -232,7 +221,7 @@
         </div>
     </div>
 
-    <!-- 캘린더 영역 (달 이동 가능) -->
+    <!-- 캘린더 영역 -->
     <div class="section-container" id="calendarSection" style="padding-bottom: 80px;">
         <div class="section-header" style="justify-content: center; margin-bottom: 20px;">
             <div>ARCHIVE <span class="title-hl">SCHEDULE</span></div>
@@ -253,24 +242,19 @@
     <div class="modal-overlay" id="scheduleModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">×</button>
-            
             <div class="modal-header-flex">
                 <div class="modal-date" id="modalDateTitle">2026. 07. 04</div>
                 <a href="#" class="ics-export-btn" id="exportIcsBtn" onclick="exportToICS()">🗓 내보내기</a>
             </div>
-            
             <div class="modal-section-title">
                 ACTIVITY GRAPH
                 <span style="font-size: 11px; color: var(--text-sub); font-weight: 400; cursor: pointer;" onclick="toggleGraphMode()" id="graphToggleBtn">이번 달 보기 ↺</span>
             </div>
             <div class="activity-graph-container" id="graphContainer"></div>
-
             <div class="modal-section-title">TODAY'S SCENE (YOUTUBE)</div>
             <div id="modalVideoContainer"></div>
-            
             <div class="modal-section-title">SCHEDULE</div>
             <div id="modalScheduleText"></div>
-
             <div class="modal-section-title">TODAY'S PHOTOS</div>
             <div class="photo-grid" id="modalPhotoContainer"></div>
         </div>
@@ -351,8 +335,8 @@
         fetchSongCharts();
         setInterval(fetchSongCharts, 60000); // 1분마다 자동 갱신
 
-        // ⭐️ 유튜브 API 연동 함수 추가
-        const YOUTUBE_API_KEY = "YOUR_API_KEY_HERE"; // 여기에 실제 발급받은 유튜브 API 키 입력
+        // 유튜브 API 연동 함수 
+        const YOUTUBE_API_KEY = "YOUR_API_KEY_HERE"; 
         const RESCENE_CHANNEL_ID = "UC_XXXXXXXXXXXXX"; 
         
         async function fetchYouTubeVideoByDate(dateStr) {

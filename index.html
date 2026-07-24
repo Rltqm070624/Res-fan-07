@@ -36,8 +36,9 @@
             <div class="video-overlay"></div>
         </div>
         
+        <!-- ⭐️ 1번 이미지 반영: 로고 간격 띄우기 및 네온사인 효과 (CSS에서 제어) -->
         <div class="logo-banner-section">
-            <img src="images/logo.png" alt="RESCENE Logo" onerror="this.style.display='none'">
+            <img src="images/logo.png" alt="RESCENE Logo" class="neon-logo" onerror="this.style.display='none'">
             <div class="debut-timer">
                 <div class="d-day" id="dDayText">D+000</div>
                 <div class="time-flow" id="timeFlowText">00:00:00</div>
@@ -69,7 +70,6 @@
             </div>
         </div>
 
-        <!-- ⭐️ 인기가요 문구 삭제 및 보령 머드축제(16:45) 추가 적용 -->
         <div class="section-container reveal" id="todayScheduleSection">
             <div class="section-header" style="border-bottom: none; margin-bottom: 20px;">
                 <div class="section-title">TODAY'S <span>BROADCAST</span></div>
@@ -83,14 +83,13 @@
                         <p class="schedule-time">📺 16:45 - 보령 KBS 슈퍼라이브</p>
                     </div>
                 </div>
+                <!-- ⭐️ 2번 이미지 반영: 404 에러 뜨던 iframe 대신 one.jpg로 꽉 차게 대체 -->
                 <div class="schedule-embed-area">
-                    <iframe src="image/one.jpg" width="100%" height="400" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
-                    <iframe src="image/boryung.jpg" width="100%" height="400" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+                    <img src="images/one.jpg" alt="원 유니버스 페스티벌" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
                 </div>
             </div>
         </div>
 
-        <!-- ⭐️ 불필요한 안내 문구(Mnet/센플릭스) 완전 삭제 -->
         <div class="section-container reveal" id="calendarSection" style="padding-bottom: 80px;">
             <div class="section-header center-header" style="border-bottom: none; margin-bottom: 20px;">
                 <div class="section-title">RESCENE <span>CALENDAR</span></div>
@@ -109,7 +108,6 @@
         </div>
     </div>
 
-    <!-- 우측 팝업 모달 -->
     <div class="modal-wrapper" id="scheduleModal">
         <button class="close-btn" onclick="closeModal()">×</button>
         <div class="modal-header-flex">
@@ -130,7 +128,6 @@
             document.getElementById('timeFlowText').innerText = `${String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0')}:${String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0')}:${String(Math.floor((diff / 1000) % 60)).padStart(2, '0')}`;
         }, 1000);
 
-        // ⭐️ 차트 화살표 (상승/하락/유지) 원래 로직 완벽 복구
         let tickerInterval;
         async function fetchSongCharts() {
             try {
@@ -149,7 +146,6 @@
                             if (pd) {
                                 let rec = pd["실시간 (HOT100)"] || pd["실시간"] || pd["24시간"];
                                 if (rec) {
-                                    // 기존 화살표 로직 복구
                                     let diffClass = 'diff-none';
                                     let diffText = rec.diff;
                                     if (diffText === 'NEW' || diffText === '0' || diffText === '유지' || diffText === '') diffText = '-';
@@ -187,16 +183,17 @@
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
+        // ⭐️ 3번 이미지 반영: 25일, 26일 모두 행사 일정(one.jpg / boryung.jpg) 셋업
         const scheduleDB = {
             "2026-07-25": { 
                 items: [
-                    { time: "12:45", title: "2026 원 유니버스 페스티벌", embed: "https://www.instagram.com/p/DbAa-iMO42j/embed/" },
+                    { time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" },
                     { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
                 ] 
             },
             "2026-07-26": { 
                 items: [
-                    { time: "12:45", title: "2026 원 유니버스 페스티벌", embed: "https://www.instagram.com/p/DbAa-iMO42j/embed/" },
+                    { time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" },
                     { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
                 ] 
             }
@@ -224,6 +221,8 @@
             
             for (let i = 1; i <= lastDate; i++) {
                 const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                // 25일, 26일에 데이터가 있으므로 핑크색 테두리가 자동으로 들어갑니다.
                 const isHighlight = scheduleDB[dateKey] ? 'today' : '';
                 
                 html += `<div class="day-cell ${isHighlight}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')">
@@ -248,13 +247,7 @@
                             <div class="sd-title">${item.title}</div>
                         </div>
                     `;
-                    if (item.embed) {
-                        scheduleHtml += `
-                            <div class="sd-embed">
-                                <iframe src="${item.embed}" width="100%" height="380" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
-                            </div>
-                        `;
-                    }
+                    // ⭐️ iframe 대신 이미지(스크린샷) 렌더링으로 완전히 변경
                     if (item.image) {
                         scheduleHtml += `
                             <div class="sd-embed">
@@ -280,7 +273,6 @@
         function closeModal() {
             document.getElementById('scheduleModal').classList.remove('active');
             document.body.classList.remove('modal-open'); 
-            setTimeout(() => { document.getElementById('modalScheduleText').innerHTML = ''; }, 300);
         }
 
         window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });

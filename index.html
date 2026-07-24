@@ -3,70 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESCENE DASHBOARD</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Noto+Sans+KR:wght@400;600;700&family=Plus+Jakarta+Sans:wght@600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=2">
+    <title>RESCENE ARCHIVE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=3">
 </head>
-<body>
+<body id="homeSection">
 
     <nav class="top-nav">
         <ul class="desktop-menu">
-            <li><a href="index.html" class="active">DASHBOARD</a></li>
-            <li><a href="fancam.html">FANCAM RANK</a></li>
-            <li><a href="goods.html">MD & SUPPORT</a></li>
-            <li><a href="archive.html">ARCHIVE</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('homeSection')" class="active">HOME</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('memberSection')">MEMBERS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection')">CHARTS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('calendarSection')">SCHEDULE</a></li>
+            <li><a href="archive.html">ARCHIVE & SNS</a></li>
         </ul>
         <div class="sns-links">
             <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X"></a>
+            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG"></a>
             <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT"></a>
         </div>
     </nav>
 
+    <button class="menu-toggle-btn" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('homeSection')">HOME</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('memberSection')">MEMBERS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection')">CHARTS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('calendarSection')">SCHEDULE</a></li>
+            <li><a href="archive.html">ARCHIVE & SNS</a></li>
+        </ul>
+    </div>
+
     <div id="mainWrapper">
-        <!-- ⭐️ 1. 배경 MP4 비디오 적용 -->
-        <div class="video-container">
+        <!-- ⭐️ 요청하신 video/member.mp4 배경 적용 -->
+        <div class="video-container" id="homeSection">
             <video autoplay loop muted playsinline class="bg-video">
-                <!-- 질문자님이 요청하신 video/member.mp4 경로 -->
                 <source src="video/member.mp4" type="video/mp4">
             </video>
             <div class="video-overlay"></div>
         </div>
+        
+        <div class="logo-banner-section">
+            <img src="images/logo.png" alt="RESCENE Logo" onerror="this.style.display='none'">
+            <div class="debut-timer">
+                <div class="d-day" id="dDayText">D+000</div>
+                <div class="time-flow" id="timeFlowText">00:00:00</div>
+            </div>
+        </div>
 
+        <!-- ⭐️ 초동 트래커 & 실시간 스밍 체크리스트 섹션 -->
         <div class="section-container">
             <div class="section-header">
-                <div class="section-title">DAILY <span>MISSION</span></div>
-                <div class="update-time">자정 갱신됨</div>
+                <div class="section-title">DAILY <span>MISSION & SALES</span></div>
             </div>
-            
-            <!-- ⭐️ 2. 초동 판매량 & 스밍 체크리스트 -->
             <div class="dashboard-grid">
-                <!-- 초동 트래커 -->
                 <div class="dash-card">
-                    <div class="dash-card-title">음반 초동 판매량 트래커 <span>DAY 3</span></div>
-                    <div style="color: var(--text-sub); font-size: 13px; margin-bottom: 20px;">The 1st Mini Album [SCENEDROME]</div>
-                    
-                    <div class="sales-info">
-                        <span>현재 누적 판매량</span>
-                        <strong>45,120 장</strong>
-                    </div>
+                    <div class="dash-card-title">초동 판매량 트래커 <span>LIVE</span></div>
+                    <div style="color: var(--text-sub); font-size: 12px; margin-bottom: 15px;">The 1st Mini Album [SCENEDROME]</div>
+                    <div class="sales-info"><span>현재 누적 판매량</span><strong>45,120 장</strong></div>
                     <div class="progress-bg"><div class="progress-fill"></div></div>
-                    <div style="text-align: right; font-size: 12px; color: var(--text-sub);">목표: 60,000 장 (75% 달성)</div>
+                    <div style="text-align: right; font-size: 11px; color: var(--text-sub);">목표: 60,000 장 (75%)</div>
                 </div>
-
-                <!-- 스밍 체크리스트 -->
                 <div class="dash-card">
-                    <div class="dash-card-title">오늘의 스트리밍 체크 <span>필수</span></div>
+                    <div class="dash-card-title">실시간 스밍 체크리스트 <span>필수</span></div>
                     <div class="stream-list">
                         <div class="stream-item">
-                            <label><input type="checkbox"> 멜론 (Melon) 1시간 1회 재생</label>
+                            <label><input type="checkbox"> 멜론 (Melon) 1시간 1회</label>
                             <button class="guide-btn">가이드</button>
                         </div>
                         <div class="stream-item">
-                            <label><input type="checkbox"> 지니 (Genie) 권장 리스트 재생</label>
+                            <label><input type="checkbox"> 지니 (Genie) 권장 리스트</label>
                             <button class="guide-btn">가이드</button>
                         </div>
                         <div class="stream-item">
-                            <label><input type="checkbox"> 유튜브 뮤직 (YT Music) 수동 스밍</label>
+                            <label><input type="checkbox"> 유튜브 뮤직 수동 스트리밍</label>
                             <button class="guide-btn">가이드</button>
                         </div>
                     </div>
@@ -74,64 +88,281 @@
             </div>
         </div>
 
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-title">RESCENE <span>SCHEDULE</span></div>
-            </div>
-            <!-- ⭐️ 3. 생일 케이크, 투표 뱃지가 포함된 캘린더 -->
-            <div class="calendar-grid" id="calendarDays">
-                <!-- 자바스크립트로 그리지 않고 예시를 보여주기 위한 정적 HTML -->
-                <div class="day-cell"><div class="day-number">24</div></div>
-                <div class="day-cell today">
-                    <div class="day-number" style="color: var(--c-pink);">25</div>
-                    <span class="event-badge badge-bday">🎂 원이 생일</span>
-                    <span class="event-badge badge-bday">☕️ 홍대 생카 3곳</span>
-                </div>
-                <div class="day-cell">
-                    <div class="day-number">26</div>
-                    <span class="event-badge badge-music">📺 M COUNTDOWN</span>
-                    <span class="event-badge badge-vote">⏰ 사전투표 마감 (-D-1)</span>
-                </div>
-                <div class="day-cell"><div class="day-number">27</div></div>
-                <div class="day-cell"><div class="day-number">28</div></div>
-                <div class="day-cell"><div class="day-number">29</div></div>
-                <div class="day-cell"><div class="day-number">30</div></div>
-            </div>
-        </div>
-
-        <div class="section-container">
+        <!-- ⭐️ 멤버 프로필 섹션 -->
+        <div class="section-container reveal" id="memberSection">
             <div class="section-header">
                 <div class="section-title">RESCENE <span>MEMBERS</span></div>
             </div>
             <div class="member-wrapper">
-                <!-- 흑백 -> 마우스 오버시 컬러 변환되는 시크한 프로필 -->
                 <div class="member-card-v2">
                     <div class="member-photo-v2"><img src="images/원이.webp" onerror="this.style.display='none'"></div>
-                    <div class="name-bar">WONI</div>
-                    <div class="info-area">2004. 05. 25.</div>
+                    <div class="name-bar">원이</div>
+                    <div class="info-area"><div class="bday">2004. 05. 25.</div><div class="flag">🇰🇷</div></div>
                 </div>
                 <div class="member-card-v2">
                     <div class="member-photo-v2"><img src="images/리브.webp" onerror="this.style.display='none'"></div>
-                    <div class="name-bar">LIV</div>
-                    <div class="info-area">2006. 10. 11.</div>
+                    <div class="name-bar">리브</div>
+                    <div class="info-area"><div class="bday">2006. 10. 11.</div><div class="flag">🇰🇷</div></div>
                 </div>
                 <div class="member-card-v2">
                     <div class="member-photo-v2"><img src="images/미나미.webp" onerror="this.style.display='none'"></div>
-                    <div class="name-bar">MINAMI</div>
-                    <div class="info-area">2006. 11. 29.</div>
+                    <div class="name-bar">미나미</div>
+                    <div class="info-area"><div class="bday">2006. 11. 29.</div><div class="flag">🇯🇵</div></div>
                 </div>
                 <div class="member-card-v2">
                     <div class="member-photo-v2"><img src="images/메이.webp" onerror="this.style.display='none'"></div>
-                    <div class="name-bar">MAY</div>
-                    <div class="info-area">2008. 08. 19.</div>
+                    <div class="name-bar">메이</div>
+                    <div class="info-area"><div class="bday">2008. 08. 19.</div><div class="flag">🇰🇷</div></div>
                 </div>
                 <div class="member-card-v2">
                     <div class="member-photo-v2"><img src="images/제나.webp" onerror="this.style.display='none'"></div>
-                    <div class="name-bar">ZENA</div>
-                    <div class="info-area">2008. 11. 27.</div>
+                    <div class="name-bar">제나</div>
+                    <div class="info-area"><div class="bday">2008. 11. 27.</div><div class="flag">🇰🇷</div></div>
                 </div>
             </div>
         </div>
+
+        <!-- ⭐️ 실시간 음원 차트 Ticker 섹션 -->
+        <div class="section-container reveal" id="chartSection">
+            <div class="section-header">
+                <div class="section-title">REAL-TIME <span>CHART</span></div>
+                <div class="update-time" id="currentTime">로딩중...</div>
+            </div>
+            <div class="ticker-container">
+                <div class="ticker-wrapper" id="tickerWrapper">
+                    <div class="ticker-item skeleton"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ⭐️ 캘린더 및 스케줄 섹션 (생일/투표 배지 포함) -->
+        <div class="section-container reveal" id="calendarSection" style="padding-bottom: 80px;">
+            <div class="section-header" style="justify-content: center; margin-bottom: 25px; border-bottom: none;">
+                <div class="section-title" style="text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">SCHEDULE <span>CALENDAR</span></div>
+            </div>
+            <div class="calendar-header-controls">
+                <button class="cal-btn" onclick="changeMonth(-1)">◀</button>
+                <div class="calendar-title" id="calendarMonthText">2026. 07</div>
+                <button class="cal-btn" onclick="changeMonth(1)">▶</button>
+            </div>
+            <div class="calendar-grid">
+                <div class="weekday">SUN</div><div class="weekday">MON</div><div class="weekday">TUE</div>
+                <div class="weekday">WED</div><div class="weekday">THU</div><div class="weekday">FRI</div><div class="weekday">SAT</div>
+            </div>
+            <div class="calendar-grid" id="calendarDays"></div>
+        </div>
     </div>
+
+    <!-- 우측 팝업 모달 -->
+    <div class="modal-wrapper" id="scheduleModal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <div class="modal-header-flex" style="border-bottom: none; margin-bottom: 10px;">
+            <div class="modal-date" id="modalDateTitle">2026. 07. 24</div>
+        </div>
+        <div class="modal-section-title">
+            ACTIVITY GRAPH
+            <span style="font-size: 11px; color: var(--text-sub); cursor: pointer;" onclick="toggleGraphMode()" id="graphToggleBtn">이번 달 보기 ↺</span>
+        </div>
+        <div class="activity-graph-container" id="graphContainer"></div>
+        <div class="modal-section-title">TODAY'S SCENE (YOUTUBE)</div>
+        <div id="modalVideoContainer"></div>
+        <div class="modal-section-title">SCHEDULE</div>
+        <div id="modalScheduleText"></div>
+        <div class="modal-section-title">TODAY'S PHOTOS</div>
+        <div class="photo-grid" id="modalPhotoContainer"></div>
+    </div>
+
+    <script>
+        const observerOptions = { threshold: 0.15 };
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } }); }, observerOptions);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('active'); document.getElementById('sidebarOverlay').classList.remove('active'); }
+        function scrollToSection(id) { closeSidebar(); document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+
+        const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - debutDate;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+            const mins = String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0');
+            const secs = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+            document.getElementById('dDayText').innerText = `D+${days}`;
+            document.getElementById('timeFlowText').innerText = `${hours}:${mins}:${secs}`;
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        let tickerInterval;
+        async function fetchSongCharts() {
+            const tickerWrapper = document.getElementById('tickerWrapper');
+            try {
+                const response = await fetch('chart_data.json?t=' + new Date().getTime());
+                const data = await response.json();
+                document.getElementById('currentTime').innerText = data.update_time || "갱신 완료";
+                const songsData = data.songs;
+                const platforms = ["Melon", "Bugs", "Genie", "FLO", "VIBE"];
+                const targetChartKeys = ["실시간 (HOT100)", "실시간", "24시간"]; 
+                let tickerHtml = '';
+                let validPlatformCount = 0;
+
+                platforms.forEach(platform => {
+                    let songsHtml = '';
+                    let hasData = false;
+                    for (const songTitle in songsData) {
+                        const platformData = songsData[songTitle][platform];
+                        if (!platformData) continue;
+                        let songRecord = null;
+                        for (const key of targetChartKeys) { if (platformData[key]) { songRecord = platformData[key]; break; } }
+
+                        if (songRecord) {
+                            hasData = true;
+                            let diffClass = 'diff-none';
+                            let diffText = songRecord.diff;
+                            if (diffText === 'NEW' || diffText === '0' || diffText === '유지' || diffText === '') diffText = '-';
+                            if (diffText.includes('▲')) diffClass = 'diff-up';
+                            else if (diffText.includes('▼')) diffClass = 'diff-down';
+                            else if (diffText === 'NEW') diffClass = 'diff-new';
+                            
+                            songsHtml += `<div class="ticker-song-info"><span class="title">${songTitle}</span><span class="rank">${songRecord.rank}위</span><span class="rank-diff ${diffClass}">${diffText}</span></div>`;
+                        }
+                    }
+                    if (hasData) {
+                        validPlatformCount++;
+                        tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${platform}</div><div class="ticker-songs">${songsHtml}</div></div>`;
+                    }
+                });
+
+                tickerWrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div class="no-data-text" style="width:100%; border:none; background:transparent;">차트 진입 데이터가 없습니다.</div></div>`;
+
+                if (validPlatformCount > 1) {
+                    let currentIndex = 0;
+                    clearInterval(tickerInterval);
+                    tickerInterval = setInterval(() => {
+                        currentIndex = (currentIndex + 1) % validPlatformCount;
+                        tickerWrapper.style.transform = `translateY(-${currentIndex * 60}px)`;
+                    }, 4000); 
+                }
+            } catch (error) { console.log("차트 로딩 대기중"); }
+        }
+        fetchSongCharts();
+        setInterval(fetchSongCharts, 60000);
+
+        const scheduleDB = {
+            "2026-07-24": {
+                hasSchedule: true,
+                youtubeId: "ZbO9PBdFRdc",
+                text: "[방송] KBS 뮤직뱅크\n[싸인회] 핫트랙스 영등포점",
+                photos: ["https://pbs.twimg.com/media/GPMQ4YubQAAn9Kj?format=jpg&name=large"],
+                activity: { video: 6, photo: 9, post: 2, live: 1 }
+            },
+            "2026-07-25": {
+                hasSchedule: true,
+                youtubeId: "9XttLI0oH0I",
+                text: "🎂 원이 생일\n[이벤트] 홍대 생일 카페 3곳 동시 진행",
+                photos: [],
+                activity: { video: 2, photo: 15, post: 10, live: 2 }
+            }
+        };
+
+        let currentCalYear = new Date().getFullYear();
+        let currentCalMonth = new Date().getMonth() + 1;
+        
+        function changeMonth(delta) {
+            currentCalMonth += delta;
+            if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; }
+            else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; }
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const calendarDays = document.getElementById('calendarDays');
+            document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`;
+            
+            const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); 
+            const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); 
+            const today = new Date();
+            const isThisMonth = (today.getFullYear() === currentCalYear && (today.getMonth() + 1) === currentCalMonth);
+            const todayDate = today.getDate();
+
+            let html = '';
+            for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; }
+            for (let i = 1; i <= lastDate; i++) {
+                const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const schedule = scheduleDB[dateKey];
+                
+                let badges = '';
+                if (dateKey === "2026-07-25") badges += `<span class="schedule-badge badge-bday">🎂 원이 생일</span>`;
+                if (schedule && schedule.hasSchedule) badges += `<span class="schedule-badge badge-music">📺 방송/사인회</span>`;
+                
+                const todayClass = (isThisMonth && i === todayDate) ? 'today' : '';
+                html += `<div class="day-cell ${todayClass}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><div class="day-number">${i}</div>${badges}</div>`;
+            }
+            calendarDays.innerHTML = html;
+        }
+
+        let currentModalDateKey = "";
+        let isGraphMonthlyMode = false;
+        const monthlyActivity = { video: 10, photo: 25, post: 14, live: 3 };
+
+        function renderGraph() {
+            const container = document.getElementById('graphContainer');
+            const data = scheduleDB[currentModalDateKey] || { activity: {video:0, photo:0, post:0, live:0} };
+            const stats = isGraphMonthlyMode ? monthlyActivity : (data.activity || {video:0, photo:0, post:0, live:0});
+            const maxVal = isGraphMonthlyMode ? 30 : 10;
+            const colorClasses = ['fill-video', 'fill-photo', 'fill-post', 'fill-live'];
+            
+            const makeRow = (label, val, colorCls) => {
+                const percent = Math.min((val / maxVal) * 100, 100);
+                return `<div class="graph-row"><div class="graph-label">${label}</div><div class="graph-bar-area"><div class="bar-bg"><div class="bar-fill ${colorCls}" style="width: ${percent}%"></div></div><div class="graph-value">${val}</div></div></div>`;
+            };
+            container.innerHTML = makeRow('영상', stats.video, colorClasses[0]) + makeRow('사진', stats.photo, colorClasses[1]) + makeRow('게시글', stats.post, colorClasses[2]) + makeRow('라이브', stats.live, colorClasses[3]);
+        }
+
+        function toggleGraphMode() {
+            isGraphMonthlyMode = !isGraphMonthlyMode;
+            document.getElementById('graphToggleBtn').innerText = isGraphMonthlyMode ? '오늘 보기 ↺' : '이번 달 보기 ↺';
+            renderGraph();
+        }
+
+        async function openModal(year, month, day, dateKey) {
+            currentModalDateKey = dateKey;
+            isGraphMonthlyMode = false;
+            document.getElementById('graphToggleBtn').innerText = '이번 달 보기 ↺';
+            document.getElementById('modalDateTitle').innerText = `${year}. ${String(month).padStart(2, '0')}. ${String(day).padStart(2, '0')}`;
+            
+            const data = scheduleDB[dateKey] || { hasSchedule: false, youtubeId: null, text: "등록된 스케줄이 없습니다.", photos: [] };
+            renderGraph();
+
+            const videoContainer = document.getElementById('modalVideoContainer');
+            if (data.youtubeId) {
+                videoContainer.innerHTML = `<div class="modal-video-wrapper"><iframe src="https://www.youtube.com/embed/${data.youtubeId}?rel=0" allowfullscreen></iframe></div>`;
+            } else {
+                videoContainer.innerHTML = `<div class="no-data-text">등록된 영상이 없습니다.</div>`;
+            }
+            
+            document.getElementById('modalScheduleText').innerHTML = `<div class="modal-schedule-box">${data.text}</div>`;
+            
+            const photoContainer = document.getElementById('modalPhotoContainer');
+            if (data.photos && data.photos.length > 0) {
+                photoContainer.innerHTML = data.photos.map(url => `<img src="${url}" onerror="this.style.display='none'" onclick="window.open('${url}', '_blank')">`).join('');
+            } else {
+                photoContainer.innerHTML = `<div class="no-data-text" style="grid-column: 1 / -1;">업로드된 사진이 없습니다.</div>`;
+            }
+            
+            document.getElementById('scheduleModal').classList.add('active');
+            document.body.classList.add('modal-open'); 
+        }
+
+        function closeModal() {
+            document.getElementById('scheduleModal').classList.remove('active');
+            document.body.classList.remove('modal-open'); 
+            setTimeout(() => { document.getElementById('modalVideoContainer').innerHTML = ''; }, 300);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
+    </script>
 </body>
 </html>

@@ -7,7 +7,6 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- ⭐️ 손글씨 폰트(Nanum Pen Script) 추가 -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
@@ -106,7 +105,7 @@
             </div>
         </div>
 
-        <!-- ⭐️ 굿즈 섹션 (3열 그리드 레이아웃) -->
+        <!-- ⭐️ 굿즈 섹션 (3열 그리드 레이아웃 + 바로가기 버튼 추가) -->
         <div class="section-container reveal" id="goodsSection" style="padding-bottom: 120px;">
             <div class="section-header">
                 <div class="section-title">OFFICIAL <span>MERCH</span></div>
@@ -116,62 +115,107 @@
                 
                 <!-- 1. REMINI (전체 품절) -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/REMINI.jpg" alt="REMINI Set" onerror="this.style.display='none'"></div>
+                    <div class="goods-img"><img src="image/goods/REMINI.jpg" alt="REMINI Set" onerror="this.style.display='none'"></div>
                     <div class="goods-sold-out-big">SOLD OUT !</div>
                 </div>
 
                 <!-- 2. jota -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/jota.jpg" alt="Jota" onerror="this.style.display='none'"></div>
+                    <div class="goods-img"><img src="image/goods/jota.jpg" alt="Jota" onerror="this.style.display='none'"></div>
                     <div class="goods-price-text">₩ 18,000</div>
                     <div class="goods-stock-list">
-                        <div class="stock-row"><span>Weverse Shop</span><span>(재고: 0)</span></div>
-                        <div class="stock-row"><span>Everline</span><span>(재고: 15)</span></div>
-                        <div class="stock-row"><span>Soundwave</span><span>(재고: 120)</span></div>
+                        <div class="stock-row">
+                            <span class="shop-name">Weverse Shop <span class="stock-num">(재고: 0)</span></span>
+                            <a href="#" target="_blank" class="buy-btn sold-out">품절</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Everline <span class="stock-num">(재고: 15)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Soundwave <span class="stock-num">(재고: 120)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 3. ming -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/ming.jpg" alt="Ming" onerror="this.style.display='none'"></div>
+                    <div class="goods-img"><img src="image/goods/ming.jpg" alt="Ming" onerror="this.style.display='none'"></div>
                     <div class="goods-price-text">₩ 18,000</div>
                     <div class="goods-stock-list">
-                        <div class="stock-row"><span>Weverse Shop</span><span>(재고: 5)</span></div>
-                        <div class="stock-row"><span>Everline</span><span>(재고: 30)</span></div>
-                        <div class="stock-row"><span>Soundwave</span><span>(재고: 85)</span></div>
+                        <div class="stock-row">
+                            <span class="shop-name">Weverse Shop <span class="stock-num">(재고: 5)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Everline <span class="stock-num">(재고: 30)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Soundwave <span class="stock-num">(재고: 85)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 4. ribbu -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/ribbu.jpg" alt="Ribbu" onerror="this.style.display='none'"></div>
+                    <div class="goods-img"><img src="image/goods/ribbu.jpg" alt="Ribbu" onerror="this.style.display='none'"></div>
                     <div class="goods-price-text">₩ 18,000</div>
                     <div class="goods-stock-list">
-                        <div class="stock-row"><span>Weverse Shop</span><span>(재고: 10)</span></div>
-                        <div class="stock-row"><span>Everline</span><span>(재고: 42)</span></div>
-                        <div class="stock-row"><span>Soundwave</span><span>(재고: 200)</span></div>
+                        <div class="stock-row">
+                            <span class="shop-name">Weverse Shop <span class="stock-num">(재고: 10)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Everline <span class="stock-num">(재고: 42)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Soundwave <span class="stock-num">(재고: 200)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 5. jjaero -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/jjaero.jpg" alt="Jjaero" onerror="this.style.display='none'"></div>
+                    <div class="goods-img"><img src="image/goods/jjaero.jpg" alt="Jjaero" onerror="this.style.display='none'"></div>
                     <div class="goods-price-text">₩ 18,000</div>
                     <div class="goods-stock-list">
-                        <div class="stock-row"><span>Weverse Shop</span><span>(재고: 0)</span></div>
-                        <div class="stock-row"><span>Everline</span><span>(재고: 8)</span></div>
-                        <div class="stock-row"><span>Soundwave</span><span>(재고: 60)</span></div>
+                        <div class="stock-row">
+                            <span class="shop-name">Weverse Shop <span class="stock-num">(재고: 0)</span></span>
+                            <a href="#" target="_blank" class="buy-btn sold-out">품절</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Everline <span class="stock-num">(재고: 8)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Soundwave <span class="stock-num">(재고: 60)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 6. yam -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/yam.jpg" alt="Yam" onerror="this.style.display='none'"></div>
+                    <div class="goods-img"><img src="image/goods/yam.jpg" alt="Yam" onerror="this.style.display='none'"></div>
                     <div class="goods-price-text">₩ 18,000</div>
                     <div class="goods-stock-list">
-                        <div class="stock-row"><span>Weverse Shop</span><span>(재고: 22)</span></div>
-                        <div class="stock-row"><span>Everline</span><span>(재고: 55)</span></div>
-                        <div class="stock-row"><span>Soundwave</span><span>(재고: 110)</span></div>
+                        <div class="stock-row">
+                            <span class="shop-name">Weverse Shop <span class="stock-num">(재고: 22)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Everline <span class="stock-num">(재고: 55)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
+                        <div class="stock-row">
+                            <span class="shop-name">Soundwave <span class="stock-num">(재고: 110)</span></span>
+                            <a href="#" target="_blank" class="buy-btn">바로가기</a>
+                        </div>
                     </div>
                 </div>
 
@@ -318,7 +362,6 @@
                 let eventsHtml = '';
                 
                 if (data && data.items) {
-                    // ⭐️ 일정이 있을 때 손글씨 폰트로 문구 추가
                     handwrittenHtml = `<div class="cal-handwritten">★ 일정이 있어요!</div>`;
                     
                     data.items.forEach(item => {
@@ -334,15 +377,14 @@
                 }
                 
                 html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')">
-                            <span class="day-number">${i}</span>
                             ${handwrittenHtml}
+                            <span class="day-number">${i}</span>
                             <div class="cell-event-list">${eventsHtml}</div>
                          </div>`;
             }
             calendarDays.innerHTML = html;
         }
 
-        // 캘린더 팝업 제어 함수
         function openCalendarPopup() {
             document.getElementById('calendarPopupModal').classList.add('active');
             document.getElementById('calPopupBackdrop').classList.add('active');
@@ -354,7 +396,6 @@
             document.body.style.overflow = 'auto'; 
         }
 
-        // 스케줄 상세 모달 제어 함수
         function openModal(year, month, day, dateKey) {
             document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`;
             const data = scheduleDB[dateKey];

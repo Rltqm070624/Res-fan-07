@@ -1,5 +1,5 @@
-const puppeteer = require('puppeteer');
-const fs = require('fs');
+import puppeteer from 'puppeteer';
+import fs from 'fs';
 
 // ⭐️ 1. 여기에 실제 긁어올 사이트 링크와 설정값을 다 적어두면 봇이 알아서 순회합니다.
 const SCRAPE_CONFIG = {

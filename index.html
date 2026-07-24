@@ -23,9 +23,9 @@
             <li><a href="archive.html">ARCHIVE</a></li>
         </ul>
         <div class="sns-links">
-            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.onerror=null; this.style.display='none'"></a>
-            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.onerror=null; this.style.display='none'"></a>
-            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.onerror=null; this.style.display='none'"></a>
+            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.style.display='none'"></a>
+            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
+            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
         </div>
     </nav>
 
@@ -69,14 +69,13 @@
             </div>
         </div>
 
-        <!-- ⭐️ 지적하신 부분 완벽 수정: 스케줄 문구 밑에 각각의 이미지가 배치되도록 Grid 레이아웃 적용 -->
+        <!-- ⭐️ 릴스 없고 이미지(one.jpg, boryung.jpg)만 있는 버전으로 원상복구 -->
         <div class="section-container reveal" id="todayScheduleSection">
             <div class="section-header" style="border-bottom: none; margin-bottom: 20px;">
                 <div class="section-title">TODAY'S <span>BROADCAST</span></div>
             </div>
             
             <div class="today-broadcast-grid">
-                <!-- 첫 번째 스케줄 카드 (one.jpg) -->
                 <div class="broadcast-card">
                     <div class="bc-header">
                         <span class="live-badge">12:45</span>
@@ -87,7 +86,6 @@
                     </div>
                 </div>
                 
-                <!-- 두 번째 스케줄 카드 (boryung.jpg) -->
                 <div class="broadcast-card">
                     <div class="bc-header">
                         <span class="live-badge">16:45</span>
@@ -118,7 +116,6 @@
         </div>
     </div>
 
-    <!-- 우측 모달 (이 부분은 이전 요청대로 100% 동일하게 유지) -->
     <div class="modal-wrapper" id="scheduleModal">
         <button class="close-btn" onclick="closeModal()">×</button>
         <div class="modal-header-flex">
@@ -144,9 +141,7 @@
             try {
                 const response = await fetch('chart_data.json?t=' + new Date().getTime());
                 const data = await response.json();
-                
                 document.getElementById('currentTime').innerText = (data.update_time || new Date().toLocaleTimeString('ko-KR')) + "기준";
-                
                 let tickerHtml = '';
                 let validCount = 0;
                 ["Melon", "Bugs", "Genie", "FLO", "VIBE"].forEach(platform => {
@@ -164,7 +159,6 @@
                                     else if (diffText.includes('▼')) diffClass = 'diff-down';
                                     else if (diffText === 'NEW') diffClass = 'diff-new';
                                     else if (diffText === '-') diffClass = 'diff-none';
-
                                     songsHtml += `<div class="ticker-song-info"><span class="title">${songTitle}</span><span class="rank">${rec.rank}위</span><span class="rank-diff ${diffClass}">${diffText}</span></div>`;
                                 }
                             }
@@ -176,10 +170,8 @@
                         tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${logo}</div><div class="ticker-songs">${songsHtml}</div></div>`;
                     }
                 });
-
                 const wrapper = document.getElementById('tickerWrapper');
                 wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#aaa; font-size:13px;">데이터 없음</div></div>`;
-
                 clearInterval(tickerInterval);
                 if (validCount > 1) {
                     let cIdx = 0;
@@ -188,9 +180,7 @@
                         wrapper.style.transform = `translateY(-${cIdx * 50}px)`;
                     }, 3500); 
                 }
-            } catch (e) {
-                console.log("차트 대기 중");
-            }
+            } catch (e) { console.log("차트 대기 중"); }
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
@@ -202,12 +192,15 @@
                 ] 
             },
             "2026-07-26": { 
+                items: [
+                    { time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" },
+                    { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
+                ] 
             }
         };
 
         let currentCalYear = 2026;
         let currentCalMonth = 7;
-        
         function changeMonth(delta) {
             currentCalMonth += delta;
             if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; }
@@ -218,23 +211,26 @@
         function renderCalendar() {
             const calendarDays = document.getElementById('calendarDays');
             document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`;
-            
             const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); 
             const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); 
-            
             let html = '';
             for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; }
-            
             for (let i = 1; i <= lastDate; i++) {
                 const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 const data = scheduleDB[dateKey];
                 const isHighlight = data ? 'today' : '';
                 
-                // ⭐️ 지적하신 부분 완벽 수정: 달력 빈칸 문제 해결 (행사가 있으면 문구 렌더링)
+                // ⭐️ [요청하신 1번, 2번 이미지 수정 사항]: 캘린더 셀 안에 녹색점+녹색시간+흰글씨 정확히 렌더링
                 let eventsHtml = '';
                 if (data && data.items) {
                     data.items.forEach(item => {
-                        eventsHtml += `<div class="cell-event-text">${item.title}</div>`;
+                        eventsHtml += `
+                            <div class="cal-event-row">
+                                <div class="cal-dot"></div>
+                                <div class="cal-event-time">${item.time}</div>
+                                <div class="cal-event-title">${item.title}</div>
+                            </div>
+                        `;
                     });
                 }
                 
@@ -261,21 +257,18 @@
                             <div class="sd-title">${item.title}</div>
                         </div>
                     `;
+                    // ⭐️ [요청하신 3번, 4번 이미지 수정 사항]: 모달 창 안의 이미지 비율 및 레터박스 처리
                     if (item.image) {
                         scheduleHtml += `
-                            <div class="sd-embed">
-                                <img src="${item.image}" alt="${item.title}" style="width:100%; border-radius: 8px; margin-top: 5px;" onerror="this.style.display='none'">
+                            <div class="sd-img-wrapper">
+                                <img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'">
                             </div>
                         `;
                     }
                 });
                 scheduleHtml += `</div></div>`;
             } else {
-                scheduleHtml = `
-                    <div class="schedule-detail-card">
-                        <div class="sd-body" style="padding: 30px; text-align: center; color: #777;">등록된 스케줄이 없습니다.</div>
-                    </div>
-                `;
+                scheduleHtml = `<div class="schedule-detail-card"><div class="sd-body" style="padding: 30px; text-align: center; color: #777;">등록된 스케줄이 없습니다.</div></div>`;
             }
 
             document.getElementById('modalScheduleText').innerHTML = scheduleHtml;

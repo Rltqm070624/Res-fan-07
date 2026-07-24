@@ -8,23 +8,31 @@
     <style>
         body, html { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; background: #121212; color: #e0e0e0; }
         
-        /* ⭐️ 로고 네온사인 효과 적용 */
-        .header { position: absolute; top: 30px; left: 40px; z-index: 10; }
-        .header img { 
-            width: 180px; 
-            filter: drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.9))
-                    drop-shadow(0px 0px 10px rgba(255, 51, 153, 0.8))
-                    drop-shadow(0px 0px 20px rgba(255, 51, 153, 0.6));
-        }
-
         .video-container { position: relative; width: 100%; height: 50vh; overflow: hidden; background: #000; }
         .video-container iframe { position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 50vh; min-width: 88.88vh; transform: translate(-50%, -50%); pointer-events: none; opacity: 0.8; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(18,18,18,0.2) 0%, rgba(18,18,18,0.6) 70%, rgba(18,18,18,1) 100%); }
 
-        /* ⭐️ 영상과 차트 사이 가로 배너 (띠 전광판 효과) */
+        /* ⭐️ 로고를 영상 배경 정중앙에 배치하고 네온빛 극대화 */
+        .hero-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            text-align: center;
+            pointer-events: none;
+        }
+        .hero-center img { 
+            width: 300px; /* 로고 크기 조절 */
+            filter: drop-shadow(0px 0px 6px rgba(255, 255, 255, 1))
+                    drop-shadow(0px 0px 15px rgba(255, 51, 153, 0.9))
+                    drop-shadow(0px 0px 30px rgba(255, 51, 153, 0.7));
+        }
+
+        /* 영상과 차트 사이 가로 배너 */
         .horizontal-banner {
             width: 100%;
-            background: #ff3399; /* 리센느 핑크 포인트 컬러 */
+            background: #ff3399;
             color: #fff;
             padding: 12px 0;
             font-size: 15px;
@@ -78,16 +86,18 @@
     </style>
 </head>
 <body>
-    <!-- 방금 올리신 2번 이미지(logo.png)로 교체됨 -->
-    <div class="header"><img src="logo.png" alt="RESCENE Logo"></div>
-    
     <div class="video-container">
-        <!-- 재생 불가능한 에러 영상 대신 정상 작동하는 UhUh 뮤비로 교체 -->
+        <!-- 보내주신 유튜브 링크(ZbO9PBdFRdc)로 완벽 교체 -->
         <iframe src="https://www.youtube.com/embed/ZbO9PBdFRdc?autoplay=1&mute=1&loop=1&playlist=ZbO9PBdFRdc&controls=0&showinfo=0&rel=0" allow="autoplay; fullscreen"></iframe>
         <div class="video-overlay"></div>
+        
+        <!-- ⭐️ 영상 배경 정중앙에 위치하는 로고 -->
+        <div class="hero-center">
+            <img src="logo.png" alt="RESCENE Logo">
+        </div>
     </div>
 
-    <!-- ⭐️ 새롭게 추가된 가로 배너 -->
+    <!-- 가로 배너 -->
     <div class="horizontal-banner">
         <div class="banner-content">
             ✨ RESCENE(리센느) 실시간 차트 아카이브에 오신 것을 환영합니다! 오늘도 스밍 화이팅! 🎧 실시간 순위는 매 정각마다 업데이트됩니다. ✨
@@ -101,7 +111,7 @@
             <div class="update-time" id="currentTime">업데이트 중...</div>
         </div>
         <div class="chart-grid" id="mainChartGrid">
-            <div class="loading-text">데이터 연동을 기다리는 중입니다... (최대 1시간 소요)</div>
+            <div class="loading-text">데이터 연동을 기다리는 중입니다... (상단 Actions 탭에서 봇을 수동 실행해보세요!)</div>
         </div>
     </div>
 
@@ -156,7 +166,6 @@
                     chartGrid.innerHTML += `<div class="platform-card"><div class="platform-name">${platform} ${platformBadge}</div><div class="platform-charts">${groupsHtml}</div></div>`;
                 }
             } catch (error) {
-                // 데이터 파일이 없을 때 뜨는 문구
                 chartGrid.innerHTML = `<div class="loading-text" style="color:#ff3399;">데이터 연동을 기다리는 중입니다... (상단 Actions 탭에서 봇을 수동 실행해보세요!)</div>`;
             }
         }

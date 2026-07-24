@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- ⭐️ 외부 CSS 파일 연동 -->
+    <!-- 외부 CSS 연동 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -43,24 +43,25 @@
         </ul>
     </div>
 
-    <!-- 팝업 시 밀리는 전체 화면 래퍼 -->
-    <div id="mainWrapper" style="padding-top: 120px;">
-        <div class="section-header">
+    <!-- 메인 컨텐츠 래퍼 -->
+    <div id="mainWrapper" style="padding-top: 120px; max-width: 900px;"> <!-- 리스트형이므로 가로폭을 살짝 줄여서 가독성 높임 -->
+        
+        <div class="section-header" style="margin-bottom: 20px; border-bottom: none;">
             <div class="section-title">RESCENE <span>DISCOGRAPHY</span></div>
         </div>
-        
-        <div class="album-grid" id="albumGridContainer"></div>
-    </div>
 
-    <!-- 우측 팝업 모달 -->
-    <div class="modal-wrapper" id="albumModal">
-        <button class="close-btn" onclick="closeModal()">×</button>
-        <div class="modal-album-header">
-            <img src="" alt="Album Cover" class="modal-album-cover" id="modalAlbumCover">
-            <div class="modal-album-title" id="modalAlbumTitle">Album Title</div>
+        <!-- ⭐️ 상단 카테고리 대분류 탭 -->
+        <div class="archive-category-tabs">
+            <button class="cat-tab-btn active">앨범</button>
+            <button class="cat-tab-btn" onclick="alert('업데이트 예정입니다.')">직캠</button>
+            <button class="cat-tab-btn" onclick="alert('업데이트 예정입니다.')">쇼츠</button>
+            <button class="cat-tab-btn" onclick="alert('업데이트 예정입니다.')">자체 컨텐츠</button>
+            <button class="cat-tab-btn" onclick="alert('업데이트 예정입니다.')">외부 컨텐츠</button>
         </div>
         
-        <div class="track-list" id="modalTrackList"></div>
+        <!-- ⭐️ 아코디언 리스트가 렌더링될 공간 -->
+        <div class="archive-list" id="archiveListContainer"></div>
+        
     </div>
 
     <script>
@@ -70,44 +71,43 @@
         const archiveData = [
             {
                 title: "YoYo", cover: "images/yoyo.jpg",
-                tracks: [ { title: "YoYo (Title)", videos: [{ label: "MV", id: "uDYy2UyO1X4" }] } ]
+                tracks: [ { title: "YoYo", videos: [{ label: "MV", id: "uDYy2UyO1X4" }] } ]
             },
             {
                 title: "Re:Scene", cover: "images/uhuh.jpg",
                 tracks: [
-                    { title: "UhUh (Title)", videos: [{ label: "MV", id: "zpSejlkSXLA" }] },
+                    { title: "UhUh", videos: [{ label: "MV", id: "zpSejlkSXLA" }] },
                     { title: "YoYo", videos: [{ label: "MV", id: "uDYy2UyO1X4" }] }
                 ]
             },
             {
                 title: "Counting Star (더 매직스타 X RESCENE)", cover: "images/Counting Start.jpg",
                 tracks: [
-                    { title: "Counting Star (Title)", videos: [{ label: "음원", id: "mBAEnI5kjdI" }, { label: "첫 팬콘", id: "AzJepX0ujq0" }] },
-                    { title: "Counting Star (Inst.)", videos: [] }
+                    { title: "Counting Star", videos: [{ label: "음원", id: "mBAEnI5kjdI" }, { label: "첫 팬콘", id: "AzJepX0ujq0" }] }
                 ]
             },
             {
                 title: "YoYo (Japanese Version)", cover: "images/yoyo japan.jpg",
-                tracks: [ { title: "YoYo (Japanese Version)", videos: [{ label: "MV", id: "Lle0xkhk_9M" }] } ]
+                tracks: [ { title: "YoYo", videos: [{ label: "MV", id: "Lle0xkhk_9M" }] } ]
             },
             {
                 title: "SCENEDROME", cover: "images/SCENEDROME.jpg",
                 tracks: [
                     { title: "Lucky you", videos: [{ label: "Audio", id: "0UMsSFysM8o" }] },
-                    { title: "Love Attack (Title)", videos: [{ label: "MV", id: "9XttLI0oH0I" }, { label: "존박 ver", id: "y1SL3LBCGWg" }, { label: "인기가요 240901", id: "Hv1wQ6nlpNE" }, { label: "엠카 260618", id: "ajhEFz1zNMQ" }] },
+                    { title: "Love Attack", videos: [{ label: "MV", id: "9XttLI0oH0I" }, { label: "존박 ver", id: "y1SL3LBCGWg" }, { label: "인기가요 240901", id: "Hv1wQ6nlpNE" }, { label: "엠카 260618", id: "ajhEFz1zNMQ" }] },
                     { title: "New World", videos: [{ label: "MV", id: "QNXeGm-Wkms" }, { label: "심플리 케이팝", id: "WwGF_sqjH6c" }] },
-                    { title: "Pinball (Title)", videos: [{ label: "MV", id: "B8JJ8RNM-60" }] }
+                    { title: "Pinball", videos: [{ label: "MV", id: "B8JJ8RNM-60" }] }
                 ]
             },
             {
                 title: "UhUh (Japanese Version)", cover: "images/uhuh japan.jpg",
-                tracks: [ { title: "UhUh (Japanese Version) (Title)", videos: [{ label: "음원", id: "YcDYrBJ3yjw" }, { label: "TV-LIVE 250528", id: "JRdVfTgwlrQ" }] } ]
+                tracks: [ { title: "UhUh", videos: [{ label: "음원", id: "YcDYrBJ3yjw" }, { label: "TV-LIVE 250528", id: "JRdVfTgwlrQ" }] } ]
             },
             {
                 title: "Glow Up", cover: "images/Glowup.jpg",
                 tracks: [
                     { title: "CRASH", videos: [{ label: "음원", id: "_ivLUJ3R62U" }, { label: "케이팝-잇", id: "8kRucJDItlQ" }] },
-                    { title: "Glow Up (Title)", videos: [{ label: "MV", id: "h0xUtrb_JBc" }, { label: "Performance ver", id: "WQuoPINWLU8" }, { label: "엠카 250206", id: "FYdghnUJx-Y" }, { label: "뮤뱅 250214", id: "r3I9kJGcn3g" }, { label: "인기가요 250302", id: "bQ24gSDbMqY" }] },
+                    { title: "Glow Up", videos: [{ label: "MV", id: "h0xUtrb_JBc" }, { label: "Performance ver", id: "WQuoPINWLU8" }, { label: "엠카 250206", id: "FYdghnUJx-Y" }, { label: "뮤뱅 250214", id: "r3I9kJGcn3g" }, { label: "인기가요 250302", id: "bQ24gSDbMqY" }] },
                     { title: "Going On", videos: [{ label: "음원", id: "SIre1awR938" }] },
                     { title: "In my lotion", videos: [{ label: "음원", id: "rm3yX5-vusA" }, { label: "쇼챔 250305", id: "DqVwDLWg3ek" }] },
                     { title: "Cotton Candy", videos: [{ label: "음원", id: "Y8dkJXZmT5M" }, { label: "직캠 250215", id: "pQs7iZS0xoE" }] }
@@ -115,42 +115,41 @@
             },
             {
                 title: "Glow Up (English Version)", cover: "images/Glowup eng.jpg",
-                tracks: [ { title: "Glow Up (English Version) (Title)", videos: [{ label: "음원", id: "a5_b7KfG15Y" }] } ]
+                tracks: [ { title: "Glow Up", videos: [{ label: "음원", id: "a5_b7KfG15Y" }] } ]
             },
             {
                 title: "남주의 첫날밤을 가져버렸다 OST Part.1", cover: "images/namju.jpg",
-                tracks: [ { title: "밤밤밤 (Title)", videos: [{ label: "MV", id: "AfiBC_VR2K4" }, { label: "음원", id: "UcIt0TBe8pg" }, { label: "직캠 250907", id: "FmJ35OQches" }] } ]
+                tracks: [ { title: "밤밤밤", videos: [{ label: "MV", id: "AfiBC_VR2K4" }, { label: "음원", id: "UcIt0TBe8pg" }, { label: "직캠 250907", id: "FmJ35OQches" }] } ]
             },
             {
                 title: "Dearest", cover: "images/dejavu.jpg",
                 tracks: [
-                    { title: "Deja vu (Title)", videos: [{ label: "MV", id: "ZbO9PBdFRdc" }, { label: "엠카 250703", id: "jciMWQgUVCA" }, { label: "엠카 250710", id: "vQBtHJVbNeM" }, { label: "뮤뱅 250714", id: "fW8CXaBau-U" }, { label: "뮤뱅 250711", id: "JdYC0Jomkbs" }, { label: "쇼챔 260715", id: "PqpmFwNjDHg" }, { label: "교차편집 1", id: "AXdH0rWOXDg" }, { label: "교차편집 2", id: "K7YYvqVFXn8" }] },
+                    { title: "Deja vu", videos: [{ label: "MV", id: "ZbO9PBdFRdc" }, { label: "엠카 250703", id: "jciMWQgUVCA" }, { label: "엠카 250710", id: "vQBtHJVbNeM" }, { label: "뮤뱅 250714", id: "fW8CXaBau-U" }, { label: "뮤뱅 250711", id: "JdYC0Jomkbs" }, { label: "쇼챔 260715", id: "PqpmFwNjDHg" }, { label: "교차편집 1", id: "AXdH0rWOXDg" }, { label: "교차편집 2", id: "K7YYvqVFXn8" }] },
                     { title: "Mood", videos: [{ label: "MV", id: "v5we0mJpoDM" }] }
                 ]
             },
             {
                 title: "Dearest (Speed Up Version)", cover: "images/dejavu.jpg",
                 tracks: [
-                    { title: "Deja vu (Speed Up) (Title)", videos: [{ label: "음원", id: "PJqWbyNPcqw" }] },
+                    { title: "Deja vu (Speed Up)", videos: [{ label: "음원", id: "PJqWbyNPcqw" }] },
                     { title: "Mood (Speed Up)", videos: [{ label: "음원", id: "VtRqBzYte2g" }] }
                 ]
             },
             {
                 title: "남주의 첫날밤을 가져버렸다 OST Special", cover: "images/namju2.jpg",
-                tracks: [ { title: "밤밤밤 (Title)", videos: [{ label: "MV", id: "AfiBC_VR2K4" }, { label: "음원", id: "UcIt0TBe8pg" }, { label: "직캠 250907", id: "FmJ35OQches" }] } ]
+                tracks: [ { title: "밤밤밤", videos: [{ label: "MV", id: "AfiBC_VR2K4" }, { label: "음원", id: "UcIt0TBe8pg" }, { label: "직캠 250907", id: "FmJ35OQches" }] } ]
             },
             {
                 title: "고백주파수 (첫사랑 엔딩 X RESCENE)", cover: "images/go.jpg",
                 tracks: [
-                    { title: "고백주파수 (Title)", videos: [{ label: "음원", id: "39gg4Su8MI8" }, { label: "Clip", id: "Ihsh9VRZLlo" }] },
-                    { title: "고백주파수 (Inst.)", videos: [{ label: "음원", id: "4as776eLYH8" }] }
+                    { title: "고백주파수", videos: [{ label: "음원", id: "39gg4Su8MI8" }, { label: "Clip", id: "Ihsh9VRZLlo" }] }
                 ]
             },
             {
                 title: "lip bomb", cover: "images/lip bomb.jpg",
                 tracks: [
-                    { title: "Heart Drop (Title)", videos: [{ label: "MV", id: "ByX8EZq8500" }, { label: "Perf ver", id: "638f3ttCR20" }, { label: "뮤뱅 251121", id: "2SKGgezncCI" }, { label: "더쇼 251111", id: "dDi-0BaW_8Y" }, { label: "쇼챔 251112", id: "ORiKYmHPVmk" }, { label: "Canvas", id: "WgDRLNgzztU" }, { label: "녹음 비하인드", id: "doGCcKx9F1Q" }] },
-                    { title: "Bloom (Title)", videos: [{ label: "MV", id: "MC6-82GRK5I" }, { label: "Perf ver", id: "_zzAi5x0cXc" }, { label: "더쇼 251213", id: "uCCV5qK0TBM" }, { label: "음중 251220", id: "4ADSzlm18hY" }, { label: "뮤뱅 251128", id: "G-zlWrcj7DU" }, { label: "its Live", id: "tf84FgQgi80" }, { label: "1theK", id: "kjvlrGs5f7c" }] },
+                    { title: "Heart Drop", videos: [{ label: "MV", id: "ByX8EZq8500" }, { label: "Perf ver", id: "638f3ttCR20" }, { label: "뮤뱅 251121", id: "2SKGgezncCI" }, { label: "더쇼 251111", id: "dDi-0BaW_8Y" }, { label: "쇼챔 251112", id: "ORiKYmHPVmk" }, { label: "Canvas", id: "WgDRLNgzztU" }, { label: "녹음 비하인드", id: "doGCcKx9F1Q" }] },
+                    { title: "Bloom", videos: [{ label: "MV", id: "MC6-82GRK5I" }, { label: "Perf ver", id: "_zzAi5x0cXc" }, { label: "더쇼 251213", id: "uCCV5qK0TBM" }, { label: "음중 251220", id: "4ADSzlm18hY" }, { label: "뮤뱅 251128", id: "G-zlWrcj7DU" }, { label: "its Live", id: "tf84FgQgi80" }, { label: "1theK", id: "kjvlrGs5f7c" }] },
                     { title: "Love Echo", videos: [{ label: "SHOWCASE", id: "rAR6A_y3P68" }, { label: "FANPOPTY 260721", id: "DONLx6eS-e0" }, { label: "FANCAM 260721", id: "TBgpliSowjI" }] },
                     { title: "Hello XO", videos: [{ label: "음원", id: "jVKfnPIkTwY" }] },
                     { title: "MVP", videos: [{ label: "음원", id: "TF2y-wSc2ss" }, { label: "Christmas ver", id: "qhLDO3nIYfc" }, { label: "Live Perf", id: "lviLSHBntGQ" }, { label: "직캠 260122", id: "4gwhiaF9zvA" }] }
@@ -158,13 +157,12 @@
             },
             {
                 title: "Pinball (Japanese Ver.)", cover: "images/pinball japan.jpg",
-                tracks: [ { title: "Pinball (Japanese Ver.) (Title)", videos: [{ label: "음원", id: "Cz-msuk8oqM" }, { label: "Kcon 260508", id: "tXI20ksglDM" }] } ]
+                tracks: [ { title: "Pinball", videos: [{ label: "음원", id: "Cz-msuk8oqM" }, { label: "Kcon 260508", id: "tXI20ksglDM" }] } ]
             },
             {
                 title: "RESCENE X ???", cover: "images/busy.jpg",
                 tracks: [
-                    { title: "Busy Boy (Title)", videos: [{ label: "MV", id: "MMvTKa3BmXo" }, { label: "Perf ver", id: "ewubELWBMaE" }, { label: "음원", id: "c70TkZH7fr0" }, { label: "음중 260228", id: "bEkXlmGstIo" }, { label: "쇼챔 260304", id: "j1YF0S3CKtw" }, { label: "인기가요 260301", id: "5HwxTQouI-0" }] },
-                    { title: "Busy Boy (Inst.)", videos: [{ label: "음원", id: "1gvTKPTYLE8" }] }
+                    { title: "Busy Boy", videos: [{ label: "MV", id: "MMvTKa3BmXo" }, { label: "Perf ver", id: "ewubELWBMaE" }, { label: "음원", id: "c70TkZH7fr0" }, { label: "음중 260228", id: "bEkXlmGstIo" }, { label: "쇼챔 260304", id: "j1YF0S3CKtw" }, { label: "인기가요 260301", id: "5HwxTQouI-0" }] }
                 ]
             },
             {
@@ -173,90 +171,163 @@
             },
             {
                 title: "Busy Boy (Galantis Remix)", cover: "images/busy_2.jpg",
-                tracks: [ { title: "Busy Boy (Galantis Remix) (Title)", videos: [{ label: "음원", id: "tSCde4Aa2lg" }] } ]
+                tracks: [ { title: "Busy Boy (Galantis Remix)", videos: [{ label: "음원", id: "tSCde4Aa2lg" }] } ]
             },
             {
                 title: "Runaway", cover: "images/run.jpg",
                 tracks: [
-                    { title: "Runaway (Title)", videos: [{ label: "MV", id: "rsZwrTNklos" }, { label: "엠카 260409", id: "qt2FvoXRw1U" }, { label: "its Live", id: "aDHmmrfizIE" }, { label: "음중 260411", id: "F9hbFUr-SmU" }, { label: "엠카 260416", id: "VB_vtps_wus" }, { label: "인기가요 260419", id: "ZoWGyFHTXbI" }, { label: "교차편집", id: "OkZVMQlXpDw" }] }
+                    { title: "Runaway", videos: [{ label: "MV", id: "rsZwrTNklos" }, { label: "엠카 260409", id: "qt2FvoXRw1U" }, { label: "its Live", id: "aDHmmrfizIE" }, { label: "음중 260411", id: "F9hbFUr-SmU" }, { label: "엠카 260416", id: "VB_vtps_wus" }, { label: "인기가요 260419", id: "ZoWGyFHTXbI" }, { label: "교차편집", id: "OkZVMQlXpDw" }] }
                 ]
             },
             {
                 title: "Pretty Girl - Special Single", cover: "images/pretty.jpg",
                 tracks: [
-                    { title: "Pretty Girl (Title)", videos: [{ label: "MV", id: "qZlu2j2SiBA" }, { label: "음중 260718", id: "mafe6aEH16k" }, { label: "엠카 260709", id: "Esd-KkxROxA" }, { label: "뮤뱅 260710", id: "3ctIKKzrA9M" }, { label: "음중 260711", id: "j4LlqGxOr2E" }, { label: "뮤뱅 260717", id: "0dWn9wtFr54" }, { label: "인기가요 260719", id: "eK-anMCLuiI" }, { label: "음중 260718", id: "4s5TkXahA8g" }] }
+                    { title: "Pretty Girl", videos: [{ label: "MV", id: "qZlu2j2SiBA" }, { label: "음중 260718", id: "mafe6aEH16k" }, { label: "엠카 260709", id: "Esd-KkxROxA" }, { label: "뮤뱅 260710", id: "3ctIKKzrA9M" }, { label: "음중 260711", id: "j4LlqGxOr2E" }, { label: "뮤뱅 260717", id: "0dWn9wtFr54" }, { label: "인기가요 260719", id: "eK-anMCLuiI" }, { label: "음중 260718", id: "4s5TkXahA8g" }] }
                 ]
             }
         ];
 
-        const gridContainer = document.getElementById('albumGridContainer');
-        archiveData.forEach((album, index) => {
-            const card = document.createElement('div');
-            card.className = 'album-card';
-            card.onclick = () => openModal(index);
-            card.innerHTML = `
-                <div class="album-cover">
-                    <img src="${album.cover}" alt="${album.title}" onerror="this.src='https://via.placeholder.com/300?text=NO+IMAGE'">
-                </div>
-                <div class="album-info"><div class="album-title">${album.title}</div></div>
-            `;
-            gridContainer.appendChild(card);
-        });
+        // ⭐️ 글로벌 데이터 스토어 (앱처럼 작동하게 만듦)
+        let processedData = [];
 
-        function openModal(albumIndex) {
-            const album = archiveData[albumIndex];
-            document.getElementById('modalAlbumTitle').innerText = album.title;
-            document.getElementById('modalAlbumCover').src = album.cover;
+        function renderList() {
+            const container = document.getElementById('archiveListContainer');
+            container.innerHTML = '';
             
-            const trackListEl = document.getElementById('modalTrackList');
-            let trackHtml = '';
-            
-            album.tracks.forEach((track, tIdx) => {
-                let btnHtml = '';
-                if(track.videos && track.videos.length > 0) {
-                    track.videos.forEach((vid) => {
-                        btnHtml += `<button class="video-btn" onclick="playVideo('player_${tIdx}', '${vid.id}', this)">${vid.label}</button>`;
-                    });
-                } else {
-                    btnHtml = `<div style="font-size:12px; color:#888;">등록된 영상이 없습니다.</div>`;
-                }
+            archiveData.forEach((album, albumIdx) => {
+                // 1. 영상 카테고리 자동 분류 로직
+                let categories = { 'MV': [], '무대': [], '직캠': [], '음원': [], '기타': [] };
+                
+                album.tracks.forEach(track => {
+                    if(track.videos) {
+                        track.videos.forEach(vid => {
+                            let cat = '기타';
+                            const lbl = vid.label.toLowerCase();
+                            // 단어 스캔해서 탭 분류
+                            if(lbl.includes('mv')) cat = 'MV';
+                            else if(lbl.includes('음원') || lbl.includes('audio')) cat = '음원';
+                            else if(lbl.includes('직캠') || lbl.includes('fancam')) cat = '직캠';
+                            else if(lbl.includes('엠카') || lbl.includes('뮤뱅') || lbl.includes('인기가요') || lbl.includes('음중') || lbl.includes('쇼챔') || lbl.includes('더쇼') || lbl.includes('perf') || lbl.includes('showcase') || lbl.includes('live')) cat = '무대';
+                            
+                            // 여러 곡이 있을 수 있으니 버튼 이름에 곡 제목을 붙여줌
+                            categories[cat].push({ 
+                                id: vid.id, 
+                                btnLabel: album.tracks.length > 1 ? `[${track.title}] ${vid.label}` : vid.label 
+                            });
+                        });
+                    }
+                });
 
-                trackHtml += `
-                    <div class="track-item" id="track_${tIdx}">
-                        <div class="track-title" onclick="toggleTrack(${tIdx})">${track.title} <span>▼</span></div>
-                        <div class="track-content">
-                            <div class="video-btn-group">${btnHtml}</div>
-                            <div class="inline-player-wrapper" id="player_${tIdx}"></div>
+                // 빈 카테고리는 삭제하고 존재하는 탭만 남김
+                let availableTabs = Object.keys(categories).filter(k => categories[k].length > 0);
+                
+                // 데이터 저장
+                processedData.push({ albumTitle: album.title, categories: categories, availableTabs: availableTabs });
+
+                // 2. 아코디언 리스트 HTML 뼈대 만들기
+                const item = document.createElement('div');
+                item.className = 'archive-item';
+                item.id = `album_item_${albumIdx}`;
+                
+                item.innerHTML = `
+                    <div class="archive-item-header" onclick="toggleAlbum(${albumIdx})">
+                        <div class="archive-item-thumb">
+                            <img src="${album.cover}" alt="cover" onerror="this.src='https://via.placeholder.com/100?text=NO+IMG'">
                         </div>
+                        <div class="archive-item-title">${album.title}</div>
+                        <div class="archive-item-icon">▼</div>
+                    </div>
+                    <div class="archive-item-content">
+                        <!-- 서브 탭 렌더링 영역 -->
+                        <div class="sub-tabs-container" id="tabs_${albumIdx}"></div>
+                        <!-- 비디오 버튼 렌더링 영역 -->
+                        <div class="video-btn-list" id="vbtns_${albumIdx}"></div>
+                        <!-- 영상 플레이어 -->
+                        <div class="inline-player" id="player_${albumIdx}"></div>
                     </div>
                 `;
+                container.appendChild(item);
             });
-            trackListEl.innerHTML = trackHtml;
-
-            document.getElementById('albumModal').classList.add('active');
-            document.body.classList.add('modal-open');
         }
 
-        function toggleTrack(tIdx) {
-            const el = document.getElementById(`track_${tIdx}`);
-            el.classList.toggle('active');
+        // 앨범 행(Row) 클릭 시 아코디언 열기
+        function toggleAlbum(idx) {
+            const el = document.getElementById(`album_item_${idx}`);
+            const isOpening = !el.classList.contains('active');
+            
+            // 다른 열려있는 앨범 닫기 (깔끔하게 하나만 열리도록)
+            document.querySelectorAll('.archive-item').forEach(item => item.classList.remove('active'));
+            
+            if (isOpening) {
+                el.classList.add('active');
+                renderTabs(idx); // 열릴 때 내부 탭 렌더링
+            } else {
+                // 닫을 때 유튜브 소리 꺼지도록 iframe 제거
+                document.getElementById(`player_${idx}`).innerHTML = '';
+            }
         }
 
-        function playVideo(playerId, ytId, btnEl) {
+        // 선택된 앨범 내부의 서브 탭(MV, 음원, 무대 등) 렌더링
+        function renderTabs(idx) {
+            const data = processedData[idx];
+            const tabContainer = document.getElementById(`tabs_${idx}`);
+            
+            if(data.availableTabs.length === 0) {
+                tabContainer.innerHTML = '<div style="font-size:13px; color:#888;">등록된 영상이 없습니다.</div>';
+                return;
+            }
+
+            let tabsHtml = '';
+            data.availableTabs.forEach((tabName, tIdx) => {
+                // 첫 번째 탭이 기본으로 선택되도록 (보통 MV나 음원)
+                const isActive = tIdx === 0 ? 'active' : '';
+                tabsHtml += `<button class="sub-tab-btn ${isActive}" onclick="selectTab(${idx}, '${tabName}', this)">${tabName}</button>`;
+            });
+            tabContainer.innerHTML = tabsHtml;
+
+            // 열리자마자 1순위 탭의 영상 버튼들을 띄우기
+            selectTab(idx, data.availableTabs[0], tabContainer.firstElementChild);
+        }
+
+        // 서브 탭(MV, 무대 등) 클릭 시 하위 비디오 버튼들 렌더링
+        function selectTab(albumIdx, tabName, btnEl) {
+            // 버튼 활성화 스타일
             const siblings = btnEl.parentElement.children;
             for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
             btnEl.classList.add('active');
 
-            const player = document.getElementById(playerId);
-            player.classList.add('active');
+            const videos = processedData[albumIdx].categories[tabName];
+            const btnContainer = document.getElementById(`vbtns_${albumIdx}`);
+            
+            let vBtnsHtml = '';
+            videos.forEach((vid, vIdx) => {
+                const isActive = vIdx === 0 ? 'active' : '';
+                vBtnsHtml += `<button class="video-btn ${isActive}" onclick="playVideo(${albumIdx}, '${vid.id}', this)">${vid.btnLabel}</button>`;
+            });
+            btnContainer.innerHTML = vBtnsHtml;
+
+            // 탭을 누르면 무조건 첫 번째 영상을 바로 틀어줌
+            if(videos.length > 0) {
+                playVideo(albumIdx, videos[0].id, btnContainer.firstElementChild);
+            }
+        }
+
+        // 실제 유튜브 iframe 재생
+        function playVideo(albumIdx, ytId, btnEl) {
+            // 버튼 활성화 스타일
+            if(btnEl) {
+                const siblings = btnEl.parentElement.children;
+                for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
+                btnEl.classList.add('active');
+            }
+
+            const player = document.getElementById(`player_${albumIdx}`);
             player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; fullscreen"></iframe>`;
         }
 
-        function closeModal() {
-            document.getElementById('albumModal').classList.remove('active');
-            document.body.classList.remove('modal-open');
-            setTimeout(() => { document.getElementById('modalTrackList').innerHTML = ''; }, 300);
-        }
+        // 초기화 실행
+        window.addEventListener('DOMContentLoaded', () => { renderList(); });
+
     </script>
 </body>
 </html>

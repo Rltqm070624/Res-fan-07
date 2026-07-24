@@ -13,34 +13,32 @@
         .video-container iframe { position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 50vh; min-width: 88.88vh; transform: translate(-50%, -50%); pointer-events: none; opacity: 0.8; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(18,18,18,0.2) 0%, rgba(18,18,18,0.6) 70%, rgba(18,18,18,1) 100%); }
 
-        .logo-banner-section { width: 100%; background: #121212; text-align: center; padding: 25px 0 10px 0; position: relative; z-index: 5; }
+        .logo-banner-section { width: 100%; background: #121212; text-align: center; padding: 25px 0 30px 0; position: relative; z-index: 5; }
         .logo-banner-section img { max-width: 350px; width: 70%; height: auto; filter: drop-shadow(0px 0px 6px rgba(255, 255, 255, 1)) drop-shadow(0px 0px 15px rgba(255, 51, 153, 0.9)) drop-shadow(0px 0px 30px rgba(255, 51, 153, 0.7)); }
 
-        /* ⭐️ 가로형 음원 차트 영역 (수정됨) */
-        .main-chart-container { padding: 30px 20px 50px 20px; max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
-        .section-header { font-size: 14px; font-weight: 500; color: #888; letter-spacing: 4px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .section-header span.title-hl { color: #fff; font-size: 20px; letter-spacing: 2px; font-weight: 700; margin-left: 10px; }
-        .update-time { font-size: 12px; color: #ff3399; font-weight: 400; letter-spacing: 1px; } 
+        /* ⭐️ 데뷔 타이머 (image_791036.png 반영) */
+        .debut-timer { margin-top: 15px; font-family: 'Noto Sans KR', sans-serif; text-align: center; }
+        .debut-timer .d-day { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; letter-spacing: 1px; }
+        .debut-timer .time-flow { font-size: 13px; font-weight: 300; color: #ccc; letter-spacing: 2px; }
+
+        /* ⭐️ 한 줄 롤링 차트 영역 (수정됨) */
+        .main-chart-container { padding: 0 20px 40px 20px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
+        .section-header { font-size: 12px; font-weight: 500; color: #888; letter-spacing: 4px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .section-header span.title-hl { color: #fff; font-size: 16px; letter-spacing: 2px; font-weight: 700; margin-left: 10px; }
+        .update-time { font-size: 11px; color: #ff3399; font-weight: 400; letter-spacing: 1px; } 
+
+        .ticker-container { height: 50px; overflow: hidden; background: #1a1a1a; border-radius: 8px; border: 1px solid #333; position: relative; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .ticker-wrapper { display: flex; flex-direction: column; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; }
+        .ticker-item { height: 50px; display: flex; align-items: center; padding: 0 20px; flex-shrink: 0; box-sizing: border-box; gap: 20px; }
         
-        .chart-list-container { display: flex; flex-direction: column; gap: 15px; }
+        .ticker-platform { font-weight: 900; font-size: 15px; color: #ff3399; width: 100px; flex-shrink: 0; }
+        .ticker-songs { display: flex; gap: 25px; overflow-x: auto; white-space: nowrap; flex: 1; align-items: center; scrollbar-width: none; }
+        .ticker-songs::-webkit-scrollbar { display: none; }
         
-        .platform-row { display: flex; background: #1a1a1a; border-radius: 12px; border: 1px solid #333; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.2s; }
-        .platform-row:hover { border-color: #555; }
-        
-        .platform-name-col { width: 140px; background: #222; padding: 20px; font-weight: 900; font-size: 18px; color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; border-right: 1px solid #333; letter-spacing: 1px; }
-        
-        .platform-charts-col { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
-        
-        .chart-type-row { display: flex; align-items: center; border-bottom: 1px dashed #333; padding-bottom: 12px; }
-        .chart-type-row:last-child { border-bottom: none; padding-bottom: 0; }
-        
-        .chart-type-name { width: 120px; font-size: 14px; color: #aaa; font-weight: 700; flex-shrink: 0; }
-        
-        .chart-songs-list { display: flex; flex-wrap: wrap; gap: 20px; flex: 1; align-items: center; }
-        .song-item { display: flex; align-items: center; gap: 8px; font-size: 14px; background: #111; padding: 6px 12px; border-radius: 20px; border: 1px solid #2a2a2a; }
-        .song-item .title { color: #eee; font-weight: 500; }
-        .song-item .rank { color: #fff; font-weight: 700; }
-        .song-item .out { color: #666; font-weight: 700; }
+        .ticker-song-info { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+        .ticker-song-info .title { color: #eee; font-weight: 500; }
+        .ticker-song-info .rank { color: #fff; font-weight: 700; }
+        .ticker-song-info .out { color: #666; font-weight: 700; }
         
         .rank-diff { font-size: 12px; font-weight: 700; }
         .diff-up { color: #ff3b30; }
@@ -48,23 +46,23 @@
         .diff-new { color: #ffd60a; }
         .diff-none { color: #888; }
         
-        .loading-text { color: #ff3399; font-weight: bold; text-align: center; width: 100%; padding: 30px; }
+        .loading-text { color: #ff3399; font-weight: bold; font-size: 14px; padding-left: 20px; }
 
         /* 캘린더 영역 */
-        .calendar-container { padding: 50px 20px; max-width: 1000px; margin: 0 auto; }
+        .calendar-container { padding: 20px 20px 50px 20px; max-width: 1000px; margin: 0 auto; }
         .calendar-header { text-align: center; font-size: 14px; font-weight: 500; color: #888; letter-spacing: 4px; margin-bottom: 40px; }
         .calendar-header span { color: #fff; font-size: 24px; font-weight: 700; letter-spacing: 2px; margin-left: 10px; }
         
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
         .weekday { text-align: center; color: #555; font-size: 12px; font-weight: 700; padding-bottom: 15px; }
-        .day-cell { background: #1a1a1a; border-radius: 8px; min-height: 120px; padding: 15px; position: relative; cursor: pointer; transition: 0.2s ease; border: 1px solid transparent; }
+        .day-cell { background: #1a1a1a; border-radius: 8px; min-height: 100px; padding: 15px; position: relative; cursor: pointer; transition: 0.2s ease; border: 1px solid transparent; }
         .day-cell:hover { background: #222; border-color: #ff3399; }
         .day-cell.empty { background: transparent; cursor: default; border: none; }
         .day-number { font-size: 15px; color: #ccc; font-weight: 500; }
         
         .schedule-badge { position: absolute; bottom: 15px; left: 15px; background: rgba(255, 51, 153, 0.1); color: #ff3399; font-size: 11px; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255, 51, 153, 0.3); }
 
-        /* ⭐️ 우측 슬라이드 팝업창 영역 (수정됨) */
+        /* 우측 슬라이드 팝업창 */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; display: flex; justify-content: flex-end; opacity: 0; visibility: hidden; transition: 0.3s ease; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         
@@ -75,26 +73,30 @@
         .close-btn:hover { color: #fff; transform: rotate(90deg); }
         
         .modal-date { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #222; }
+        .modal-section-title { font-size: 13px; color: #ff3399; font-weight: 700; letter-spacing: 2px; margin-bottom: 15px; margin-top: 35px; display: flex; justify-content: space-between; align-items: flex-end; }
         
-        .modal-section-title { font-size: 13px; color: #ff3399; font-weight: 700; letter-spacing: 2px; margin-bottom: 15px; margin-top: 35px; }
+        /* ⭐️ 활동량 그래프 영역 (image_7913ff.png 반영) */
+        .activity-graph-container { background: #1a1a1a; padding: 25px 20px; border-radius: 12px; border: 1px solid #333; margin-bottom: 10px; }
+        .graph-row { display: flex; align-items: center; margin-bottom: 15px; }
+        .graph-row:last-child { margin-bottom: 0; }
+        .graph-label { width: 50px; font-size: 13px; color: #aaa; flex-shrink: 0; }
+        .graph-bar-area { flex: 1; display: flex; align-items: center; gap: 10px; }
+        .bar-bg { width: 100%; height: 16px; background: transparent; border-radius: 2px; display: flex; align-items: center; }
+        .bar-fill { height: 100%; background: #e0e0e0; border-radius: 2px; min-width: 4px; transition: width 0.8s ease-out; }
+        .graph-value { font-size: 14px; font-weight: 700; color: #fff; width: 30px; }
         
+        /* 모달 내 기타 콘텐츠 영역 */
         .modal-video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; border: 1px solid #333; }
         .modal-video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .no-data-text { color: #666; font-size: 14px; background: #1a1a1a; padding: 20px; border-radius: 8px; text-align: center; border: 1px dashed #333; }
+        .modal-schedule-box { background: #1a1a1a; padding: 20px; border-radius: 12px; color: #ddd; font-size: 14px; border: 1px solid #333; white-space: pre-line; line-height: 1.6; }
+        .no-data-text { color: #666; font-size: 13px; background: #1a1a1a; padding: 20px; border-radius: 8px; text-align: center; border: 1px dashed #333; }
         
-        .modal-schedule-box { background: #1a1a1a; padding: 20px; border-radius: 12px; color: #ddd; font-size: 15px; border: 1px solid #333; white-space: pre-line; line-height: 1.6; }
-
-        /* ⭐️ 사진 모아보기 영역 추가 */
         .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .photo-grid img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; border: 1px solid #333; transition: 0.2s; cursor: pointer; }
         .photo-grid img:hover { border-color: #ff3399; filter: brightness(1.1); }
 
         @media (max-width: 768px) {
-            .platform-row { flex-direction: column; }
-            .platform-name-col { width: 100%; border-right: none; border-bottom: 1px solid #333; padding: 15px; }
-            .chart-type-row { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .chart-type-name { width: 100%; border-bottom: 1px solid #222; padding-bottom: 5px; }
-            .day-cell { min-height: 80px; padding: 10px; }
+            .day-cell { min-height: 70px; padding: 8px; }
             .schedule-badge { font-size: 10px; padding: 2px 4px; bottom: 8px; left: 8px; }
             .modal-content { max-width: 100%; }
         }
@@ -105,18 +107,26 @@
         <iframe src="https://www.youtube.com/embed/ZbO9PBdFRdc?autoplay=1&mute=1&loop=1&playlist=ZbO9PBdFRdc&controls=0&showinfo=0&rel=0" allow="autoplay; fullscreen"></iframe>
         <div class="video-overlay"></div>
     </div>
+    
     <div class="logo-banner-section">
         <img src="logo.png" alt="RESCENE Logo" onerror="this.style.display='none'">
+        <!-- 데뷔 타이머 -->
+        <div class="debut-timer">
+            <div class="d-day" id="dDayText">✓ D+000</div>
+            <div class="time-flow" id="timeFlowText">00:00:00</div>
+        </div>
     </div>
 
-    <!-- 1. 차트 영역 (가로형) -->
+    <!-- 1. 한 줄 롤링 차트 영역 -->
     <div class="main-chart-container">
         <div class="section-header">
-            <div>SONG CHARTS <span class="title-hl">TRACKING</span></div>
+            <div>REAL-TIME <span class="title-hl">HOT 100</span></div>
             <div class="update-time" id="currentTime">업데이트 중...</div>
         </div>
-        <div class="chart-list-container" id="mainChartGrid">
-            <div class="loading-text">데이터 연동을 기다리는 중입니다...</div>
+        <div class="ticker-container">
+            <div class="ticker-wrapper" id="tickerWrapper">
+                <div class="ticker-item"><div class="loading-text">데이터 연동을 기다리는 중입니다...</div></div>
+            </div>
         </div>
     </div>
 
@@ -126,13 +136,8 @@
             ARCHIVE SCHEDULE <span id="calendarMonthText">2026. 07</span>
         </div>
         <div class="calendar-grid">
-            <div class="weekday">SUN</div>
-            <div class="weekday">MON</div>
-            <div class="weekday">TUE</div>
-            <div class="weekday">WED</div>
-            <div class="weekday">THU</div>
-            <div class="weekday">FRI</div>
-            <div class="weekday">SAT</div>
+            <div class="weekday">SUN</div><div class="weekday">MON</div><div class="weekday">TUE</div>
+            <div class="weekday">WED</div><div class="weekday">THU</div><div class="weekday">FRI</div><div class="weekday">SAT</div>
         </div>
         <div class="calendar-grid" id="calendarDays"></div>
     </div>
@@ -143,6 +148,15 @@
             <button class="close-btn" onclick="closeModal()">×</button>
             <div class="modal-date" id="modalDateTitle">2026. 07. 04.</div>
             
+            <!-- 활동량 그래프 -->
+            <div class="modal-section-title">
+                ACTIVITY GRAPH
+                <span style="font-size: 11px; color: #888; font-weight: 400; cursor: pointer;" onclick="toggleGraphMode()" id="graphToggleBtn">이번 달 보기 ↺</span>
+            </div>
+            <div class="activity-graph-container" id="graphContainer">
+                <!-- JS 렌더링 -->
+            </div>
+
             <div class="modal-section-title">TODAY'S SCENE (VIDEO)</div>
             <div id="modalVideoContainer"></div>
             
@@ -155,7 +169,23 @@
     </div>
 
     <script>
-        // --- 1. 가로형 음원 차트 로직 ---
+        // --- 0. 데뷔 타이머 로직 ---
+        const debutDate = new Date("2024-03-26T18:00:00+09:00"); // 리센느 데뷔일시
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - debutDate;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+            const mins = String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0');
+            const secs = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+            
+            document.getElementById('dDayText').innerText = `✓ D+${days}`;
+            document.getElementById('timeFlowText').innerText = `${hours}:${mins}:${secs}`;
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // --- 1. 한 줄 롤링 차트 로직 ---
         function getDiffClass(diffText) {
             if (!diffText) return 'diff-none';
             if (diffText.includes('▲')) return 'diff-up';
@@ -164,8 +194,9 @@
             return 'diff-none';
         }
 
+        let tickerInterval;
         async function fetchSongCharts() {
-            const chartGrid = document.getElementById('mainChartGrid');
+            const tickerWrapper = document.getElementById('tickerWrapper');
             const timeEl = document.getElementById('currentTime');
             
             try {
@@ -174,177 +205,191 @@
                 
                 timeEl.innerText = data.update_time;
                 const songsData = data.songs;
-                const platforms = ["Melon", "Bugs", "Genie", "FLO", "VIBE"]; // 표기할 플랫폼 순서
-                let finalHtml = '';
+                const platforms = ["Melon", "Bugs", "Genie", "FLO", "VIBE"];
+                
+                // 실시간 성격의 차트 키워드만 필터링
+                const targetChartKeys = ["실시간 (HOT100)", "실시간", "24시간"]; 
+                let tickerHtml = '';
+                let validPlatformCount = 0;
 
                 platforms.forEach(platform => {
-                    // 플랫폼별로 존재하는 차트 종류(HOT100, 일간 등) 수집
-                    const chartTypesSet = new Set();
+                    let songsHtml = '';
+                    let hasData = false;
+
                     for (const songTitle in songsData) {
-                        if (songsData[songTitle][platform]) {
-                            Object.keys(songsData[songTitle][platform]).forEach(ct => chartTypesSet.add(ct));
+                        const platformData = songsData[songTitle][platform];
+                        if (!platformData) continue;
+                        
+                        // 실시간 관련 차트 데이터 찾기
+                        let songRecord = null;
+                        for (const key of targetChartKeys) {
+                            if (platformData[key]) { songRecord = platformData[key]; break; }
+                        }
+
+                        if (songRecord) {
+                            hasData = true;
+                            const diffClass = getDiffClass(songRecord.diff);
+                            songsHtml += `
+                                <div class="ticker-song-info">
+                                    <span class="title">${songTitle}</span> 
+                                    <span class="rank">${songRecord.rank}위</span> 
+                                    <span class="rank-diff ${diffClass}">${songRecord.diff}</span>
+                                </div>`;
+                        } else {
+                            songsHtml += `
+                                <div class="ticker-song-info" style="opacity: 0.5;">
+                                    <span class="title" style="color:#aaa;">${songTitle}</span> 
+                                    <span class="out">OUT</span>
+                                </div>`;
                         }
                     }
-
-                    if (chartTypesSet.size > 0) {
-                        let chartsHtml = '';
-                        chartTypesSet.forEach(chartType => {
-                            let songsHtml = '';
-                            
-                            // 모든 곡에 대해 해당 플랫폼/차트타입의 순위 탐색
-                            for (const songTitle in songsData) {
-                                const songRecord = songsData[songTitle][platform]?.[chartType];
-                                if (songRecord) {
-                                    const diffClass = getDiffClass(songRecord.diff);
-                                    songsHtml += `
-                                        <div class="song-item">
-                                            <span class="title">${songTitle}</span> 
-                                            <span class="rank">${songRecord.rank}위</span> 
-                                            <span class="rank-diff ${diffClass}">${songRecord.diff}</span>
-                                        </div>`;
-                                } else {
-                                    songsHtml += `
-                                        <div class="song-item" style="opacity: 0.6;">
-                                            <span class="title" style="color:#aaa;">${songTitle}</span> 
-                                            <span class="out">OUT</span>
-                                        </div>`;
-                                }
-                            }
-                            
-                            chartsHtml += `
-                                <div class="chart-type-row">
-                                    <div class="chart-type-name">${chartType}</div>
-                                    <div class="chart-songs-list">${songsHtml}</div>
-                                </div>`;
-                        });
-
-                        finalHtml += `
-                            <div class="platform-row">
-                                <div class="platform-name-col">${platform}</div>
-                                <div class="platform-charts-col">${chartsHtml}</div>
+                    
+                    if (hasData) {
+                        validPlatformCount++;
+                        tickerHtml += `
+                            <div class="ticker-item">
+                                <div class="ticker-platform">${platform}</div>
+                                <div class="ticker-songs">${songsHtml}</div>
                             </div>`;
                     }
                 });
-                
-                chartGrid.innerHTML = finalHtml || `<div class="loading-text">데이터가 없습니다.</div>`;
+
+                tickerWrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div class="loading-text">차트 진입 데이터가 없습니다.</div></div>`;
+
+                // 롤링 애니메이션 설정
+                if (validPlatformCount > 1) {
+                    let currentIndex = 0;
+                    clearInterval(tickerInterval);
+                    tickerInterval = setInterval(() => {
+                        currentIndex = (currentIndex + 1) % validPlatformCount;
+                        tickerWrapper.style.transform = `translateY(-${currentIndex * 50}px)`;
+                    }, 4000); // 4초마다 롤링
+                }
 
             } catch (error) {
-                chartGrid.innerHTML = `<div class="loading-text" style="color:#ff3399;">데이터 갱신 대기 중...</div>`;
+                tickerWrapper.innerHTML = `<div class="ticker-item"><div class="loading-text" style="color:#ff3399;">데이터 갱신 대기 중...</div></div>`;
             }
         }
 
-        // --- 2. 캘린더 및 우측 팝업 로직 ---
-        // 하드코딩된 스케줄/영상/사진 데이터 (사진은 이미지 URL 배열로 입력)
+        // --- 2. 캘린더 및 팝업/그래프 로직 ---
         const scheduleDB = {
             "2026-07-24": {
                 hasSchedule: true,
                 youtubeId: "ZbO9PBdFRdc",
                 text: "[방송] KBS 뮤직뱅크\n[싸인회] 핫트랙스 영등포점",
-                photos: [
-                    "https://pbs.twimg.com/media/GPMQ4YubQAAn9Kj?format=jpg&name=large", 
-                    "https://pbs.twimg.com/media/GPMQ4Yva0AAVn2E?format=jpg&name=large"
-                ] // 임시 예시 이미지 주소
+                photos: ["https://pbs.twimg.com/media/GPMQ4YubQAAn9Kj?format=jpg&name=large", "https://pbs.twimg.com/media/GPMQ4Yva0AAVn2E?format=jpg&name=large"],
+                activity: { video: 6, photo: 9, post: 2, live: 1 }
             },
             "2026-07-25": {
                 hasSchedule: true,
                 youtubeId: "",
                 text: "[방송] MBC 쇼! 음악중심 오후 3시 15분",
-                photos: []
+                photos: [],
+                activity: { video: 1, photo: 3, post: 1, live: 0 }
             }
         };
 
         const targetYear = 2026;
         const targetMonth = 7; 
+        
+        let currentModalDateKey = "";
+        let isGraphMonthlyMode = false;
+        
+        // 이번 달 전체 활동량 계산
+        const monthlyActivity = { video: 0, photo: 0, post: 0, live: 0 };
+        Object.values(scheduleDB).forEach(day => {
+            if(day.activity) {
+                monthlyActivity.video += day.activity.video;
+                monthlyActivity.photo += day.activity.photo;
+                monthlyActivity.post += day.activity.post;
+                monthlyActivity.live += day.activity.live;
+            }
+        });
 
         function renderCalendar() {
             const calendarDays = document.getElementById('calendarDays');
-            const monthText = document.getElementById('calendarMonthText');
-            monthText.innerText = `${targetYear}. ${String(targetMonth).padStart(2, '0')}`;
-            
+            document.getElementById('calendarMonthText').innerText = `${targetYear}. ${String(targetMonth).padStart(2, '0')}`;
             const firstDayIndex = new Date(targetYear, targetMonth - 1, 1).getDay(); 
             const lastDate = new Date(targetYear, targetMonth, 0).getDate(); 
             
             let html = '';
-            for (let i = 0; i < firstDayIndex; i++) {
-                html += `<div class="day-cell empty"></div>`;
-            }
-            
+            for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; }
             for (let i = 1; i <= lastDate; i++) {
                 const dateKey = `${targetYear}-${String(targetMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 const schedule = scheduleDB[dateKey];
-                
-                let badgeHtml = '';
-                if (schedule && schedule.hasSchedule) {
-                    badgeHtml = `<div class="schedule-badge">스케줄 있음</div>`;
-                }
-
-                html += `
-                    <div class="day-cell" onclick="openModal('${targetYear}', '${targetMonth}', '${i}', '${dateKey}')">
-                        <div class="day-number">${i}</div>
-                        ${badgeHtml}
-                    </div>
-                `;
+                const badgeHtml = (schedule && schedule.hasSchedule) ? `<div class="schedule-badge">스케줄 있음</div>` : '';
+                html += `<div class="day-cell" onclick="openModal('${targetYear}', '${targetMonth}', '${i}', '${dateKey}')"><div class="day-number">${i}</div>${badgeHtml}</div>`;
             }
             calendarDays.innerHTML = html;
         }
 
-        // 모달 열기
+        function renderGraph() {
+            const container = document.getElementById('graphContainer');
+            const data = scheduleDB[currentModalDateKey] || { activity: {video:0, photo:0, post:0, live:0} };
+            const stats = isGraphMonthlyMode ? monthlyActivity : (data.activity || {video:0, photo:0, post:0, live:0});
+            
+            // 최대값을 기준으로 게이지 % 계산 (월간 모드일 때는 최대값을 더 크게 설정)
+            const maxVal = isGraphMonthlyMode ? Math.max(1, stats.video, stats.photo, stats.post, stats.live) + 5 : 10;
+            
+            const makeRow = (label, val) => {
+                const percent = Math.min((val / maxVal) * 100, 100);
+                return `
+                    <div class="graph-row">
+                        <div class="graph-label">${label}</div>
+                        <div class="graph-bar-area">
+                            <div class="bar-bg"><div class="bar-fill" style="width: ${percent}%"></div></div>
+                            <div class="graph-value">${val}</div>
+                        </div>
+                    </div>`;
+            };
+
+            container.innerHTML = makeRow('영상', stats.video) + makeRow('사진', stats.photo) + makeRow('게시글', stats.post) + makeRow('라이브', stats.live);
+        }
+
+        function toggleGraphMode() {
+            isGraphMonthlyMode = !isGraphMonthlyMode;
+            document.getElementById('graphToggleBtn').innerText = isGraphMonthlyMode ? '오늘 보기 ↺' : '이번 달 보기 ↺';
+            renderGraph();
+        }
+
         function openModal(year, month, day, dateKey) {
-            const modal = document.getElementById('scheduleModal');
-            const titleEl = document.getElementById('modalDateTitle');
-            const videoContainer = document.getElementById('modalVideoContainer');
-            const textEl = document.getElementById('modalScheduleText');
-            const photoContainer = document.getElementById('modalPhotoContainer');
+            currentModalDateKey = dateKey;
+            isGraphMonthlyMode = false;
+            document.getElementById('graphToggleBtn').innerText = '이번 달 보기 ↺';
             
-            titleEl.innerText = `${year}. ${String(month).padStart(2, '0')}. ${String(day).padStart(2, '0')}.`;
-            
+            document.getElementById('modalDateTitle').innerText = `${year}. ${String(month).padStart(2, '0')}. ${String(day).padStart(2, '0')}.`;
             const data = scheduleDB[dateKey] || { hasSchedule: false, youtubeId: "", text: "등록된 스케줄이 없습니다.", photos: [] };
             
-            // 영상 처리
+            renderGraph(); // 그래프 렌더링
+
+            const videoContainer = document.getElementById('modalVideoContainer');
             if (data.youtubeId) {
                 videoContainer.innerHTML = `<div class="modal-video-wrapper"><iframe src="https://www.youtube.com/embed/${data.youtubeId}?rel=0" allowfullscreen></iframe></div>`;
             } else {
                 videoContainer.innerHTML = `<div class="no-data-text">등록된 영상이 없습니다.</div>`;
             }
             
-            // 스케줄 텍스트 처리
-            textEl.innerHTML = `<div class="modal-schedule-box">${data.text}</div>`;
+            document.getElementById('modalScheduleText').innerHTML = `<div class="modal-schedule-box">${data.text}</div>`;
             
-            // 사진 처리
+            const photoContainer = document.getElementById('modalPhotoContainer');
             if (data.photos && data.photos.length > 0) {
-                let photoHtml = '';
-                data.photos.forEach(url => {
-                    // 클릭 시 원본 이미지 새 탭에서 열기
-                    photoHtml += `<img src="${url}" alt="Today Photo" onclick="window.open('${url}', '_blank')">`;
-                });
-                photoContainer.innerHTML = photoHtml;
+                photoContainer.innerHTML = data.photos.map(url => `<img src="${url}" alt="Today Photo" onclick="window.open('${url}', '_blank')">`).join('');
             } else {
                 photoContainer.innerHTML = `<div class="no-data-text" style="grid-column: 1 / -1;">업로드된 사진이 없습니다.</div>`;
             }
             
-            modal.classList.add('active');
+            document.getElementById('scheduleModal').classList.add('active');
             document.body.style.overflow = 'hidden'; 
         }
 
-        // 모달 닫기
         function closeModal() {
-            const modal = document.getElementById('scheduleModal');
-            const videoContainer = document.getElementById('modalVideoContainer');
-            
-            modal.classList.remove('active');
+            document.getElementById('scheduleModal').classList.remove('active');
             document.body.style.overflow = 'auto'; 
-            
-            // 애니메이션이 끝난 후 영상 종료 (소리 방지)
-            setTimeout(() => {
-                videoContainer.innerHTML = ''; 
-            }, 300);
+            setTimeout(() => { document.getElementById('modalVideoContainer').innerHTML = ''; }, 300);
         }
 
-        // 검은 배경 클릭 시 닫기
         document.getElementById('scheduleModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
+            if (e.target === this) closeModal();
         });
 
         window.addEventListener('DOMContentLoaded', () => {

@@ -2,7 +2,8 @@ name: Goods Updater Auto-Bot
 
 on:
   schedule:
-    - cron: '0 0,12 * * *' # 매일 UTC 0시, 12시에 실행 (하루 2번)
+    # ⭐️ 매 6시간마다 실행되도록 변경 (UTC 0, 6, 12, 18시 / 한국 시간 오전 9시, 오후 3시, 오후 9시, 새벽 3시)
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -25,13 +26,13 @@ jobs:
           npm install
           npm install puppeteer
 
-      - name: 굿즈 크롤러 실행
-        run: node goods_scraper.js
+      - name: 굿즈 크롤러 실행 (질문자님 경로 반영)
+        run: node goods/goods_scraper.js
 
       - name: 결과 저장 및 푸시
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add goods_data.json
+          git add goods/goods_data.json
           git commit -m "Auto update goods_data.json" || exit 0
           git push

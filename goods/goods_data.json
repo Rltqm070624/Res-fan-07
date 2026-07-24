@@ -1,0 +1,27 @@
+{
+    "jota": {
+        "weverse": 0,
+        "everline": 15,
+        "soundwave": 120
+    },
+    "ming": {
+        "weverse": 5,
+        "everline": 30,
+        "soundwave": 85
+    },
+    "ribbu": {
+        "weverse": 10,
+        "everline": 42,
+        "soundwave": 200
+    },
+    "jjaero": {
+        "weverse": 0,
+        "everline": 8,
+        "soundwave": 60
+    },
+    "yam": {
+        "weverse": 22,
+        "everline": 55,
+        "soundwave": 110
+    }
+}

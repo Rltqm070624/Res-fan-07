@@ -302,62 +302,57 @@
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
         // ⭐️ 굿즈 데이터 DOM 제어 (전체 품절 시 도장 찍기 로직 추가)
-        async function fetchGoodsInventory() {
-            try {
-                const response = await fetch('goods/goods_data.json?t=' + new Date().getTime());
-                const data = await response.json();
-                
-                // remini 추가
-                const items = ['remini', 'jota', 'ming', 'ribbu', 'jjaero', 'yam'];
-                const shops = ['weverse', 'everline', 'soundwave'];
+async function fetchGoodsInventory() {
+    try {
+        const response = await fetch('goods/goods_data.json?t=' + new Date().getTime());
+        const data = await response.json();
 
-                items.forEach(item => {
-                    if (data[item]) {
-                        // 1. 가격 업데이트
-                        if (data[item].price) {
-                            const priceElem = document.getElementById(`${item}-price`);
-                            if (priceElem) priceElem.innerText = data[item].price;
-                        }
+        // ⭐️ 아이템별 실제 쇼핑몰 키 이름 매핑 (goods_data.json의 진짜 필드명)
+        const itemShopMap = {
+            remini: 'withmuu',
+            jota: 'kream',
+            ming: 'kream',
+            ribbu: 'kream',
+            jjaero: 'kream',
+            yam: 'kream'
+        };
 
-                        let soldoutCount = 0;
-                        let activeShops = 0;
+        const items = ['remini', 'jota', 'ming', 'ribbu', 'jjaero', 'yam'];
 
-                        // 2. 쇼핑몰별 품절 상태 반영
-                        shops.forEach(shop => {
-                            if(data[item][shop] !== undefined) {
-                                activeShops++;
-                                const status = data[item][shop]; 
-                                const statusElem = document.getElementById(`${item}-${shop}-status`);
-                                const btnElem = document.getElementById(`${item}-${shop}-btn`);
+        items.forEach(item => {
+            if (data[item]) {
+                // 1. 가격 업데이트
+                if (data[item].price) {
+                    const priceElem = document.getElementById(`${item}-price`);
+                    if (priceElem) priceElem.innerText = data[item].price;
+                }
 
-                                if(statusElem && btnElem) {
-                                    if(status === "soldout") {
-                                        statusElem.innerText = "(품절)";
-                                        btnElem.innerText = "품절";
-                                        btnElem.classList.add("sold-out");
-                                        soldoutCount++; // 해당 아이템의 품절 카운트 증가
-                                    } else {
-                                        statusElem.innerText = "(재고: 여유)";
-                                        btnElem.innerText = "바로가기";
-                                        btnElem.classList.remove("sold-out");
-                                    }
-                                }
-                            }
-                        });
+                // 2. 실제 쇼핑몰 키로 상태 조회 (HTML id는 여전히 -weverse- 그대로 사용)
+                const realShop = itemShopMap[item];
+                const status = data[item][realShop];
+                const statusElem = document.getElementById(`${item}-weverse-status`);
+                const btnElem = document.getElementById(`${item}-weverse-btn`);
+                const imgWrapper = document.getElementById(`${item}-img-wrap`);
 
-                        // 3. ⭐️ 만약 등록된 모든 쇼핑몰이 품절이라면 도장(Stamp) 찍기
-                        const imgWrapper = document.getElementById(`${item}-img-wrap`);
-                        if (imgWrapper && activeShops > 0 && soldoutCount === activeShops) {
-                            imgWrapper.classList.add('is-soldout');
-                        } else if (imgWrapper) {
-                            imgWrapper.classList.remove('is-soldout');
-                        }
+                if (status !== undefined && statusElem && btnElem) {
+                    if (status === "soldout") {
+                        statusElem.innerText = "(품절)";
+                        btnElem.innerText = "품절";
+                        btnElem.classList.add("sold-out");
+                        if (imgWrapper) imgWrapper.classList.add('is-soldout');
+                    } else {
+                        statusElem.innerText = "(재고: 여유)";
+                        btnElem.innerText = "바로가기";
+                        btnElem.classList.remove("sold-out");
+                        if (imgWrapper) imgWrapper.classList.remove('is-soldout');
                     }
-                });
-            } catch (e) {
-                console.log("굿즈 데이터 JSON을 기다리는 중이거나 경로가 다릅니다.");
+                }
             }
-        }
+        });
+    } catch (e) {
+        console.log("굿즈 데이터 JSON을 기다리는 중이거나 경로가 다릅니다.");
+    }
+}
         fetchGoodsInventory();
 
         // 스케줄 데이터 

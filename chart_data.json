@@ -1,60 +1,93 @@
 {
-    "update_time": "2026. 07. 24 16:20 기준",
-    "charts": {
-        "Melon": {
-            "실시간 (TOP 100)": [
-                {
-                    "title": "LOVE ATTACK",
+    "update_time": "2026. 07. 24 16:24 기준",
+    "songs": {
+        "LOVE ATTACK": {
+            "Melon": {
+                "실시간 (HOT100)": {
                     "rank": 1,
-                    "diff": "진입"
+                    "diff": "NEW"
                 },
-                {
-                    "title": "Pretty Girl",
+                "일간": null,
+                "주간": null,
+                "월간": null
+            },
+            "Bugs": {
+                "실시간": {
+                    "rank": 3,
+                    "diff": "▼ 1"
+                },
+                "일간": null
+            },
+            "Genie": {
+                "실시간": null,
+                "일간": null
+            }
+        },
+        "Pretty Girl": {
+            "Melon": {
+                "실시간 (HOT100)": {
                     "rank": 6,
-                    "diff": "진입"
+                    "diff": "NEW"
                 },
-                {
-                    "title": "Deja Vu",
+                "일간": null,
+                "주간": null,
+                "월간": null
+            },
+            "Bugs": {
+                "실시간": {
                     "rank": 10,
-                    "diff": "진입"
+                    "diff": "▼ 1"
                 },
-                {
-                    "title": "Runaway",
+                "일간": null
+            },
+            "Genie": {
+                "실시간": null,
+                "일간": null
+            }
+        },
+        "Deja Vu": {
+            "Melon": {
+                "실시간 (HOT100)": {
+                    "rank": 10,
+                    "diff": "NEW"
+                },
+                "일간": null,
+                "주간": null,
+                "월간": null
+            },
+            "Bugs": {
+                "실시간": {
+                    "rank": 12,
+                    "diff": "-"
+                },
+                "일간": null
+            },
+            "Genie": {
+                "실시간": null,
+                "일간": null
+            }
+        },
+        "Runaway": {
+            "Melon": {
+                "실시간 (HOT100)": {
                     "rank": 44,
-                    "diff": "진입"
-                }
-            ],
-            "일간": []
-        },
-        "Bugs": {
-            "실시간": [],
-            "일간": []
-        },
-        "Genie": {
-            "실시간": [],
-            "일간": []
-        },
-        "FLO": {
-            "24시간": []
-        },
-        "VIBE": {
-            "실시간": []
-        },
-        "Circle Chart": {
-            "일간": [],
-            "주간": []
-        },
-        "Spotify KR": {
-            "Daily": []
-        },
-        "YouTube Music": {
-            "일간": []
-        },
-        "Apple Music": {
-            "일간": []
-        },
-        "Hanteo Chart": {
-            "실시간": []
+                    "diff": "NEW"
+                },
+                "일간": null,
+                "주간": null,
+                "월간": null
+            },
+            "Bugs": {
+                "실시간": {
+                    "rank": 27,
+                    "diff": "▲ 46"
+                },
+                "일간": null
+            },
+            "Genie": {
+                "실시간": null,
+                "일간": null
+            }
         }
     }
 }

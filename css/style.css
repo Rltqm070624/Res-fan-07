@@ -327,3 +327,67 @@ body, html {
 @media (max-width: 500px) {
     .goods-grid-v2 { grid-template-columns: 1fr; } 
 }
+
+/* ==========================================================================
+   🚨 모바일 UI 픽스 (style.css 맨 아래에 추가해 주세요)
+   ========================================================================== */
+
+/* 1. 멤버 이름/생년월일 우측 쏠림 현상 해결 (20646.jpg) */
+.member-info {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+.name-bar, .bday {
+    width: 100%;
+    text-align: center;
+    display: block;
+}
+
+/* --- 모바일 해상도(800px 이하) 전용 수정 --- */
+@media (max-width: 800px) {
+    
+    /* 1-2. 우측 상단 캘린더 및 SNS 아이콘 간격 좁히기 (20646.jpg) */
+    .nav-right {
+        gap: 8px !important;
+    }
+    .sns-links {
+        gap: 6px !important;
+    }
+    .sns-links a, .cal-icon-btn {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    /* 2. 캘린더 닫기(X) 버튼과 방향키 겹침 현상 해결 (20648.jpg) */
+    .calendar-popup-wrapper {
+        padding: 45px 15px 25px !important; /* X 버튼이 들어갈 윗공간 넉넉하게 확보 */
+    }
+    #calendarPopupModal .close-btn {
+        top: 8px !important;
+        right: 8px !important;
+        padding: 5px !important;
+    }
+    .calendar-header-controls {
+        margin-bottom: 20px !important;
+    }
+
+    /* 3. 음악 차트 텍스트 잘림 현상 해결 (20650.jpg) */
+    /* 가로로 스와이프(터치 스크롤) 해서 볼 수 있도록 수정 */
+    .ticker-songs {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 20px;
+    }
+    /* 지저분해 보이지 않도록 가로 스크롤바는 투명하게 숨김 처리 */
+    .ticker-songs::-webkit-scrollbar {
+        display: none;
+    }
+    .ticker-songs {
+        -ms-overflow-style: none; /* IE, Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+}
+
+
+

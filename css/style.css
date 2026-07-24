@@ -20,6 +20,9 @@
     --transition-smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ==========================================================================
+   Base
+   ========================================================================== */
 body, html { 
     margin: 0; padding: 0; 
     font-family: var(--font-body); 
@@ -37,11 +40,24 @@ body, html {
 
 .section-container { padding: 100px 20px; max-width: 1040px; margin: 0 auto; position: relative; z-index: 2; }
 
-.section-header { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-light); padding-bottom: 20px; }
+/* ==========================================================================
+   Typography & Headers
+   ========================================================================== */
+.section-header { 
+    margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; 
+    border-bottom: 1px solid var(--border-light); padding-bottom: 20px; 
+}
 .section-title { font-family: var(--font-head); font-size: 28px; font-weight: 300; color: var(--text-secondary); letter-spacing: 2px; }
 .section-title span { color: var(--text-primary); font-weight: 800; }
 
-.top-nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; box-sizing: border-box; z-index: 8000; background: rgba(18, 19, 24, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); }
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+.top-nav { 
+    position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; 
+    padding: 15px 40px; box-sizing: border-box; z-index: 8000; 
+    background: rgba(18, 19, 24, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); 
+}
 .nav-brand { font-family: var(--font-head); font-weight: 800; font-size: 16px; letter-spacing: 4px; color: var(--text-primary); }
 .desktop-menu { display: flex; gap: 40px; list-style: none; margin: 0; padding: 0; }
 .desktop-menu li a { color: var(--text-secondary); text-decoration: none; font-size: 12px; font-weight: 600; font-family: var(--font-head); letter-spacing: 1px; transition: color 0.3s ease; }
@@ -49,11 +65,18 @@ body, html {
 
 .nav-right { display: flex; gap: 20px; align-items: center; }
 .sns-links { display: flex; gap: 12px; }
-.sns-links a, .cal-icon-btn { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--bg-surface); border: 1px solid var(--border-light); transition: all 0.3s ease; cursor: pointer; color: var(--text-secondary); }
+.sns-links a, .cal-icon-btn { 
+    display: flex; align-items: center; justify-content: center; 
+    width: 36px; height: 36px; border-radius: 50%; 
+    background: var(--bg-surface); border: 1px solid var(--border-light); transition: all 0.3s ease; cursor: pointer; color: var(--text-secondary);
+}
 .sns-links a img { width: 14px; height: 14px; filter: invert(1); opacity: 0.6; transition: 0.3s; }
 .sns-links a:hover, .cal-icon-btn:hover { background: var(--text-primary); color: var(--bg-base); }
 .sns-links a:hover img { filter: invert(0); opacity: 1; }
 
+/* ==========================================================================
+   Hero Visual
+   ========================================================================== */
 .video-container { position: relative; width: 100%; height: 75vh; overflow: hidden; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.7; }
 .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(18,19,24,0.2) 0%, rgba(18,19,24,0.6) 60%, var(--bg-base) 100%); z-index: 2; }
@@ -63,6 +86,9 @@ body, html {
 .debut-timer .d-day { font-family: var(--font-head); font-size: 28px; font-weight: 200; color: var(--text-primary); letter-spacing: 4px; margin-bottom: 8px; }
 .debut-timer .time-flow { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: var(--text-secondary); letter-spacing: 3px; }
 
+/* ==========================================================================
+   Member
+   ========================================================================== */
 .member-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 20px; }
 .member-card-v2 { position: relative; background: var(--bg-surface); border-radius: 20px; overflow: hidden; border: 1px solid var(--border-light); transition: var(--transition-smooth); }
 .member-card-v2:hover { transform: translateY(-8px); border-color: var(--border-highlight); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
@@ -73,6 +99,9 @@ body, html {
 .name-bar { color: var(--text-primary); font-size: 18px; font-family: var(--font-head); font-weight: 600; letter-spacing: 1px; }
 .info-area .bday { color: var(--text-secondary); font-family: var(--font-num); font-size: 11px; letter-spacing: 1px; margin-top: 4px; }
 
+/* ==========================================================================
+   Chart Ticker
+   ========================================================================== */
 .update-time { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 500; }
 .ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }
 .ticker-wrapper { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
@@ -86,6 +115,9 @@ body, html {
 .ticker-song-info .rank { color: var(--c-accent); font-weight: 700; font-size: 16px; }
 .rank-diff { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); }
 
+/* ==========================================================================
+   Broadcast
+   ========================================================================== */
 .today-broadcast-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .broadcast-card { position: relative; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-light); transition: var(--transition-smooth); }
 .broadcast-card:hover { border-color: var(--border-highlight); transform: translateY(-5px); }
@@ -95,7 +127,9 @@ body, html {
 .live-badge { align-self: flex-start; background: var(--c-accent); color: #000; font-family: var(--font-num); font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 30px; margin-bottom: 15px; letter-spacing: 1px; }
 .bc-title { font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0; line-height: 1.4; letter-spacing: -0.5px; }
 
-/* 굿즈 섹션 */
+/* ==========================================================================
+   ⭐️ Goods Section (Grid Version + Buy Buttons)
+   ========================================================================== */
 .goods-grid-v2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px 20px; }
 .goods-item { display: flex; flex-direction: column; align-items: center; }
 .goods-img { width: 100%; max-width: 220px; aspect-ratio: 1; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; background: transparent; }
@@ -111,39 +145,92 @@ body, html {
 .buy-btn:hover { background: var(--c-accent); color: var(--bg-base); }
 .buy-btn.sold-out { background: transparent; color: #ff4757; border: 1px solid #ff4757; pointer-events: none; }
 
-/* 캘린더 팝업 */
+/* ==========================================================================
+   ⭐️ Calendar Central Popup Modal
+   ========================================================================== */
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9998; opacity: 0; pointer-events: none; transition: 0.4s ease; }
 .modal-backdrop.active { opacity: 1; pointer-events: auto; }
 .modal-backdrop.cal-backdrop { z-index: 8900; } 
-.calendar-popup-wrapper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%); width: 90%; max-width: 850px; background: var(--bg-base); border: 1px solid var(--border-light); border-radius: 24px; z-index: 8910; padding: 40px; box-sizing: border-box; box-shadow: 0 20px 80px rgba(0,0,0,0.9); opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+
+.calendar-popup-wrapper {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%);
+    width: 90%; max-width: 850px; background: var(--bg-base); 
+    border: 1px solid var(--border-light); border-radius: 24px;
+    z-index: 8910; padding: 40px; box-sizing: border-box;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.9);
+    opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .calendar-popup-wrapper.active { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
+
 .calendar-header-controls { display: flex; justify-content: center; align-items: center; gap: 30px; margin: 0 0 30px 0; }
 .cal-btn { background: var(--bg-surface); border: 1px solid var(--border-light); color: var(--text-secondary); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
 .cal-btn:hover { background: var(--text-primary); color: var(--bg-base); }
 .calendar-title { font-family: var(--font-head); font-size: 28px; font-weight: 300; color: var(--text-primary); width: 140px; text-align: center; letter-spacing: 2px;}
+
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
 .weekday { text-align: center; color: var(--text-muted); font-family: var(--font-head); font-size: 11px; font-weight: 600; padding-bottom: 10px; letter-spacing: 1px; }
 
-/* 캘린더 셀 (오버플로우 히든 다시 복구됨) */
-.day-cell { position: relative; border-radius: 12px; height: 110px !important; min-height: 110px !important; max-height: 110px !important; padding: 12px; border: 1px solid transparent; display: flex; flex-direction: column; cursor: pointer; transition: 0.3s; box-sizing: border-box; overflow: hidden; }
+/* ⭐️ 달력 셀 설정 (가운데 정렬 적용 완료) */
+.day-cell { 
+    position: relative; 
+    border-radius: 12px; 
+    height: 110px !important;       
+    min-height: 110px !important; 
+    max-height: 110px !important;
+    padding: 12px; 
+    border: 1px solid transparent; 
+    display: flex; 
+    flex-direction: column; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    box-sizing: border-box;         
+    overflow: hidden; 
+}
 .day-cell.has-event { background: rgba(255,255,255,0.03); border-color: var(--border-light); }
 .day-cell.has-event:hover { background: rgba(255,255,255,0.07); border-color: var(--border-highlight); transform: translateY(-2px); }
 .day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
-.day-number { font-family: var(--font-num); font-size: 14px; color: var(--text-secondary); font-weight: 500; align-self: flex-start; margin-bottom: 6px; flex-shrink: 0;}
+
+.day-number { 
+    font-family: var(--font-num); 
+    font-size: 14px; 
+    color: var(--text-secondary); 
+    font-weight: 500; 
+    align-self: flex-start; 
+    margin-bottom: 8px; /* 날짜 아래 여백 확보 */
+    flex-shrink: 0;
+}
 .day-cell.has-event .day-number { color: var(--text-primary); font-weight: 700; }
-.cell-event-list { display: flex; flex-direction: column; gap: 5px; width: 100%; overflow: hidden; flex: 1; }
+
+.cell-event-list { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 5px; 
+    width: 100%; 
+    overflow: hidden; 
+    flex: 1; 
+    justify-content: center; /* ⭐️ 일정 리스트 수직 중앙 정렬 */
+}
 .cal-event-row { display: flex; align-items: center; gap: 8px; width: 100%; overflow: hidden; }
 .cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 .cal-event-time { font-size: 11px; font-weight: 600; font-family: var(--font-num); flex-shrink: 0; }
 .cal-event-title { color: var(--text-primary); font-size: 11px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
 
-/* 스케줄 상세 모달 */
-.modal-wrapper { position: fixed; top: 0; right: 0; width: 440px; height: 100vh; background: #15161a; border-left: 1px solid var(--border-light); z-index: 9999; transform: translateX(100%); transition: var(--transition-smooth); overflow-y: auto; padding: 60px 40px; box-sizing: border-box; box-shadow: -30px 0 60px rgba(0,0,0,0.8); }
+/* ==========================================================================
+   Schedule Detail Modal
+   ========================================================================== */
+.modal-wrapper { 
+    position: fixed; top: 0; right: 0; width: 440px; height: 100vh; 
+    background: #15161a; border-left: 1px solid var(--border-light); 
+    z-index: 9999; transform: translateX(100%); transition: var(--transition-smooth); 
+    overflow-y: auto; padding: 60px 40px; box-sizing: border-box; 
+    box-shadow: -30px 0 60px rgba(0,0,0,0.8);
+}
 .modal-wrapper.active { transform: translateX(0); }
 .close-btn { position: absolute; top: 25px; right: 25px; color: var(--text-secondary); background: none; border: none; cursor: pointer; transition: 0.3s; padding: 10px; }
 .close-btn:hover { color: var(--text-primary); transform: rotate(90deg); }
 .modal-header-flex { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
 .modal-date { font-family: var(--font-num); font-size: 24px; font-weight: 300; color: var(--text-primary); letter-spacing: 1px; }
+
 .schedule-detail-card { margin-bottom: 30px; }
 .sd-row { display: flex; align-items: flex-start; padding: 0 0 20px 0; }
 .sd-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 8px; margin-right: 16px; flex-shrink: 0; }
@@ -153,15 +240,22 @@ body, html {
 .sd-img-wrapper img { width: 100%; height: 280px; object-fit: contain; background: var(--bg-surface); border-radius: 16px; border: 1px solid var(--border-light); }
 .schedule-detail-empty { text-align: center; color: var(--text-muted); font-size: 14px; padding: 40px 0; font-weight: 300; }
 
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
 @media (max-width: 800px) {
     .top-nav { padding: 15px 20px; }
     .desktop-menu { display: none; }
+    
     .goods-grid-v2 { grid-template-columns: repeat(2, 1fr); gap: 40px 15px; }
+
     .calendar-popup-wrapper { width: 95%; padding: 25px 15px; }
     .calendar-grid { gap: 6px; }
     .day-cell { height: 95px !important; min-height: 95px !important; padding: 8px; }
+    
     .modal-wrapper { width: 100%; padding: 40px 20px; }
 }
+
 @media (max-width: 500px) {
     .goods-grid-v2 { grid-template-columns: 1fr; } 
 }

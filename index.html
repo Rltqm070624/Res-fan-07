@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        <!-- 굿즈 섹션 -->
+        <!-- ⭐️ 굿즈 섹션 -->
         <div class="section-container reveal" id="goodsSection" style="padding-bottom: 120px;">
             <div class="section-header">
                 <div class="section-title">OFFICIAL <span>MERCH</span></div>
@@ -113,108 +113,93 @@
             
             <div class="goods-grid-v2">
                 
-                <!-- 1. REMINI (전체 품절) -->
+                <!-- 1. REMINI (레이아웃 통일 + 도장 추가) -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/REMINI.jpg" alt="REMINI Set" onerror="this.style.display='none'"></div>
-                    <div class="goods-sold-out-big">SOLD OUT !</div>
+                    <div class="goods-img" id="remini-img-wrap">
+                        <img src="images/goods/REMINI.jpg" alt="REMINI Set" onerror="this.style.display='none'">
+                        <div class="soldout-stamp"><span>SOLD</span></div>
+                    </div>
+                    <div class="goods-price-text" id="remini-price">가격 확인중...</div>
+                    <div class="goods-stock-list">
+                        <div class="stock-row">
+                            <span class="shop-name">Kream <span class="stock-num" id="remini-weverse-status">(상태 확인중...)</span></span>
+                            <a href="https://kream.co.kr/products/..." target="_blank" class="buy-btn" id="remini-weverse-btn">바로가기</a>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 2. jota -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/jota.jpg" alt="Jota" onerror="this.style.display='none'"></div>
+                    <div class="goods-img" id="jota-img-wrap">
+                        <img src="images/goods/jota.jpg" alt="Jota" onerror="this.style.display='none'">
+                        <div class="soldout-stamp"><span>SOLD</span></div>
+                    </div>
                     <div class="goods-price-text" id="jota-price">가격 확인중...</div>
                     <div class="goods-stock-list">
                         <div class="stock-row">
                             <span class="shop-name">Kream <span class="stock-num" id="jota-weverse-status">(상태 확인중...)</span></span>
                             <a href="https://kream.co.kr/products/985255" target="_blank" class="buy-btn" id="jota-weverse-btn">바로가기</a>
                         </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Everline <span class="stock-num" id="jota-everline-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="jota-everline-btn">바로가기</a>
-                        </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Soundwave <span class="stock-num" id="jota-soundwave-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="jota-soundwave-btn">바로가기</a>
-                        </div>
                     </div>
                 </div>
 
                 <!-- 3. ming -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/ming.jpg" alt="Ming" onerror="this.style.display='none'"></div>
+                    <div class="goods-img" id="ming-img-wrap">
+                        <img src="images/goods/ming.jpg" alt="Ming" onerror="this.style.display='none'">
+                        <div class="soldout-stamp"><span>SOLD</span></div>
+                    </div>
                     <div class="goods-price-text" id="ming-price">가격 확인중...</div>
                     <div class="goods-stock-list">
                         <div class="stock-row">
                             <span class="shop-name">Kream <span class="stock-num" id="ming-weverse-status">(상태 확인중...)</span></span>
                             <a href="https://kream.co.kr/products/985257" target="_blank" class="buy-btn" id="ming-weverse-btn">바로가기</a>
                         </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Everline <span class="stock-num" id="ming-everline-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="ming-everline-btn">바로가기</a>
-                        </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Soundwave <span class="stock-num" id="ming-soundwave-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="ming-soundwave-btn">바로가기</a>
-                        </div>
                     </div>
                 </div>
 
                 <!-- 4. ribbu -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/ribbu.jpg" alt="Ribbu" onerror="this.style.display='none'"></div>
+                    <div class="goods-img" id="ribbu-img-wrap">
+                        <img src="images/goods/ribbu.jpg" alt="Ribbu" onerror="this.style.display='none'">
+                        <div class="soldout-stamp"><span>SOLD</span></div>
+                    </div>
                     <div class="goods-price-text" id="ribbu-price">가격 확인중...</div>
                     <div class="goods-stock-list">
                         <div class="stock-row">
                             <span class="shop-name">Kream <span class="stock-num" id="ribbu-weverse-status">(상태 확인중...)</span></span>
                             <a href="https://kream.co.kr/products/985256" target="_blank" class="buy-btn" id="ribbu-weverse-btn">바로가기</a>
                         </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Everline <span class="stock-num" id="ribbu-everline-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="ribbu-everline-btn">바로가기</a>
-                        </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Soundwave <span class="stock-num" id="ribbu-soundwave-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="ribbu-soundwave-btn">바로가기</a>
-                        </div>
                     </div>
                 </div>
 
                 <!-- 5. jjaero -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/jjaero.jpg" alt="Jjaero" onerror="this.style.display='none'"></div>
+                    <div class="goods-img" id="jjaero-img-wrap">
+                        <img src="images/goods/jjaero.jpg" alt="Jjaero" onerror="this.style.display='none'">
+                        <div class="soldout-stamp"><span>SOLD</span></div>
+                    </div>
                     <div class="goods-price-text" id="jjaero-price">가격 확인중...</div>
                     <div class="goods-stock-list">
                         <div class="stock-row">
                             <span class="shop-name">Kream <span class="stock-num" id="jjaero-weverse-status">(상태 확인중...)</span></span>
                             <a href="https://kream.co.kr/products/985259" target="_blank" class="buy-btn" id="jjaero-weverse-btn">바로가기</a>
                         </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Everline <span class="stock-num" id="jjaero-everline-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="jjaero-everline-btn">바로가기</a>
-                        </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Soundwave <span class="stock-num" id="jjaero-soundwave-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="jjaero-soundwave-btn">바로가기</a>
-                        </div>
                     </div>
                 </div>
 
                 <!-- 6. yam -->
                 <div class="goods-item">
-                    <div class="goods-img"><img src="images/goods/yam.jpg" alt="Yam" onerror="this.style.display='none'"></div>
+                    <div class="goods-img" id="yam-img-wrap">
+                        <img src="images/goods/yam.jpg" alt="Yam" onerror="this.style.display='none'">
+                        <div class="soldout-stamp"><span>SOLD</span></div>
+                    </div>
                     <div class="goods-price-text" id="yam-price">가격 확인중...</div>
                     <div class="goods-stock-list">
                         <div class="stock-row">
                             <span class="shop-name">Kream <span class="stock-num" id="yam-weverse-status">(상태 확인중...)</span></span>
                             <a href="https://kream.co.kr/products/985258" target="_blank" class="buy-btn" id="yam-weverse-btn">바로가기</a>
                         </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Everline <span class="stock-num" id="yam-everline-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="yam-everline-btn">바로가기</a>
-                        </div>
-                        <div class="stock-row">
-                            <span class="shop-name">Soundwave <span class="stock-num" id="yam-soundwave-status">(상태 확인중...)</span></span>
-                            <a href="#" target="_blank" class="buy-btn" id="yam-soundwave-btn">바로가기</a>
                         </div>
                     </div>
                 </div>
@@ -316,43 +301,58 @@
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
-        // ⭐️ 굿즈 데이터 DOM 변경 (재고 수량 대신 구매 상태 텍스트, 클릭 허용)
+        // ⭐️ 굿즈 데이터 DOM 제어 (전체 품절 시 도장 찍기 로직 추가)
         async function fetchGoodsInventory() {
             try {
                 const response = await fetch('goods/goods_data.json?t=' + new Date().getTime());
                 const data = await response.json();
                 
-                const items = ['jota', 'ming', 'ribbu', 'jjaero', 'yam'];
+                // remini 추가
+                const items = ['remini', 'jota', 'ming', 'ribbu', 'jjaero', 'yam'];
                 const shops = ['weverse', 'everline', 'soundwave'];
 
                 items.forEach(item => {
-                    // 1. 봇이 긁어온 가격 정보 반영
-                    if (data[item] && data[item].price) {
-                        const priceElem = document.getElementById(`${item}-price`);
-                        if (priceElem) priceElem.innerText = data[item].price;
-                    }
+                    if (data[item]) {
+                        // 1. 가격 업데이트
+                        if (data[item].price) {
+                            const priceElem = document.getElementById(`${item}-price`);
+                            if (priceElem) priceElem.innerText = data[item].price;
+                        }
 
-                    // 2. 쇼핑몰별 품절 상태 반영
-                    shops.forEach(shop => {
-                        if(data[item] && data[item][shop] !== undefined) {
-                            const status = data[item][shop]; // "soldout" or "available"
-                            const statusElem = document.getElementById(`${item}-${shop}-status`);
-                            const btnElem = document.getElementById(`${item}-${shop}-btn`);
+                        let soldoutCount = 0;
+                        let activeShops = 0;
 
-                            if(statusElem && btnElem) {
-                                // 품절이더라도 링크를 클릭할 수 있게 sold-out 클래스는 부여하되 CSS에서 pointer-events 뺌
-                                if(status === "soldout") {
-                                    statusElem.innerText = "(품절)";
-                                    btnElem.innerText = "품절";
-                                    btnElem.classList.add("sold-out");
-                                } else {
-                                    statusElem.innerText = "(재고: 여유)";
-                                    btnElem.innerText = "바로가기";
-                                    btnElem.classList.remove("sold-out");
+                        // 2. 쇼핑몰별 품절 상태 반영
+                        shops.forEach(shop => {
+                            if(data[item][shop] !== undefined) {
+                                activeShops++;
+                                const status = data[item][shop]; 
+                                const statusElem = document.getElementById(`${item}-${shop}-status`);
+                                const btnElem = document.getElementById(`${item}-${shop}-btn`);
+
+                                if(statusElem && btnElem) {
+                                    if(status === "soldout") {
+                                        statusElem.innerText = "(품절)";
+                                        btnElem.innerText = "품절";
+                                        btnElem.classList.add("sold-out");
+                                        soldoutCount++; // 해당 아이템의 품절 카운트 증가
+                                    } else {
+                                        statusElem.innerText = "(재고: 여유)";
+                                        btnElem.innerText = "바로가기";
+                                        btnElem.classList.remove("sold-out");
+                                    }
                                 }
                             }
+                        });
+
+                        // 3. ⭐️ 만약 등록된 모든 쇼핑몰이 품절이라면 도장(Stamp) 찍기
+                        const imgWrapper = document.getElementById(`${item}-img-wrap`);
+                        if (imgWrapper && activeShops > 0 && soldoutCount === activeShops) {
+                            imgWrapper.classList.add('is-soldout');
+                        } else if (imgWrapper) {
+                            imgWrapper.classList.remove('is-soldout');
                         }
-                    });
+                    }
                 });
             } catch (e) {
                 console.log("굿즈 데이터 JSON을 기다리는 중이거나 경로가 다릅니다.");

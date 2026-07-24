@@ -255,7 +255,7 @@
             try {
                 const response = await fetch('chart_data.json?t=' + new Date().getTime());
                 const data = await response.json();
-                document.getElementById('currentTime').innerText = (data.update_time || new Date().toLocaleTimeString('ko-KR')) + " 기준";
+                document.getElementById('currentTime').innerText = (data.update_time || new Date().toLocaleTimeString('ko-KR'));
                 let tickerHtml = '';
                 let validCount = 0;
                 ["Melon", "Bugs", "Genie", "FLO", "VIBE"].forEach(platform => {

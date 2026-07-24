@@ -1,4 +1,4 @@
-De<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -7,9 +7,9 @@ De<!DOCTYPE html>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="css/style.css?v=1">
+    <link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body id="homeSection">
 
@@ -45,7 +45,10 @@ De<!DOCTYPE html>
     <!-- 메인 래퍼 -->
     <div id="mainWrapper">
         <div class="video-container" id="homeSection">
-            <img src="video/member.mp4" alt="Dejavu Background" class="bg-gif" onerror="this.onerror=null; this.style.display='none'">
+            <!-- ⭐️ mp4 파일을 위한 video 태그로 교체 -->
+            <video class="bg-gif" autoplay loop muted playsinline>
+                <source src="video/member.mp4" type="video/mp4">
+            </video>
             <div class="video-overlay"></div>
         </div>
         
@@ -103,8 +106,8 @@ De<!DOCTYPE html>
         </div>
 
         <div class="section-container reveal" id="calendarSection" style="padding-bottom: 80px;">
-            <div class="section-header" style="justify-content: center; margin-bottom: 25px; border-bottom: none;">
-                <div class="section-title" style="text-align: center; border-bottom: 2px solid var(--text-main); padding-bottom: 10px;">오늘의 영상 <span>확인하기</span></div>
+            <div class="section-header center-header">
+                <div class="section-title">오늘의 영상 <span>확인하기</span></div>
             </div>
             <div class="calendar-header-controls">
                 <button class="cal-btn" onclick="changeMonth(-1)">◀</button>
@@ -119,15 +122,15 @@ De<!DOCTYPE html>
         </div>
     </div>
 
-    <!-- 우측 스플릿 팝업 모달 (캘린더 상세정보) -->
+    <!-- 우측 스플릿 팝업 모달 -->
     <div class="modal-wrapper" id="scheduleModal">
         <button class="close-btn" onclick="closeModal()">×</button>
-        <div class="modal-header-flex" style="border-bottom: none; margin-bottom: 10px;">
+        <div class="modal-header-flex">
             <div class="modal-date" id="modalDateTitle">2026. 07. 04</div>
         </div>
         <div class="modal-section-title">
             ACTIVITY GRAPH
-            <span style="font-size: 11px; color: #888; font-weight: 500; cursor: pointer; font-family: var(--font-body);" onclick="toggleGraphMode()" id="graphToggleBtn">이번 달 보기 ↺</span>
+            <span class="graph-toggle-btn" onclick="toggleGraphMode()" id="graphToggleBtn">이번 달 보기 ↺</span>
         </div>
         <div class="activity-graph-container" id="graphContainer"></div>
         <div class="modal-section-title">TODAY'S SCENE (YOUTUBE)</div>

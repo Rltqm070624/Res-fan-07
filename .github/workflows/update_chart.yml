@@ -1,0 +1,35 @@
+name: Chart Updater Auto-Bot
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 코드 불러오기
+        uses: actions/checkout@v3
+
+      - name: Node.js 세팅
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 패키지 설치
+        run: npm install
+
+      - name: 크롤러 실행
+        run: node scraper.js
+
+      - name: 결과 저장 및 푸시
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add chart_data.json
+          git commit -m "Auto update chart_data.json" || exit 0
+          git push

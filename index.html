@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESCENE ARCHIVE</title>
+    <title>RESCENE ARCHIVE | Premium</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="homeSection">
 
+    <!-- 프리미엄 내비게이션 -->
     <nav class="top-nav">
+        <div class="nav-brand">RESCENE</div>
         <ul class="desktop-menu">
             <li><a href="javascript:void(0)" onclick="scrollToSection('homeSection')">HOME</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('memberSection')">MEMBERS</a></li>
@@ -30,36 +32,38 @@
     </nav>
 
     <div id="mainWrapper">
-        
+        <!-- 메인 비주얼 -->
         <div class="video-container" id="homeSection">
             <video src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
-        </div>
-        
-        <div class="logo-banner-section">
-            <img src="images/logo.png" alt="RESCENE Logo" class="neon-logo" onerror="this.style.display='none'">
-            <div class="debut-timer">
-                <div class="d-day" id="dDayText">D+000</div>
-                <div class="time-flow" id="timeFlowText">00:00:00</div>
+            
+            <div class="hero-content">
+                <img src="images/logo.png" alt="RESCENE Logo" class="hero-logo" onerror="this.style.display='none'">
+                <div class="debut-timer">
+                    <div class="d-day" id="dDayText">D+000</div>
+                    <div class="time-flow" id="timeFlowText">00:00:00</div>
+                </div>
             </div>
         </div>
 
+        <!-- 멤버 섹션 -->
         <div class="section-container reveal" id="memberSection">
             <div class="section-header">
-                <div class="section-title">RESCENE <span>MEMBERS</span></div>
+                <div class="section-title">THE <span>MEMBERS</span></div>
             </div>
             <div class="member-wrapper">
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/원이.webp" alt="원이" onerror="this.style.display='none'"></div><div class="name-bar">원이</div><div class="info-area"><div class="bday">2004. 05. 25.</div></div></div>
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/리브.webp" alt="리브" onerror="this.style.display='none'"></div><div class="name-bar">리브</div><div class="info-area"><div class="bday">2006. 10. 11.</div></div></div>
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/미나미.webp" alt="미나미" onerror="this.style.display='none'"></div><div class="name-bar">미나미</div><div class="info-area"><div class="bday">2006. 11. 29.</div></div></div>
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/메이.webp" alt="메이" onerror="this.style.display='none'"></div><div class="name-bar">메이</div><div class="info-area"><div class="bday">2008. 08. 19.</div></div></div>
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/제나.webp" alt="제나" onerror="this.style.display='none'"></div><div class="name-bar">제나</div><div class="info-area"><div class="bday">2008. 11. 27.</div></div></div>
+                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/원이.webp" alt="원이" onerror="this.style.display='none'"></div><div class="member-info"><div class="name-bar">원이</div><div class="bday">2004. 05. 25.</div></div></div>
+                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/리브.webp" alt="리브" onerror="this.style.display='none'"></div><div class="member-info"><div class="name-bar">리브</div><div class="bday">2006. 10. 11.</div></div></div>
+                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/미나미.webp" alt="미나미" onerror="this.style.display='none'"></div><div class="member-info"><div class="name-bar">미나미</div><div class="bday">2006. 11. 29.</div></div></div>
+                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/메이.webp" alt="메이" onerror="this.style.display='none'"></div><div class="member-info"><div class="name-bar">메이</div><div class="bday">2008. 08. 19.</div></div></div>
+                <div class="member-card-v2"><div class="member-photo-v2"><img src="images/제나.webp" alt="제나" onerror="this.style.display='none'"></div><div class="member-info"><div class="name-bar">제나</div><div class="bday">2008. 11. 27.</div></div></div>
             </div>
         </div>
 
+        <!-- 차트 섹션 -->
         <div class="section-container reveal" id="chartSection">
             <div class="section-header chart-header">
-                <div class="section-title">음원 사이트 <span>HOT 100 차트</span></div>
+                <div class="section-title">MUSIC <span>CHARTS</span></div>
                 <div class="update-time" id="currentTime">데이터 로딩중...</div>
             </div>
             <div class="ticker-container">
@@ -69,55 +73,64 @@
             </div>
         </div>
 
-        <!-- ⭐️ 릴스 없고 이미지(one.jpg, boryung.jpg)만 있는 버전으로 원상복구 -->
+        <!-- 스케줄 (이미지 버전) -->
         <div class="section-container reveal" id="todayScheduleSection">
-            <div class="section-header" style="border-bottom: none; margin-bottom: 20px;">
+            <div class="section-header">
                 <div class="section-title">TODAY'S <span>BROADCAST</span></div>
             </div>
-            
             <div class="today-broadcast-grid">
                 <div class="broadcast-card">
-                    <div class="bc-header">
-                        <span class="live-badge">12:45</span>
-                        <h3 class="bc-title">2026 원 유니버스 페스티벌</h3>
-                    </div>
                     <div class="bc-img-wrapper">
                         <img src="images/one.jpg" alt="원 유니버스 페스티벌" class="bc-img" onerror="this.style.display='none'">
+                        <div class="bc-overlay">
+                            <span class="live-badge">12:45</span>
+                            <h3 class="bc-title">2026 원 유니버스 페스티벌</h3>
+                        </div>
                     </div>
                 </div>
-                
                 <div class="broadcast-card">
-                    <div class="bc-header">
-                        <span class="live-badge">16:45</span>
-                        <h3 class="bc-title">보령 KBS 슈퍼라이브</h3>
-                    </div>
                     <div class="bc-img-wrapper">
                         <img src="images/boryung.jpg" alt="보령 KBS 슈퍼라이브" class="bc-img" onerror="this.style.display='none'">
+                        <div class="bc-overlay">
+                            <span class="live-badge">16:45</span>
+                            <h3 class="bc-title">보령 KBS 슈퍼라이브</h3>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="section-container reveal" id="calendarSection" style="padding-bottom: 80px;">
-            <div class="section-header center-header" style="border-bottom: none; margin-bottom: 20px;">
-                <div class="section-title">RESCENE <span>CALENDAR</span></div>
+        <!-- 캘린더 섹션 -->
+        <div class="section-container reveal" id="calendarSection" style="padding-bottom: 100px;">
+            <div class="section-header center-header">
+                <div class="section-title">OFFICIAL <span>CALENDAR</span></div>
             </div>
 
             <div class="calendar-header-controls">
-                <button class="cal-btn" onclick="changeMonth(-1)">◀</button>
+                <button class="cal-btn" onclick="changeMonth(-1)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
                 <div class="calendar-title" id="calendarMonthText">2026. 07</div>
-                <button class="cal-btn" onclick="changeMonth(1)">▶</button>
+                <button class="cal-btn" onclick="changeMonth(1)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
             </div>
-            <div class="calendar-grid">
-                <div class="weekday">SUN</div><div class="weekday">MON</div><div class="weekday">TUE</div>
-                <div class="weekday">WED</div><div class="weekday">THU</div><div class="weekday">FRI</div><div class="weekday">SAT</div>
+            <div class="calendar-wrapper">
+                <div class="calendar-grid">
+                    <div class="weekday">SUN</div><div class="weekday">MON</div><div class="weekday">TUE</div>
+                    <div class="weekday">WED</div><div class="weekday">THU</div><div class="weekday">FRI</div><div class="weekday">SAT</div>
+                </div>
+                <div class="calendar-grid" id="calendarDays"></div>
             </div>
-            <div class="calendar-grid" id="calendarDays"></div>
         </div>
     </div>
 
+    <!-- 모달 -->
+    <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
     <div class="modal-wrapper" id="scheduleModal">
-        <button class="close-btn" onclick="closeModal()">×</button>
+        <button class="close-btn" onclick="closeModal()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
         <div class="modal-header-flex">
             <div class="modal-date" id="modalDateTitle">2026년 7월 25일</div>
         </div>
@@ -125,10 +138,12 @@
     </div>
 
     <script>
+        // 스크롤 및 진입 애니메이션
         const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
 
+        // 디데이 타이머
         const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
         setInterval(() => {
             const diff = new Date() - debutDate;
@@ -136,12 +151,13 @@
             document.getElementById('timeFlowText').innerText = `${String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0')}:${String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0')}:${String(Math.floor((diff / 1000) % 60)).padStart(2, '0')}`;
         }, 1000);
 
+        // 차트 로직
         let tickerInterval;
         async function fetchSongCharts() {
             try {
                 const response = await fetch('chart_data.json?t=' + new Date().getTime());
                 const data = await response.json();
-                document.getElementById('currentTime').innerText = (data.update_time || new Date().toLocaleTimeString('ko-KR')) + "기준";
+                document.getElementById('currentTime').innerText = (data.update_time || new Date().toLocaleTimeString('ko-KR')) + " 기준";
                 let tickerHtml = '';
                 let validCount = 0;
                 ["Melon", "Bugs", "Genie", "FLO", "VIBE"].forEach(platform => {
@@ -159,31 +175,32 @@
                                     else if (diffText.includes('▼')) diffClass = 'diff-down';
                                     else if (diffText === 'NEW') diffClass = 'diff-new';
                                     else if (diffText === '-') diffClass = 'diff-none';
-                                    songsHtml += `<div class="ticker-song-info"><span class="title">${songTitle}</span><span class="rank">${rec.rank}위</span><span class="rank-diff ${diffClass}">${diffText}</span></div>`;
+                                    songsHtml += `<div class="ticker-song-info"><span class="title">${songTitle}</span><span class="rank">${rec.rank}</span><span class="rank-diff ${diffClass}">${diffText}</span></div>`;
                                 }
                             }
                         }
                     }
                     if (songsHtml !== '') {
                         validCount++;
-                        let logo = platform === 'Melon' ? `<div class="p-logo melon">Melon</div>` : (platform === 'Bugs' ? `<div class="p-logo bugs">Bugs!</div>` : `<div class="p-logo">${platform}</div>`);
-                        tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${logo}</div><div class="ticker-songs">${songsHtml}</div></div>`;
+                        // 깔끔한 모노톤 텍스트 로고로 변경
+                        tickerHtml += `<div class="ticker-item"><div class="ticker-platform"><span class="p-logo">${platform}</span></div><div class="ticker-songs">${songsHtml}</div></div>`;
                     }
                 });
                 const wrapper = document.getElementById('tickerWrapper');
-                wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#aaa; font-size:13px;">데이터 없음</div></div>`;
+                wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">데이터 수집 중입니다.</div></div>`;
                 clearInterval(tickerInterval);
                 if (validCount > 1) {
                     let cIdx = 0;
                     tickerInterval = setInterval(() => {
                         cIdx = (cIdx + 1) % validCount;
-                        wrapper.style.transform = `translateY(-${cIdx * 50}px)`;
-                    }, 3500); 
+                        wrapper.style.transform = `translateY(-${cIdx * 56}px)`;
+                    }, 4000); 
                 }
             } catch (e) { console.log("차트 대기 중"); }
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
+        // 스케줄 데이터
         const scheduleDB = {
             "2026-07-25": { 
                 items: [
@@ -193,12 +210,12 @@
             },
             "2026-07-26": { 
                 items: [
-                    { time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" },
-                    { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
+                    { time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" }
                 ] 
             }
         };
 
+        // 캘린더 로직
         let currentCalYear = 2026;
         let currentCalMonth = 7;
         function changeMonth(delta) {
@@ -213,14 +230,14 @@
             document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`;
             const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); 
             const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); 
+            
             let html = '';
             for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; }
             for (let i = 1; i <= lastDate; i++) {
                 const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 const data = scheduleDB[dateKey];
-                const isHighlight = data ? 'today' : '';
+                const hasEvent = data ? 'has-event' : '';
                 
-                // ⭐️ [요청하신 1번, 2번 이미지 수정 사항]: 캘린더 셀 안에 녹색점+녹색시간+흰글씨 정확히 렌더링
                 let eventsHtml = '';
                 if (data && data.items) {
                     data.items.forEach(item => {
@@ -234,7 +251,7 @@
                     });
                 }
                 
-                html += `<div class="day-cell ${isHighlight}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')">
+                html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')">
                             <span class="day-number">${i}</span>
                             <div class="cell-event-list">${eventsHtml}</div>
                          </div>`;
@@ -242,8 +259,9 @@
             calendarDays.innerHTML = html;
         }
 
+        // 모달 제어
         function openModal(year, month, day, dateKey) {
-            document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`;
+            document.getElementById('modalDateTitle').innerText = `${year}. ${String(month).padStart(2, '0')}. ${String(day).padStart(2, '0')}`;
             const data = scheduleDB[dateKey];
             let scheduleHtml = '';
 
@@ -257,7 +275,6 @@
                             <div class="sd-title">${item.title}</div>
                         </div>
                     `;
-                    // ⭐️ [요청하신 3번, 4번 이미지 수정 사항]: 모달 창 안의 이미지 비율 및 레터박스 처리
                     if (item.image) {
                         scheduleHtml += `
                             <div class="sd-img-wrapper">
@@ -268,17 +285,19 @@
                 });
                 scheduleHtml += `</div></div>`;
             } else {
-                scheduleHtml = `<div class="schedule-detail-card"><div class="sd-body" style="padding: 30px; text-align: center; color: #777;">등록된 스케줄이 없습니다.</div></div>`;
+                scheduleHtml = `<div class="schedule-detail-empty">일정이 없는 날입니다.</div>`;
             }
 
             document.getElementById('modalScheduleText').innerHTML = scheduleHtml;
             document.getElementById('scheduleModal').classList.add('active');
-            document.body.classList.add('modal-open'); 
+            document.getElementById('modalBackdrop').classList.add('active');
+            document.body.style.overflow = 'hidden'; // 뒤 스크롤 방지
         }
 
         function closeModal() {
             document.getElementById('scheduleModal').classList.remove('active');
-            document.body.classList.remove('modal-open'); 
+            document.getElementById('modalBackdrop').classList.remove('active');
+            document.body.style.overflow = 'auto';
         }
 
         window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });

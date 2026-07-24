@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -105,14 +105,13 @@
             </div>
         </div>
 
-        <!-- ⭐️ 굿즈 섹션 (3열 그리드 레이아웃 + 바로가기 버튼 추가) -->
+        <!-- 굿즈 섹션 -->
         <div class="section-container reveal" id="goodsSection" style="padding-bottom: 120px;">
             <div class="section-header">
                 <div class="section-title">OFFICIAL <span>MERCH</span></div>
             </div>
             
             <div class="goods-grid-v2">
-                
                 <!-- 1. REMINI (전체 품절) -->
                 <div class="goods-item">
                     <div class="goods-img"><img src="images/goods/REMINI.jpg" alt="REMINI Set" onerror="this.style.display='none'"></div>
@@ -335,7 +334,7 @@
             }
         };
 
-        // 캘린더 로직
+        // 캘린더 로직 (★ 일정이 있어요 삭제됨)
         let currentCalYear = 2026;
         let currentCalMonth = 7;
         function changeMonth(delta) {
@@ -357,13 +356,9 @@
                 const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 const data = scheduleDB[dateKey];
                 const hasEvent = data ? 'has-event' : '';
-                
-                let handwrittenHtml = '';
                 let eventsHtml = '';
                 
                 if (data && data.items) {
-                    handwrittenHtml = `<div class="cal-handwritten">★ 일정이 있어요!</div>`;
-                    
                     data.items.forEach(item => {
                         let dotColor = item.color ? item.color : 'var(--c-accent)';
                         eventsHtml += `
@@ -377,7 +372,6 @@
                 }
                 
                 html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')">
-                            ${handwrittenHtml}
                             <span class="day-number">${i}</span>
                             <div class="cell-event-list">${eventsHtml}</div>
                          </div>`;

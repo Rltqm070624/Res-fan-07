@@ -1,5 +1,5 @@
 {
-    "update_time": "2026. 07. 24 15:58 기준",
+    "update_time": "2026. 07. 24 16:20 기준",
     "charts": {
         "Melon": {
             "실시간 (TOP 100)": [
@@ -20,7 +20,7 @@
                 },
                 {
                     "title": "Runaway",
-                    "rank": 47,
+                    "rank": 44,
                     "diff": "진입"
                 }
             ],

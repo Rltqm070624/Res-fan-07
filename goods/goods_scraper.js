@@ -64,18 +64,19 @@ async function scrapeGoods() {
                 
                 await delay(3000); 
 
-                // 1. 가격 긁어오기
+                // 1. 가격 긁어오기 (⭐️ 수정: 텍스트 전체에서 숫자만 정규식으로 추출)
                 if (!priceSet) {
                     await page.waitForSelector(config.priceSelector, { timeout: 5000 }).catch(() => null);
                     const priceText = await page.$eval(config.priceSelector, el => el.innerText).catch(() => null);
-                    
-                    if (priceText && priceText.trim() !== "") {
-                        let cleanText = priceText.trim().split('\n')[0]; 
-                        if (!cleanText.includes('₩') && !cleanText.includes('원')) {
-                            cleanText = `₩ ${cleanText}`;
+
+                    if (priceText) {
+                        // 콤마 제거 후 세 자리 이상 숫자만 추출 → "판매가" 같은 라벨 텍스트는 무시됨
+                        const match = priceText.replace(/,/g, '').match(/\d{3,}/);
+                        if (match) {
+                            const num = Number(match[0]).toLocaleString('ko-KR');
+                            goodsData[member].price = `₩ ${num}`;
+                            priceSet = true;
                         }
-                        goodsData[member].price = cleanText;
-                        priceSet = true;
                     }
                 }
 

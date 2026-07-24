@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESCENE ARCHIVE - MEDIA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #121215; --bg-card: #1c1c21;
+            --c-pink: #ff3399; --c-mint: #00e5ff; --c-gold: #ffc107; --c-purple: #b388ff;
+            --text-main: #f0f0f0; --text-sub: #a0a0a5; --border-color: rgba(255, 51, 153, 0.2);
+        }
+
+        body, html { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; background: var(--bg-main); color: var(--text-main); }
+        
+        .top-nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; box-sizing: border-box; z-index: 10000; background: rgba(18,18,21,0.95); border-bottom: 1px solid #222; }
+        .desktop-menu { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
+        .desktop-menu li a { color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; transition: 0.2s; }
+        .desktop-menu li a:hover { color: var(--c-pink); }
+        
+        .sns-links { display: flex; gap: 15px; }
+        .sns-links a { color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; }
+        .sns-links a:hover { border-color: var(--c-pink); color: var(--c-pink); }
+
+        .menu-toggle-btn { display: none; position: fixed; top: 15px; left: 15px; z-index: 10001; background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); border-radius: 8px; width: 42px; height: 42px; font-size: 22px; cursor: pointer; }
+        .sidebar { position: fixed; top: 0; left: -260px; width: 260px; height: 100vh; background: var(--bg-main); border-right: 1px solid #333; z-index: 10000; transition: 0.3s ease; padding-top: 80px; box-shadow: 5px 0 20px rgba(0,0,0,0.5); }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s ease; }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+        .sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar li a { display: block; padding: 18px 30px; color: #eee; text-decoration: none; border-bottom: 1px solid #222; }
+
+        .section-container { padding: 120px 20px 50px 20px; max-width: 1200px; margin: 0 auto; }
+        .section-header { font-size: 12px; font-weight: 500; color: var(--text-sub); letter-spacing: 4px; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .section-header span.title-hl { color: #fff; font-size: 24px; letter-spacing: 2px; font-weight: 900; margin-left: 10px; }
+
+        /* 비디오 카드 그리드 */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-bottom: 60px; }
+        .video-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; text-decoration: none; display: block; }
+        .video-card:hover { border-color: var(--c-pink); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 51, 153, 0.15); }
+        
+        .video-thumb { width: 100%; aspect-ratio: 16 / 9; background: #000; position: relative; overflow: hidden; }
+        .video-thumb img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .video-card:hover .video-thumb img { transform: scale(1.05); }
+        .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: rgba(255,51,153,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; opacity: 0; transition: 0.3s; }
+        .video-card:hover .play-icon { opacity: 1; }
+
+        .video-info { padding: 15px 20px; }
+        .video-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .video-date { font-size: 12px; color: var(--text-sub); }
+
+        @media (max-width: 768px) {
+            .top-nav { display: none; }
+            .menu-toggle-btn { display: flex; align-items: center; justify-content: center; }
+            .section-container { padding-top: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 네비게이션: 타 페이지로의 앵커는 index.html 주소 포함 -->
+    <nav class="top-nav">
+        <ul class="desktop-menu">
+            <li><a href="index.html#homeSection">Home</a></li>
+            <li><a href="index.html#memberSection">Members</a></li>
+            <li><a href="index.html#chartSection">Real-time Chart</a></li>
+            <li><a href="index.html#calendarSection">Schedule</a></li>
+            <li><a href="archive.html" style="color: var(--c-gold);">Archive</a></li>
+        </ul>
+        <div class="sns-links">
+            <a href="https://twitter.com/RESCENEofficial" target="_blank">𝕏</a>
+            <a href="https://www.instagram.com/rescene_official" target="_blank">IG</a>
+            <a href="https://www.youtube.com/@RESCENE_official" target="_blank">YT</a>
+        </div>
+    </nav>
+
+    <button class="menu-toggle-btn" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="index.html#homeSection">Home</a></li>
+            <li><a href="index.html#memberSection">Members</a></li>
+            <li><a href="index.html#chartSection">실시간 차트</a></li>
+            <li><a href="index.html#calendarSection">스케줄 달력</a></li>
+            <li><a href="archive.html" style="color: var(--c-gold);">아카이브 영상관</a></li>
+        </ul>
+    </div>
+
+    <!-- 컨텐츠 영역 -->
+    <div class="section-container">
+        
+        <!-- 뮤직비디오 섹션 -->
+        <div class="section-header">
+            <div>OFFICIAL <span class="title-hl">MUSIC VIDEO</span></div>
+        </div>
+        <div class="video-grid">
+            <a href="https://youtu.be/ZbO9PBdFRdc" target="_blank" class="video-card">
+                <div class="video-thumb">
+                    <!-- 썸네일 주소: 유튜브 고유 ID를 넣으면 썸네일을 가져옵니다 -->
+                    <img src="https://img.youtube.com/vi/ZbO9PBdFRdc/maxresdefault.jpg" alt="LOVE ATTACK MV">
+                    <div class="play-icon">▶</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">RESCENE (리센느) 'LOVE ATTACK' Official MV</div>
+                    <div class="video-date">2024. 08. 27</div>
+                </div>
+            </a>
+            
+            <a href="https://youtu.be/some_id" target="_blank" class="video-card">
+                <div class="video-thumb">
+                    <img src="https://via.placeholder.com/640x360/1a1a1a/ff3399?text=Video+Thumbnail" alt="UhUh MV">
+                    <div class="play-icon">▶</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">RESCENE (리센느) 'UhUh' Official MV</div>
+                    <div class="video-date">2024. 03. 26</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- 외부 컨텐츠 / 자체 예능 섹션 -->
+        <div class="section-header">
+            <div>RESCENE <span class="title-hl">CONTENTS</span></div>
+        </div>
+        <div class="video-grid">
+            <a href="https://youtu.be/some_id" target="_blank" class="video-card">
+                <div class="video-thumb">
+                    <img src="https://via.placeholder.com/640x360/1a1a1a/00e5ff?text=Contents+Thumbnail" alt="Contents">
+                    <div class="play-icon">▶</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">[리센느 자체컨텐츠] 제목이 들어갑니다 1화</div>
+                    <div class="video-date">2024. 09. 10</div>
+                </div>
+            </a>
+            
+            <a href="https://youtu.be/some_id" target="_blank" class="video-card">
+                <div class="video-thumb">
+                    <img src="https://via.placeholder.com/640x360/1a1a1a/ffc107?text=Contents+Thumbnail" alt="Contents">
+                    <div class="play-icon">▶</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">릴레이댄스 RESCENE(리센느) - LOVE ATTACK</div>
+                    <div class="video-date">2024. 09. 05</div>
+                </div>
+            </a>
+        </div>
+        
+    </div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('active'); document.getElementById('sidebarOverlay').classList.remove('active'); }
+    </script>
+</body>
+</html>

@@ -96,7 +96,6 @@ body, html {
 .member-photo-v2 img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
 .member-card-v2:hover .member-photo-v2 img { transform: scale(1.08); }
 
-/* ⭐️ 모바일 정렬 픽스 반영 */
 .member-info { 
     position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 20px; 
     background: linear-gradient(to top, rgba(18,19,24,0.95) 0%, rgba(18,19,24,0) 100%); 
@@ -117,7 +116,16 @@ body, html {
 .p-logo { font-family: var(--font-head); font-size: 12px; font-weight: 800; color: var(--text-secondary); letter-spacing: 1px; }
 .p-logo-img { max-height: 20px !important; max-width: 60px !important; width: auto !important; height: auto !important; object-fit: contain; display: block; }
 .ticker-songs { display: flex; gap: 40px; overflow: hidden; white-space: nowrap; flex: 1; align-items: center; }
-.ticker-song-info { display: flex; align-items: center; gap: 10px; font-size: 14px; font-family: var(--font-num); }
+.ticker-song-info { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    font-size: 14px; 
+    font-family: var(--font-num); 
+    /* ⭐️ 모바일에서 텍스트가 찌그러지거나 겹치지 않게 방지하는 핵심 코드 */
+    flex-shrink: 0; 
+    white-space: nowrap;
+}
 .ticker-song-info .title { color: var(--text-primary); font-weight: 400; font-family: var(--font-body); }
 .ticker-song-info .rank { color: var(--c-accent); font-weight: 700; font-size: 16px; }
 .rank-diff { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); }
@@ -135,7 +143,7 @@ body, html {
 .bc-title { font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0; line-height: 1.4; letter-spacing: -0.5px; }
 
 /* ==========================================================================
-   ⭐️ Goods Section 
+   Goods Section 
    ========================================================================== */
 .goods-grid-v2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px 20px; }
 .goods-item { display: flex; flex-direction: column; align-items: center; }
@@ -285,14 +293,12 @@ body, html {
     .top-nav { padding: 15px 20px; }
     .desktop-menu { display: none; }
     
-    /* 네비게이션 우측 간격 축소 픽스 */
     .nav-right { gap: 8px !important; }
     .sns-links { gap: 6px !important; }
     .sns-links a, .cal-icon-btn { width: 32px !important; height: 32px !important; }
 
     .goods-grid-v2 { grid-template-columns: repeat(2, 1fr); gap: 40px 15px; }
 
-    /* 캘린더 모바일 여백 및 닫기 버튼 픽스 */
     .calendar-popup-wrapper { width: 95%; padding: 45px 15px 25px !important; }
     #calendarPopupModal .close-btn { top: 8px !important; right: 8px !important; padding: 5px !important; }
     .calendar-header-controls { margin-bottom: 20px !important; }
@@ -301,15 +307,14 @@ body, html {
     
     .modal-wrapper { width: 100%; padding: 40px 20px; }
 
-    /* 차트 스와이프 기능 픽스 */
     .ticker-songs {
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
         padding-right: 20px;
-        -ms-overflow-style: none; /* IE, Edge */
-        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none;
+        scrollbar-width: none; 
     }
-    .ticker-songs::-webkit-scrollbar { display: none; /* 크롬, 사파리 등 */ }
+    .ticker-songs::-webkit-scrollbar { display: none; }
 }
 
 @media (max-width: 500px) {

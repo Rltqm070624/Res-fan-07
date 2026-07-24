@@ -23,9 +23,9 @@
             <li><a href="archive.html">ARCHIVE</a></li>
         </ul>
         <div class="sns-links">
-            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.style.display='none'"></a>
-            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
-            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
+            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.onerror=null; this.style.display='none'"></a>
+            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.onerror=null; this.style.display='none'"></a>
+            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.onerror=null; this.style.display='none'"></a>
         </div>
     </nav>
 
@@ -42,15 +42,14 @@
         </ul>
     </div>
 
-    <!-- ⭐️ 팝업 열리면 전체가 왼쪽으로 밀림 (index 전용 래퍼) -->
     <div id="mainWrapper">
         <div class="video-container" id="homeSection">
-            <img src="images/Dejavu.gif" alt="Dejavu Background" class="bg-gif" onerror="this.style.display='none'">
+            <img src="images/Dejavu.gif" alt="Dejavu Background" class="bg-gif" onerror="this.onerror=null; this.style.display='none'">
             <div class="video-overlay"></div>
         </div>
         
         <div class="logo-banner-section">
-            <img src="images/logo.png" alt="RESCENE Logo" onerror="this.style.display='none'">
+            <img src="images/logo.png" alt="RESCENE Logo" onerror="this.onerror=null; this.style.display='none'">
             <div class="debut-timer">
                 <div class="d-day" id="dDayText">D+000</div>
                 <div class="time-flow" id="timeFlowText">00:00:00</div>
@@ -63,27 +62,27 @@
             </div>
             <div class="member-wrapper">
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/원이.webp" alt="원이" onerror="this.style.display='none'"></div>
+                    <div class="member-photo-v2"><img src="images/원이.webp" alt="원이" onerror="this.onerror=null; this.style.display='none'"></div>
                     <div class="name-bar">원이</div>
                     <div class="info-area"><div class="bday">2004. 05. 25.<br>(22세)</div><div class="flag">🇰🇷</div></div>
                 </div>
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/리브.webp" alt="리브" onerror="this.style.display='none'"></div>
+                    <div class="member-photo-v2"><img src="images/리브.webp" alt="리브" onerror="this.onerror=null; this.style.display='none'"></div>
                     <div class="name-bar">리브</div>
                     <div class="info-area"><div class="bday">2006. 10. 11.<br>(19세)</div><div class="flag">🇰🇷</div></div>
                 </div>
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/미나미.webp" alt="미나미" onerror="this.style.display='none'"></div>
+                    <div class="member-photo-v2"><img src="images/미나미.webp" alt="미나미" onerror="this.onerror=null; this.style.display='none'"></div>
                     <div class="name-bar">미나미</div>
                     <div class="info-area"><div class="bday">2006. 11. 29.<br>(19세)</div><div class="flag">🇯🇵</div></div>
                 </div>
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/메이.webp" alt="메이" onerror="this.style.display='none'"></div>
+                    <div class="member-photo-v2"><img src="images/메이.webp" alt="메이" onerror="this.onerror=null; this.style.display='none'"></div>
                     <div class="name-bar">메이</div>
                     <div class="info-area"><div class="bday">2008. 08. 19.<br>(17세)</div><div class="flag">🇰🇷</div></div>
                 </div>
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/제나.webp" alt="제나" onerror="this.style.display='none'"></div>
+                    <div class="member-photo-v2"><img src="images/제나.webp" alt="제나" onerror="this.onerror=null; this.style.display='none'"></div>
                     <div class="name-bar">제나</div>
                     <div class="info-area"><div class="bday">2008. 11. 27.<br>(17세)</div><div class="flag">🇰🇷</div></div>
                 </div>
@@ -117,7 +116,7 @@
             </div>
             <div class="calendar-grid" id="calendarDays"></div>
         </div>
-    </div> <!-- // mainWrapper 종료 -->
+    </div>
 
     <!-- 우측 스플릿 팝업 모달 (캘린더 상세정보) -->
     <div class="modal-wrapper" id="scheduleModal">
@@ -200,8 +199,8 @@
                     if (hasData) {
                         validPlatformCount++;
                         let platformLogo = platform;
-                        if (platform === 'Melon') platformLogo = `<img src="images/melon.jpeg" alt="Melon" style="height: 24px; vertical-align: middle; border-radius: 4px;" onerror="this.style.display='none'; this.nextSibling.style.display='inline';"> <span style="display:none;">Melon</span>`;
-                        else if (platform === 'Bugs') platformLogo = `<img src="images/bugs.jpg" alt="Bugs" style="height: 24px; vertical-align: middle; border-radius: 4px;" onerror="this.style.display='none'; this.nextSibling.style.display='inline';"> <span style="display:none;">Bugs</span>`;
+                        if (platform === 'Melon') platformLogo = `<img src="images/melon.jpeg" alt="Melon" style="height: 24px; vertical-align: middle; border-radius: 4px;" onerror="this.onerror=null; this.style.display='none'; this.nextSibling.style.display='inline';"> <span style="display:none;">Melon</span>`;
+                        else if (platform === 'Bugs') platformLogo = `<img src="images/bugs.jpg" alt="Bugs" style="height: 24px; vertical-align: middle; border-radius: 4px;" onerror="this.onerror=null; this.style.display='none'; this.nextSibling.style.display='inline';"> <span style="display:none;">Bugs</span>`;
 
                         tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${platformLogo}</div><div class="ticker-songs">${songsHtml}</div></div>`;
                     }

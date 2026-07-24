@@ -1,36 +1,28 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 
-// ⭐️ 1. 여기에 실제 긁어올 사이트 링크와 설정값을 다 적어두면 봇이 알아서 순회합니다.
+// ⭐️ remini는 withmuu 1개, 나머지는 kream 1개만 돌도록 완벽하게 분리했습니다.
 const SCRAPE_CONFIG = {
+    remini: {
+        withmuu: { url: "https://withmuu.com/goods/goods_view.php?goodsNo=1000014598", priceSelector: ".item_price", soldoutSelector: ".btn_soldout" }
+    },
     jota: {
-        kream: { url: "https://kream.co.kr/products/985255", priceSelector: ".price", soldoutSelector: ".btn_soldout" },
-        everline: { url: "https://everline.com/jota_주소", priceSelector: ".price", soldoutSelector: ".soldout_mark" },
-        soundwave: { url: "https://soundwave.com/jota_주소", priceSelector: ".price", soldoutSelector: ".soldout_icon" }
+        kream: { url: "https://kream.co.kr/products/985255", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
     },
     ming: {
-        kream: { url: "https://kream.co.kr/products/985257", priceSelector: ".price", soldoutSelector: ".btn_soldout" },
-        everline: { url: "https://everline.com/ming_주소", priceSelector: ".price", soldoutSelector: ".soldout_mark" },
-        soundwave: { url: "https://soundwave.com/ming_주소", priceSelector: ".price", soldoutSelector: ".soldout_icon" }
+        kream: { url: "https://kream.co.kr/products/985257", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
     },
     ribbu: {
-        kream: { url: "https://kream.co.kr/products/985256", priceSelector: ".price", soldoutSelector: ".btn_soldout" },
-        everline: { url: "https://everline.com/ribbu_주소", priceSelector: ".price", soldoutSelector: ".soldout_mark" },
-        soundwave: { url: "https://soundwave.com/ribbu_주소", priceSelector: ".price", soldoutSelector: ".soldout_icon" }
+        kream: { url: "https://kream.co.kr/products/985256", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
     },
     jjaero: {
-        kream: { url: "https://kream.co.kr/products/985259", priceSelector: ".price", soldoutSelector: ".btn_soldout" },
-        everline: { url: "https://everline.com/jjaero_주소", priceSelector: ".price", soldoutSelector: ".soldout_mark" },
-        soundwave: { url: "https://soundwave.com/jjaero_주소", priceSelector: ".price", soldoutSelector: ".soldout_icon" }
+        kream: { url: "https://kream.co.kr/products/985259", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
     },
     yam: {
-        kream: { url: "https://kream.co.kr/products/985258", priceSelector: ".price", soldoutSelector: ".btn_soldout" },
-        everline: { url: "https://everline.com/yam_주소", priceSelector: ".price", soldoutSelector: ".soldout_mark" },
-        soundwave: { url: "https://soundwave.com/yam_주소", priceSelector: ".price", soldoutSelector: ".soldout_icon" }
+        kream: { url: "https://kream.co.kr/products/985258", priceSelector: ".amount", soldoutSelector: ".btn_soldout" }
     }
 };
 
-// 시간 지연 함수 (봇 차단 방지용)
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function scrapeGoods() {
@@ -42,69 +34,78 @@ async function scrapeGoods() {
     });
     const page = await browser.newPage();
     
-    // 크롤링 차단 방지용 가짜 유저 세팅
+    // 크롤링 차단 방지용
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
-    // ⭐️ 2. 봇이 저장할 데이터 뼈대 (HTML과 맞추기 위해 weverse라는 키를 그대로 씀)
+    // ⭐️ 저장할 데이터 뼈대도 딱 각자 들어갈 1곳씩만 남겼습니다.
     const goodsData = {
-        "jota": { "price": "", "weverse": "available", "everline": "available", "soundwave": "available" },
-        "ming": { "price": "", "weverse": "available", "everline": "available", "soundwave": "available" },
-        "ribbu": { "price": "", "weverse": "available", "everline": "available", "soundwave": "available" },
-        "jjaero": { "price": "", "weverse": "available", "everline": "available", "soundwave": "available" },
-        "yam": { "price": "", "weverse": "available", "everline": "available", "soundwave": "available" }
+        "remini": { "price": "", "withmuu": "available" },
+        "jota": { "price": "", "kream": "available" },
+        "ming": { "price": "", "kream": "available" },
+        "ribbu": { "price": "", "kream": "available" },
+        "jjaero": { "price": "", "kream": "available" },
+        "yam": { "price": "", "kream": "available" }
     };
 
-    // ⭐️ 3. 멤버와 쇼핑몰을 돌면서 전부 자동으로 긁어오는 로직
     const members = Object.keys(SCRAPE_CONFIG);
-    const shops = ['kream', 'everline', 'soundwave'];
 
     for (const member of members) {
-        let priceSet = false; // 가격은 한 쇼핑몰에서만 가져오면 되니까 체크용
+        let priceSet = false; 
+        
+        // 각 멤버에 할당된 쇼핑몰(1개)만 가져옴
+        const shops = Object.keys(SCRAPE_CONFIG[member]);
 
         for (const shop of shops) {
             const config = SCRAPE_CONFIG[member][shop];
-            const htmlKey = shop === 'kream' ? 'weverse' : shop; // html의 id가 weverse로 되어있어서 매핑해줌
 
             try {
-                console.log(`[${member} - ${shop}] 페이지 접속 중... (${config.url})`);
+                console.log(`[${member} - ${shop}] 페이지 접속 중...`);
                 await page.goto(config.url, { waitUntil: 'domcontentloaded', timeout: 30000 });
-                await delay(2000); // 로딩 대기
+                
+                await delay(3000); 
 
-                // 3-1. 가격 긁어오기 (아직 가격을 못 가져왔을 때만)
+                // 1. 가격 긁어오기
                 if (!priceSet) {
+                    await page.waitForSelector(config.priceSelector, { timeout: 5000 }).catch(() => null);
                     const priceText = await page.$eval(config.priceSelector, el => el.innerText).catch(() => null);
-                    if (priceText) {
-                        goodsData[member].price = priceText;
+                    
+                    if (priceText && priceText.trim() !== "") {
+                        let cleanText = priceText.trim().split('\n')[0]; 
+                        if (!cleanText.includes('₩') && !cleanText.includes('원')) {
+                            cleanText = `₩ ${cleanText}`;
+                        }
+                        goodsData[member].price = cleanText;
                         priceSet = true;
-                    } else {
-                        goodsData[member].price = "₩ 18,000"; // 못 긁어오면 기본값 설정
                     }
                 }
 
-                // 3-2. 품절 마크 긁어오기
+                // 2. 품절 마크 긁어오기
                 const isSoldOut = await page.$(config.soldoutSelector); 
                 if (isSoldOut) {
-                    goodsData[member][htmlKey] = "soldout";
+                    goodsData[member][shop] = "soldout";
                     console.log(` > 상태: 품절`);
                 } else {
-                    goodsData[member][htmlKey] = "available";
+                    goodsData[member][shop] = "available";
                     console.log(` > 상태: 구매 가능`);
                 }
 
             } catch (e) {
-                console.error(`[${member} - ${shop}] 크롤링 에러! 주소나 태그를 확인하세요.`);
-                // 에러 나면 일단 구매 가능(available)로 처리
-                goodsData[member][htmlKey] = "available"; 
+                console.error(`[${member} - ${shop}] 크롤링 에러 발생!`);
+                goodsData[member][shop] = "available"; 
             }
+        }
+
+        if (!priceSet) {
+            goodsData[member].price = "₩ 45,000"; 
         }
     }
 
     await browser.close();
     
-    // ⭐️ 4. JSON 파일 저장
+    // JSON 파일 저장
     const savePath = 'goods/goods_data.json';
     fs.writeFileSync(savePath, JSON.stringify(goodsData, null, 4), 'utf-8');
-    console.log(`✅ 모든 크롤링 완료! 데이터가 [${savePath}]에 저장되었습니다.`);
+    console.log(`✅ 크롤링 완료! 데이터가 [${savePath}]에 저장되었습니다.`);
 }
 
 scrapeGoods();

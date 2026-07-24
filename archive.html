@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- 외부 CSS 연동 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -24,7 +23,6 @@
             <li><a href="archive.html" style="color: var(--c-pink);">ARCHIVE</a></li>
         </ul>
         <div class="sns-links">
-            <!-- ⭐️ 무한루프 방지 (this.onerror=null;) 적용됨 -->
             <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.onerror=null; this.src='https://via.placeholder.com/18x18?text=X'"></a>
             <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.onerror=null; this.src='https://via.placeholder.com/18x18?text=IG'"></a>
             <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.onerror=null; this.src='https://via.placeholder.com/18x18?text=YT'"></a>
@@ -44,8 +42,9 @@
         </ul>
     </div>
 
-    <!-- 메인 컨텐츠 래퍼 -->
-    <div id="mainWrapper" style="padding-top: 120px; max-width: 900px;">
+    <!-- ⭐️ 팝업 시 왼쪽으로 밀리는 전체 화면 (가운데 정렬 적용) -->
+    <div id="mainWrapper" style="padding-top: 120px; padding-left: 20px; padding-right: 20px;">
+        
         <div class="section-header" style="margin-bottom: 20px; border-bottom: none;">
             <div class="section-title">RESCENE <span>DISCOGRAPHY</span></div>
         </div>
@@ -58,7 +57,22 @@
             <button class="cat-tab-btn" onclick="alert('업데이트 예정입니다.')">외부 컨텐츠</button>
         </div>
         
+        <!-- 한 줄씩 나오는 앨범 리스트 영역 -->
         <div class="archive-list" id="archiveListContainer"></div>
+        
+    </div>
+
+    <!-- ⭐️ 우측 스플릿 팝업 모달 (수록곡 아코디언) -->
+    <div class="modal-wrapper" id="albumModal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        
+        <div class="modal-album-header">
+            <img src="" alt="Album Cover" class="modal-album-cover" id="modalAlbumCover">
+            <div class="modal-album-title" id="modalAlbumTitle">Album Title</div>
+        </div>
+        
+        <!-- 트랙(수록곡) 리스트가 그려질 공간 -->
+        <div class="track-list" id="modalTrackList"></div>
     </div>
 
     <script>
@@ -184,121 +198,177 @@
             }
         ];
 
-        let processedData = [];
-
+        // 앨범 목록을 가운데 정렬된 한 줄 카드로 렌더링
         function renderList() {
             const container = document.getElementById('archiveListContainer');
             container.innerHTML = '';
             
             archiveData.forEach((album, albumIdx) => {
-                let categories = { 'MV': [], '무대': [], '직캠': [], '음원': [], '기타': [] };
-                
-                album.tracks.forEach(track => {
-                    if(track.videos) {
-                        track.videos.forEach(vid => {
-                            let cat = '기타';
-                            const lbl = vid.label.toLowerCase();
-                            if(lbl.includes('mv')) cat = 'MV';
-                            else if(lbl.includes('음원') || lbl.includes('audio')) cat = '음원';
-                            else if(lbl.includes('직캠') || lbl.includes('fancam')) cat = '직캠';
-                            else if(lbl.includes('엠카') || lbl.includes('뮤뱅') || lbl.includes('인기가요') || lbl.includes('음중') || lbl.includes('쇼챔') || lbl.includes('더쇼') || lbl.includes('perf') || lbl.includes('showcase') || lbl.includes('live')) cat = '무대';
-                            
-                            categories[cat].push({ 
-                                id: vid.id, 
-                                btnLabel: album.tracks.length > 1 ? `[${track.title}] ${vid.label}` : vid.label 
-                            });
-                        });
-                    }
-                });
-
-                let availableTabs = Object.keys(categories).filter(k => categories[k].length > 0);
-                processedData.push({ albumTitle: album.title, categories: categories, availableTabs: availableTabs });
-
                 const item = document.createElement('div');
                 item.className = 'archive-item';
-                item.id = `album_item_${albumIdx}`;
+                // 행 클릭 시 우측 팝업 열기
+                item.onclick = () => openAlbumModal(albumIdx);
                 
-                // ⭐️ 무한루프 방지 (this.onerror=null;) 적용됨
                 item.innerHTML = `
-                    <div class="archive-item-header" onclick="toggleAlbum(${albumIdx})">
+                    <div class="archive-item-header">
                         <div class="archive-item-thumb">
                             <img src="${album.cover}" alt="cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/100?text=NO+IMG'">
                         </div>
                         <div class="archive-item-title">${album.title}</div>
-                        <div class="archive-item-icon">▼</div>
-                    </div>
-                    <div class="archive-item-content">
-                        <div class="sub-tabs-container" id="tabs_${albumIdx}"></div>
-                        <div class="video-btn-list" id="vbtns_${albumIdx}"></div>
-                        <div class="inline-player" id="player_${albumIdx}"></div>
+                        <div class="archive-item-icon">▶</div>
                     </div>
                 `;
                 container.appendChild(item);
             });
         }
 
-        function toggleAlbum(idx) {
-            const el = document.getElementById(`album_item_${idx}`);
+        // 우측 팝업 열기 및 수록곡(트랙) 아코디언 생성
+        function openAlbumModal(albumIdx) {
+            const album = archiveData[albumIdx];
+            document.getElementById('modalAlbumTitle').innerText = album.title;
+            document.getElementById('modalAlbumCover').src = album.cover;
+            
+            const trackListEl = document.getElementById('modalTrackList');
+            let trackHtml = '';
+            
+            album.tracks.forEach((track, tIdx) => {
+                // 영상들을 카테고리(탭)별로 분류
+                let cats = { 'MV': [], '무대': [], '직캠': [], '음원': [], '기타': [] };
+                
+                if (track.videos) {
+                    track.videos.forEach(vid => {
+                        let cat = '기타';
+                        let lbl = vid.label.toLowerCase();
+                        if(lbl.includes('mv')) cat = 'MV';
+                        else if(lbl.includes('음원') || lbl.includes('audio')) cat = '음원';
+                        else if(lbl.includes('직캠') || lbl.includes('fancam') || lbl.includes('캠')) cat = '직캠';
+                        else if(lbl.includes('엠카') || lbl.includes('뮤뱅') || lbl.includes('인기가요') || lbl.includes('음중') || lbl.includes('쇼챔') || lbl.includes('더쇼') || lbl.includes('perf') || lbl.includes('showcase') || lbl.includes('live') || lbl.includes('방송분')) cat = '무대';
+                        
+                        cats[cat].push(vid);
+                    });
+                }
+
+                // 빈 카테고리 탭 제외
+                let availableTabs = Object.keys(cats).filter(k => cats[k].length > 0);
+                
+                let tabsHtml = '';
+                let vBtnsHtml = '';
+
+                if (availableTabs.length > 0) {
+                    availableTabs.forEach((tabName, tabIndex) => {
+                        const isActiveTab = tabIndex === 0 ? 'active' : '';
+                        tabsHtml += `<button class="sub-tab-btn ${isActiveTab}" onclick="selectTrackTab(${albumIdx}, ${tIdx}, '${tabName}', this)">${tabName}</button>`;
+
+                        // 기본적으로 첫 번째 탭의 비디오 버튼들을 그려둠
+                        if (tabIndex === 0) {
+                            cats[tabName].forEach((vid, vIdx) => {
+                                const isActiveBtn = vIdx === 0 ? 'active' : '';
+                                vBtnsHtml += `<button class="video-btn ${isActiveBtn}" onclick="playVideo('player_${albumIdx}_${tIdx}', '${vid.id}', this)">${vid.label}</button>`;
+                            });
+                        }
+                    });
+                } else {
+                    tabsHtml = `<div style="font-size:13px; color:#888;">등록된 영상이 없습니다.</div>`;
+                }
+
+                trackHtml += `
+                    <div class="track-item" id="track_${albumIdx}_${tIdx}">
+                        <div class="track-title" onclick="toggleTrack(${albumIdx}, ${tIdx})">${track.title} <span>▼</span></div>
+                        <div class="track-content">
+                            <div class="sub-tabs-container" id="tabs_${albumIdx}_${tIdx}">${tabsHtml}</div>
+                            <div class="video-btn-list" id="vbtns_${albumIdx}_${tIdx}">${vBtnsHtml}</div>
+                            <div class="inline-player-wrapper" id="player_${albumIdx}_${tIdx}"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            trackListEl.innerHTML = trackHtml;
+
+            // 탭 클릭 시 불러올 수 있도록 글로벌 변수에 카테고리 데이터 임시 저장
+            window.currentAlbumData = album.tracks.map(track => {
+                let cats = { 'MV': [], '무대': [], '직캠': [], '음원': [], '기타': [] };
+                if (track.videos) {
+                    track.videos.forEach(vid => {
+                        let cat = '기타';
+                        let lbl = vid.label.toLowerCase();
+                        if(lbl.includes('mv')) cat = 'MV';
+                        else if(lbl.includes('음원') || lbl.includes('audio')) cat = '음원';
+                        else if(lbl.includes('직캠') || lbl.includes('fancam') || lbl.includes('캠')) cat = '직캠';
+                        else if(lbl.includes('엠카') || lbl.includes('뮤뱅') || lbl.includes('인기가요') || lbl.includes('음중') || lbl.includes('쇼챔') || lbl.includes('더쇼') || lbl.includes('perf') || lbl.includes('showcase') || lbl.includes('live') || lbl.includes('방송분')) cat = '무대';
+                        cats[cat].push(vid);
+                    });
+                }
+                return cats;
+            });
+
+            // 모달 열기 애니메이션 트리거 (메인 화면 왼쪽으로 이동)
+            document.getElementById('albumModal').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        // 수록곡 클릭 시 아코디언 펼치기
+        function toggleTrack(albumIdx, tIdx) {
+            const el = document.getElementById(`track_${albumIdx}_${tIdx}`);
             const isOpening = !el.classList.contains('active');
-            
-            document.querySelectorAll('.archive-item').forEach(item => item.classList.remove('active'));
-            
+
+            // 다른 열려있는 곡들은 닫고 영상 끄기
+            document.querySelectorAll('.track-item').forEach(item => {
+                item.classList.remove('active');
+                const player = item.querySelector('.inline-player-wrapper');
+                if (player) player.innerHTML = '';
+            });
+
+            // 방금 누른 곡만 펼치고, 첫 번째 영상 자동재생 시작
             if (isOpening) {
                 el.classList.add('active');
-                renderTabs(idx);
-            } else {
-                document.getElementById(`player_${idx}`).innerHTML = '';
+                const firstVideoBtn = el.querySelector('.video-btn.active');
+                if (firstVideoBtn) {
+                    firstVideoBtn.click();
+                }
             }
         }
 
-        function renderTabs(idx) {
-            const data = processedData[idx];
-            const tabContainer = document.getElementById(`tabs_${idx}`);
-            
-            if(data.availableTabs.length === 0) {
-                tabContainer.innerHTML = '<div style="font-size:13px; color:#888;">등록된 영상이 없습니다.</div>';
-                return;
-            }
-
-            let tabsHtml = '';
-            data.availableTabs.forEach((tabName, tIdx) => {
-                const isActive = tIdx === 0 ? 'active' : '';
-                tabsHtml += `<button class="sub-tab-btn ${isActive}" onclick="selectTab(${idx}, '${tabName}', this)">${tabName}</button>`;
-            });
-            tabContainer.innerHTML = tabsHtml;
-
-            selectTab(idx, data.availableTabs[0], tabContainer.firstElementChild);
-        }
-
-        function selectTab(albumIdx, tabName, btnEl) {
+        // MV, 직캠 등 하위 탭 클릭 이벤트
+        function selectTrackTab(albumIdx, tIdx, tabName, btnEl) {
             const siblings = btnEl.parentElement.children;
             for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
             btnEl.classList.add('active');
 
-            const videos = processedData[albumIdx].categories[tabName];
-            const btnContainer = document.getElementById(`vbtns_${albumIdx}`);
-            
+            const videos = window.currentAlbumData[tIdx][tabName];
+            const btnContainer = document.getElementById(`vbtns_${albumIdx}_${tIdx}`);
+
             let vBtnsHtml = '';
             videos.forEach((vid, vIdx) => {
                 const isActive = vIdx === 0 ? 'active' : '';
-                vBtnsHtml += `<button class="video-btn ${isActive}" onclick="playVideo(${albumIdx}, '${vid.id}', this)">${vid.btnLabel}</button>`;
+                vBtnsHtml += `<button class="video-btn ${isActive}" onclick="playVideo('player_${albumIdx}_${tIdx}', '${vid.id}', this)">${vid.label}</button>`;
             });
             btnContainer.innerHTML = vBtnsHtml;
 
+            // 탭 변경 시 첫 번째 영상 바로 재생
             if(videos.length > 0) {
-                playVideo(albumIdx, videos[0].id, btnContainer.firstElementChild);
+                playVideo(`player_${albumIdx}_${tIdx}`, videos[0].id, btnContainer.firstElementChild);
             }
         }
 
-        function playVideo(albumIdx, ytId, btnEl) {
+        // 유튜브 영상 재생
+        function playVideo(playerId, ytId, btnEl) {
             if(btnEl) {
                 const siblings = btnEl.parentElement.children;
                 for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
                 btnEl.classList.add('active');
             }
 
-            const player = document.getElementById(`player_${albumIdx}`);
+            const player = document.getElementById(playerId);
             player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; fullscreen"></iframe>`;
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('albumModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
+            // 닫을 때 영상 소리 꺼지도록 HTML 비워주기
+            setTimeout(() => { document.getElementById('modalTrackList').innerHTML = ''; }, 300);
         }
 
         window.addEventListener('DOMContentLoaded', () => { renderList(); });

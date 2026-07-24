@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- ⭐️ 외부 CSS 파일 연동 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="homeSection">
@@ -24,9 +23,10 @@
             <li><a href="archive.html">ARCHIVE</a></li>
         </ul>
         <div class="sns-links">
-            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.src='https://via.placeholder.com/18x18?text=X'"></a>
-            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.src='https://via.placeholder.com/18x18?text=IG'"></a>
-            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.src='https://via.placeholder.com/18x18?text=YT'"></a>
+            <!-- ⭐️ 무한루프 방지 적용 -->
+            <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.onerror=null; this.src='https://via.placeholder.com/18x18?text=X'"></a>
+            <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.onerror=null; this.src='https://via.placeholder.com/18x18?text=IG'"></a>
+            <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.onerror=null; this.src='https://via.placeholder.com/18x18?text=YT'"></a>
         </div>
     </nav>
 
@@ -46,12 +46,13 @@
     <!-- 메인 래퍼 -->
     <div id="mainWrapper">
         <div class="video-container" id="homeSection">
-            <img src="images/Dejavu.gif" alt="Dejavu Background" class="bg-gif" onerror="this.src='https://via.placeholder.com/1920x1080/000000/ff3399?text=Dejavu.gif'">
+            <!-- ⭐️ 무한루프 방지 적용 -->
+            <img src="images/Dejavu.gif" alt="Dejavu Background" class="bg-gif" onerror="this.onerror=null; this.src='https://via.placeholder.com/1920x1080/000000/ff3399?text=Dejavu.gif'">
             <div class="video-overlay"></div>
         </div>
         
         <div class="logo-banner-section">
-            <img src="images/logo.png" alt="RESCENE Logo" onerror="this.src='https://via.placeholder.com/300x100/ffffff/ff3399?text=RESCENE'">
+            <img src="images/logo.png" alt="RESCENE Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x100/ffffff/ff3399?text=RESCENE'">
             <div class="debut-timer">
                 <div class="d-day" id="dDayText">D+000</div>
                 <div class="time-flow" id="timeFlowText">00:00:00</div>
@@ -63,28 +64,29 @@
                 <div class="section-title">RESCENE <span>MEMBERS</span></div>
             </div>
             <div class="member-wrapper">
+                <!-- ⭐️ 무한루프 방지 적용 -->
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/원이.webp" alt="원이" onerror="this.src='https://via.placeholder.com/300x400/222/ff3399?text=원이'"></div>
+                    <div class="member-photo-v2"><img src="images/원이.webp" alt="원이" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x400/222/ff3399?text=원이'"></div>
                     <div class="name-bar">원이</div>
                     <div class="info-area"><div class="bday">2004. 05. 25.<br>(22세)</div><div class="flag">🇰🇷</div></div>
                 </div>
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/리브.webp" alt="리브" onerror="this.src='https://via.placeholder.com/300x400/222/ff3399?text=리브'"></div>
+                    <div class="member-photo-v2"><img src="images/리브.webp" alt="리브" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x400/222/ff3399?text=리브'"></div>
                     <div class="name-bar">리브</div>
                     <div class="info-area"><div class="bday">2006. 10. 11.<br>(19세)</div><div class="flag">🇰🇷</div></div>
                 </div>
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/미나미.webp" alt="미나미" onerror="this.src='https://via.placeholder.com/300x400/222/ff3399?text=미나미'"></div>
+                    <div class="member-photo-v2"><img src="images/미나미.webp" alt="미나미" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x400/222/ff3399?text=미나미'"></div>
                     <div class="name-bar">미나미</div>
                     <div class="info-area"><div class="bday">2006. 11. 29.<br>(19세)</div><div class="flag">🇯🇵</div></div>
                 </div>
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/메이.webp" alt="메이" onerror="this.src='https://via.placeholder.com/300x400/222/ff3399?text=메이'"></div>
+                    <div class="member-photo-v2"><img src="images/메이.webp" alt="메이" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x400/222/ff3399?text=메이'"></div>
                     <div class="name-bar">메이</div>
                     <div class="info-area"><div class="bday">2008. 08. 19.<br>(17세)</div><div class="flag">🇰🇷</div></div>
                 </div>
                 <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="images/제나.webp" alt="제나" onerror="this.src='https://via.placeholder.com/300x400/222/ff3399?text=제나'"></div>
+                    <div class="member-photo-v2"><img src="images/제나.webp" alt="제나" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x400/222/ff3399?text=제나'"></div>
                     <div class="name-bar">제나</div>
                     <div class="info-area"><div class="bday">2008. 11. 27.<br>(17세)</div><div class="flag">🇰🇷</div></div>
                 </div>
@@ -201,8 +203,8 @@
                     if (hasData) {
                         validPlatformCount++;
                         let platformLogo = platform;
-                        if (platform === 'Melon') platformLogo = `<img src="images/melon.jpeg" alt="Melon" style="height: 24px; vertical-align: middle; border-radius: 4px;" onerror="this.style.display='none'; this.nextSibling.style.display='inline';"> <span style="display:none;">Melon</span>`;
-                        else if (platform === 'Bugs') platformLogo = `<img src="images/bugs.jpg" alt="Bugs" style="height: 24px; vertical-align: middle; border-radius: 4px;" onerror="this.style.display='none'; this.nextSibling.style.display='inline';"> <span style="display:none;">Bugs</span>`;
+                        if (platform === 'Melon') platformLogo = `<img src="images/melon.jpeg" alt="Melon" style="height: 24px; vertical-align: middle; border-radius: 4px;" onerror="this.onerror=null; this.style.display='none'; this.nextSibling.style.display='inline';"> <span style="display:none;">Melon</span>`;
+                        else if (platform === 'Bugs') platformLogo = `<img src="images/bugs.jpg" alt="Bugs" style="height: 24px; vertical-align: middle; border-radius: 4px;" onerror="this.onerror=null; this.style.display='none'; this.nextSibling.style.display='inline';"> <span style="display:none;">Bugs</span>`;
 
                         tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${platformLogo}</div><div class="ticker-songs">${songsHtml}</div></div>`;
                     }

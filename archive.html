@@ -4,68 +4,230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESCENE ARCHIVE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=2">
-    <style>
-        /* Archive 전용 다크 테마 탭 */
-        .archive-category-tabs { display: flex; gap: 10px; margin-bottom: 30px; }
-        .cat-tab-btn { padding: 10px 24px; border-radius: 4px; background: var(--bg-card); color: var(--text-sub); border: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; font-family: var(--font-body); font-weight: 700;}
-        .cat-tab-btn:hover { border-color: var(--text-main); color: var(--text-main); }
-        .cat-tab-btn.active { background: var(--c-pink); border-color: var(--c-pink); color: #fff; }
-
-        /* SNS 피드 가상 디자인 */
-        .sns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .sns-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; }
-        .sns-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .sns-platform { font-size: 12px; font-weight: 800; font-family: var(--font-head); color: #1DA1F2; } /* 트위터색 */
-        .sns-date { font-size: 12px; color: var(--text-sub); }
-        .sns-img { width: 100%; height: 200px; background: #222; border-radius: 4px; margin-bottom: 15px; }
-        .sns-text { font-size: 13px; line-height: 1.5; color: var(--text-main); }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
 
     <nav class="top-nav">
         <ul class="desktop-menu">
-            <li><a href="index.html">DASHBOARD</a></li>
-            <li><a href="fancam.html">FANCAM RANK</a></li>
-            <li><a href="goods.html">MD & SUPPORT</a></li>
-            <li><a href="archive.html" class="active" style="color: var(--text-main);">ARCHIVE</a></li>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="archive.html" class="active" style="color: var(--text-main);">ARCHIVE & SNS</a></li>
         </ul>
     </nav>
 
-    <div id="mainWrapper">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-title">RESCENE <span>ARCHIVE</span></div>
+    <div id="mainWrapper" style="padding-top: 100px;">
+        <div style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+            <div class="section-header" style="margin-bottom: 25px; border-bottom: none;">
+                <div class="section-title">RESCENE <span>HUB</span></div>
             </div>
 
+            <!-- 대분류 탭 (앨범 / SNS 통합 피드) -->
             <div class="archive-category-tabs">
-                <button class="cat-tab-btn">디스코그래피</button>
-                <button class="cat-tab-btn active">SNS 통합 피드</button>
+                <button class="cat-tab-btn active" onclick="switchMainTab('album', this)">디스코그래피</button>
+                <button class="cat-tab-btn" onclick="switchMainTab('sns', this)">SNS 통합 피드</button>
+            </div>
+            
+            <!-- 1. 앨범 리스트 영역 -->
+            <div id="albumSectionView">
+                <div class="archive-list" id="archiveListContainer"></div>
             </div>
 
-            <!-- ⭐️ 5. 멤버별 SNS 통합 피드 영역 -->
-            <div class="sns-grid">
-                <div class="sns-card">
-                    <div class="sns-header">
-                        <span class="sns-platform">X (Twitter)</span>
-                        <span class="sns-date">2026.07.24</span>
+            <!-- 2. SNS 통합 피드 영역 (요청하신 기능) -->
+            <div id="snsSectionView" style="display: none;">
+                <div class="sns-grid">
+                    <div class="sns-card">
+                        <div class="sns-header">
+                            <span class="sns-platform">X (Twitter) Official</span>
+                            <span class="sns-date">2026.07.24</span>
+                        </div>
+                        <div class="sns-img"></div>
+                        <div class="sns-text">[#메이] 오늘 음악중심 무대 끝! 우리 피오니들 응원 덕분에 눈물 찔끔 날 뻔했어요💖 늘 고마워요! #RESCENE #MAY</div>
                     </div>
-                    <div class="sns-img"></div>
-                    <div class="sns-text">[#메이] 오늘 음악중심 무대 어땠나요?! 팬분들 응원 소리 덕분에 힘이 났어요🔥 내일도 화이팅! #RESCENE #MAY</div>
-                </div>
-                <div class="sns-card">
-                    <div class="sns-header">
-                        <span class="sns-platform" style="background: -webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Instagram</span>
-                        <span class="sns-date">2026.07.23</span>
+                    <div class="sns-card">
+                        <div class="sns-header">
+                            <span class="sns-platform" style="color: #ff2a7a;">Instagram Story</span>
+                            <span class="sns-date">2026.07.23</span>
+                        </div>
+                        <div class="sns-img"></div>
+                        <div class="sns-text">리브의 소소한 일상 브이로그 비하인드 컷 공개 📸 다들 맛있는 저녁 먹었어요?</div>
                     </div>
-                    <div class="sns-img"></div>
-                    <div class="sns-text">리센느 첫 번째 생일 카페 투어 완료! 너무 예쁘게 꾸며주셔서 감사합니다💖 #리브 #LIV</div>
                 </div>
             </div>
+
         </div>
     </div>
 
+    <script>
+        function switchMainTab(type, btn) {
+            document.querySelectorAll('.cat-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if(type === 'album') {
+                document.getElementById('albumSectionView').style.display = 'block';
+                document.getElementById('snsSectionView').style.display = 'none';
+            } else {
+                document.getElementById('albumSectionView').style.display = 'none';
+                document.getElementById('snsSectionView').style.display = 'block';
+            }
+        }
+
+        const archiveData = [
+            {
+                title: "Dearest", cover: "images/dejavu.jpg",
+                tracks: [
+                    { title: "Deja vu", isTitle: true, videos: [{ label: "MV", id: "ZbO9PBdFRdc" }, { label: "엠카 250703", id: "jciMWQgUVCA" }, { label: "뮤뱅 250714", id: "fW8CXaBau-U" }] },
+                    { title: "Mood", videos: [{ label: "MV", id: "v5we0mJpoDM" }] }
+                ]
+            },
+            {
+                title: "SCENEDROME", cover: "images/SCENEDROME.jpg",
+                tracks: [
+                    { title: "Love Attack", isTitle: true, videos: [{ label: "MV", id: "9XttLI0oH0I" }, { label: "인기가요 240901", id: "Hv1wQ6nlpNE" }] },
+                    { title: "Pinball", isTitle: true, videos: [{ label: "MV", id: "B8JJ8RNM-60" }] }
+                ]
+            }
+        ];
+
+        let processedData = [];
+
+        function parseVideoCategory(label) {
+            let cat = '기타';
+            let btnName = label;
+            const lbl = label.toLowerCase();
+            if (lbl.includes('mv')) { cat = 'MV'; btnName = 'Official MV'; }
+            else if (lbl.includes('엠카')) { cat = '엠카운트다운'; btnName = label.replace(/엠카\s*/i, ''); }
+            else if (lbl.includes('뮤뱅')) { cat = '뮤직뱅크'; btnName = label.replace(/뮤뱅\s*/i, ''); }
+            else if (lbl.includes('인가')) { cat = '인기가요'; btnName = label.replace(/인가\s*/i, ''); }
+            return { category: cat, btnLabel: btnName || '영상보기' };
+        }
+
+        function renderList() {
+            const container = document.getElementById('archiveListContainer');
+            container.innerHTML = '';
+            
+            archiveData.forEach((album, albumIdx) => {
+                const item = document.createElement('div');
+                item.className = 'archive-item';
+                item.id = `album_item_${albumIdx}`;
+                
+                let trackHtml = '';
+                let albumCategories = [];
+                
+                album.tracks.forEach((track, tIdx) => {
+                    let cats = { 'MV': [], '엠카운트다운': [], '뮤직뱅크': [], '인기가요': [], '기타': [] };
+                    if (track.videos) {
+                        track.videos.forEach(vid => {
+                            let parsed = parseVideoCategory(vid.label);
+                            cats[parsed.category].push({ id: vid.id, label: parsed.btnLabel });
+                        });
+                    }
+
+                    let availableTabs = Object.keys(cats).filter(k => cats[k].length > 0);
+                    albumCategories.push({ cats: cats, tabs: availableTabs });
+                    
+                    let tabsHtml = '';
+                    let vBtnsHtml = '';
+
+                    if (availableTabs.length > 0) {
+                        availableTabs.forEach((tabName, tabIndex) => {
+                            const isActiveTab = tabIndex === 0 ? 'active' : '';
+                            tabsHtml += `<button class="sub-tab-btn ${isActiveTab}" onclick="selectTrackTab(${albumIdx}, ${tIdx}, '${tabName}', this)">${tabName}</button>`;
+                            if (tabIndex === 0) {
+                                cats[tabName].forEach((vid, vIdx) => {
+                                    const isActiveBtn = vIdx === 0 ? 'active' : '';
+                                    vBtnsHtml += `<button class="video-btn ${isActiveBtn}" onclick="playVideo('player_${albumIdx}_${tIdx}', '${vid.id}', this)">${vid.label}</button>`;
+                                });
+                            }
+                        });
+                    }
+
+                    const titleBadge = track.isTitle ? `<span class="title-badge">TITLE</span>` : '';
+
+                    trackHtml += `
+                        <div class="track-item" id="track_${albumIdx}_${tIdx}">
+                            <div class="track-title" onclick="toggleTrack(${albumIdx}, ${tIdx}, event)">
+                                <div>${track.title} ${titleBadge}</div>
+                                <span>▼</span>
+                            </div>
+                            <div class="track-content">
+                                <div class="sub-tabs-container" id="tabs_${albumIdx}_${tIdx}">${tabsHtml}</div>
+                                <div class="video-btn-list" id="vbtns_${albumIdx}_${tIdx}">${vBtnsHtml}</div>
+                                <div class="inline-player-wrapper" id="player_${albumIdx}_${tIdx}"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                processedData.push(albumCategories);
+
+                item.innerHTML = `
+                    <div class="archive-item-header" onclick="toggleAlbum(${albumIdx})">
+                        <div class="archive-item-thumb"><img src="${album.cover}" onerror="this.style.display='none'"></div>
+                        <div class="archive-item-title">${album.title}</div>
+                        <div class="archive-item-icon">▼</div>
+                    </div>
+                    <div class="archive-item-content"><div class="track-list">${trackHtml}</div></div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function toggleAlbum(idx) {
+            const el = document.getElementById(`album_item_${idx}`);
+            const isOpening = !el.classList.contains('active');
+            document.querySelectorAll('.archive-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelectorAll('.inline-player-wrapper').forEach(p => p.innerHTML = '');
+                item.querySelectorAll('.track-item').forEach(t => t.classList.remove('active'));
+            });
+            if (isOpening) el.classList.add('active');
+        }
+
+        function toggleTrack(albumIdx, tIdx, event) {
+            event.stopPropagation();
+            const el = document.getElementById(`track_${albumIdx}_${tIdx}`);
+            const isOpening = !el.classList.contains('active');
+            document.getElementById(`album_item_${albumIdx}`).querySelectorAll('.track-item').forEach(item => {
+                item.classList.remove('active');
+                const p = item.querySelector('.inline-player-wrapper');
+                if (p) p.innerHTML = '';
+            });
+            if (isOpening) {
+                el.classList.add('active');
+                const firstBtn = el.querySelector('.video-btn.active');
+                if (firstBtn) firstBtn.click();
+            }
+        }
+
+        function selectTrackTab(albumIdx, tIdx, tabName, btnEl) {
+            const siblings = btnEl.parentElement.children;
+            for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
+            btnEl.classList.add('active');
+
+            const videos = processedData[albumIdx][tIdx].cats[tabName];
+            const btnContainer = document.getElementById(`vbtns_${albumIdx}_${tIdx}`);
+            let vBtnsHtml = '';
+            videos.forEach((vid, vIdx) => {
+                const isActive = vIdx === 0 ? 'active' : '';
+                vBtnsHtml += `<button class="video-btn ${isActive}" onclick="playVideo('player_${albumIdx}_${tIdx}', '${vid.id}', this)">${vid.label}</button>`;
+            });
+            btnContainer.innerHTML = vBtnsHtml;
+            if(videos.length > 0) playVideo(`player_${albumIdx}_${tIdx}`, videos[0].id, btnContainer.firstElementChild);
+        }
+
+        function playVideo(playerId, ytId, btnEl) {
+            if(btnEl) {
+                const siblings = btnEl.parentElement.children;
+                for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
+                btnEl.classList.add('active');
+            }
+            document.getElementById(playerId).innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; fullscreen"></iframe>`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => { renderList(); });
+    </script>
 </body>
 </html>

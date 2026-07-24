@@ -8,53 +8,30 @@
     <style>
         body, html { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; background: #121212; color: #e0e0e0; }
         
+        /* 유튜브 영상 배경 영역 */
         .video-container { position: relative; width: 100%; height: 50vh; overflow: hidden; background: #000; }
         .video-container iframe { position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 50vh; min-width: 88.88vh; transform: translate(-50%, -50%); pointer-events: none; opacity: 0.8; }
-        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(18,18,18,0.2) 0%, rgba(18,18,18,0.6) 70%, rgba(18,18,18,1) 100%); }
+        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-genesis; background: linear-gradient(to bottom, rgba(18,18,18,0.2) 0%, rgba(18,18,18,0.6) 70%, rgba(18,18,18,1) 100%); }
 
-        /* ⭐️ 로고를 영상 배경 정중앙에 배치하고 네온빛 극대화 */
-        .hero-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 6;
+        /* ⭐️ 유튜브 영상과 차트 사이 공간에 들어갈 로고 배너 영역 */
+        .logo-banner-section {
+            width: 100%;
+            background: #121212;
             text-align: center;
-            pointer-events: none;
+            padding: 25px 0 10px 0;
+            position: relative;
+            z-index: 5;
         }
-        .hero-center img { 
-            width: 300px; /* 로고 크기 조절 */
+        .logo-banner-section img {
+            max-width: 350px;
+            width: 70%;
+            height: auto;
             filter: drop-shadow(0px 0px 6px rgba(255, 255, 255, 1))
                     drop-shadow(0px 0px 15px rgba(255, 51, 153, 0.9))
                     drop-shadow(0px 0px 30px rgba(255, 51, 153, 0.7));
         }
 
-        /* 영상과 차트 사이 가로 배너 */
-        .horizontal-banner {
-            width: 100%;
-            background: #ff3399;
-            color: #fff;
-            padding: 12px 0;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            z-index: 5;
-            box-shadow: 0 4px 15px rgba(255,51,153,0.3);
-        }
-        .banner-content {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 25s linear infinite;
-        }
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
-
-        .main-chart-container { padding: 40px 20px; max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
+        .main-chart-container { padding: 30px 20px 50px 20px; max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
         .section-header { font-size: 14px; font-weight: 500; color: #888; letter-spacing: 4px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: flex-end; }
         .section-header span.title-hl { color: #fff; font-size: 20px; letter-spacing: 2px; font-weight: 700; margin-left: 10px; }
         .update-time { font-size: 12px; color: #ff3399; font-weight: 400; letter-spacing: 1px; } 
@@ -86,22 +63,15 @@
     </style>
 </head>
 <body>
+    <!-- 유튜브 영상 배경 (ZbO9PBdFRdc 링크 고정) -->
     <div class="video-container">
-        <!-- 보내주신 유튜브 링크(ZbO9PBdFRdc)로 완벽 교체 -->
         <iframe src="https://www.youtube.com/embed/ZbO9PBdFRdc?autoplay=1&mute=1&loop=1&playlist=ZbO9PBdFRdc&controls=0&showinfo=0&rel=0" allow="autoplay; fullscreen"></iframe>
         <div class="video-overlay"></div>
-        
-        <!-- ⭐️ 영상 배경 정중앙에 위치하는 로고 -->
-        <div class="hero-center">
-            <img src="logo.png" alt="RESCENE Logo">
-        </div>
     </div>
 
-    <!-- 가로 배너 -->
-    <div class="horizontal-banner">
-        <div class="banner-content">
-            ✨ RESCENE(리센느) 실시간 차트 아카이브에 오신 것을 환영합니다! 오늘도 스밍 화이팅! 🎧 실시간 순위는 매 정각마다 업데이트됩니다. ✨
-        </div>
+    <!-- ⭐️ 유튜브 영상과 차트 사이 공간에 배치된 로고 이미지 -->
+    <div class="logo-banner-section">
+        <img src="logo.png" alt="RESCENE Logo">
     </div>
 
     <!-- 차트 섹션 -->

@@ -50,9 +50,19 @@ body.modal-open #mainWrapper { transform: translateX(-350px); opacity: 0.5; }
 .bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; pointer-events: none; }
 .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(16,17,21,0.2) 0%, rgba(16,17,21,0.8) 70%, var(--bg-body) 100%); z-index: 2; }
 
-.logo-banner-section { width: 100%; text-align: center; padding: 10px 0 30px 0; position: relative; z-index: 5; margin-top: -60px; }
-.logo-banner-section img { max-width: 240px; width: 50%; }
-.debut-timer { margin-top: 20px; }
+/* ⭐️ 1번 이미지 반영: 영상과 로고 사이 여백 추가 및 네온 효과 적용 */
+.logo-banner-section { 
+    width: 100%; text-align: center; 
+    padding: 20px 0 30px 0; /* 상단 여백 추가로 비디오와 띄움 */
+    position: relative; z-index: 5; 
+    margin-top: 40px; /* 기존 -60px에서 40px로 변경하여 겹치지 않게 내림 */
+}
+.neon-logo {
+    max-width: 240px; width: 50%;
+    /* 네온사인 느낌의 강력한 화이트 글로우 */
+    filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 15px rgba(255,255,255,0.8)) drop-shadow(0 0 30px rgba(255,255,255,0.4)); 
+}
+.debut-timer { margin-top: 30px; }
 .debut-timer .d-day { font-family: var(--font-head); font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 1px; margin-bottom: 5px; }
 .debut-timer .time-flow { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: var(--text-sub); letter-spacing: 2px; }
 
@@ -65,7 +75,7 @@ body.modal-open #mainWrapper { transform: translateX(-350px); opacity: 0.5; }
 .info-area { padding: 0 0 15px 0; display: flex; flex-direction: column; align-items: center; }
 .info-area .bday { color: var(--text-sub); font-family: var(--font-num); font-size: 12px; }
 
-/* ⭐️ 차트 영역 (화살표 CSS 클래스 복원) */
+/* 차트 영역 */
 .ticker-container { height: 50px; overflow: hidden; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-color); }
 .ticker-wrapper { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
 .ticker-item { height: 50px; display: flex; align-items: center; padding: 0 20px; gap: 20px; width: 100%; box-sizing: border-box; }
@@ -92,7 +102,7 @@ body.modal-open #mainWrapper { transform: translateX(-350px); opacity: 0.5; }
 .schedule-desc { font-size: 13px; color: var(--text-sub); line-height: 1.5; margin-bottom: 25px; }
 .insta-btn { display: inline-block; padding: 10px 20px; background: #1a1b21; border: 1px solid #333; color: #fff; text-decoration: none; font-size: 12px; font-weight: 600; border-radius: 6px; transition: 0.2s; }
 .insta-btn:hover { background: #fff; color: #000; }
-.schedule-embed-area { width: 320px; height: 100%; border-left: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; background: #0c0c0f; }
+.schedule-embed-area { width: 320px; height: 100%; border-left: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; background: #0c0c0f; overflow: hidden; }
 
 /* 캘린더 */
 .calendar-header-controls { display: flex; justify-content: center; align-items: center; gap: 20px; margin: 0 0 40px 0; }

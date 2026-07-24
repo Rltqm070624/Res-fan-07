@@ -22,7 +22,6 @@
             <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection')">CHARTS</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection')">SCHEDULE</a></li>
             <li><a href="goods.html">GOODS</a></li>
-            <li><a href="archive.html">ARCHIVE</a></li>
         </ul>
         <div class="sns-links">
             <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.style.display='none'"></a>
@@ -182,8 +181,11 @@
                     }
                     if (songsHtml !== '') {
                         validCount++;
-                        // 깔끔한 모노톤 텍스트 로고로 변경
-                        tickerHtml += `<div class="ticker-item"><div class="ticker-platform"><span class="p-logo">${platform}</span></div><div class="ticker-songs">${songsHtml}</div></div>`;
+                        let logoHtml = `<span class="p-logo">${platform}</span>`;
+                        if (platform === 'Melon') logoHtml = `<img src="images/melon.jpeg" alt="Melon" class="p-logo-img" onerror="this.style.display='none'">`;
+                        if (platform === 'Bugs') logoHtml = `<img src="images/bugs.jpg" alt="Bugs" class="p-logo-img" onerror="this.style.display='none'">`;
+                        
+                        tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${logoHtml}</div><div class="ticker-songs">${songsHtml}</div></div>`;
                     }
                 });
                 const wrapper = document.getElementById('tickerWrapper');
@@ -200,7 +202,7 @@
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
-        // 스케줄 데이터
+        // 스케줄 데이터 (색상 지원)
         const scheduleDB = {
             "2026-07-25": { 
                 items: [
@@ -210,7 +212,8 @@
             },
             "2026-07-26": { 
                 items: [
-                    { time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" }
+                    { time: "14:00", title: "2026 캐리비안베이 워터뮤직풀파티", color: "#e78b54" },
+                    { time: "19:00", title: "별방수련회", color: "#72a58b" }
                 ] 
             }
         };
@@ -241,10 +244,11 @@
                 let eventsHtml = '';
                 if (data && data.items) {
                     data.items.forEach(item => {
+                        let dotColor = item.color ? item.color : 'var(--c-accent)';
                         eventsHtml += `
                             <div class="cal-event-row">
-                                <div class="cal-dot"></div>
-                                <div class="cal-event-time">${item.time}</div>
+                                <div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div>
+                                <div class="cal-event-time" style="color: ${dotColor};">${item.time}</div>
                                 <div class="cal-event-title">${item.title}</div>
                             </div>
                         `;
@@ -261,17 +265,18 @@
 
         // 모달 제어
         function openModal(year, month, day, dateKey) {
-            document.getElementById('modalDateTitle').innerText = `${year}. ${String(month).padStart(2, '0')}. ${String(day).padStart(2, '0')}`;
+            document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`;
             const data = scheduleDB[dateKey];
             let scheduleHtml = '';
 
             if (data && data.items) {
                 scheduleHtml += `<div class="schedule-detail-card"><div class="sd-body">`;
                 data.items.forEach(item => {
+                    let dotColor = item.color ? item.color : 'var(--c-accent)';
                     scheduleHtml += `
                         <div class="sd-row">
-                            <div class="sd-dot"></div>
-                            <div class="sd-time">${item.time}</div>
+                            <div class="sd-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor}60;"></div>
+                            <div class="sd-time" style="color: ${dotColor};">${item.time}</div>
                             <div class="sd-title">${item.title}</div>
                         </div>
                     `;
@@ -285,13 +290,13 @@
                 });
                 scheduleHtml += `</div></div>`;
             } else {
-                scheduleHtml = `<div class="schedule-detail-empty">일정이 없는 날입니다.</div>`;
+                scheduleHtml = `<div class="schedule-detail-empty">등록된 일정이 없습니다.</div>`;
             }
 
             document.getElementById('modalScheduleText').innerHTML = scheduleHtml;
             document.getElementById('scheduleModal').classList.add('active');
             document.getElementById('modalBackdrop').classList.add('active');
-            document.body.style.overflow = 'hidden'; // 뒤 스크롤 방지
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeModal() {

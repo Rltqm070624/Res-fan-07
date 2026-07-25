@@ -1,5 +1,5 @@
 {
-    "update_time": "2026. 07. 25 16:29 기준",
+    "update_time": "2026. 07. 25 20:32 기준",
     "songs": {
         "LOVE ATTACK": {
             "Melon": {
@@ -13,8 +13,8 @@
             },
             "Bugs": {
                 "실시간": {
-                    "rank": 2,
-                    "diff": "-"
+                    "rank": 3,
+                    "diff": "▼ 1"
                 },
                 "일간": null
             },
@@ -57,8 +57,8 @@
             },
             "Bugs": {
                 "실시간": {
-                    "rank": 12,
-                    "diff": "-"
+                    "rank": 13,
+                    "diff": "▼ 1"
                 },
                 "일간": null
             },
@@ -70,7 +70,7 @@
         "Runaway": {
             "Melon": {
                 "실시간 (HOT100)": {
-                    "rank": 47,
+                    "rank": 49,
                     "diff": "NEW"
                 },
                 "일간": null,
@@ -79,8 +79,8 @@
             },
             "Bugs": {
                 "실시간": {
-                    "rank": 27,
-                    "diff": "▲ 23"
+                    "rank": 48,
+                    "diff": "▼ 13"
                 },
                 "일간": null
             },

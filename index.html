@@ -89,23 +89,24 @@
         </div>
 
         <!-- ⭐️ 발걸음 저니 — 스크롤에 따라 발걸음이 이동하며 연혁이 전환됨 -->
-        <div class="section-container journey-section" id="journeySection">
-            <div class="journey-sticky">
-                <div class="journey-header">
-                    <div class="journey-eyebrow">RESCENE HISTORY</div>
-                </div>
-
-                <div class="journey-content" id="journeyContent"></div>
-
-                <div class="journey-path-wrap">
-                    <div class="journey-path" id="journeyPath">
-                        <div class="journey-progress-fill" id="journeyProgressFill"></div>
-                        <div class="journey-footstep" id="journeyFootstep">👣</div>
-                    </div>
-                </div>
-
-                <div class="journey-hint">마우스 휠을 내려 다음 이야기로 진행하세요 ↓</div>
+        <div class="section-container reveal" id="journeySection">
+            <div class="section-header">
+                <div class="section-title">RESCENE <span>HISTORY</span></div>
+                <div style="font-size:12px; color:var(--text-muted);">마우스 휠로 넘겨보세요 →</div>
             </div>
+
+            <div class="journey-path-wrap">
+                <div class="journey-path" id="journeyPath">
+                    <div class="journey-progress-fill" id="journeyProgressFill"></div>
+                    <div class="journey-footstep" id="journeyFootstep">👣</div>
+                </div>
+            </div>
+
+            <div class="journey-track-viewport">
+                <div class="journey-track" id="journeyTrack"></div>
+            </div>
+
+            <div class="journey-scroll-hint">마우스 휠을 내리면 발걸음이 오른쪽으로 이동해요 →</div>
         </div>
 
         <div class="section-container reveal" id="chartSection">
@@ -230,17 +231,19 @@
         if (introStage) introObserver.observe(introStage);
 
         /* =====================================================
-           2) 발걸음 저니 — 스크롤에 따라 연혁이 전환되는 스크롤리텔링
+           2) 발걸음 저니 — 페이지는 스크롤되지 않고, 이 박스 안에서만
+           마우스 휠(세로)을 가로 스크롤로 변환해 발걸음이 오른쪽으로 이동
            ===================================================== */
-        // 실제 곡/타이틀 위주로 구성한 최초/처음 기록들
+        // ⭐️ 영상은 mp4가 아니라 유튜브 링크로 넣어주세요. videoId만 교체하면 됩니다.
+        //    (데뷔 쇼케이스는 실제로 주신 링크로 채워뒀고, 나머지 2개는 임시로 대표 영상을 넣어뒀어요 — 실제 링크로 바꿔주세요)
         const JOURNEY_STOPS = [
-            { date: "2024년 3월 26일", title: "RESCENE 첫 데뷔 및 쇼케이스", desc: "우리의 첫 장면이 시작된 날. 데뷔 싱글 [Re:Scene] 발매와 함께 팬들과 처음 마주하다.", video: "video/uhuh_mv.mp4" },
-            { date: "2024년 3월 29일", title: "KBS 뮤직뱅크 첫 음악방송 데뷔", desc: "지상파 첫 입성! 타이틀곡 'UhUh'로 화려한 퍼포먼스를 선보이며 대중에게 눈도장을 찍다.", video: "video/yoyo_teaser.mp4" },
-            { date: "2024년 4월 15일", title: "뮤직비디오 1,000만 뷰 돌파", desc: "글로벌 팬덤의 폭발적인 반응! 데뷔곡 뮤직비디오가 초고속으로 천만 뷰를 달성하며 저력을 입증하다.", video: "video/member.mp4" },
-            { more: true, title: "이어서 보기", desc: "첫 미니앨범, 데뷔 첫 음악방송 1위, 역주행까지. 계속되는 리센느의 이야기를 확인해보세요." }
+            { date: "2024년 3월 26일", title: "RESCENE 첫 데뷔 및 쇼케이스", desc: "우리의 첫 장면이 시작된 날. 데뷔 싱글 [Re:Scene] 발매와 함께 팬들과 처음 마주하다.", videoId: "8T0J9NrvxYs" },
+            { date: "2024년 3월 29일", title: "KBS 뮤직뱅크 첫 음악방송 데뷔", desc: "지상파 첫 입성! 타이틀곡 'UhUh'로 화려한 퍼포먼스를 선보이며 대중에게 눈도장을 찍다.", videoId: "ZbO9PBdFRdc" /* TODO: 실제 뮤직뱅크 영상 링크로 교체 */ },
+            { date: "2024년 4월 15일", title: "뮤직비디오 1,000만 뷰 돌파", desc: "글로벌 팬덤의 폭발적인 반응! 데뷔곡 뮤직비디오가 초고속으로 천만 뷰를 달성하며 저력을 입증하다.", videoId: "ZbO9PBdFRdc" /* TODO: 실제 뮤직비디오 링크로 교체 */ },
+            { more: true, title: "발자취 확인하기", desc: "첫 미니앨범, 데뷔 첫 음악방송 1위, 역주행까지. 계속되는 리센느의 이야기를 확인해보세요." }
         ];
 
-        // ⭐️ "이어서 보기" 팝업 전용 목록 (최초/처음/목표 달성 위주로 구성)
+        // ⭐️ "발자취 확인하기" 팝업 전용 목록 (최초/처음/목표 달성 위주로 구성)
         const HISTORY_MORE = [
             { date: "2024.08.27", title: "첫 미니앨범 SCENEDROME 발매", desc: "타이틀곡 'LOVE ATTACK', 'Pinball'과 함께 발매된 첫 미니 1집. 데뷔 5개월 만에 완성한 첫 정규 라인업의 결과물." },
             { date: "2025.02.05", title: "미니 2집 Glow Up 발매", desc: "타이틀곡 'Glow Up'으로 두 번째 미니앨범 발매, 성장한 팀 컬러를 보여준 앨범." },
@@ -249,26 +252,22 @@
             { date: "2026.07.14", title: "데뷔 첫 음악방송 1위", desc: "'Pretty Girl' 활동으로 더쇼에서 데뷔 후 첫 음악방송 1위를 달성. 데뷔곡부터 함께한 팬들과 처음으로 함께 나눈 목표 달성의 순간." }
         ];
 
-        const journeySection = document.getElementById('journeySection');
-        const journeyContent = document.getElementById('journeyContent');
+        const journeyTrack = document.getElementById('journeyTrack');
+        const journeyPath = document.getElementById('journeyPath');
         const journeyFootstep = document.getElementById('journeyFootstep');
         const journeyProgressFill = document.getElementById('journeyProgressFill');
         const N = JOURNEY_STOPS.length;
 
-        // 스크롤 길이 확보 (정거장 하나당 100vh)
-        journeySection.style.height = (N * 100) + 'vh';
-
-        // 각 정거장 DOM 생성
-        JOURNEY_STOPS.forEach((stop, i) => {
+        // 정거장(슬라이드) 생성
+        JOURNEY_STOPS.forEach((stop) => {
             const el = document.createElement('div');
             el.className = 'journey-stop' + (stop.more ? ' journey-more' : '');
-            el.dataset.idx = i;
             if (stop.more) {
                 el.innerHTML = `
                     <div class="history-more-icon">→</div>
                     <div class="js-title">${stop.title}</div>
                     <div class="js-desc">${stop.desc}</div>
-                    <button class="journey-more-btn" onclick="openHistoryContinued()">이어서 보기</button>
+                    <button class="journey-more-btn" onclick="openHistoryContinued()">발자취 확인하기</button>
                 `;
             } else {
                 el.innerHTML = `
@@ -276,65 +275,43 @@
                     <div class="js-title">${stop.title}</div>
                     <div class="js-desc">${stop.desc}</div>
                     <div class="js-video-wrap">
-                        <video src="${stop.video}" muted loop playsinline preload="none" onerror="this.parentElement.style.display='none'"></video>
+                        <iframe src="https://www.youtube.com/embed/${stop.videoId}" title="${stop.title}" allow="encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
                     </div>
                 `;
             }
-            journeyContent.appendChild(el);
+            journeyTrack.appendChild(el);
         });
 
         // 경로 위 정거장 마커 생성
-        const journeyPath = document.getElementById('journeyPath');
         JOURNEY_STOPS.forEach((stop, i) => {
             const marker = document.createElement('div');
             marker.className = 'journey-marker';
             marker.style.left = (N === 1 ? 0 : (i / (N - 1)) * 100) + '%';
-            marker.dataset.idx = i;
             journeyPath.appendChild(marker);
         });
-
-        const journeyStopEls = journeyContent.querySelectorAll('.journey-stop');
         const journeyMarkerEls = journeyPath.querySelectorAll('.journey-marker');
 
-        function updateJourney() {
-            const rect = journeySection.getBoundingClientRect();
-            const scrollableDist = journeySection.offsetHeight - window.innerHeight;
-            let progress = scrollableDist > 0 ? (-rect.top / scrollableDist) : 0;
-            progress = Math.max(0, Math.min(1, progress));
-
-            // 발걸음 위치 + 진행바
+        // 트랙 스크롤 진행률에 따라 발걸음/진행바/마커 갱신
+        function updateJourneyProgress() {
+            const maxScroll = journeyTrack.scrollWidth - journeyTrack.clientWidth;
+            const progress = maxScroll > 0 ? (journeyTrack.scrollLeft / maxScroll) : 0;
             journeyFootstep.style.left = (progress * 100) + '%';
             journeyProgressFill.style.width = (progress * 100) + '%';
-
-            // 정거장 마커 활성화
             journeyMarkerEls.forEach((m, i) => {
                 const p_i = (N === 1) ? 0 : i / (N - 1);
-                m.classList.toggle('passed', progress >= p_i - 0.001);
-            });
-
-            // 각 정거장 텍스트/영상 opacity + 좌우 이동 (연속적으로 전환)
-            const windowSize = 1 / Math.max(N - 1, 1) * 0.9;
-            journeyStopEls.forEach((el, i) => {
-                const p_i = (N === 1) ? 0 : i / (N - 1);
-                const d = progress - p_i;
-                const opacity = Math.max(0, 1 - Math.abs(d) / windowSize);
-                const translateX = Math.max(-1, Math.min(1, -d / windowSize)) * 50; // px
-                el.style.opacity = opacity;
-                el.style.transform = `translateX(${translateX}px)`;
-                el.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
-
-                // 비디오 재생/정지 (성능 위해 활성 구간에서만 재생)
-                const video = el.querySelector('video');
-                if (video) {
-                    if (opacity > 0.6) { video.play().catch(()=>{}); }
-                    else { video.pause(); }
-                }
+                m.classList.toggle('passed', progress >= p_i - 0.02);
             });
         }
+        journeyTrack.addEventListener('scroll', updateJourneyProgress, { passive: true });
+        updateJourneyProgress();
 
-        window.addEventListener('scroll', updateJourney, { passive: true });
-        window.addEventListener('resize', updateJourney);
-        updateJourney();
+        // ⭐️ 마우스 휠(세로)을 가로 스크롤로 변환 — 페이지 자체는 움직이지 않음
+        journeyTrack.addEventListener('wheel', (e) => {
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                e.preventDefault();
+                journeyTrack.scrollLeft += e.deltaY * 1.4;
+            }
+        }, { passive: false });
 
         function openHistoryContinued() {
             const listHtml = HISTORY_MORE.map(h => `

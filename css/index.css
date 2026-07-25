@@ -70,24 +70,26 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
     transform: translateY(-2px);
 }
 
-/* --- ⭐️ 시네마틱 발자취 모달 (UI 고급화/풀스크린) --- */
+/* --- ⭐️ 시네마틱 발자취 모달 (둥근 박스 형태로 복구) --- */
 .history-modal-wrapper {
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; 
-    height: 100vh; 
+    top: 50%; left: 50%;
+    transform: translate(-50%, -45%);
+    width: 95%; max-width: 1200px;
+    height: 85vh; 
     background: #000; 
-    border: none;
-    border-radius: 0;
+    border: 1px solid var(--border-light);
+    border-radius: 24px;
     z-index: 9999;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.9);
     opacity: 0; pointer-events: none;
-    /* 서서히 스케일업 되며 몰입감 있게 등장 */
-    transform: scale(0.95);
-    transition: 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden; /* 모달 밖으로 영상 안 삐져나가게 설정 */
 }
+html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
 .history-modal-wrapper.active { 
     opacity: 1; 
-    transform: scale(1); 
+    transform: translate(-50%, -50%); 
     pointer-events: auto; 
 }
 
@@ -105,7 +107,7 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
-/* 은은한 비네팅 효과 (가장자리를 어둡게 하여 텍스트 집중도 상승) */
+/* 은은한 비네팅 효과 */
 .history-modal-overlay {
     position: absolute; top: 0; left: 0; 
     width: 100%; height: 100%;
@@ -122,17 +124,55 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
 
 /* 고급스러운 우측 상단 닫기 버튼 */
 .close-btn {
-    position: absolute; right: 40px; top: 40px;
+    position: absolute; right: 25px; top: 25px;
     z-index: 99999; color: rgba(255, 255, 255, 0.6);
-    background: transparent;
+    background: rgba(0,0,0,0.4);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    padding: 12px; cursor: pointer; transition: 0.4s ease;
+    padding: 10px; cursor: pointer; transition: 0.4s ease;
 }
 .close-btn:hover { 
     background: #fff; color: #000; 
     transform: rotate(90deg); 
     border-color: #fff;
+}
+
+/* ⭐️ '걸어온 길' 감성 문구 버튼 (하단 중앙 배치) */
+.timeline-link-text {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 1.5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: 0.4s ease;
+    padding: 10px 20px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+.timeline-link-text::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 0%;
+    height: 1px;
+    background: #fff;
+    transition: 0.4s ease;
+    transform: translateX(-50%);
+}
+.timeline-link-text:hover {
+    color: rgba(255, 255, 255, 1);
+    letter-spacing: 2.5px;
+}
+.timeline-link-text:hover::after {
+    width: 60%;
 }
 
 .history-page {
@@ -181,7 +221,7 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
     text-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
-/* ⭐️ 가운데 정렬 헤더 구조 변경 */
+/* 가운데 정렬 헤더 구조 변경 */
 .section-header { position: relative; margin-bottom: 20px; display: flex; align-items: flex-end; }
 .section-header.center-header { justify-content: center; text-align: center; }
 .update-time { position: absolute; right: 10px; top: -30px; font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 500; }
@@ -270,16 +310,12 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: -30px
     .ticker-songs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; padding-right: 20px; -ms-overflow-style: none; scrollbar-width: none; }
     .ticker-songs::-webkit-scrollbar { display: none; }
     
-    .history-modal-wrapper { 
-        height: 100vh;
-        transform: scale(0.95);
-    }
-    /* 모바일에서는 닫기 버튼 크기/위치 조정 */
-    .close-btn { top: 20px; right: 20px; padding: 8px; }
-    .h-date { font-size: 44px; letter-spacing: 6px; }
-    .h-title { font-size: 22px; }
+    .history-modal-wrapper { height: 90vh; }
+    .h-date { font-size: 40px; }
+    .h-title { font-size: 24px; }
     
     #historySection .section-title { font-size: 40px; }
     .update-time { position: static; margin-top: 10px; }
     .section-header.center-header { align-items: center; flex-direction: column; }
+    .timeline-link-text { font-size: 12px; bottom: 20px; width: 80%; }
 }

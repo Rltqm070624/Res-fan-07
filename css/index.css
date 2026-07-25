@@ -1,205 +1,308 @@
-/* 메인 비디오 영역 */
-.video-container { position: relative; width: 100%; height: 100vh; overflow: hidden; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.7; }
-.video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(18,19,24,0.2) 0%, rgba(18,19,24,0.6) 60%, var(--bg-base) 100%); z-index: 2; }
-html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 60%, var(--bg-base) 100%); }
-.hero-content { position: relative; z-index: 5; text-align: center; margin-top: 60px; }
-.hero-logo { max-width: 220px; width: 50%; filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5)); }
-.debut-timer { margin-top: 40px; }
-.debut-timer .d-day { font-family: var(--font-head); font-size: 28px; font-weight: 200; color: var(--text-on-media); letter-spacing: 4px; margin-bottom: 8px; }
-.debut-timer .time-flow { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: rgba(244,244,245,0.7); letter-spacing: 3px; }
-
-
-/* 1. 발자취 진입 섹션 (Flex로 중앙 정렬 및 여백을 넉넉하게 주어 배경과 차트 사이 정중앙 위치) */
-#historySection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 200px 20px; 
-}
-#historySection .section-title {
-    margin-bottom: 15px; 
-    font-size: 54px; 
-    letter-spacing: 2px;
-}
-
-/* 2. '사아아아' 초느림 애니메이션 클래스 */
-.slow-reveal {
-    opacity: 0;
-    transform: translateY(60px);
-    transition: opacity 3s cubic-bezier(0.22, 1, 0.36, 1), transform 3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.slow-reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* 발자취 따라가기 텍스트 링크 */
-.history-text-link {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 15px;
-    font-weight: 500;
-    font-family: var(--font-body);
-    cursor: pointer;
-    padding: 10px 15px;
-    transition: 0.4s ease;
-    letter-spacing: 0.5px;
-}
-.history-text-link:hover {
-    color: var(--text-primary);
-    transform: translateY(-2px);
-}
-
-
-/* 일대기 (History Timeline 모달 안으로 들어감) */
-.history-track-container { width: 100%; overflow: hidden; }
-.history-track { 
-    display: flex; gap: 24px; overflow-x: auto; 
-    padding: 10px 10px 40px 10px; margin: -10px;
-    scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: auto; 
-}
-.history-track::-webkit-scrollbar { display: none; }
-.history-card { 
-    min-width: 260px; max-width: 260px; 
-    background: var(--bg-surface); 
-    border: 1px solid var(--border-light); 
-    border-radius: 16px; padding: 30px 25px; 
-    transition: var(--transition-smooth); 
-    display: flex; flex-direction: column; justify-content: center;
-}
-.history-card:hover { 
-    transform: translateY(-8px); 
-    border-color: var(--c-accent) !important; 
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2); 
-}
-html[data-theme="light"] .history-card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
-.history-date { 
-    font-family: var(--font-num); font-size: 15px; 
-    color: var(--c-accent); font-weight: 700; margin-bottom: 12px; letter-spacing: 1px; 
-}
-.history-title { 
-    font-family: var(--font-body); font-size: 18px; 
-    color: var(--text-primary); font-weight: 600; line-height: 1.4; word-break: keep-all; 
-}
-
-/* 차트 Ticker */
-.update-time { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 500; }
-.ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }
-.ticker-wrapper { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
-.ticker-item { height: 56px; display: flex; align-items: center; padding: 0 25px; gap: 30px; width: 100%; box-sizing: border-box; }
-.ticker-platform { width: 70px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.p-logo { font-family: var(--font-head); font-size: 12px; font-weight: 800; color: var(--text-secondary); letter-spacing: 1px; }
-.p-logo-img { max-height: 20px !important; max-width: 60px !important; width: auto !important; height: auto !important; object-fit: contain; display: block; }
-.ticker-songs { display: flex; gap: 40px; overflow: hidden; white-space: nowrap; flex: 1; align-items: center; }
-.ticker-song-info { display: flex; align-items: center; gap: 10px; font-size: 14px; font-family: var(--font-num); flex-shrink: 0; white-space: nowrap; }
-.ticker-song-info .title { color: var(--text-primary); font-weight: 400; font-family: var(--font-body); }
-.ticker-song-info .rank { color: var(--c-accent); font-weight: 700; font-size: 16px; }
-.rank-diff { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); }
-html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
-
-/* 방송 스케줄 (Broadcast) */
-.today-broadcast-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-.broadcast-card { position: relative; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-light); transition: var(--transition-smooth); }
-.broadcast-card:hover { border-color: var(--border-highlight); transform: translateY(-5px); }
-.bc-img-wrapper { width: 100%; height: 380px; position: relative; }
-.bc-img { width: 100%; height: 100%; object-fit: cover; }
-.bc-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(18,19,24,0.9) 0%, rgba(18,19,24,0) 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; box-sizing: border-box; }
-.live-badge { align-self: flex-start; background: var(--c-accent); color: #000; font-family: var(--font-num); font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 30px; margin-bottom: 15px; letter-spacing: 1px; }
-.bc-title { font-size: 20px; font-weight: 600; color: var(--text-on-media); margin: 0; line-height: 1.4; letter-spacing: -0.5px; }
-
-/* 굿즈 연결 배너 */
-.goods-banner { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(229,192,123,0.15) 0%, rgba(229,192,123,0.05) 100%); border: 1px solid var(--c-accent-glow); border-radius: 20px; padding: 40px 50px; cursor: pointer; transition: 0.3s; }
-html[data-theme="light"] .goods-banner { background: linear-gradient(135deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.02) 100%); border-color: rgba(0,0,0,0.1); }
-.goods-banner:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(229,192,123,0.1); }
-.gb-left h2 { margin: 0 0 10px 0; font-family: var(--font-head); font-size: 28px; color: var(--text-primary); }
-.gb-left p { margin: 0; color: var(--text-secondary); font-size: 15px; }
-.gb-btn { display: inline-block; background: var(--text-primary); color: var(--bg-base); padding: 12px 24px; border-radius: 30px; font-weight: 700; font-size: 14px; }
-
-/* 모달 및 캘린더 */
-.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9998; opacity: 0; pointer-events: none; transition: 0.4s ease; }
-.modal-backdrop.active { opacity: 1; pointer-events: auto; }
-.modal-backdrop.cal-backdrop { z-index: 8900; } 
-.calendar-popup-wrapper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%); width: 90%; max-width: 850px; background: var(--bg-base); border: 1px solid var(--border-light); border-radius: 24px; z-index: 8910; padding: 40px; box-sizing: border-box; box-shadow: 0 20px 80px rgba(0,0,0,0.9); opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-html[data-theme="light"] .calendar-popup-wrapper { box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
-.calendar-popup-wrapper.active { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
-.calendar-header-controls { display: flex; justify-content: center; align-items: center; gap: 30px; margin: 0 0 30px 0; }
-.cal-btn { background: var(--bg-surface); border: 1px solid var(--border-light); color: var(--text-secondary); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-.cal-btn:hover { background: var(--text-primary); color: var(--bg-base); }
-.calendar-title { font-family: var(--font-head); font-size: 28px; font-weight: 300; color: var(--text-primary); width: 140px; text-align: center; letter-spacing: 2px;}
-.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-.weekday { text-align: center; color: var(--text-muted); font-family: var(--font-head); font-size: 11px; font-weight: 600; padding-bottom: 10px; letter-spacing: 1px; }
-.day-cell { position: relative; border-radius: 12px; height: 110px !important; min-height: 110px !important; max-height: 110px !important; padding: 12px; border: 1px solid transparent; display: flex; flex-direction: column; cursor: pointer; transition: 0.3s; box-sizing: border-box; overflow: hidden; }
-.day-cell.has-event { background: rgba(255,255,255,0.03); border-color: var(--border-light); }
-html[data-theme="light"] .day-cell.has-event { background: rgba(0,0,0,0.025); }
-.day-cell.has-event:hover { background: rgba(255,255,255,0.07); border-color: var(--border-highlight); transform: translateY(-2px); }
-html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05); }
-.day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
-.day-number { font-family: var(--font-num); font-size: 14px; color: var(--text-secondary); font-weight: 500; align-self: flex-start; margin-bottom: 8px; flex-shrink: 0; }
-.day-cell.has-event .day-number { color: var(--text-primary); font-weight: 700; }
-.cell-event-list { display: flex; flex-direction: column; gap: 5px; width: 100%; overflow: hidden; flex: 1; justify-content: center; }
-.cal-event-row { display: flex; align-items: center; gap: 8px; width: 100%; overflow: hidden; }
-.cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.cal-event-time { font-size: 11px; font-weight: 600; font-family: var(--font-num); flex-shrink: 0; }
-.cal-event-title { color: var(--text-primary); font-size: 11px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
-.modal-wrapper { position: fixed; top: 0; right: 0; width: 440px; height: 100vh; background: #15161a; border-left: 1px solid var(--border-light); z-index: 9999; transform: translateX(100%); transition: var(--transition-smooth); overflow-y: auto; padding: 60px 40px; box-sizing: border-box; box-shadow: -30px 0 60px rgba(0,0,0,0.8); }
-html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: -30px 0 60px rgba(0,0,0,0.1); }
-.modal-wrapper.active { transform: translateX(0); }
-.close-btn { position: absolute; top: 25px; right: 25px; color: var(--text-secondary); background: none; border: none; cursor: pointer; transition: 0.3s; padding: 10px; }
-.close-btn:hover { color: var(--text-primary); transform: rotate(90deg); }
-.modal-header-flex { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
-.modal-date { font-family: var(--font-num); font-size: 24px; font-weight: 300; color: var(--text-primary); letter-spacing: 1px; }
-.schedule-detail-card { margin-bottom: 30px; }
-.sd-row { display: flex; align-items: flex-start; padding: 0 0 20px 0; }
-.sd-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 8px; margin-right: 16px; flex-shrink: 0; }
-.sd-time { font-weight: 500; font-family: var(--font-num); width: 55px; flex-shrink: 0; font-size: 15px; }
-.sd-title { color: var(--text-primary); font-weight: 500; font-size: 17px; flex: 1; line-height: 1.4; }
-.sd-img-wrapper { padding: 0 0 30px 22px; }
-.sd-img-wrapper img { width: 100%; height: 280px; object-fit: contain; background: var(--bg-surface); border-radius: 16px; border: 1px solid var(--border-light); }
-.schedule-detail-empty { text-align: center; color: var(--text-muted); font-size: 14px; padding: 40px 0; font-weight: 300; }
-
-/* 발자취 모달 창 래퍼 */
-.history-modal-wrapper {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -45%);
-    width: 95%; max-width: 1100px;
-    background: var(--bg-base);
-    border: 1px solid var(--border-light);
-    border-radius: 24px;
-    z-index: 9999; /* 다른 모달들보다 위에 배치 */
-    padding: 50px 40px;
-    box-sizing: border-box;
-    box-shadow: 0 20px 80px rgba(0,0,0,0.9);
-    opacity: 0; pointer-events: none;
-    transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-html[data-theme="light"] .history-modal-wrapper { 
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15); 
-}
-.history-modal-wrapper.active {
-    opacity: 1; 
-    transform: translate(-50%, -50%); 
-    pointer-events: auto;
-}
-
-/* 메인 전용 모바일 반응형 */
-@media (max-width: 800px) {
-    .goods-banner { flex-direction: column; text-align: center; gap: 20px; padding: 30px 20px; }
-    .calendar-popup-wrapper { width: 95%; padding: 45px 15px 25px !important; }
-    #calendarPopupModal .close-btn { top: 8px !important; right: 8px !important; padding: 5px !important; }
-    .calendar-header-controls { margin-bottom: 20px !important; }
-    .calendar-grid { gap: 6px; }
-    .day-cell { height: 95px !important; min-height: 95px !important; padding: 8px; }
-    .modal-wrapper { width: 100%; padding: 40px 20px; }
-    .ticker-songs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; padding-right: 20px; -ms-overflow-style: none; scrollbar-width: none; }
-    .ticker-songs::-webkit-scrollbar { display: none; }
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESCENE ARCHIVE | 메인</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
     
-    /* 발자취 모달 모바일 반응형 */
-    .history-modal-wrapper { padding: 40px 20px; }
-    
-    #historySection { padding: 120px 20px; }
-    #historySection .section-title { font-size: 40px; }
-}
+    <!-- 공통 CSS와 메인 전용 CSS 호출 -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
+
+    <script>
+        (function() {
+            const saved = localStorage.getItem('rescene-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
+</head>
+<body id="homeSection">
+
+    <nav class="top-nav">
+        <div class="nav-brand"><a href="index.html" style="color:inherit; text-decoration:none;">RESCENE</a></div>
+        <ul class="desktop-menu">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="member/member.html">MEMBERS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection')">CHARTS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection')">SCHEDULE</a></li>
+            <li><a href="goods/goods.html">GOODS</a></li>
+        </ul>
+        
+        <div class="nav-right">
+            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="테마 변경"></button>
+            <div class="desktop-only-utils">
+                <button class="cal-icon-btn" onclick="openCalendarPopup()" title="Calendar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </button>
+            </div>
+            <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="메뉴 열기">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-menu-panel" id="mobileMenuPanel">
+        <div class="mobile-top-utils">
+            <button class="mobile-cal-btn" onclick="openCalendarPopup(); toggleMobileMenu();" title="Calendar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </button>
+            <div class="mobile-sns-box">
+                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" style="transform: scale(0.75);"></a>
+                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG"></a>
+                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT"></a>
+            </div>
+        </div>
+        <ul class="mobile-menu-list">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="member/member.html">MEMBERS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection'); toggleMobileMenu();">CHARTS</a></li>
+            <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection'); toggleMobileMenu();">SCHEDULE</a></li>
+            <li><a href="goods/goods.html">GOODS</a></li>
+        </ul>
+    </div>
+
+    <div id="mainWrapper">
+        <div class="video-container" id="homeHero">
+            <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
+            <div class="video-overlay"></div>
+            <div class="hero-content">
+                <img src="images/logo.png" alt="RESCENE Logo" class="hero-logo" onerror="this.style.display='none'">
+                <div class="debut-timer">
+                    <div class="d-day" id="dDayText">D+000</div>
+                    <div class="time-flow" id="timeFlowText">00:00:00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. 발자취 진입 섹션 (텍스트 영역) -->
+        <div class="section-container slow-reveal" id="historySection">
+            <div class="section-title">WITH <span>RESCENE</span></div>
+            <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
+        </div>
+        
+        <!-- 2. 말씀하신 대로 문구를 정중앙에 맞추기 위해 밑에 하나 더 만든 영역 (Spacer) -->
+        <div id="visualSpacer" style="height: 220px; width: 100%;"></div>
+
+        <div class="section-container reveal" id="chartSection">
+            <div class="section-header chart-header">
+                <div class="section-title">MUSIC <span>CHARTS</span></div>
+                <div class="update-time" id="currentTime">데이터 로딩중...</div>
+            </div>
+            <div class="ticker-container">
+                <div class="ticker-wrapper" id="tickerWrapper">
+                    <div class="ticker-item skeleton"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container reveal" id="todayScheduleSection">
+            <div class="section-header">
+                <div class="section-title">TODAY'S <span>BROADCAST</span></div>
+            </div>
+            <div class="today-broadcast-grid">
+                <div class="broadcast-card">
+                    <div class="bc-img-wrapper">
+                        <img src="images/one.jpg" alt="원 유니버스 페스티벌" class="bc-img" onerror="this.style.display='none'">
+                        <div class="bc-overlay">
+                            <span class="live-badge">12:45</span>
+                            <h3 class="bc-title">2026 원 유니버스 페스티벌</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="broadcast-card">
+                    <div class="bc-img-wrapper">
+                        <img src="images/boryung.jpg" alt="보령 KBS 슈퍼라이브" class="bc-img" onerror="this.style.display='none'">
+                        <div class="bc-overlay">
+                            <span class="live-badge">16:45</span>
+                            <h3 class="bc-title">보령 KBS 슈퍼라이브</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container reveal" style="padding-bottom: 120px;">
+            <div class="goods-banner" onclick="location.href='goods/goods.html'">
+                <div class="gb-left">
+                    <h2>OFFICIAL MERCH</h2>
+                    <p>리센느의 공식 굿즈 실시간 재고 및 품절 유무를 확인하세요.</p>
+                </div>
+                <div class="gb-right">
+                    <span class="gb-btn">굿즈 스토어 바로가기 ➔</span>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="global-footer">
+            <div class="footer-sns">
+                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" style="transform: scale(0.75);"></a>
+                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG"></a>
+                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT"></a>
+            </div>
+            <p>&copy; 2024 RESCENE ARCHIVE. All Rights Reserved.</p>
+        </footer>
+
+    </div> 
+
+    <!-- 발자취(History) 모달 컨테이너 -->
+    <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
+    <div class="history-modal-wrapper" id="historyModal">
+        <button class="close-btn" onclick="closeHistoryModal()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="section-header" style="margin-bottom: 30px; border-bottom: none;">
+            <div class="section-title">RESCENE <span>HISTORY</span></div>
+            <div style="font-size:12px; color:var(--text-muted);">마우스 휠로 넘겨보세요 ➔</div>
+        </div>
+        <div class="history-track-container">
+            <div class="history-track" id="historyTrack">
+                <div class="history-card"><div class="history-date">2024. 02. 29</div><div class="history-title">선공개 곡 'YoYo' 발매</div></div>
+                <div class="history-card"><div class="history-date">2024. 03. 26</div><div class="history-title">싱글 1집 《Re:Scene》 발매 (데뷔)</div></div>
+                <div class="history-card"><div class="history-date">2024. 08. 27</div><div class="history-title">미니 1집 《SCENEDROME》 발매</div></div>
+                <div class="history-card"><div class="history-date">2025. 02. 05</div><div class="history-title">미니 2집 《Glow Up》 발매</div></div>
+                <div class="history-card"><div class="history-date">2025. 07. 02</div><div class="history-title">싱글 2집 《Dearest》 발매</div></div>
+                <div class="history-card"><div class="history-date">2025. 11. 25</div><div class="history-title">미니 3집 《Lip Bomb》 발매</div></div>
+                <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 08</div><div class="history-title">리메이크 싱글 'Pretty Girl' 발매</div></div>
+                <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 08</div><div class="history-title">'LOVE ATTACK' 멜론 첫 음원차트 1위</div></div>
+                <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 14</div><div class="history-title">'Pretty Girl' 첫 음악방송 1위<br><span style="font-size:14px; color:var(--text-secondary);">(SBS M 《더쇼》)</span></div></div>
+                <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 25</div><div class="history-title">'Pretty Girl' 첫 지상파 음악방송 1위<br><span style="font-size:14px; color:var(--text-secondary);">(MBC 《쇼! 음악중심》)</span></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 캘린더, 스케줄 모달 컨테이너 -->
+    <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
+    <div class="calendar-popup-wrapper" id="calendarPopupModal">
+        <button class="close-btn" onclick="closeCalendarPopup()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="calendar-header-controls">
+            <button class="cal-btn" onclick="changeMonth(-1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <div class="calendar-title" id="calendarMonthText">2026. 07</div>
+            <button class="cal-btn" onclick="changeMonth(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+        <div class="calendar-grid"><div class="weekday">SUN</div><div class="weekday">MON</div><div class="weekday">TUE</div><div class="weekday">WED</div><div class="weekday">THU</div><div class="weekday">FRI</div><div class="weekday">SAT</div></div>
+        <div class="calendar-grid" id="calendarDays"></div>
+    </div>
+
+    <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
+    <div class="modal-wrapper" id="scheduleModal">
+        <button class="close-btn" onclick="closeModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        <div class="modal-header-flex"><div class="modal-date" id="modalDateTitle"></div></div>
+        <div id="modalScheduleText"></div>
+    </div>
+
+    <script>
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+        function toggleMobileMenu() {
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+            document.getElementById('mobileMenuPanel').classList.toggle('active');
+            document.getElementById('mobileMenuBackdrop').classList.toggle('active');
+            document.body.style.overflow = document.getElementById('mobileMenuPanel').classList.contains('active') ? 'hidden' : 'auto';
+        }
+        const sunIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+        const moonIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+        function updateThemeIcon(theme) { const btn = document.getElementById('themeToggleBtn'); if (btn) btn.innerHTML = (theme === 'dark') ? sunIcon : moonIcon; }
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('rescene-theme', next);
+            updateThemeIcon(next);
+        }
+        updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+
+        // 스크롤 시 reveal 클래스 추가옵저버 (기존 일반 요소용과 slow 요소용 분리 처리)
+        const observer = new IntersectionObserver((entries) => { 
+            entries.forEach(e => { 
+                if(e.isIntersecting) {
+                    e.target.classList.add('active'); 
+                }
+            }); 
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
+
+        // 발자취 모달 열기/닫기 함수
+        function openHistoryModal() {
+            document.getElementById('historyModal').classList.add('active');
+            document.getElementById('historyBackdrop').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeHistoryModal() {
+            document.getElementById('historyModal').classList.remove('active');
+            document.getElementById('historyBackdrop').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // History 가로 스크롤 스와이프 기능
+        const historyTrack = document.getElementById('historyTrack');
+        if (historyTrack) {
+            historyTrack.addEventListener('wheel', (e) => {
+                e.preventDefault(); 
+                historyTrack.scrollLeft += e.deltaY;
+            }, { passive: false });
+        }
+
+        const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
+        setInterval(() => {
+            const diff = new Date() - debutDate;
+            document.getElementById('dDayText').innerText = `D+${Math.floor(diff / (1000 * 60 * 60 * 24))}`;
+            document.getElementById('timeFlowText').innerText = `${String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0')}:${String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0')}:${String(Math.floor((diff / 1000) % 60)).padStart(2, '0')}`;
+        }, 1000);
+
+        let tickerInterval;
+        async function fetchSongCharts() {
+            try {
+                const response = await fetch('chart_data.json?t=' + new Date().getTime());
+                const data = await response.json();
+                document.getElementById('currentTime').innerText = (data.update_time || new Date().toLocaleTimeString('ko-KR'));
+                let tickerHtml = ''; let validCount = 0;
+                ["Melon", "Bugs", "Genie", "FLO", "VIBE"].forEach(platform => {
+                    let songsHtml = '';
+                    if (data.songs) {
+                        for (const songTitle in data.songs) {
+                            const pd = data.songs[songTitle][platform];
+                            if (pd) {
+                                let rec = pd["실시간 (HOT100)"] || pd["실시간"] || pd["24시간"];
+                                if (rec) {
+                                    let diffClass = 'diff-none'; let diffText = rec.diff;
+                                    if (diffText === 'NEW' || diffText === '0' || diffText === '유지' || diffText === '') diffText = '-';
+                                    if (diffText.includes('▲')) diffClass = 'diff-up'; else if (diffText.includes('▼')) diffClass = 'diff-down'; else if (diffText === 'NEW') diffClass = 'diff-new'; else if (diffText === '-') diffClass = 'diff-none';
+                                    songsHtml += `<div class="ticker-song-info"><span class="title">${songTitle}</span><span class="rank">${rec.rank}</span><span class="rank-diff ${diffClass}">${diffText}</span></div>`;
+                                }
+                            }
+                        }
+                    }
+                    if (songsHtml !== '') {
+                        validCount++;
+                        let logoHtml = `<span class="p-logo">${platform}</span>`;
+                        if (platform === 'Melon') logoHtml = `<img src="images/melon.jpeg" alt="Melon" class="p-logo-img" onerror="this.style.display='none'">`;
+                        if (platform === 'Bugs') logoHtml = `<img src="images/bugs.jpg" alt="Bugs" class="p-logo-img" onerror="this.style.display='none'">`;
+                        tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${logoHtml}</div><div class="ticker-songs">${songsHtml}</div></div>`;
+                    }
+                });
+                const wrapper = document.getElementById('tickerWrapper');
+                wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">데이터 수집 중입니다.</div></div>`;
+                clearInterval(tickerInterval);
+                if (validCount > 1) {
+                    let cIdx = 0;
+                    tickerInterval = setInterval(() => { cIdx = (cIdx + 1) % validCount; wrapper.style.transform = `translateY(-${cIdx * 56}px)`; }, 4000); 
+                }
+            } catch (e) { console.log("차트 대기 중"); }
+        }
+        fetchSongCharts(); setInterval(fetchSongCharts, 60000);
+
+        const scheduleDB = { "2026-07-25": { items: [{ time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" }, { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }] }, "2026-07-26": { items: [{ time: "14:00", title: "2026 캐리비안베이 워터뮤직풀파티", color: "#e78b54" }, { time: "19:00", title: "별방수련회", color: "#72a58b" }] } };
+        let currentCalYear = 2026; let currentCalMonth = 7;
+        function changeMonth(delta) { currentCalMonth += delta; if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } renderCalendar(); }
+        function renderCalendar() { const calendarDays = document.getElementById('calendarDays'); document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); let html = ''; for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; } for (let i = 1; i <= lastDate; i++) { const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; const data = scheduleDB[dateKey]; const hasEvent = data ? 'has-event' : ''; let eventsHtml = ''; if (data && data.items) { data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div><div class="cal-event-title">${item.title}</div></div>`; }); } html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`; } calendarDays.innerHTML = html; }
+        function openCalendarPopup() { document.getElementById('calendarPopupModal').classList.add('active'); document.getElementById('calPopupBackdrop').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeCalendarPopup() { document.getElementById('calendarPopupModal').classList.remove('active'); document.getElementById('calPopupBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
+        function openModal(year, month, day, dateKey) { document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`; const data = scheduleDB[dateKey]; let scheduleHtml = ''; if (data && data.items) { scheduleHtml += `<div class="schedule-detail-card"><div class="sd-body">`; data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; scheduleHtml += `<div class="sd-row"><div class="sd-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor}60;"></div><div class="sd-time" style="color: ${dotColor};">${item.time}</div><div class="sd-title">${item.title}</div></div>`; if (item.image) { scheduleHtml += `<div class="sd-img-wrapper"><img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`; } }); scheduleHtml += `</div></div>`; } else { scheduleHtml = `<div class="schedule-detail-empty">등록된 일정이 없습니다.</div>`; } document.getElementById('modalScheduleText').innerHTML = scheduleHtml; document.getElementById('scheduleModal').classList.add('active'); document.getElementById('modalBackdrop').classList.add('active'); }
+        function closeModal() { document.getElementById('scheduleModal').classList.remove('active'); document.getElementById('modalBackdrop').classList.remove('active'); if(!document.getElementById('calendarPopupModal').classList.contains('active')){ document.body.style.overflow = 'auto'; } }
+        window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
+    </script>
+</body>
+</html>

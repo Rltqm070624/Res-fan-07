@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESCENE ARCHIVE | MEMBERS</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
-    
+
     <!-- ⭐️ 상위 폴더의 공통 CSS와 자신의 폴더에 있는 CSS 호출 -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="member.css">
@@ -22,21 +22,38 @@
             <li><a href="../index.html">HOME</a></li>
             <li><a href="member.html">MEMBERS</a></li>
             <li><a href="../index.html#chartSection">CHARTS</a></li>
+            <li><a href="../discography/discography.html">DISCOGRAPHY</a></li>
             <li><a href="../index.html#todayScheduleSection">SCHEDULE</a></li>
             <li><a href="../goods/goods.html">GOODS</a></li>
         </ul>
         <div class="nav-right">
             <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="테마 변경"></button>
+            <div class="desktop-only-utils">
+                <button class="cal-icon-btn" onclick="openCalendarPopup()" title="Calendar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </button>
+            </div>
             <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
         </div>
     </nav>
 
     <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="toggleMobileMenu()"></div>
     <div class="mobile-menu-panel" id="mobileMenuPanel">
+        <div class="mobile-top-utils">
+            <button class="mobile-cal-btn" onclick="openCalendarPopup(); toggleMobileMenu();" title="Calendar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </button>
+            <div class="mobile-sns-box">
+                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="../images/x.png" alt="X" onerror="this.style.display='none'"></a>
+                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="../images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
+                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="../images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
+            </div>
+        </div>
         <ul class="mobile-menu-list">
             <li><a href="../index.html">HOME</a></li>
             <li><a href="member.html">MEMBERS</a></li>
             <li><a href="../index.html#chartSection">CHARTS</a></li>
+            <li><a href="../discography/discography.html">DISCOGRAPHY</a></li>
             <li><a href="../index.html#todayScheduleSection">SCHEDULE</a></li>
             <li><a href="../goods/goods.html">GOODS</a></li>
         </ul>
@@ -47,40 +64,68 @@
             <div class="section-header">
                 <div class="section-title">THE <span>MEMBERS</span></div>
             </div>
-            
+
             <div class="member-wrapper">
                 <!-- ⭐️ 이미지는 상위 폴더의 images 폴더 참조 -->
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="../images/원이.webp" alt="원이"></div><div class="member-info"><div class="name-bar">원이</div><div class="bday">2004. 05. 25.</div></div></div>
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="../images/리브.webp" alt="리브"></div><div class="member-info"><div class="name-bar">리브</div><div class="bday">2006. 10. 11.</div></div></div>
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="../images/미나미.webp" alt="미나미"></div><div class="member-info"><div class="name-bar">미나미</div><div class="bday">2006. 11. 29.</div></div></div>
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="../images/메이.webp" alt="메이"></div><div class="member-info"><div class="name-bar">메이</div><div class="bday">2008. 08. 19.</div></div></div>
-                <div class="member-card-v2"><div class="member-photo-v2"><img src="../images/제나.webp" alt="제나"></div><div class="member-info"><div class="name-bar">제나</div><div class="bday">2008. 11. 27.</div></div></div>
+                <div class="member-card-v2">
+                    <div class="member-photo-v2"><img src="../images/원이.webp" alt="원이" onerror="this.style.display='none'"></div>
+                    <div class="member-info"><div class="name-bar">원이 WONI</div><div class="bday">2004. 05. 25. · 리더 / 보컬</div></div>
+                </div>
+                <div class="member-card-v2">
+                    <div class="member-photo-v2"><img src="../images/리브.webp" alt="리브" onerror="this.style.display='none'"></div>
+                    <div class="member-info"><div class="name-bar">리브 LIV</div><div class="bday">2006. 10. 11. · 보컬</div></div>
+                </div>
+                <div class="member-card-v2">
+                    <div class="member-photo-v2"><img src="../images/미나미.webp" alt="미나미" onerror="this.style.display='none'"></div>
+                    <div class="member-info"><div class="name-bar">미나미 MINAMI</div><div class="bday">2006. 11. 29. · 보컬 / 댄스 / 랩</div></div>
+                </div>
+                <div class="member-card-v2">
+                    <div class="member-photo-v2"><img src="../images/메이.webp" alt="메이" onerror="this.style.display='none'"></div>
+                    <div class="member-info"><div class="name-bar">메이 MAY</div><div class="bday">2008. 08. 19. · 보컬</div></div>
+                </div>
+                <div class="member-card-v2">
+                    <div class="member-photo-v2"><img src="../images/제나.webp" alt="제나" onerror="this.style.display='none'"></div>
+                    <div class="member-info"><div class="name-bar">제나 ZENA</div><div class="bday">2008. 11. 27. · 보컬 / 댄스</div></div>
+                </div>
             </div>
         </div>
 
         <footer class="global-footer">
+            <div class="footer-sns">
+                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="../images/x.png" alt="X" onerror="this.style.display='none'"></a>
+                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="../images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
+                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="../images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
+            </div>
             <p>&copy; 2024 RESCENE ARCHIVE. All Rights Reserved.</p>
         </footer>
     </div>
 
+    <!-- 캘린더 중앙 팝업 모달 -->
+    <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
+    <div class="calendar-popup-wrapper" id="calendarPopupModal">
+        <button class="close-btn" onclick="closeCalendarPopup()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        <div class="calendar-header-controls">
+            <button class="cal-btn" onclick="changeMonth(-1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <div class="calendar-title" id="calendarMonthText">2026. 07</div>
+            <button class="cal-btn" onclick="changeMonth(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+        <div class="calendar-grid"><div class="weekday">SUN</div><div class="weekday">MON</div><div class="weekday">TUE</div><div class="weekday">WED</div><div class="weekday">THU</div><div class="weekday">FRI</div><div class="weekday">SAT</div></div>
+        <div class="calendar-grid" id="calendarDays"></div>
+    </div>
+
+    <!-- 스케줄 상세 정보 모달 -->
+    <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
+    <div class="modal-wrapper" id="scheduleModal">
+        <button class="close-btn" onclick="closeModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        <div class="modal-header-flex"><div class="modal-date" id="modalDateTitle"></div></div>
+        <div id="modalScheduleText"></div>
+    </div>
+
+    <script src="../js/schedule-data.js"></script>
     <script>
-        function toggleMobileMenu() {
-            document.getElementById('hamburgerBtn').classList.toggle('active');
-            document.getElementById('mobileMenuPanel').classList.toggle('active');
-            document.getElementById('mobileMenuBackdrop').classList.toggle('active');
-            document.body.style.overflow = document.getElementById('mobileMenuPanel').classList.contains('active') ? 'hidden' : 'auto';
-        }
-        const sunIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
-        const moonIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
-        function updateThemeIcon(theme) { const btn = document.getElementById('themeToggleBtn'); if (btn) btn.innerHTML = (theme === 'dark') ? sunIcon : moonIcon; }
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme') || 'dark';
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('rescene-theme', next);
-            updateThemeIcon(next);
-        }
-        updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+        // 하위 폴더(member/)에서 실행되므로 이미지 경로 앞에 ../ 를 붙여야 함
+        var SITE_ROOT = '../';
     </script>
+    <script src="../js/common.js"></script>
 </body>
 </html>

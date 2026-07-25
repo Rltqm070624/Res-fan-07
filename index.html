@@ -6,8 +6,7 @@
     <title>RESCENE ARCHIVE | 메인</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- ⭐️ 구글 폰트: Montserrat 통일 -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
@@ -69,6 +68,7 @@
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
+            <!-- 로고와 타이머가 1.5초 동안 서서히 나타남 -->
             <div class="hero-content">
                 <img src="images/logo.png" alt="RESCENE Logo" class="hero-logo" onerror="this.style.display='none'">
                 <div class="debut-timer">
@@ -150,30 +150,31 @@
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
         
-        <!-- ⭐️ 햄버거 메뉴를 모달 박스 우측 바깥 영역(참고해주신 위치)에 배치 -->
-        <div class="modal-menu-container">
-            <button class="modal-hamburger-btn" onclick="toggleHistoryMenu()" id="historyMenuBtn">
-                <span></span><span></span><span></span>
-            </button>
-            <div class="history-dropdown" id="historyDropdown">
-                <button onclick="closeHistoryModal()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg> 창 닫기
-                </button>
-                <button onclick="skipHistorySequence()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg> 영상 스킵하기
-                </button>
-                <button onclick="openDetailedTimeline()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> 발자취 더 확인하기
-                </button>
-            </div>
-        </div>
-        
-        <!-- 맨 마지막 정중앙에 나타날 텍스트 버튼 -->
+        <!-- ⭐️ 맨 마지막 정중앙에 나타날 텍스트 버튼 -->
         <button class="timeline-link-text" onclick="openDetailedTimeline()">
             걸어온 길을 다시 한 번 걸어 볼까요?
         </button>
         
         <div id="tvContainer" style="width: 100%; height: 100%; position: relative; overflow: hidden; background: #000; border-radius: 24px;">
+            
+            <!-- ⭐️ 모달 우측 상단 안쪽에 위치한 햄버거 메뉴 -->
+            <div class="modal-menu-container">
+                <button class="modal-hamburger-btn" onclick="toggleHistoryMenu()" id="historyMenuBtn">
+                    <span></span><span></span><span></span>
+                </button>
+                <div class="history-dropdown" id="historyDropdown">
+                    <button onclick="closeHistoryModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg> 창 닫기
+                    </button>
+                    <button onclick="skipHistorySequence()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg> 영상 스킵하기
+                    </button>
+                    <button onclick="openDetailedTimeline()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> 발자취 더 확인하기
+                    </button>
+                </div>
+            </div>
+
             <div class="history-modal-bg" id="historyModalBg">
                 <iframe id="historyYoutubeBg" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 <div class="history-modal-overlay"></div>
@@ -186,14 +187,14 @@
                 </div>
             </div>
 
-            <!-- 하단 플레이어 컨트롤러 바 (클릭/드래그 Seek 가능한 프로그레스 바) -->
+            <!-- ⭐️ 클릭해서 원하는 구간으로 이동할 수 있는(Seek) 하단 프로그레스 바 -->
             <div class="history-player-bar" id="historyPlayerBar">
                 <div class="history-progress-container" id="historyProgressContainer" onclick="seekTimeline(event)">
                     <div class="history-progress-bar" id="historyProgressBar"></div>
                 </div>
                 <div class="history-player-info">
                     <span id="historyCurrentChapter">RESCENE ARCHIVE</span>
-                    <span id="historyTimeIndicator">00:00 / 00:38</span>
+                    <span id="historyTimeIndicator">00:00 / 00:30</span>
                 </div>
             </div>
         </div>
@@ -267,38 +268,38 @@
         document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
         const historyData = [
-            { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o" }, 
-            { date: "2024. 03. 26", title: "싱글 1집 《Re:Scene》 발매 (데뷔)" }, 
-            { date: "2024. 05", title: "코스모폴리탄 코리아 5월호 화보" },
-            { date: "2024. 08. 27", title: "미니 1집 《SCENEDROME》 발매" },
-            { date: "2025. 01", title: "프리티스킨, 형지엘리트 광고 모델" },
-            { date: "2025. 01", title: "캐릭터 라이선싱 페어 홍보대사" },
-            { date: "2025. 02. 05", title: "미니 2집 《Glow Up》 발매" },
-            { date: "2025. 02. 11", title: "한국청소년연맹 홍보대사" },
-            { date: "2025. 05", title: "BEAUTY+ 5월호 화보" },
-            { date: "2025. 07. 02", title: "싱글 2집 《Dearest》 발매" },
-            { date: "2025. 11. 25", title: "미니 3집 《Lip Bomb》 발매" },
-            { date: "2026. 01", title: "I-SHA, 넥슨, CU 등 다수 브랜드 콜라보" },
-            { date: "2026. 05. 22", title: "경상남도 거제시 홍보대사" },
-            { date: "2026. 06", title: "앳스타일 6월호 화보" },
-            { date: "2026. 06. 04", title: "화보 MIIM (원이, 미나미)" },
-            { date: "2026. 06. 24", title: "경기도 수원시 홍보대사" },
-            { date: "2026. 06. 29", title: "경상북도 경주시 홍보대사" },
-            { date: "2026. 07. 02", title: "경기도 고양시 홍보대사" },
-            { date: "2026. 07. 08", title: "리메이크 싱글 'Pretty Girl' 발매" },
-            { date: "2026. 07. 08", title: "멜론 1위 소감 라이브", vid: "v6n4XQdX6_8" }, 
-            { date: "2026. 07. 14", title: "저스트 메이크업 IN TOKYO 2027 홍보대사" },
-            { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위 (더쇼)", vid: "dOllJ26kfIY" }, 
-            { date: "2026. 07. 21", title: "전남광주통합특별시 섬의 날 홍보대사" },
-            { date: "2026. 07. 23", title: "MBC 아시안게임 중계방송 홍보대사" },
-            { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 1위 (음악중심)" },
-            { date: "2026. 08", title: "하퍼스 바자 코리아 8월호 화보" }
+            { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o", timeIndex: 0 }, 
+            { date: "2024. 03. 26", title: "싱글 1집 《Re:Scene》 발매 (데뷔)", timeIndex: 5 }, 
+            { date: "2024. 05", title: "코스모폴리탄 코리아 5월호 화보", timeIndex: 7 },
+            { date: "2024. 08. 27", title: "미니 1집 《SCENEDROME》 발매", timeIndex: 9 },
+            { date: "2025. 01", title: "프리티스킨, 형지엘리트 광고 모델", timeIndex: 11 },
+            { date: "2025. 01", title: "캐릭터 라이선싱 페어 홍보대사", timeIndex: 12 },
+            { date: "2025. 02. 05", title: "미니 2집 《Glow Up》 발매", timeIndex: 13 },
+            { date: "2025. 02. 11", title: "한국청소년연맹 홍보대사", timeIndex: 14 },
+            { date: "2025. 05", title: "BEAUTY+ 5월호 화보", timeIndex: 15 },
+            { date: "2025. 07. 02", title: "싱글 2집 《Dearest》 발매", timeIndex: 16 },
+            { date: "2025. 11. 25", title: "미니 3집 《Lip Bomb》 발매", timeIndex: 17 },
+            { date: "2026. 01", title: "I-SHA, 넥슨, CU 등 다수 브랜드 콜라보", timeIndex: 18 },
+            { date: "2026. 05. 22", title: "경상남도 거제시 홍보대사", timeIndex: 19 },
+            { date: "2026. 06", title: "앳스타일 6월호 화보", timeIndex: 20 },
+            { date: "2026. 06. 04", title: "화보 MIIM (원이, 미나미)", timeIndex: 21 },
+            { date: "2026. 06. 24", title: "경기도 수원시 홍보대사", timeIndex: 22 },
+            { date: "2026. 06. 29", title: "경상북도 경주시 홍보대사", timeIndex: 23 },
+            { date: "2026. 07. 02", title: "경기도 고양시 홍보대사", timeIndex: 24 },
+            { date: "2026. 07. 08", title: "리메이크 싱글 'Pretty Girl' 발매", timeIndex: 25 },
+            { date: "2026. 07. 08", title: "멜론 1위 소감 라이브", vid: "v6n4XQdX6_8", timeIndex: 26 }, 
+            { date: "2026. 07. 14", title: "저스트 메이크업 IN TOKYO 2027 홍보대사", timeIndex: 28 },
+            { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위 (더쇼)", vid: "dOllJ26kfIY", timeIndex: 29 }, 
+            { date: "2026. 07. 21", title: "전남광주통합특별시 섬의 날 홍보대사", timeIndex: 35 },
+            { date: "2026. 07. 23", title: "MBC 아시안게임 중계방송 홍보대사", timeIndex: 36 },
+            { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 1위 (음악중심)", timeIndex: 37 },
+            { date: "2026. 08", title: "하퍼스 바자 코리아 8월호 화보", timeIndex: 38 }
         ];
 
         let slotTimer;
         let seqTimeouts = [];
         let progressInterval;
-        const TOTAL_DURATION_MS = 38000; 
+        const TOTAL_DURATION_MS = 38000; // 총 가상 재생시간 38초
         let currentElapsedMs = 0;
 
         function clearHistorySequence() {
@@ -648,6 +649,7 @@
             }, dur));
         }
 
+        // ⭐️ 프로그레스 바 클릭/드래그 시 원하는 위치(시간)로 점프하는 Seek 기능
         function seekTimeline(event) {
             const container = document.getElementById('historyProgressContainer');
             const rect = container.getBoundingClientRect();
@@ -668,10 +670,11 @@
             const bg = document.getElementById('historyModalBg');
             const yt = document.getElementById('historyYoutubeBg');
             
+            // 시간에 따른 대략적 인덱스 분기 점프
             let targetIdx = 1;
-            if (ms > 22000) targetIdx = 21; 
-            else if (ms > 15000) targetIdx = 19; 
-            else if (ms > 5000) targetIdx = 2; 
+            if (ms > 22000) targetIdx = 21; // 더쇼 1위 구간
+            else if (ms > 15000) targetIdx = 19; // 멜론 1위 구간
+            else if (ms > 5000) targetIdx = 2; // 일반 가속 구간
             
             const item = historyData[targetIdx];
             if (item) {
@@ -684,6 +687,7 @@
                     bg.classList.add('show');
                 }
                 
+                // 남은 시간만큼 재생 후 다음으로 진행
                 seqTimeouts.push(setTimeout(() => {
                     playSequenceIdx(targetIdx + 1);
                 }, 4000));

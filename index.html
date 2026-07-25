@@ -68,7 +68,6 @@
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
-            <!-- 로고와 타이머가 1.5초 동안 서서히 나타남 -->
             <div class="hero-content">
                 <img src="images/logo.png" alt="RESCENE Logo" class="hero-logo" onerror="this.style.display='none'">
                 <div class="debut-timer">
@@ -153,7 +152,7 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
         
-        <!-- ⭐️ 추가된 감성 문구 버튼 -->
+        <!-- ⭐️ 맨 마지막에 나타날 문구 버튼 -->
         <button class="timeline-link-text" onclick="openDetailedTimeline()">
             걸어온 길을 다시 한 번 걸어 볼까요?
         </button>
@@ -223,10 +222,9 @@
         document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
 
-        // --- ⭐️ 시네마틱 발자취 스크립트 로직 ---
         const historyData = [
-            { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o" }, // 인덱스 0
-            { date: "2024. 03. 26", title: "싱글 1집 《Re:Scene》 발매 (데뷔)" }, // 인덱스 1
+            { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o" }, 
+            { date: "2024. 03. 26", title: "싱글 1집 《Re:Scene》 발매 (데뷔)" }, 
             { date: "2024. 05", title: "코스모폴리탄 코리아 5월호 화보" },
             { date: "2024. 08. 27", title: "미니 1집 《SCENEDROME》 발매" },
             { date: "2025. 01", title: "프리티스킨, 형지엘리트 광고 모델" },
@@ -244,10 +242,8 @@
             { date: "2026. 06. 29", title: "경상북도 경주시 홍보대사" },
             { date: "2026. 07. 02", title: "경기도 고양시 홍보대사" },
             { date: "2026. 07. 08", title: "리메이크 싱글 'Pretty Girl' 발매" },
-            // ⭐️ 인덱스 19
             { date: "2026. 07. 08", title: "멜론 1위 소감 라이브", vid: "v6n4XQdX6_8" }, 
             { date: "2026. 07. 14", title: "저스트 메이크업 IN TOKYO 2027 홍보대사" },
-            // ⭐️ 인덱스 21
             { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위<br><span style='font-size:16px; font-weight:300; opacity:0.8;'>(SBS M 《더쇼》)</span>", vid: "dOllJ26kfIY" }, 
             { date: "2026. 07. 21", title: "전남광주통합특별시 섬의 날 홍보대사" },
             { date: "2026. 07. 23", title: "MBC 아시안게임 중계방송 홍보대사" },
@@ -267,6 +263,7 @@
             const bg = document.getElementById('historyModalBg');
             const dateEl = document.getElementById('seqDate');
             const titleEl = document.getElementById('seqTitle');
+            const btnEl = document.querySelector('.timeline-link-text'); // 문구 버튼
 
             if(yt) yt.src = "";
             bg.style.transition = "none";
@@ -281,6 +278,9 @@
             titleEl.style.transform = "";
             titleEl.style.opacity = "";
             titleEl.classList.remove('show');
+            
+            // 모달을 끄거나 초기화 시 버튼도 다시 숨김
+            if (btnEl) btnEl.classList.remove('show');
         }
 
         function startHistorySequence() {
@@ -291,7 +291,6 @@
             const bg = document.getElementById('historyModalBg');
             const yt = document.getElementById('historyYoutubeBg');
             
-            // 카운팅 이펙트(옛날 필름 감성 노이즈) 추가
             dateEl.classList.add('counting');
             dateEl.style.transition = "none";
             dateEl.innerText = "0000. 01. 01";
@@ -325,7 +324,6 @@
                     if (elapsed === duration) {
                         clearInterval(slotTimer);
                         
-                        // 도착 시점에 노이즈를 끄고 선명해짐
                         dateEl.classList.remove('counting');
                         dateEl.style.transition = "opacity 0.3s ease";
                         dateEl.style.opacity = 1;
@@ -409,7 +407,6 @@
                 return;
             }
 
-            // 2. 멜론 1위 소감 (인덱스 19) 후 1초 암전 대기
             if (idx === 19) {
                 dateEl.innerText = item.date;
                 dateEl.style.transition = "none";
@@ -435,7 +432,6 @@
                             bg.classList.add('show');
                         }
                         
-                        // 10초 유지 후 사라지기
                         seqTimeouts.push(setTimeout(() => {
                             titleEl.style.transform = "translateY(0)";
                             titleEl.style.transition = "opacity 0.6s ease";
@@ -447,9 +443,9 @@
                                 titleEl.style.transform = "";
                                 titleEl.style.opacity = ""; 
                                 
-                                // 1초 암전 대기
+                                // ⭐️ 1초 암전 대기 후 바로 인덱스 21(더 쇼)로 스킵하여 빠른 텍스트 제거
                                 seqTimeouts.push(setTimeout(() => {
-                                    playSequenceIdx(20);
+                                    playSequenceIdx(21);
                                 }, 1000));
 
                             }, 600)); 
@@ -497,6 +493,9 @@
                                 titleEl.style.transform = "";
                                 titleEl.style.opacity = "";
                                 yt.src = "";
+                                
+                                // ⭐️ 더 쇼 1위 영상 종료 후 맨 마지막에 문구 천천히 등장
+                                document.querySelector('.timeline-link-text').classList.add('show');
                             }, 2000));
                         }, 10000));
                     }, 1500));
@@ -540,7 +539,6 @@
             }, dur));
         }
 
-        // 모달 제어
         function openHistoryModal() {
             document.getElementById('historyModal').classList.add('active');
             document.getElementById('historyBackdrop').classList.add('active');
@@ -555,10 +553,8 @@
             clearHistorySequence();
         }
         
-        // ⭐️ '걸어온 길을 다시 한 번 걸어 볼까요?' 텍스트 클릭 시 동작 함수
         function openDetailedTimeline() {
             alert('상세 연혁 타임라인 페이지 연결 준비 중입니다.');
-            // 나중에 window.location.href = 'timeline.html'; 등으로 연결하시면 됩니다.
         }
 
         const debutDate = new Date("2024-03-26T18:00:00+09:00"); 

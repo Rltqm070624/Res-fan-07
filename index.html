@@ -6,7 +6,8 @@
     <title>RESCENE ARCHIVE | 메인</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- ⭐️ 구글 폰트 최적화: 가장 얇고 세련된 Montserrat & Noto Sans KR 만 사용 -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
@@ -68,6 +69,7 @@
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
+            <!-- 로고와 타이머가 1.5초 동안 서서히 나타남 -->
             <div class="hero-content">
                 <img src="images/logo.png" alt="RESCENE Logo" class="hero-logo" onerror="this.style.display='none'">
                 <div class="debut-timer">
@@ -152,7 +154,7 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
         
-        <!-- ⭐️ 맨 마지막에 나타날 문구 버튼 -->
+        <!-- ⭐️ 맨 마지막 정중앙에 나타날 텍스트 버튼 -->
         <button class="timeline-link-text" onclick="openDetailedTimeline()">
             걸어온 길을 다시 한 번 걸어 볼까요?
         </button>
@@ -263,7 +265,7 @@
             const bg = document.getElementById('historyModalBg');
             const dateEl = document.getElementById('seqDate');
             const titleEl = document.getElementById('seqTitle');
-            const btnEl = document.querySelector('.timeline-link-text'); // 문구 버튼
+            const btnEl = document.querySelector('.timeline-link-text');
 
             if(yt) yt.src = "";
             bg.style.transition = "none";
@@ -279,8 +281,10 @@
             titleEl.style.opacity = "";
             titleEl.classList.remove('show');
             
-            // 모달을 끄거나 초기화 시 버튼도 다시 숨김
-            if (btnEl) btnEl.classList.remove('show');
+            // 모달을 닫거나 초기화 시 중앙 버튼도 함께 숨김
+            if (btnEl) {
+                btnEl.classList.remove('show');
+            }
         }
 
         function startHistorySequence() {
@@ -407,6 +411,7 @@
                 return;
             }
 
+            // 2. 멜론 1위 소감 (인덱스 19)
             if (idx === 19) {
                 dateEl.innerText = item.date;
                 dateEl.style.transition = "none";
@@ -443,7 +448,7 @@
                                 titleEl.style.transform = "";
                                 titleEl.style.opacity = ""; 
                                 
-                                // ⭐️ 1초 암전 대기 후 바로 인덱스 21(더 쇼)로 스킵하여 빠른 텍스트 제거
+                                // ⭐️ 1초 암전 대기 후 더 쇼(인덱스 21)로 바로 연결
                                 seqTimeouts.push(setTimeout(() => {
                                     playSequenceIdx(21);
                                 }, 1000));
@@ -455,54 +460,72 @@
                 return;
             }
 
+            // 3. 더쇼 1위 (인덱스 21) - 튀어나옴 방지 (투명한 상태로 세팅 후 천천히 등장)
             if (idx === 21) {
-                dateEl.innerText = item.date;
+                dateEl.innerText = "";
                 dateEl.style.transition = "none";
-                dateEl.style.opacity = 1;
+                dateEl.style.opacity = 0;
                 titleEl.classList.remove('show');
                 bg.classList.remove('show');
                 yt.src = "";
                 
+                // DOM이 빈 화면을 인식할 수 있도록 아주 짧은 딜레이 부여 후 텍스트 삽입
                 seqTimeouts.push(setTimeout(() => {
-                    dateEl.style.transition = "opacity 1.5s ease";
-                    dateEl.style.opacity = 0;
+                    dateEl.innerText = item.date;
+                    void dateEl.offsetWidth; // 렌더링 강제 업데이트
+                    
+                    // ⭐️ 여기서부터 날짜가 천천히 스르륵 나타납니다
+                    dateEl.style.transition = "opacity 2.5s ease";
+                    dateEl.style.opacity = 1;
                     
                     seqTimeouts.push(setTimeout(() => {
-                        dateEl.innerText = "";
-                        titleEl.innerHTML = item.title;
-                        titleEl.style.transition = "opacity 2s ease, transform 2s ease";
-                        titleEl.style.opacity = 1;
-                        titleEl.classList.add('show');
-                        
-                        if (item.vid) {
-                            yt.src = `https://www.youtube.com/embed/${item.vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${item.vid}&playsinline=1&modestbranding=1`;
-                            bg.style.transition = "opacity 2s ease";
-                            bg.classList.add('show');
-                        }
+                        dateEl.style.transition = "opacity 1.5s ease";
+                        dateEl.style.opacity = 0;
                         
                         seqTimeouts.push(setTimeout(() => {
-                            titleEl.style.transform = "translateY(0)";
-                            titleEl.style.transition = "opacity 2s ease";
-                            titleEl.style.opacity = 0;
+                            dateEl.innerText = "";
+                            titleEl.innerHTML = item.title;
+                            titleEl.style.transition = "opacity 2s ease, transform 2s ease";
+                            titleEl.style.opacity = 1;
+                            titleEl.classList.add('show');
                             
-                            bg.style.transition = "opacity 2s ease";
-                            bg.classList.remove('show');
+                            if (item.vid) {
+                                yt.src = `https://www.youtube.com/embed/${item.vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${item.vid}&playsinline=1&modestbranding=1`;
+                                bg.style.transition = "opacity 2s ease";
+                                bg.classList.add('show');
+                            }
                             
                             seqTimeouts.push(setTimeout(() => {
-                                titleEl.classList.remove('show');
-                                titleEl.style.transform = "";
-                                titleEl.style.opacity = "";
-                                yt.src = "";
+                                titleEl.style.transform = "translateY(0)";
+                                titleEl.style.transition = "opacity 2.5s ease";
+                                titleEl.style.opacity = 0;
                                 
-                                // ⭐️ 더 쇼 1위 영상 종료 후 맨 마지막에 문구 천천히 등장
-                                document.querySelector('.timeline-link-text').classList.add('show');
-                            }, 2000));
-                        }, 10000));
-                    }, 1500));
-                }, 2000));
+                                bg.style.transition = "opacity 2.5s ease";
+                                bg.classList.remove('show');
+                                
+                                seqTimeouts.push(setTimeout(() => {
+                                    titleEl.classList.remove('show');
+                                    titleEl.style.transform = "";
+                                    titleEl.style.opacity = "";
+                                    yt.src = "";
+                                    
+                                    // ⭐️ 영상이 끝나고 1.5초간 완벽한 암전 유지 후 화면 정중앙에 최종 문구 등장
+                                    seqTimeouts.push(setTimeout(() => {
+                                        const endBtn = document.querySelector('.timeline-link-text');
+                                        if (endBtn) {
+                                            endBtn.classList.add('show');
+                                        }
+                                    }, 1500));
+                                    
+                                }, 2500));
+                            }, 10000));
+                        }, 1500));
+                    }, 3000));
+                }, 100)); // 100ms 번쩍임 방지 버퍼
                 return;
             }
 
+            // 가속 구간
             dateEl.style.transition = "none";
             dateEl.style.opacity = 1;
             titleEl.style.transition = "none";
@@ -525,7 +548,6 @@
             else if (idx >= 4 && idx <= 7) dur = 500;
             else if (idx >= 8 && idx <= 12) dur = 200;
             else if (idx >= 13 && idx <= 18) dur = 100;
-            else if (idx === 20) dur = 100; 
             else dur = 70;
             
             seqTimeouts.push(setTimeout(() => {

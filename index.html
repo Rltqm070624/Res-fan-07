@@ -6,17 +6,27 @@
     <title>RESCENE ARCHIVE | 메인</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- ⭐️ Yomogi 추가 (일본어 손글씨체) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Yomogi&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
+    <!-- ⭐️ 언어 스위처 / 일본어 폰트 -->
+    <link rel="stylesheet" href="css/i18n.css">
 
     <script>
         (function() {
-            const saved = localStorage.getItem('rescene-theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', saved);
+            const savedTheme = localStorage.getItem('rescene-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // ⭐️ 언어도 미리 적용해서 첫 렌더링 시 폰트가 깜빡이지 않게 함
+            const savedLang = localStorage.getItem('rescene-lang') || 'ko';
+            document.documentElement.setAttribute('lang', savedLang);
         })();
     </script>
+
+    <!-- ⭐️ i18n 로직 (window.t / window.setLang 을 미리 정의해 둠) -->
+    <script src="js/i18n.js"></script>
 </head>
 <body id="homeSection">
 
@@ -295,6 +305,9 @@
             { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 1위 (음악중심)", timeIndex: 37 },
             { date: "2026. 08", title: "하퍼스 바자 코리아 8월호 화보", timeIndex: 38 }
         ];
+        // ⭐️ i18n.js 가 위 historyData 의 title 을 현재 언어로 덮어씁니다.
+        //    항목을 추가할 땐 i18n.js 의 HISTORY(ko/en/ja) 세 배열에도 같은 순서로 추가해 주세요.
+        window.historyData = historyData;
 
         let slotTimer;
         let seqTimeouts = [];
@@ -631,12 +644,17 @@
                 yt.src = "";
             }
 
+            // ⭐️ 언어별 가독 시간 보정 (영문/일본어는 문장이 길어 조금 더 오래 노출)
+            const langFactor = (typeof getLang === 'function' && getLang() !== 'ko') ? 1.35 : 1;
+
             let dur = 2000;
             if (idx >= 2 && idx <= 3) dur = 1000;
             else if (idx >= 4 && idx <= 7) dur = 500;
             else if (idx >= 8 && idx <= 12) dur = 200;
             else if (idx >= 13 && idx <= 18) dur = 100;
             else dur = 70;
+
+            dur = Math.round(dur * langFactor);
             
             seqTimeouts.push(setTimeout(() => {
                 titleEl.classList.remove('show');
@@ -724,7 +742,7 @@
         }
         
         function openDetailedTimeline() {
-            alert('상세 연혁 타임라인 페이지 연결 준비 중입니다.');
+            alert(typeof t === 'function' ? t('timelineSoon') : '상세 연혁 타임라인 페이지 연결 준비 중입니다.');
         }
 
         const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
@@ -765,8 +783,9 @@
                         tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${logoHtml}</div><div class="ticker-songs">${songsHtml}</div></div>`;
                     }
                 });
+                const waitingMsg = (typeof t === 'function') ? t('chartWaiting') : '데이터 수집 중입니다.';
                 const wrapper = document.getElementById('tickerWrapper');
-                wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">데이터 수집 중입니다.</div></div>`;
+                wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">${waitingMsg}</div></div>`;
                 clearInterval(tickerInterval);
                 if (validCount > 1) {
                     let cIdx = 0;
@@ -782,7 +801,23 @@
         function renderCalendar() { const calendarDays = document.getElementById('calendarDays'); document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); let html = ''; for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; } for (let i = 1; i <= lastDate; i++) { const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; const data = scheduleDB[dateKey]; const hasEvent = data ? 'has-event' : ''; let eventsHtml = ''; if (data && data.items) { data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div><div class="cal-event-title">${item.title}</div></div>`; }); } html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`; } calendarDays.innerHTML = html; }
         function openCalendarPopup() { document.getElementById('calendarPopupModal').classList.add('active'); document.getElementById('calPopupBackdrop').classList.add('active'); document.body.style.overflow = 'hidden'; }
         function closeCalendarPopup() { document.getElementById('calendarPopupModal').classList.remove('active'); document.getElementById('calPopupBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
-        function openModal(year, month, day, dateKey) { document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`; const data = scheduleDB[dateKey]; let scheduleHtml = ''; if (data && data.items) { scheduleHtml += `<div class="schedule-detail-card"><div class="sd-body">`; data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; scheduleHtml += `<div class="sd-row"><div class="sd-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor}60;"></div><div class="sd-time" style="color: ${dotColor};">${item.time}</div><div class="sd-title">${item.title}</div></div>`; if (item.image) { scheduleHtml += `<div class="sd-img-wrapper"><img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`; } }); scheduleHtml += `</div></div>`; } else { scheduleHtml = `<div class="schedule-detail-empty">등록된 일정이 없습니다.</div>`; } document.getElementById('modalScheduleText').innerHTML = scheduleHtml; document.getElementById('scheduleModal').classList.add('active'); document.getElementById('modalBackdrop').classList.add('active'); }
+        function openModal(year, month, day, dateKey) {
+            // ⭐️ 날짜 표기를 언어에 맞게 변환
+            const dateTitle = (typeof tDate === 'function') ? tDate(year, month, day) : `${year}년 ${month}월 ${day}일`;
+            document.getElementById('modalDateTitle').innerText = dateTitle;
+            const data = scheduleDB[dateKey]; let scheduleHtml = '';
+            if (data && data.items) {
+                scheduleHtml += `<div class="schedule-detail-card"><div class="sd-body">`;
+                data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; scheduleHtml += `<div class="sd-row"><div class="sd-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor}60;"></div><div class="sd-time" style="color: ${dotColor};">${item.time}</div><div class="sd-title">${item.title}</div></div>`; if (item.image) { scheduleHtml += `<div class="sd-img-wrapper"><img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`; } });
+                scheduleHtml += `</div></div>`;
+            } else {
+                const emptyMsg = (typeof t === 'function') ? t('noSchedule') : '등록된 일정이 없습니다.';
+                scheduleHtml = `<div class="schedule-detail-empty">${emptyMsg}</div>`;
+            }
+            document.getElementById('modalScheduleText').innerHTML = scheduleHtml;
+            document.getElementById('scheduleModal').classList.add('active');
+            document.getElementById('modalBackdrop').classList.add('active');
+        }
         function closeModal() { document.getElementById('scheduleModal').classList.remove('active'); document.getElementById('modalBackdrop').classList.remove('active'); if(!document.getElementById('calendarPopupModal').classList.contains('active')){ document.body.style.overflow = 'auto'; } }
         window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
     </script>

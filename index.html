@@ -66,6 +66,7 @@
     </div>
 
     <div id="mainWrapper">
+        <!-- 1. 배경 영상 영역 (100vh) -->
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
@@ -78,7 +79,7 @@
             </div>
         </div>
 
-        <!-- 아예 배경 영상처럼 화면을 통째로 쓰는 풀스크린 독립 영역 -->
+        <!-- 2. 배경 영상과 똑같은 크기(100vh)를 가지는 독립된 발자취 진입 섹션 -->
         <div id="historySection" class="slow-reveal">
             <div class="section-title">WITH <span>RESCENE</span></div>
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
@@ -145,12 +146,12 @@
 
     </div> 
 
-    <!-- 발자취(History) 모달 컨테이너 -->
+    <!-- 발자취(History) 모달 컨테이너 (시네마틱 연출 적용) -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
         
-        <!-- 유튜브 백그라운드 영상 및 오버레이 -->
-        <div class="history-modal-bg">
+        <!-- 유튜브 백그라운드 영상 및 오버레이 (자바스크립트로 opacity 제어) -->
+        <div class="history-modal-bg" id="historyModalBg">
             <iframe id="historyYoutubeBg" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             <div class="history-modal-overlay"></div>
         </div>
@@ -159,11 +160,6 @@
             <button class="close-btn" onclick="closeHistoryModal()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
-            
-            <div class="history-modal-header">
-                <div class="section-title" style="color:#fff;">RESCENE <span>HISTORY</span></div>
-                <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:8px;">마우스 휠을 아래로 내려보세요 ↓</div>
-            </div>
             
             <!-- 한 페이지당 1개씩 스크롤(Snap)되는 구역 -->
             <div class="history-scroll-container" id="historyScrollContainer">
@@ -271,7 +267,7 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
-        // [중요] 발자취 페이지 스크롤마다 숫자 촤라락 돌아가는 옵저버 로직
+        // [핵심] 스크롤 시 검은 화면 + 3초 촤라락 + 영상 페이드인 연출
         let historyObserver;
         function initHistoryObserver() {
             const historyPages = document.querySelectorAll('.history-page');
@@ -280,24 +276,31 @@
                     if(entry.isIntersecting) {
                         const dateEl = entry.target.querySelector('.h-date');
                         const targetDate = dateEl.getAttribute('data-date');
+                        const bg = document.getElementById('historyModalBg');
                         
-                        // 슬롯 애니메이션 설정 (각 페이지 보일때마다 실행)
+                        // 요소가 화면에 나타나면 먼저 배경을 까맣게 만듦 (영상 숨김)
+                        bg.classList.remove('show');
+                        
+                        // 3초(약 75프레임) 동안 숫자 슬롯 애니메이션 실행
                         let frame = 0;
-                        const maxFrames = 15; // 빠르게 돌아감
+                        const maxFrames = 75; 
                         clearInterval(dateEl.interval);
                         
                         dateEl.interval = setInterval(() => {
                             frame++;
                             if(frame < maxFrames) {
-                                // 무작위 년/월/일 생성
+                                // 무작위 날짜 생성
                                 const rY = Math.floor(Math.random() * (2026 - 2024 + 1) + 2024);
                                 const rM = String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0');
                                 const rD = String(Math.floor(Math.random() * 31 + 1)).padStart(2, '0');
                                 dateEl.innerText = `${rY}. ${rM}. ${rD}`;
                             } else {
-                                // 목표 날짜에 딱 멈춤
+                                // 3초 뒤 목표 날짜에 멈춤
                                 dateEl.innerText = targetDate;
                                 clearInterval(dateEl.interval);
+                                
+                                // 숫자가 멈추면 비로소 배경 유튜브 영상 서서히 등장
+                                bg.classList.add('show');
                             }
                         }, 40);
                     }
@@ -313,13 +316,16 @@
             document.getElementById('historyBackdrop').classList.add('active');
             document.body.style.overflow = 'hidden';
             
-            // 1. 유튜브 백그라운드 영상 재생
+            // 모달 열릴 때 무조건 배경 암전 상태로 시작
+            document.getElementById('historyModalBg').classList.remove('show');
+            
+            // 유튜브 영상 셋팅
             const ytIframe = document.getElementById('historyYoutubeBg');
             if(!ytIframe.src.includes('jgaWSOXyH_o')) {
                 ytIframe.src = "https://www.youtube.com/embed/jgaWSOXyH_o?autoplay=1&mute=1&controls=0&loop=1&playlist=jgaWSOXyH_o&playsinline=1&modestbranding=1";
             }
 
-            // 2. 모달 열릴때 스크롤 맨 위로 올리고 애니메이션 옵저버 실행
+            // 모달 열릴때 스크롤 맨 위로 올리고 애니메이션 옵저버 실행
             const container = document.getElementById('historyScrollContainer');
             container.scrollTop = 0;
             if(!historyObserver) {

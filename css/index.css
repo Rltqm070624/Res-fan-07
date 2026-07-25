@@ -31,11 +31,9 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
     transform: translate(-50%, -50%) scale(0.25);
     transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
     pointer-events: none;
-    mix-blend-mode: normal;
 }
-html[data-theme="dark"] .foliage-gif { mix-blend-mode: screen; } /* 흰 배경 gif를 어두운 배경 위에서 자연스럽게 */
 
-.history-intro-stage.burst .foliage-gif { opacity: 0.85; }
+.history-intro-stage.burst .foliage-gif { opacity: 0.9; }
 .history-intro-stage.burst .foliage-gif.spread-1 { transform: translate(-135%, -110%) scale(1); }
 .history-intro-stage.burst .foliage-gif.spread-2 { transform: translate(35%, -110%) scale(1); }
 .history-intro-stage.burst .foliage-gif.spread-3 { transform: translate(-135%, 10%) scale(1); }
@@ -77,6 +75,7 @@ html[data-theme="dark"] .foliage-gif { mix-blend-mode: screen; } /* 흰 배경 g
 
 .journey-content {
     position: relative;
+    width: 100%;
     max-width: 640px;
     margin: 0 auto;
     height: 280px;

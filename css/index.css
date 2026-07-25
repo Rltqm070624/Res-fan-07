@@ -133,7 +133,7 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     padding: 20px; box-sizing: border-box;
 }
 
-/* ⭐️ 날짜 스타일 (흐릿함 제거, 트랜지션은 JS에서 동적 제어) */
+/* ⭐️ 날짜 스타일 */
 .h-date {
     font-family: var(--font-num); font-size: 64px; font-weight: 800;
     color: #ffffff;

@@ -84,12 +84,10 @@
         </div>
 
         <div class="section-container reveal" id="chartSection">
-            <!-- 가운데 정렬 -->
             <div class="section-header center-header" style="margin-bottom: 30px;">
                 <div class="section-title">MUSIC <span>CHARTS</span></div>
             </div>
             <div style="position: relative; width: 100%;">
-                <!-- 순위 박스 우측 상단으로 이동 -->
                 <div class="update-time" id="currentTime" style="position: absolute; right: 10px; top: -25px;">데이터 로딩중...</div>
                 <div class="ticker-container">
                     <div class="ticker-wrapper" id="tickerWrapper">
@@ -100,7 +98,6 @@
         </div>
 
         <div class="section-container reveal" id="todayScheduleSection">
-            <!-- 가운데 정렬 -->
             <div class="section-header center-header" style="margin-bottom: 30px;">
                 <div class="section-title">TODAY'S <span>BROADCAST</span></div>
             </div>
@@ -149,14 +146,13 @@
 
     </div> 
 
-    <!-- ⭐️ 완전 새로 짜인 시네마틱 모달 (TV 꺼짐 효과 적용) -->
+    <!-- ⭐️ 시네마틱 모달 -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
-        <button class="close-btn" onclick="closeHistoryModal()" style="position: absolute; right: 25px; top: 25px; z-index: 99999;">
+        <button class="close-btn" onclick="closeHistoryModal()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
         
-        <!-- TV 꺼짐 효과가 적용될 전체 컨테이너 -->
         <div id="tvContainer" style="width: 100%; height: 100%; position: relative; overflow: hidden; background: #000;">
             <div class="history-modal-bg" id="historyModalBg">
                 <iframe id="historyYoutubeBg" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -224,7 +220,7 @@
 
         // --- ⭐️ 시네마틱 발자취 스크립트 로직 ---
         const historyData = [
-            { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o" }, // 인덱스 0: 개별 연출
+            { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o" }, // 인덱스 0
             { date: "2024. 03. 26", title: "싱글 1집 《Re:Scene》 발매 (데뷔)" },
             { date: "2024. 05", title: "코스모폴리탄 코리아 5월호 화보" },
             { date: "2024. 08. 27", title: "미니 1집 《SCENEDROME》 발매" },
@@ -262,18 +258,19 @@
             
             const yt = document.getElementById('historyYoutubeBg');
             const bg = document.getElementById('historyModalBg');
-            const tv = document.getElementById('tvContainer');
             const dateEl = document.getElementById('seqDate');
             const titleEl = document.getElementById('seqTitle');
 
             if(yt) yt.src = "";
             bg.classList.remove('show');
-            tv.classList.remove('tv-off-effect');
             
             dateEl.style.transition = "none";
             dateEl.style.opacity = 1;
             dateEl.classList.remove('dash-blur');
             dateEl.innerText = "";
+            
+            // 타이틀 트랜지션 초기화
+            titleEl.style.transition = ""; 
             titleEl.classList.remove('show');
         }
 
@@ -284,7 +281,6 @@
             const dateEl = document.getElementById('seqDate');
             const titleEl = document.getElementById('seqTitle');
             const bg = document.getElementById('historyModalBg');
-            const tv = document.getElementById('tvContainer');
             const yt = document.getElementById('historyYoutubeBg');
             
             // 1. 흐린 상태로 숫자가 빠르게 올라감
@@ -321,24 +317,20 @@
                             yt.src = `https://www.youtube.com/embed/${historyData[0].vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${historyData[0].vid}&playsinline=1&modestbranding=1`;
                             bg.classList.add('show');
                             
-                            // 6. 영상 5초 정도 보여주고 TV 꺼짐 효과 파직!
+                            // 6. 영상 5초 정도 보여주고 자연스럽게 까매지며 사라짐
                             seqTimeouts.push(setTimeout(() => {
-                                tv.classList.add('tv-off-effect');
+                                bg.classList.remove('show');
+                                titleEl.classList.remove('show');
                                 
-                                // 7. TV 꺼진 후 초기화 및 나머지 연대기 가속 재생
+                                // 7. 완전히 까매진(1.5초 페이드아웃) 후 다음 연대기 가속 재생
                                 seqTimeouts.push(setTimeout(() => {
-                                    tv.classList.remove('tv-off-effect');
-                                    bg.classList.remove('show');
-                                    titleEl.classList.remove('show');
+                                    // 빠른 재생을 위해 겹치는 텍스트 잔상(트랜지션) 제거
+                                    titleEl.style.transition = "none";
                                     dateEl.style.transition = "none";
                                     dateEl.style.opacity = 1;
                                     
-                                    // 약간의 암전 후 2번째 항목부터 재생 시작
-                                    seqTimeouts.push(setTimeout(() => {
-                                        playSequenceIdx(1);
-                                    }, 800));
-                                    
-                                }, 600)); // tv 꺼지는 애니메이션 지속시간
+                                    playSequenceIdx(1);
+                                }, 1500)); 
                             }, 5000));
                         }, 600)); 
                     }, 2000));
@@ -346,7 +338,7 @@
             }, 40);
         }
 
-        // 점점 가속하며 수수수수숙 지나가는 효과
+        // 텍스트 잔상없이 깔끔하게 가속하며 지나가는 효과
         function playSequenceIdx(idx) {
             if(idx >= historyData.length) return; 
 
@@ -365,7 +357,10 @@
                 yt.src = "";
 
                 seqTimeouts.push(setTimeout(() => {
-                    // 더 쇼 1위 정보 및 유튜브 영상 출력
+                    // 더 쇼 1위 정보 출력 시 다시 원래의 부드러운 페이드 효과 복구
+                    titleEl.style.transition = ""; 
+                    dateEl.style.transition = "opacity 0.6s ease";
+                    
                     dateEl.style.opacity = 1;
                     dateEl.innerText = item.date;
                     titleEl.innerHTML = item.title;
@@ -392,7 +387,7 @@
                     }, 4000));
 
                 }, 1500)); 
-                return; // 함수 종료 (자동 진행 스탑)
+                return; // 가속 루프 스탑
             }
 
             // 일반 항목 출력 
@@ -409,7 +404,7 @@
                 yt.src = "";
             }
 
-            // ⭐️ 점진적 속도 가속화 로직
+            // 점진적 속도 가속화 로직
             let dur = 2000;
             if (idx >= 1 && idx <= 3) dur = 2000;
             else if (idx >= 4 && idx <= 7) dur = 1000;
@@ -420,8 +415,9 @@
             seqTimeouts.push(setTimeout(() => {
                 titleEl.classList.remove('show');
                 dateEl.innerText = "";
-                // 항목 사이 잠깐의 깜빡임 여백
-                let gap = (dur < 200) ? 30 : 200;
+                
+                // 트랜지션(transition: none)이 제거된 상태이므로, 항목 사이 약간의 여백만 주고 곧바로 다음 인덱스 출력
+                let gap = (dur < 200) ? 30 : 100;
                 seqTimeouts.push(setTimeout(() => {
                     playSequenceIdx(idx + 1);
                 }, gap));

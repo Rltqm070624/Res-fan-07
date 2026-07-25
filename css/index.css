@@ -33,23 +33,6 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
     overflow: hidden;
 }
 
-/* WITH RESCENE 배경 영상 & 흩날리는 벚꽃 3초 서서히 등장 */
-#historySection .history-bg-video {
-    position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1;
-    opacity: 0; transition: opacity 3s ease-in-out;
-}
-#historySection.active .history-bg-video { opacity: 0.6; }
-
-.blossom-layer {
-    position: absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events: none;
-    opacity: 0; transition: opacity 3s ease-in-out;
-}
-#historySection.active .blossom-layer { opacity: 0.3; } /* 엄청 연하게 */
-
-.blossom { position: absolute; width: 500px; max-width: 45vw; top: 50%; transform: translateY(-50%); }
-.blossom.left { left: 5%; }
-.blossom.right { right: 5%; }
-
 #historySection .section-title { 
     position: relative; z-index: 5;
     margin-bottom: 15px; font-size: 54px; letter-spacing: 2px; 

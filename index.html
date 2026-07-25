@@ -66,7 +66,6 @@
     </div>
 
     <div id="mainWrapper">
-        <!-- 1. 배경 영상 영역 (100vh) -->
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
@@ -79,7 +78,6 @@
             </div>
         </div>
 
-        <!-- 2. 배경 영상과 똑같은 크기(100vh)를 가지는 독립된 발자취 진입 섹션 -->
         <div id="historySection" class="slow-reveal">
             <div class="section-title">WITH <span>RESCENE</span></div>
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
@@ -146,11 +144,10 @@
 
     </div> 
 
-    <!-- 발자취(History) 모달 컨테이너 (시네마틱 연출 적용) -->
+    <!-- 발자취(History) 모달 컨테이너 -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
         
-        <!-- 유튜브 백그라운드 영상 및 오버레이 (자바스크립트로 opacity 제어) -->
         <div class="history-modal-bg" id="historyModalBg">
             <iframe id="historyYoutubeBg" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             <div class="history-modal-overlay"></div>
@@ -161,59 +158,47 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
             
-            <!-- 한 페이지당 1개씩 스크롤(Snap)되는 구역 -->
             <div class="history-scroll-container" id="historyScrollContainer">
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2024. 02. 29">0000. 00. 00</div>
                     <div class="h-title">선공개 곡 'YoYo' 발매</div>
                 </div>
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2024. 03. 26">0000. 00. 00</div>
                     <div class="h-title">싱글 1집 《Re:Scene》 발매 (데뷔)</div>
                 </div>
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2024. 08. 27">0000. 00. 00</div>
                     <div class="h-title">미니 1집 《SCENEDROME》 발매</div>
                 </div>
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2025. 02. 05">0000. 00. 00</div>
                     <div class="h-title">미니 2집 《Glow Up》 발매</div>
                 </div>
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2025. 07. 02">0000. 00. 00</div>
                     <div class="h-title">싱글 2집 《Dearest》 발매</div>
                 </div>
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2025. 11. 25">0000. 00. 00</div>
                     <div class="h-title">미니 3집 《Lip Bomb》 발매</div>
                 </div>
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2026. 07. 08">0000. 00. 00</div>
                     <div class="h-title">리메이크 싱글 'Pretty Girl' 발매</div>
                 </div>
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2026. 07. 08">0000. 00. 00</div>
                     <div class="h-title">'LOVE ATTACK' 멜론 첫 음원차트 1위</div>
                 </div>
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2026. 07. 14">0000. 00. 00</div>
                     <div class="h-title">'Pretty Girl' 첫 음악방송 1위<br><span style="font-size:16px; font-weight:400; opacity:0.8;">(SBS M 《더쇼》)</span></div>
                 </div>
-                
                 <div class="history-page">
                     <div class="h-date" data-date="2026. 07. 25">0000. 00. 00</div>
                     <div class="h-title">'Pretty Girl' 첫 지상파 음악방송 1위<br><span style="font-size:16px; font-weight:400; opacity:0.8;">(MBC 《쇼! 음악중심》)</span></div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -267,7 +252,7 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
-        // [핵심] 스크롤 시 검은 화면 + 3초 촤라락 + 영상 페이드인 연출
+        // [수정된 애니메이션] 1.5초(38프레임)동안 연한 상태로 촤라라락 올라가다 멈추면 선명해지고 영상 페이드인
         let historyObserver;
         function initHistoryObserver() {
             const historyPages = document.querySelectorAll('.history-page');
@@ -278,54 +263,46 @@
                         const targetDate = dateEl.getAttribute('data-date');
                         const bg = document.getElementById('historyModalBg');
                         
-                        // 요소가 화면에 나타나면 먼저 배경을 까맣게 만듦 (영상 숨김)
                         bg.classList.remove('show');
+                        dateEl.classList.add('spinning'); // 돌아갈 때 연한 상태 적용
                         
-                        // 3초(약 75프레임) 동안 숫자 슬롯 애니메이션 실행
                         let frame = 0;
-                        const maxFrames = 75; 
+                        const maxFrames = 38; // 약 1.5초 (38 * 40ms)
                         clearInterval(dateEl.interval);
                         
                         dateEl.interval = setInterval(() => {
                             frame++;
                             if(frame < maxFrames) {
-                                // 무작위 날짜 생성
                                 const rY = Math.floor(Math.random() * (2026 - 2024 + 1) + 2024);
                                 const rM = String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0');
                                 const rD = String(Math.floor(Math.random() * 31 + 1)).padStart(2, '0');
                                 dateEl.innerText = `${rY}. ${rM}. ${rD}`;
                             } else {
-                                // 3초 뒤 목표 날짜에 멈춤
                                 dateEl.innerText = targetDate;
+                                dateEl.classList.remove('spinning'); // 멈추면 선명하게 돌아옴
                                 clearInterval(dateEl.interval);
-                                
-                                // 숫자가 멈추면 비로소 배경 유튜브 영상 서서히 등장
                                 bg.classList.add('show');
                             }
                         }, 40);
                     }
                 });
-            }, { threshold: 0.5 }); // 화면에 50% 이상 보일 때 발동
+            }, { threshold: 0.5 });
 
             historyPages.forEach(p => historyObserver.observe(p));
         }
 
-        // 모달 열기/닫기 제어
         function openHistoryModal() {
             document.getElementById('historyModal').classList.add('active');
             document.getElementById('historyBackdrop').classList.add('active');
             document.body.style.overflow = 'hidden';
             
-            // 모달 열릴 때 무조건 배경 암전 상태로 시작
             document.getElementById('historyModalBg').classList.remove('show');
             
-            // 유튜브 영상 셋팅
             const ytIframe = document.getElementById('historyYoutubeBg');
             if(!ytIframe.src.includes('jgaWSOXyH_o')) {
                 ytIframe.src = "https://www.youtube.com/embed/jgaWSOXyH_o?autoplay=1&mute=1&controls=0&loop=1&playlist=jgaWSOXyH_o&playsinline=1&modestbranding=1";
             }
 
-            // 모달 열릴때 스크롤 맨 위로 올리고 애니메이션 옵저버 실행
             const container = document.getElementById('historyScrollContainer');
             container.scrollTop = 0;
             if(!historyObserver) {
@@ -337,8 +314,6 @@
             document.getElementById('historyModal').classList.remove('active');
             document.getElementById('historyBackdrop').classList.remove('active');
             document.body.style.overflow = 'auto';
-            
-            // 모달 닫을 때 백그라운드 소리/영상 꺼지도록 처리
             document.getElementById('historyYoutubeBg').src = "";
         }
 

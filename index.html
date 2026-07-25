@@ -6,7 +6,6 @@
     <title>RESCENE ARCHIVE | 메인</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- ⭐️ 구글 폰트 추가: 손글씨 폰트 Nanum Pen Script 적용 -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
@@ -147,7 +146,7 @@
 
     </div> 
 
-    <!-- ⭐️ 시네마틱 모달 -->
+    <!-- ⭐️ 시네마틱 모달 (overflow 해제 처리) -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
         
@@ -174,7 +173,8 @@
             걸어온 길을 다시 한 번 걸어 볼까요?
         </button>
         
-        <div id="tvContainer" style="width: 100%; height: 100%; position: relative; overflow: hidden; background: transparent;">
+        <!-- ⭐️ 영상이 나오는 구역에만 모달과 동일한 둥근 테두리 및 overflow:hidden 적용 -->
+        <div id="tvContainer" style="width: 100%; height: 100%; position: relative; overflow: hidden; background: #000; border-radius: inherit;">
             <div class="history-modal-bg" id="historyModalBg">
                 <iframe id="historyYoutubeBg" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 <div class="history-modal-overlay"></div>
@@ -258,7 +258,6 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
-        // ⭐️ 폰트에 맞춰 세부 글씨(span) 크기를 26px 수준으로 조정
         const historyData = [
             { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o" }, 
             { date: "2024. 03. 26", title: "싱글 1집 《Re:Scene》 발매 (데뷔)" }, 
@@ -316,7 +315,7 @@
             titleEl.style.opacity = "";
             titleEl.classList.remove('show');
             
-            // 모달 초기화 시 문구 숨김
+            // 모달 초기화 시 중앙 버튼도 함께 리셋
             if (btnEl) {
                 btnEl.classList.remove('show');
             }
@@ -486,7 +485,6 @@
                                 titleEl.style.transform = "";
                                 titleEl.style.opacity = ""; 
                                 
-                                // ⭐️ 1초 암전 대기 후 바로 더 쇼(21번)로 진입 (텍스트 날아가던 구간 생략)
                                 seqTimeouts.push(setTimeout(() => {
                                     playSequenceIdx(21);
                                 }, 1000));
@@ -498,7 +496,6 @@
                 return;
             }
 
-            // ⭐️ 2026. 07. 14 (더 쇼) 튀어나옴 방지 (투명한 상태로 세팅 후 천천히 스르륵 등장)
             if (idx === 21) {
                 dateEl.innerText = "";
                 dateEl.style.transition = "none";
@@ -507,7 +504,6 @@
                 bg.classList.remove('show');
                 yt.src = "";
                 
-                // 100ms의 짧은 안전 대기 후 텍스트 삽입 (번쩍임 현상 방지)
                 seqTimeouts.push(setTimeout(() => {
                     dateEl.innerText = item.date;
                     void dateEl.offsetWidth; 
@@ -546,7 +542,7 @@
                                     titleEl.style.opacity = "";
                                     yt.src = "";
                                     
-                                    // ⭐️ 영상이 완전히 끝난 후 정중앙에 최종 문구 스르륵 등장
+                                    // ⭐️ 완전히 영상이 끝난 후 정중앙에 최종 문구 등장
                                     seqTimeouts.push(setTimeout(() => {
                                         const endBtn = document.querySelector('.timeline-link-text');
                                         if (endBtn) {
@@ -600,6 +596,10 @@
         // ⭐️ Skip 버튼 클릭 시 즉시 마지막 문구로 스킵하는 기능
         function skipHistorySequence() {
             clearHistorySequence();
+            
+            // 햄버거 메뉴 닫아주기
+            document.getElementById('historyDropdown').classList.remove('active');
+            document.getElementById('historyMenuBtn').classList.remove('active');
             
             const endBtn = document.querySelector('.timeline-link-text');
             if (endBtn) {

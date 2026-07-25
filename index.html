@@ -153,29 +153,17 @@
     <div class="journey-modal" id="journeyModal">
         <button class="journey-close-btn" onclick="closeJourneyModal()">✕</button>
         
-        <!-- 연한 벚꽃 배경 (blossom.gif, 아주 연하게) -->
-        <div class="journey-bg"></div>
-
-        <!-- 데뷔 씬에 도달하면 서서히 재생되는 배경 영상 -->
+        <!-- 배경: 처음부터 debut.mp4가 재생됨 -->
         <video class="journey-bg-video" id="journeyBgVideo" src="video/history/debut.mp4" muted loop playsinline></video>
+        <div class="journey-video-overlay"></div>
         
         <div class="journey-track-container" id="journeyTrack">
-            <!-- 하얀색 연결 곡선 (스크롤에 맞춰 서서히 그려짐) -->
-            <svg class="journey-curve" viewBox="0 0 1000 200" preserveAspectRatio="none">
-                <path id="journeyCurvePath" d="M 0,100 C 300,100 400,180 600,180 C 800,180 900,80 1500,80" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"></path>
-            </svg>
-            
             <!-- 씬 1: 2024년 텍스트 -->
             <div class="journey-item">
-                <div class="year-box" id="yearBoxAnim">2024년</div>
+                <div class="year-box" id="yearBoxAnim">2024<span class="yb-suffix">년</span></div>
             </div>
             
-            <!-- 여백과 발자국 -->
-            <div class="journey-item scene-gap">
-                <div class="footprint" id="footprintAnim">👣</div>
-            </div>
-            
-            <!-- 씬 2: 데뷔 쇼케이스 (곡선이 도달하면 이미지 등장) -->
+            <!-- 씬 2: 데뷔 쇼케이스 (휠을 내리면 한 번에 이동하며 등장) -->
             <div class="journey-item">
                 <div class="event-card" id="debutEventCard">
                     <div class="ec-header">
@@ -258,6 +246,11 @@
             document.getElementById('journeyModalBackdrop').classList.add('active');
             document.getElementById('journeyModal').classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // 배경 영상은 모달이 열리자마자 바로 재생
+            const bgVideo = document.getElementById('journeyBgVideo');
+            bgVideo.currentTime = 0;
+            bgVideo.play().catch(() => {});
             
             // 모달이 열리고 0.4초 뒤에 2024년 텍스트가 천천히 떠오름
             setTimeout(() => {
@@ -270,68 +263,55 @@
             document.getElementById('journeyModal').classList.remove('active');
             document.getElementById('yearBoxAnim').classList.remove('active');
 
-            // 데뷔 씬 상태 초기화
-            const bgVideo = document.getElementById('journeyBgVideo');
+            // 씬 상태 초기화
             document.getElementById('debutEventCard').classList.remove('show');
             document.getElementById('debutImageWrapper').classList.remove('show');
-            bgVideo.classList.remove('show');
-            bgVideo.pause();
-            bgVideo.currentTime = 0;
+            document.getElementById('journeyBgVideo').pause();
+            journeyScene = 0;
+            isJourneyAnimating = false;
             if (jTrack) jTrack.scrollLeft = 0;
-            if (journeyCurvePath && curvePathLength) journeyCurvePath.style.strokeDashoffset = curvePathLength;
 
             document.body.style.overflow = 'auto';
         }
 
-        // ⭐️ 3. 모달 안에서 휠 가로 스크롤 + 곡선 드로잉 + 발자국 + 데뷔 씬 등장
+        // ⭐️ 3. 휠을 내리면 한 번에 오른쪽으로 이동(스냅 스크롤)하며 데뷔 씬 등장
         const jTrack = document.getElementById('journeyTrack');
-        const footprint = document.getElementById('footprintAnim');
-        const journeyCurvePath = document.getElementById('journeyCurvePath');
         const debutEventCard = document.getElementById('debutEventCard');
         const debutImageWrapper = document.getElementById('debutImageWrapper');
-        const journeyBgVideo = document.getElementById('journeyBgVideo');
-        let curvePathLength = 0;
+        let journeyScene = 0; // 0 = 2024년, 1 = 데뷔 쇼케이스
+        let isJourneyAnimating = false;
 
-        if (journeyCurvePath) {
-            curvePathLength = journeyCurvePath.getTotalLength();
-            journeyCurvePath.style.strokeDasharray = curvePathLength;
-            journeyCurvePath.style.strokeDashoffset = curvePathLength; // 처음엔 곡선이 안 보이는 상태
+        function goToJourneyScene(index) {
+            if (isJourneyAnimating || !jTrack) return;
+            isJourneyAnimating = true;
+            journeyScene = index;
+
+            const maxScroll = jTrack.scrollWidth - jTrack.clientWidth;
+            const target = index === 0 ? 0 : maxScroll;
+
+            jTrack.scrollTo({ left: target, behavior: 'smooth' });
+
+            if (index === 1) {
+                // 이동하는 도중에 카드 + 이미지가 함께 나타남
+                debutEventCard.classList.add('show');
+                debutImageWrapper.classList.add('show');
+            } else {
+                debutEventCard.classList.remove('show');
+                debutImageWrapper.classList.remove('show');
+            }
+
+            // 스무스 스크롤이 끝날 때쯤 다음 입력을 받을 수 있도록 잠금 해제
+            setTimeout(() => { isJourneyAnimating = false; }, 900);
         }
 
         if (jTrack) {
             jTrack.addEventListener('wheel', (e) => {
-                e.preventDefault(); // 기본 세로 스크롤 방지
-                jTrack.scrollLeft += e.deltaY * 1.2; // 휠 내리면 오른쪽으로 이동
-                
-                // 가로 스크롤 진행률 (0 ~ 1)
-                const scrollRatio = jTrack.scrollLeft / (jTrack.scrollWidth - jTrack.clientWidth);
-                
-                // 곡선이 스크롤에 맞춰 서서히 그려짐
-                if (journeyCurvePath && curvePathLength) {
-                    const drawRatio = Math.min(scrollRatio * 1.4, 1);
-                    journeyCurvePath.style.strokeDashoffset = curvePathLength * (1 - drawRatio);
-                }
-
-                // 스크롤 중간 지점을 지날 때 발자국 스멀스멀 나타났다 사라짐
-                if (scrollRatio > 0.15 && scrollRatio < 0.7) {
-                    footprint.classList.add('active');
-                } else {
-                    footprint.classList.remove('active');
-                }
-
-                // 곡선이 03월 26일 카드에 도달하면: 카드 + 이미지 페이드인, 배경 영상 재생
-                if (scrollRatio > 0.5) {
-                    debutEventCard.classList.add('show');
-                    debutImageWrapper.classList.add('show');
-                    if (journeyBgVideo.classList.contains('show') === false) {
-                        journeyBgVideo.classList.add('show');
-                        journeyBgVideo.play().catch(() => {});
-                    }
-                } else {
-                    debutEventCard.classList.remove('show');
-                    debutImageWrapper.classList.remove('show');
-                    journeyBgVideo.classList.remove('show');
-                    journeyBgVideo.pause();
+                e.preventDefault();
+                if (isJourneyAnimating) return;
+                if (e.deltaY > 0 && journeyScene === 0) {
+                    goToJourneyScene(1);
+                } else if (e.deltaY < 0 && journeyScene === 1) {
+                    goToJourneyScene(0);
                 }
             });
         }

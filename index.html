@@ -69,7 +69,7 @@
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
-            <!-- 애니메이션 클래스가 적용된 히어로 콘텐츠 -->
+            <!-- 로고와 타이머가 1.5초 동안 서서히 나타남 -->
             <div class="hero-content">
                 <img src="images/logo.png" alt="RESCENE Logo" class="hero-logo" onerror="this.style.display='none'">
                 <div class="debut-timer">
@@ -79,28 +79,37 @@
             </div>
         </div>
 
-        <!-- 아예 배경 영상처럼 화면을 통째로 쓰는 풀스크린 독립 영역 -->
+        <!-- 배경 영상과 흩날리는 벚꽃이 포함된 풀스크린 독립 영역 -->
         <div id="historySection" class="slow-reveal">
+            <video src="video/logo.mp4" autoplay loop muted playsinline class="history-bg-video"></video>
+            <div class="blossom-layer">
+                <img src="images/blossom.gif" alt="blossom" class="blossom left">
+                <img src="images/blossom.gif" alt="blossom" class="blossom right">
+            </div>
+            
             <div class="section-title">WITH <span>RESCENE</span></div>
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
         </div>
 
         <div class="section-container reveal" id="chartSection">
-            <!-- ⭐️ 클래스에 center-header 추가 -->
+            <!-- ⭐️ 가운데 정렬로 변경 -->
             <div class="section-header center-header">
                 <div class="section-title">MUSIC <span>CHARTS</span></div>
-                <div class="update-time" id="currentTime">데이터 로딩중...</div>
             </div>
-            <div class="ticker-container">
-                <div class="ticker-wrapper" id="tickerWrapper">
-                    <div class="ticker-item skeleton"></div>
+            <div style="position: relative; width: 100%;">
+                <!-- ⭐️ 업데이트 시간 위치 우측 하단 고정 -->
+                <div class="update-time" id="currentTime">데이터 로딩중...</div>
+                <div class="ticker-container">
+                    <div class="ticker-wrapper" id="tickerWrapper">
+                        <div class="ticker-item skeleton"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="section-container reveal" id="todayScheduleSection">
-            <!-- ⭐️ 클래스에 center-header 추가 -->
-            <div class="section-header center-header">
+            <!-- ⭐️ 가운데 정렬로 변경 -->
+            <div class="section-header center-header" style="margin-bottom: 30px;">
                 <div class="section-title">TODAY'S <span>BROADCAST</span></div>
             </div>
             <div class="today-broadcast-grid">
@@ -148,60 +157,23 @@
 
     </div> 
 
-    <!-- 발자취(History) 모달 컨테이너 -->
+    <!-- ⭐️ 완전 자동재생 시네마틱 발자취 모달 -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
         
-        <!-- 유튜브 백그라운드 영역 (자바스크립트에서 껐다켤 때마다 iframe 재생성됨) -->
-        <div class="history-modal-bg" id="historyModalBg"></div>
+        <div class="history-modal-bg" id="historyModalBg">
+            <iframe id="historyYoutubeBg" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <div class="history-modal-overlay"></div>
+        </div>
 
-        <div class="history-modal-content">
+        <div class="history-modal-content" id="seqContent">
             <button class="close-btn" onclick="closeHistoryModal()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
             
-            <div class="history-scroll-container" id="historyScrollContainer">
-                <!-- ⭐️ h-title에 hidden-title 클래스 추가하여 애니메이션 대기 -->
-                <div class="history-page">
-                    <div class="h-date" data-date="2024. 02. 29">0000. 00. 00</div>
-                    <div class="h-title hidden-title">DEBUT SHOWCASE LIVE</div>
-                </div>
-                <div class="history-page">
-                    <div class="h-date" data-date="2024. 03. 26">0000. 00. 00</div>
-                    <div class="h-title hidden-title">싱글 1집 《Re:Scene》 발매 (데뷔)</div>
-                </div>
-                <div class="history-page">
-                    <div class="h-date" data-date="2024. 08. 27">0000. 00. 00</div>
-                    <div class="h-title hidden-title">미니 1집 《SCENEDROME》 발매</div>
-                </div>
-                <div class="history-page">
-                    <div class="h-date" data-date="2025. 02. 05">0000. 00. 00</div>
-                    <div class="h-title hidden-title">미니 2집 《Glow Up》 발매</div>
-                </div>
-                <div class="history-page">
-                    <div class="h-date" data-date="2025. 07. 02">0000. 00. 00</div>
-                    <div class="h-title hidden-title">싱글 2집 《Dearest》 발매</div>
-                </div>
-                <div class="history-page">
-                    <div class="h-date" data-date="2025. 11. 25">0000. 00. 00</div>
-                    <div class="h-title hidden-title">미니 3집 《Lip Bomb》 발매</div>
-                </div>
-                <div class="history-page">
-                    <div class="h-date" data-date="2026. 07. 08">0000. 00. 00</div>
-                    <div class="h-title hidden-title">리메이크 싱글 'Pretty Girl' 발매</div>
-                </div>
-                <div class="history-page">
-                    <div class="h-date" data-date="2026. 07. 08">0000. 00. 00</div>
-                    <div class="h-title hidden-title">'LOVE ATTACK' 멜론 첫 음원차트 1위</div>
-                </div>
-                <div class="history-page">
-                    <div class="h-date" data-date="2026. 07. 14">0000. 00. 00</div>
-                    <div class="h-title hidden-title">'Pretty Girl' 첫 음악방송 1위<br><span style="font-size:16px; font-weight:400; opacity:0.8;">(SBS M 《더쇼》)</span></div>
-                </div>
-                <div class="history-page">
-                    <div class="h-date" data-date="2026. 07. 25">0000. 00. 00</div>
-                    <div class="h-title hidden-title">'Pretty Girl' 첫 지상파 음악방송 1위<br><span style="font-size:16px; font-weight:400; opacity:0.8;">(MBC 《쇼! 음악중심》)</span></div>
-                </div>
+            <div class="history-page">
+                <div class="h-date spinning" id="seqDate">0000. 00. 00</div>
+                <div class="h-title hidden-title" id="seqTitle"></div>
             </div>
         </div>
     </div>
@@ -255,82 +227,164 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
-        // [핵심] 스크롤 시 검은 화면 + 1.5초 촤라락 + 영상 페이드인 + 문구 떠오르기 연출
-        let historyObserver;
-        function initHistoryObserver() {
-            const historyPages = document.querySelectorAll('.history-page');
-            historyObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if(entry.isIntersecting) {
-                        const dateEl = entry.target.querySelector('.h-date');
-                        const titleEl = entry.target.querySelector('.h-title');
-                        const targetDate = dateEl.getAttribute('data-date');
-                        const bg = document.getElementById('historyModalBg');
-                        
-                        // 배경 까맣게, 제목 숨기기, 숫자 연하게 설정
-                        bg.classList.remove('show');
-                        titleEl.classList.remove('show');
-                        dateEl.classList.add('spinning');
-                        
-                        let frame = 0;
-                        const maxFrames = 38; // 약 1.5초
-                        clearInterval(dateEl.interval);
-                        
-                        dateEl.interval = setInterval(() => {
-                            frame++;
-                            if(frame < maxFrames) {
-                                const rY = Math.floor(Math.random() * (2026 - 2024 + 1) + 2024);
-                                const rM = String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0');
-                                const rD = String(Math.floor(Math.random() * 31 + 1)).padStart(2, '0');
-                                dateEl.innerText = `${rY}. ${rM}. ${rD}`;
-                            } else {
-                                // 애니메이션 종료 후 멈춤, 배경 및 타이틀 서서히 등장
-                                dateEl.innerText = targetDate;
-                                dateEl.classList.remove('spinning');
-                                clearInterval(dateEl.interval);
-                                bg.classList.add('show');
-                                titleEl.classList.add('show');
-                            }
-                        }, 40);
-                    } else {
-                        // 스크롤해서 다른 곳으로 가면 타이틀 다시 숨김 처리 (재반복 위함)
-                        const titleEl = entry.target.querySelector('.h-title');
-                        if(titleEl) titleEl.classList.remove('show');
-                    }
-                });
-            }, { threshold: 0.5 });
 
-            historyPages.forEach(p => historyObserver.observe(p));
+        // ⭐️ 추가된 방대한 발자취 데이터 (표 요청 내용 완벽 포함)
+        const historyData = [
+            { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o", duration: 5000 },
+            { date: "2024. 03. 26", title: "싱글 1집 《Re:Scene》 발매 (데뷔)", duration: 1500 },
+            { date: "2024. 05", title: "코스모폴리탄 코리아 5월호 화보", duration: 1500 },
+            { date: "2024. 08. 27", title: "미니 1집 《SCENEDROME》 발매", duration: 1500 },
+            { date: "2025. 01", title: "프리티스킨, 형지엘리트 광고 모델", duration: 1500 },
+            { date: "2025. 01", title: "캐릭터 라이선싱 페어 홍보대사", duration: 1500 },
+            { date: "2025. 02. 05", title: "미니 2집 《Glow Up》 발매", duration: 1500 },
+            { date: "2025. 02. 11", title: "한국청소년연맹 홍보대사", duration: 1500 },
+            { date: "2025. 05", title: "BEAUTY+ 5월호 화보", duration: 1500 },
+            { date: "2025. 07. 02", title: "싱글 2집 《Dearest》 발매", duration: 1500 },
+            { date: "2025. 11. 25", title: "미니 3집 《Lip Bomb》 발매", duration: 1500 },
+            { date: "2026. 01", title: "I-SHA, 넥슨, CU, 도미노피자, KREAM 등<br><span style='font-size:16px; opacity:0.8; font-weight:400;'>다수 브랜드 광고 및 콜라보레이션</span>", duration: 2500 },
+            { date: "2026. 05. 22", title: "경상남도 거제시 홍보대사", duration: 1500 },
+            { date: "2026. 06", title: "앳스타일 6월호 화보", duration: 1500 },
+            { date: "2026. 06. 04", title: "화보 MIIM (원이, 미나미)", duration: 1500 },
+            { date: "2026. 06. 24", title: "경기도 수원시 홍보대사", duration: 1500 },
+            { date: "2026. 06. 29", title: "경상북도 경주시 홍보대사", duration: 1500 },
+            { date: "2026. 07. 02", title: "경기도 고양시 홍보대사", duration: 1500 },
+            { date: "2026. 07. 08", title: "리메이크 싱글 'Pretty Girl' 발매", duration: 1500 },
+            { date: "2026. 07. 08", title: "'LOVE ATTACK' 멜론 첫 음원차트 1위", vid: "v6n4XQdX6_8", duration: 4000 },
+            { date: "2026. 07. 14", title: "저스트 메이크업 IN TOKYO 2027 홍보대사", duration: 1500 },
+            { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위<br><span style='font-size:16px; font-weight:400; opacity:0.8;'>(SBS M 《더쇼》)</span>", duration: 1500 },
+            { date: "2026. 07. 21", title: "전남광주통합특별시 섬의 날 홍보대사", duration: 1500 },
+            { date: "2026. 07. 23", title: "MBC 아시안게임 중계방송 홍보대사", duration: 1500 },
+            { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 음악방송 1위<br><span style='font-size:16px; font-weight:400; opacity:0.8;'>(MBC 《쇼! 음악중심》)</span>", duration: 3000 },
+            { date: "2026. 08", title: "하퍼스 바자 코리아 8월호 화보", duration: 2000 }
+        ];
+
+        let slotInterval;
+        let sequenceTimeouts = [];
+
+        function clearHistorySequence() {
+            clearInterval(slotInterval);
+            sequenceTimeouts.forEach(t => clearTimeout(t));
+            sequenceTimeouts = [];
+            const ytIframe = document.getElementById('historyYoutubeBg');
+            if (ytIframe) ytIframe.src = "";
         }
 
-        // 모달 열기/닫기 (유튜브 무조건 재가동되도록 버그 수정)
+        // [핵심] 시네마틱 오토 플레이 시퀀스 제어
+        function playHistorySequence() {
+            const bg = document.getElementById('historyModalBg');
+            const content = document.getElementById('seqContent');
+            const dateEl = document.getElementById('seqDate');
+            const titleEl = document.getElementById('seqTitle');
+            const ytIframe = document.getElementById('historyYoutubeBg');
+
+            // 초기화
+            bg.classList.remove('show', 'glitch-effect');
+            content.classList.remove('glitch-effect');
+            titleEl.classList.remove('show');
+            dateEl.classList.add('spinning');
+            dateEl.innerText = "0000. 00. 00";
+
+            const item0 = historyData[0];
+            let frame = 0;
+            
+            // 1. 1.5초(38프레임) 동안 슬롯머신 돌아감
+            slotInterval = setInterval(() => {
+                frame++;
+                if(frame < 38) { 
+                    const rY = Math.floor(Math.random() * (2026 - 2024 + 1) + 2024);
+                    const rM = String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0');
+                    const rD = String(Math.floor(Math.random() * 31 + 1)).padStart(2, '0');
+                    dateEl.innerText = `${rY}. ${rM}. ${rD}`;
+                } else {
+                    // 2. 숫자가 멈추면 선명해짐 + 영상 & 타이틀 서서히 상승
+                    clearInterval(slotInterval);
+                    dateEl.innerText = item0.date;
+                    dateEl.classList.remove('spinning');
+                    titleEl.innerHTML = item0.title;
+                    titleEl.classList.add('show');
+                    
+                    ytIframe.src = `https://www.youtube.com/embed/${item0.vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${item0.vid}&playsinline=1&modestbranding=1`;
+                    bg.classList.add('show');
+
+                    // 3. 지정된 시간 후 치지지직(Glitch) 효과 발생
+                    let t1 = setTimeout(() => {
+                        content.classList.add('glitch-effect');
+                        bg.classList.add('glitch-effect');
+                        
+                        // 4. 글리치 후 화면 암전
+                        let t2 = setTimeout(() => {
+                            content.classList.remove('glitch-effect');
+                            bg.classList.remove('glitch-effect', 'show');
+                            ytIframe.src = "";
+                            titleEl.classList.remove('show');
+                            dateEl.innerText = "";
+                            
+                            // 5. 암전 직후 나머지 항목 오토플레이 시작
+                            let t3 = setTimeout(() => {
+                                playNextSequence(1);
+                            }, 600); // 암전 유지 시간
+                            sequenceTimeouts.push(t3);
+
+                        }, 300); // 치지지직 유지 시간
+                        sequenceTimeouts.push(t2);
+
+                    }, item0.duration);
+                    sequenceTimeouts.push(t1);
+                }
+            }, 40);
+        }
+        
+        // 6. 나머지 발자취 1.5초마다 하나씩 텍스트(또는 영상) 재생
+        function playNextSequence(index) {
+            if(index >= historyData.length) return; // 끝
+            
+            const item = historyData[index];
+            const dateEl = document.getElementById('seqDate');
+            const titleEl = document.getElementById('seqTitle');
+            const bg = document.getElementById('historyModalBg');
+            const ytIframe = document.getElementById('historyYoutubeBg');
+
+            dateEl.innerText = item.date;
+            titleEl.innerHTML = item.title;
+            titleEl.classList.add('show');
+
+            // 동영상이 있는 날짜면 배경에서 페이드인
+            if(item.vid) {
+                ytIframe.src = `https://www.youtube.com/embed/${item.vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${item.vid}&playsinline=1&modestbranding=1`;
+                bg.classList.add('show');
+            } else {
+                bg.classList.remove('show');
+                ytIframe.src = "";
+            }
+
+            // 지정된 시간(기본 1.5초) 후 타이틀 숨기고 다음으로
+            let t = setTimeout(() => {
+                titleEl.classList.remove('show');
+                
+                let tNext = setTimeout(() => playNextSequence(index + 1), 300); // 텍스트 간 짧은 공백
+                sequenceTimeouts.push(tNext);
+            }, item.duration || 1500);
+            
+            sequenceTimeouts.push(t);
+        }
+
         function openHistoryModal() {
             document.getElementById('historyModal').classList.add('active');
             document.getElementById('historyBackdrop').classList.add('active');
             document.body.style.overflow = 'hidden';
             
-            // 모달 열릴 때 무조건 배경 암전 상태로 시작
-            const bg = document.getElementById('historyModalBg');
-            bg.classList.remove('show');
-            
-            // ⭐️ 버그 수정: 아예 iframe 태그 자체를 새로 그려서 강제 재시작 (무조건 처음부터 재생됨)
-            bg.innerHTML = '<iframe id="historyYoutubeBg" src="https://www.youtube.com/embed/jgaWSOXyH_o?autoplay=1&mute=1&controls=0&loop=1&playlist=jgaWSOXyH_o&playsinline=1&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="history-modal-overlay"></div>';
-
-            const container = document.getElementById('historyScrollContainer');
-            container.scrollTop = 0;
-            if(!historyObserver) {
-                initHistoryObserver();
-            }
+            // 모달을 껐다 켜면 완벽하게 처음부터 다시 재생되도록 초기화 호출
+            clearHistorySequence();
+            playHistorySequence();
         }
 
         function closeHistoryModal() {
             document.getElementById('historyModal').classList.remove('active');
             document.getElementById('historyBackdrop').classList.remove('active');
             document.body.style.overflow = 'auto';
-            
-            // ⭐️ 버그 수정: 모달 닫을 때 HTML 껍데기를 아예 날려버림 (안전하게 완전 정지)
-            document.getElementById('historyModalBg').innerHTML = '';
+            clearHistorySequence();
         }
+
 
         const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
         setInterval(() => {

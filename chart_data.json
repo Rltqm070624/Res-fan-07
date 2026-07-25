@@ -1,17 +1,20 @@
 {
-    "update_time": "2026. 07. 26 00:47 기준",
+    "update_time": "2026. 07. 26 05:14 기준",
     "songs": {
         "LOVE ATTACK": {
             "Melon": {
-                "실시간 (HOT100)": null,
+                "실시간 (HOT100)": {
+                    "rank": 1,
+                    "diff": "NEW"
+                },
                 "일간": null,
                 "주간": null,
                 "월간": null
             },
             "Bugs": {
                 "실시간": {
-                    "rank": 5,
-                    "diff": "▼ 2"
+                    "rank": 4,
+                    "diff": "▲ 1"
                 },
                 "일간": null
             },
@@ -22,15 +25,18 @@
         },
         "Pretty Girl": {
             "Melon": {
-                "실시간 (HOT100)": null,
+                "실시간 (HOT100)": {
+                    "rank": 6,
+                    "diff": "NEW"
+                },
                 "일간": null,
                 "주간": null,
                 "월간": null
             },
             "Bugs": {
                 "실시간": {
-                    "rank": 7,
-                    "diff": "▲ 4"
+                    "rank": 11,
+                    "diff": "▼ 4"
                 },
                 "일간": null
             },
@@ -41,15 +47,18 @@
         },
         "Deja Vu": {
             "Melon": {
-                "실시간 (HOT100)": null,
+                "실시간 (HOT100)": {
+                    "rank": 16,
+                    "diff": "NEW"
+                },
                 "일간": null,
                 "주간": null,
                 "월간": null
             },
             "Bugs": {
                 "실시간": {
-                    "rank": 13,
-                    "diff": "▲ 1"
+                    "rank": 15,
+                    "diff": "▼ 2"
                 },
                 "일간": null
             },
@@ -60,7 +69,10 @@
         },
         "Runaway": {
             "Melon": {
-                "실시간 (HOT100)": null,
+                "실시간 (HOT100)": {
+                    "rank": 65,
+                    "diff": "NEW"
+                },
                 "일간": null,
                 "주간": null,
                 "월간": null
@@ -68,7 +80,7 @@
             "Bugs": {
                 "실시간": {
                     "rank": 36,
-                    "diff": "▲ 19"
+                    "diff": "-"
                 },
                 "일간": null
             },

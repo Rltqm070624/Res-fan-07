@@ -29,6 +29,7 @@
             <li><a href="index.html">HOME</a></li>
             <li><a href="member/member.html">MEMBERS</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection')">CHARTS</a></li>
+            <li><a href="discography/discography.html">DISCOGRAPHY</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection')">SCHEDULE</a></li>
             <li><a href="goods/goods.html">GOODS</a></li>
         </ul>
@@ -62,6 +63,7 @@
             <li><a href="index.html">HOME</a></li>
             <li><a href="member/member.html">MEMBERS</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection'); toggleMobileMenu();">CHARTS</a></li>
+            <li><a href="discography/discography.html">DISCOGRAPHY</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection'); toggleMobileMenu();">SCHEDULE</a></li>
             <li><a href="goods/goods.html">GOODS</a></li>
         </ul>
@@ -105,6 +107,11 @@
                         <div class="history-title">뮤직비디오 1,000만 뷰 돌파</div>
                         <div class="history-desc">글로벌 팬덤의 폭발적인 반응! 데뷔곡 뮤직비디오가 초고속으로 천만 뷰를 달성하며 저력을 입증하다.</div>
                         <div class="history-more">+ 더보기</div>
+                    </div>
+                    <div class="history-card history-card-more" onclick="openHistoryContinued()">
+                        <div class="history-more-icon">→</div>
+                        <div class="history-title">이어서 보기</div>
+                        <div class="history-desc">첫 미니앨범, 데뷔 첫 음악방송 1위, 역주행까지. 계속되는 리센느의 이야기를 확인해보세요.</div>
                     </div>
                 </div>
             </div>
@@ -197,38 +204,31 @@
         <div id="modalScheduleText"></div>
     </div>
 
+    <script src="js/schedule-data.js"></script>
     <script>
-        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
-        function toggleMobileMenu() {
-            document.getElementById('hamburgerBtn').classList.toggle('active');
-            document.getElementById('mobileMenuPanel').classList.toggle('active');
-            document.getElementById('mobileMenuBackdrop').classList.toggle('active');
-            document.body.style.overflow = document.getElementById('mobileMenuPanel').classList.contains('active') ? 'hidden' : 'auto';
-        }
-        const sunIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
-        const moonIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
-        function updateThemeIcon(theme) { const btn = document.getElementById('themeToggleBtn'); if (btn) btn.innerHTML = (theme === 'dark') ? sunIcon : moonIcon; }
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme') || 'dark';
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('rescene-theme', next);
-            updateThemeIcon(next);
-        }
-        updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+        // 하위 폴더가 아닌 루트 페이지이므로 SITE_ROOT는 빈 문자열
+        var SITE_ROOT = '';
+    </script>
+    <script src="js/common.js"></script>
+    <script>
+        // ⭐️ 여기서부터는 index.html 전용 로직만 남겼어요.
+        //    모바일메뉴 / 테마토글 / 캘린더 / 스케줄모달 / reveal 공통 로직은 js/common.js 에서 관리됩니다.
 
         let leavesTriggered = false;
-        const observer = new IntersectionObserver((entries) => { 
-            entries.forEach(e => { 
-                if(e.isIntersecting) {
-                    e.target.classList.add('active'); 
-                    if(e.target.id === 'historySection' && !leavesTriggered) {
-                        leavesTriggered = true; triggerLeavesEffect();
-                    }
+        const leafObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting && e.target.id === 'historySection' && !leavesTriggered) {
+                    leavesTriggered = true;
+                    triggerLeavesEffect();
                 }
-            }); 
+                // 맨 위로 스크롤해서 되돌아가면 다음 방문 때 다시 재생되도록 리셋
+                if (!e.isIntersecting && e.target.id === 'historySection' && e.boundingClientRect.top > 0) {
+                    leavesTriggered = false;
+                }
+            });
         }, { threshold: 0.15 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        const historySectionEl = document.getElementById('historySection');
+        if (historySectionEl) leafObserver.observe(historySectionEl);
 
         function triggerLeavesEffect() {
             const container = document.getElementById('leafContainer');
@@ -250,11 +250,45 @@
             });
         }
 
+
         const historyDB = {
             'debut': { title: "RESCENE 첫 데뷔 및 쇼케이스", date: "2024년 3월 26일", video: "video/uhuh_mv.mp4", desc: "RESCENE(리센느)가 대중 앞에 첫 선을 보인 날. 첫 싱글 앨범 타이틀곡 'UhUh'의 쇼케이스 무대가 성공적으로 마무리되었습니다. 향기로 기억되는 그녀들의 첫 페이지입니다." },
             'musicbank': { title: "KBS 뮤직뱅크 첫 음악방송", date: "2024년 3월 29일", video: "video/yoyo_teaser.mp4", desc: "떨리는 마음으로 맞이한 첫 지상파 음악방송 데뷔! 강렬한 퍼포먼스와 완벽한 라이브로 시청자들의 눈을 사로잡았습니다." },
             'million': { title: "뮤직비디오 1,000만 뷰 돌파", date: "2024년 4월 15일", video: "video/member.mp4", desc: "데뷔곡 뮤직비디오가 놀라운 속도로 천만 뷰를 달성하며 글로벌 팬덤의 확장을 알렸습니다. 리센느의 비상은 이제 시작입니다." }
         };
+
+        // ⭐️ "이어서 보기" 팝업에 표시될 계속되는 이야기 (최초/처음/목표 달성 위주로 구성)
+        const HISTORY_MORE = [
+            { date: "2024.08.27", title: "첫 미니앨범 SCENEDROME 발매", desc: "타이틀곡 'LOVE ATTACK', 'Pinball'과 함께 발매된 첫 미니 1집. 데뷔 5개월 만에 완성한 첫 정규 라인업의 결과물." },
+            { date: "2025.02.05", title: "미니 2집 Glow Up 발매", desc: "타이틀곡 'Glow Up'으로 두 번째 미니앨범 발매, 성장한 팀 컬러를 보여준 앨범." },
+            { date: "2025.11.25", title: "미니 3집 lip bomb 발매", desc: "타이틀곡 'Heart Drop', 'Bloom'과 함께한 세 번째 미니앨범. 데뷔 이후 가장 짙어진 리센느만의 향을 담았다." },
+            { date: "2026.07.09", title: "LOVE ATTACK 멜론 TOP100 1위 역주행", desc: "발매 약 2년 만에 'LOVE ATTACK'이 멜론 TOP100 1위에 오르며 역주행에 성공. 초기 곡이 뒤늦게 재조명된 상징적인 순간." },
+            { date: "2026.07.14", title: "데뷔 첫 음악방송 1위", desc: "'Pretty Girl' 활동으로 더쇼에서 데뷔 후 첫 음악방송 1위를 달성. 데뷔곡부터 함께한 팬들과 처음으로 함께 나눈 목표 달성의 순간." }
+        ];
+
+        function openHistoryContinued() {
+            const listHtml = HISTORY_MORE.map(h => `
+                <div class="hm-row">
+                    <div class="hm-date">${h.date}</div>
+                    <div>
+                        <div class="hm-title">${h.title}</div>
+                        <div class="hm-desc">${h.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+            const html = `
+                <div style="text-align:center; margin-bottom: 20px;">
+                    <div style="color:var(--c-accent); font-family:var(--font-num); font-size:14px; font-weight:700;">RESCENE STORY</div>
+                    <h2 style="font-size:24px; font-family:var(--font-head); margin:10px 0;">이어서 보기</h2>
+                </div>
+                <div class="history-more-list">${listHtml}</div>
+            `;
+            document.getElementById('historyModalContent').innerHTML = html;
+            document.getElementById('historyModal').classList.add('active');
+            document.getElementById('historyBackdrop').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
 
         function openHistoryModal(key) {
             const data = historyDB[key]; if(!data) return;
@@ -327,15 +361,6 @@
             bgVideo.addEventListener('ended', () => { currentVideoIndex = (currentVideoIndex + 1) % videoList.length; bgVideo.src = videoList[currentVideoIndex]; bgVideo.play(); });
         }
         
-        const scheduleDB = { "2026-07-25": { items: [{ time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" }, { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }] }, "2026-07-26": { items: [{ time: "14:00", title: "2026 캐리비안베이 워터뮤직풀파티", color: "#e78b54" }, { time: "19:00", title: "별방수련회", color: "#72a58b" }] } };
-        let currentCalYear = 2026; let currentCalMonth = 7;
-        function changeMonth(delta) { currentCalMonth += delta; if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } renderCalendar(); }
-        function renderCalendar() { const calendarDays = document.getElementById('calendarDays'); document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); let html = ''; for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; } for (let i = 1; i <= lastDate; i++) { const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; const data = scheduleDB[dateKey]; const hasEvent = data ? 'has-event' : ''; let eventsHtml = ''; if (data && data.items) { data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div><div class="cal-event-title">${item.title}</div></div>`; }); } html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`; } calendarDays.innerHTML = html; }
-        function openCalendarPopup() { document.getElementById('calendarPopupModal').classList.add('active'); document.getElementById('calPopupBackdrop').classList.add('active'); document.body.style.overflow = 'hidden'; }
-        function closeCalendarPopup() { document.getElementById('calendarPopupModal').classList.remove('active'); document.getElementById('calPopupBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
-        function openModal(year, month, day, dateKey) { document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`; const data = scheduleDB[dateKey]; let scheduleHtml = ''; if (data && data.items) { scheduleHtml += `<div class="schedule-detail-card"><div class="sd-body">`; data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; scheduleHtml += `<div class="sd-row"><div class="sd-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor}60;"></div><div class="sd-time" style="color: ${dotColor};">${item.time}</div><div class="sd-title">${item.title}</div></div>`; if (item.image) { scheduleHtml += `<div class="sd-img-wrapper"><img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`; } }); scheduleHtml += `</div></div>`; } else { scheduleHtml = `<div class="schedule-detail-empty">등록된 일정이 없습니다.</div>`; } document.getElementById('modalScheduleText').innerHTML = scheduleHtml; document.getElementById('scheduleModal').classList.add('active'); document.getElementById('modalBackdrop').classList.add('active'); }
-        function closeModal() { document.getElementById('scheduleModal').classList.remove('active'); document.getElementById('modalBackdrop').classList.remove('active'); if(!document.getElementById('calendarPopupModal').classList.contains('active')){ document.body.style.overflow = 'auto'; } }
-        window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
     </script>
 </body>
 </html>

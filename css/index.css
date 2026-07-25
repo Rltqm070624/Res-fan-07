@@ -29,6 +29,28 @@ html[data-theme="light"] .leaf { background: radial-gradient(circle, rgba(255,10
 .history-more { margin-top: auto; padding-top: 20px; font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 600; text-align: right; }
 .history-card:hover .history-more { color: var(--c-accent); }
 
+/* ⭐️ 일대기 "이어서 보기" 카드 */
+.history-card-more {
+    align-items: center; justify-content: center; text-align: center;
+    background: linear-gradient(135deg, rgba(229,192,123,0.12) 0%, rgba(229,192,123,0.02) 100%);
+    border-style: dashed;
+}
+.history-more-icon {
+    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-highlight);
+    display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--c-accent);
+    margin-bottom: 16px;
+}
+.history-card-more .history-title { text-align: center; }
+.history-card-more .history-desc { -webkit-line-clamp: 4; text-align: center; }
+
+/* ⭐️ 이어서 보기 팝업 내부 리스트 */
+.history-more-list { display: flex; flex-direction: column; gap: 0; }
+.hm-row { display: flex; gap: 18px; padding: 20px 0; border-top: 1px solid var(--border-light); text-align: left; }
+.hm-row:first-child { border-top: none; }
+.hm-date { font-family: var(--font-num); font-size: 12px; color: var(--c-accent); font-weight: 700; flex-shrink: 0; width: 90px; }
+.hm-title { font-family: var(--font-head); font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+.hm-desc { font-size: 13px; line-height: 1.7; color: var(--text-secondary); }
+
 /* 차트 Ticker */
 .update-time { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 500; }
 .ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }

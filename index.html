@@ -80,10 +80,22 @@
             </div>
         </div>
 
-        <!-- 새롭게 변경된 히스토리 진입 섹션 -->
-        <div class="section-container reveal" id="historySection" style="text-align: center; padding: 140px 20px;">
-            <div class="section-title" style="margin-bottom: 15px; font-size: 54px; letter-spacing: 2px;">WITH <span>RESCENE</span></div>
+        <!-- 1. 히스토리 진입 섹션 (완벽한 중앙 정렬 및 초느림 애니메이션 적용) -->
+        <div class="section-container slow-reveal" id="historySection">
+            <div class="section-title">WITH <span>RESCENE</span></div>
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
+        </div>
+
+        <!-- 2. 새로 추가된 영역 (최신 영상이나 콘텐츠를 넣을 수 있는 곳) -->
+        <div class="section-container reveal" id="newMediaSection">
+            <div class="section-header">
+                <div class="section-title">LATEST <span>MEDIA</span></div>
+                <div style="font-size:12px; color:var(--text-muted);">가장 최근 업데이트된 콘텐츠입니다.</div>
+            </div>
+            <!-- 유튜브 영상이나 이미지가 들어갈 플레이스홀더 박스 -->
+            <div class="media-placeholder-box">
+                <p>여기에 유튜브 영상이나 앨범 이미지를 넣을 수 있습니다.</p>
+            </div>
         </div>
 
         <div class="section-container reveal" id="chartSection">
@@ -138,7 +150,6 @@
         
         <footer class="global-footer">
             <div class="footer-sns">
-                <!-- 트위터 로고 크기 조정 -->
                 <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" style="transform: scale(0.75);"></a>
                 <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG"></a>
                 <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT"></a>
@@ -214,6 +225,7 @@
         }
         updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
 
+        // 스크롤 시 reveal 클래스 추가옵저버 (기존 일반 요소용과 slow 요소용 분리 처리)
         const observer = new IntersectionObserver((entries) => { 
             entries.forEach(e => { 
                 if(e.isIntersecting) {
@@ -221,7 +233,7 @@
                 }
             }); 
         }, { threshold: 0.15 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
         // 발자취 모달 열기/닫기 함수
         function openHistoryModal() {

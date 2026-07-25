@@ -10,117 +10,99 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
 .debut-timer .time-flow { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: rgba(244,244,245,0.7); letter-spacing: 3px; }
 
 /* ==========================================================================
-   ⭐️ 히스토리 인트로 — 나뭇잎(foliage.gif)이 가운데서 바깥으로 퍼지며
-   "리센느의 발걸음" 타이틀이 서서히 나타나는 연출
+   ⭐️ 발걸음 저니 섹션 (가로 스크롤 완벽 적용)
    ========================================================================== */
-.history-intro-stage {
+.journey-section {
     position: relative;
-    height: 70vh;
-    min-height: 420px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    /* 높이는 JS에서 아이템 개수 비례해서 자동 세팅됩니다 (스크롤 길이 확보) */
+}
+
+.journey-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
     overflow: hidden;
-}
-.foliage-gif {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 320px;
-    max-width: 50vw;
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
-    transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.1s ease;
-    pointer-events: none;
-    /* ⭐️ gif 원본의 흰 배경 + makeagif.com 워터마크를 최대한 감추기 위한 처리 */
-    mix-blend-mode: multiply;
-    -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 68%);
-    mask-image: radial-gradient(circle at center, black 30%, transparent 68%);
-}
-
-.history-intro-stage.burst .foliage-gif { opacity: 0.95; }
-html[data-theme="dark"] .foliage-gif { filter: brightness(2.1) saturate(1.3); }
-.history-intro-stage.burst .foliage-gif.spread-1 { transform: translate(-145%, -115%) scale(1.15) rotate(-6deg); }
-.history-intro-stage.burst .foliage-gif.spread-2 { transform: translate(45%, -115%) scale(1.15) rotate(8deg); }
-.history-intro-stage.burst .foliage-gif.spread-3 { transform: translate(-145%, 15%) scale(1.15) rotate(5deg); }
-.history-intro-stage.burst .foliage-gif.spread-4 { transform: translate(45%, 15%) scale(1.15) rotate(-8deg); }
-
-.history-intro-title {
-    position: relative;
-    z-index: 5;
-    font-family: var(--font-head);
-    font-size: clamp(28px, 4vw, 48px);
-    font-weight: 800;
-    color: var(--text-primary);
-    text-align: center;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 1s ease 0.7s, transform 1s ease 0.7s;
-}
-.history-intro-stage.burst .history-intro-title { opacity: 1; transform: translateY(0); }
-
-/* ==========================================================================
-   ⭐️ 발걸음 저니(Journey) — 페이지 자체는 스크롤되지 않고, 이 영역 안에서만
-   마우스 휠(세로)을 가로 스크롤로 변환해 발걸음이 오른쪽으로 이동하는 캐러셀
-   ========================================================================== */
-.journey-path-wrap { max-width: 640px; margin: 0 auto 36px; }
-.journey-path { position: relative; height: 4px; background: var(--border-light); border-radius: 2px; }
-.journey-progress-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--c-accent); border-radius: 2px; width: 0%; }
-.journey-marker {
-    position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 50%;
-    background: var(--bg-base); border: 2px solid var(--border-highlight);
-    transform: translate(-50%, -50%); transition: border-color 0.2s, background 0.2s;
-}
-.journey-marker.passed { background: var(--c-accent); border-color: var(--c-accent); }
-.journey-footstep {
-    position: absolute; top: 50%; left: 0%;
-    transform: translate(-50%, -62%);
-    font-size: 22px;
-    transition: left 0.15s ease-out;
-}
-
-.journey-track-viewport { overflow: hidden; }
-.journey-track {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    scroll-behavior: smooth;
-}
-.journey-track::-webkit-scrollbar { display: none; }
-
-.journey-stop {
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-    box-sizing: border-box;
-    padding: 0 12px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    background: var(--bg-base);
+}
+
+/* 잎사귀 이펙트 (중앙에서 바깥으로 퍼짐) */
+.foliage-effect {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 10;
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0;
+}
+.foliage-effect.active img {
+    width: 300px;
+    animation: foliageBurst 2.5s ease-out forwards;
+}
+@keyframes foliageBurst {
+    0% { transform: scale(0.5); opacity: 1; }
+    40% { transform: scale(3.5); opacity: 1; }
+    100% { transform: scale(6); opacity: 0; display: none; }
+}
+
+/* 상단 타이틀 영역 */
+.journey-header { text-align: center; padding: 60px 20px 20px; flex-shrink: 0; z-index: 5; }
+.journey-header h2 { font-family: var(--font-head); font-size: 32px; font-weight: 300; margin: 0; letter-spacing: 1px;}
+.journey-header h2 span { font-weight: 800; color: var(--text-primary); }
+.journey-header p { font-size: 13px; color: var(--text-muted); margin-top: 10px; font-family: var(--font-num); }
+
+/* 가로 스크롤을 보여줄 윈도우 */
+.journey-window {
+    flex: 1;
+    width: 100%;
+    display: flex;
     align-items: center;
-    text-align: center;
+    overflow: hidden;
+    z-index: 5;
 }
-.js-date { font-family: var(--font-num); font-size: 13px; color: var(--c-accent); font-weight: 700; margin-bottom: 10px; }
-.js-title { font-family: var(--font-head); font-size: clamp(20px, 2.6vw, 28px); font-weight: 800; color: var(--text-primary); margin-bottom: 12px; }
-.js-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.65; max-width: 480px; margin: 0 auto 20px; }
-.js-video-wrap { width: 100%; max-width: 480px; aspect-ratio: 16/9; margin: 0 auto; border-radius: 14px; overflow: hidden; background: #000; border: 1px solid var(--border-light); }
-.js-video-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
 
-.journey-stop.journey-more { justify-content: center; }
-.journey-stop.journey-more .history-more-icon {
-    width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border-highlight);
-    display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--c-accent);
-    margin: 0 auto 16px;
+/* 실제 왼쪽으로 이동하는 트랙 */
+.journey-track {
+    display: flex;
+    align-items: center;
+    gap: 80px; 
+    padding: 0 50vw; /* 첫 아이템이 정중앙에 오도록 양쪽 여백 */
+    will-change: transform;
 }
-.journey-more-btn {
-    display: inline-block; margin-top: 10px; background: var(--text-primary); color: var(--bg-base);
-    padding: 13px 28px; border-radius: 30px; font-family: var(--font-head); font-weight: 700; font-size: 13px;
-    letter-spacing: 0.5px; cursor: pointer; border: none;
+
+/* 각각의 콘텐츠 영역 */
+.journey-item {
+    width: 480px;
+    flex-shrink: 0;
+    display: flex; flex-direction: column; gap: 15px;
+    text-align: left;
 }
-.journey-more-btn:hover { background: var(--c-accent); }
+.ji-date { font-family: var(--font-num); color: var(--c-accent); font-weight: 700; font-size: 14px; }
+.ji-title { font-family: var(--font-head); font-weight: 800; font-size: 26px; color: var(--text-primary); line-height: 1.3; }
+.ji-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+.ji-media { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-light); }
+.ji-media iframe, .ji-media video { width: 100%; height: 100%; object-fit: cover; }
 
-.journey-scroll-hint { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 26px; }
+/* 팝업 버튼 영역 */
+.journey-item.more-btn-item { justify-content: center; align-items: center; text-align: center; }
+.journey-item.more-btn-item button { background: var(--text-primary); color: var(--bg-base); border: none; padding: 18px 40px; font-size: 15px; font-weight: 800; border-radius: 40px; cursor: pointer; transition: 0.3s; font-family: var(--font-head); }
+.journey-item.more-btn-item button:hover { transform: scale(1.05); background: var(--c-accent); }
 
-/* ⭐️ "이어서 보기" 팝업 내부 리스트 (재사용) */
+/* 하단 발걸음 바 */
+.journey-progress-container {
+    position: absolute; bottom: 8vh; left: 10vw; right: 10vw; height: 40px; z-index: 5;
+}
+.journey-line { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: var(--border-light); transform: translateY(-50%); }
+.journey-fill { position: absolute; top: 50%; left: 0; width: 0%; height: 2px; background: var(--c-accent); transform: translateY(-50%); transition: width 0.1s; }
+.journey-foot { position: absolute; top: 50%; left: 0%; transform: translate(-50%, -60%); font-size: 24px; transition: left 0.1s; }
+
+/* "발자취 확인하기" 리스트 CSS */
 .history-more-list { display: flex; flex-direction: column; gap: 0; }
 .hm-row { display: flex; gap: 18px; padding: 20px 0; border-top: 1px solid var(--border-light); text-align: left; }
 .hm-row:first-child { border-top: none; }
@@ -128,7 +110,10 @@ html[data-theme="dark"] .foliage-gif { filter: brightness(2.1) saturate(1.3); }
 .hm-title { font-family: var(--font-head); font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
 .hm-desc { font-size: 13px; line-height: 1.7; color: var(--text-secondary); }
 
-/* 차트 Ticker */
+
+/* ==========================================================================
+   차트 Ticker / 스케줄 / 굿즈
+   ========================================================================== */
 .update-time { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 500; }
 .ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }
 .ticker-wrapper { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
@@ -143,7 +128,6 @@ html[data-theme="dark"] .foliage-gif { filter: brightness(2.1) saturate(1.3); }
 .rank-diff { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); }
 html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
 
-/* 방송 스케줄 (Broadcast) */
 .today-broadcast-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .broadcast-card { position: relative; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-light); transition: var(--transition-smooth); }
 .broadcast-card:hover { border-color: var(--border-highlight); transform: translateY(-5px); }
@@ -153,9 +137,6 @@ html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
 .live-badge { align-self: flex-start; background: var(--c-accent); color: #000; font-family: var(--font-num); font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 30px; margin-bottom: 15px; letter-spacing: 1px; }
 .bc-title { font-size: 20px; font-weight: 600; color: var(--text-on-media); margin: 0; line-height: 1.4; letter-spacing: -0.5px; }
 
-/* ==========================================================================
-   ⭐️ RESCENE GOODS & ALBUM — 굿즈/음반 구매처 바로가기 리스트
-   ========================================================================== */
 .goods-links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 .goods-link-card {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -170,7 +151,7 @@ html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
 }
 .goods-link-card:hover .glc-go { background: var(--c-accent); color: var(--bg-base); border-color: var(--c-accent); }
 
-/* 모달 및 캘린더 */
+/* 모달 컨테이너 (캘린더 / 팝업) */
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9998; opacity: 0; pointer-events: none; transition: 0.4s ease; }
 .modal-backdrop.active { opacity: 1; pointer-events: auto; }
 .modal-backdrop.cal-backdrop { z-index: 8900; } 
@@ -187,32 +168,15 @@ html[data-theme="light"] .calendar-popup-wrapper { box-shadow: 0 20px 60px rgba(
 .day-cell.has-event { background: rgba(255,255,255,0.03); border-color: var(--border-light); }
 html[data-theme="light"] .day-cell.has-event { background: rgba(0,0,0,0.025); }
 .day-cell.has-event:hover { background: rgba(255,255,255,0.07); border-color: var(--border-highlight); transform: translateY(-2px); }
-html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05); }
 .day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
-.day-number { font-family: var(--font-num); font-size: 14px; color: var(--text-secondary); font-weight: 500; align-self: flex-start; margin-bottom: 8px; flex-shrink: 0; }
+.day-number { font-family: var(--font-num); font-size: 14px; color: var(--text-secondary); font-weight: 500; margin-bottom: 8px; }
 .day-cell.has-event .day-number { color: var(--text-primary); font-weight: 700; }
-.cell-event-list { display: flex; flex-direction: column; gap: 5px; width: 100%; overflow: hidden; flex: 1; justify-content: center; }
-.cal-event-row { display: flex; align-items: center; gap: 8px; width: 100%; overflow: hidden; }
-.cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.cal-event-time { font-size: 11px; font-weight: 600; font-family: var(--font-num); flex-shrink: 0; }
-.cal-event-title { color: var(--text-primary); font-size: 11px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
-.modal-wrapper { position: fixed; top: 0; right: 0; width: 440px; height: 100vh; background: #15161a; border-left: 1px solid var(--border-light); z-index: 9999; transform: translateX(100%); transition: var(--transition-smooth); overflow-y: auto; padding: 60px 40px; box-sizing: border-box; box-shadow: -30px 0 60px rgba(0,0,0,0.8); }
-html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: -30px 0 60px rgba(0,0,0,0.1); }
+.modal-wrapper { position: fixed; top: 0; right: 0; width: 440px; height: 100vh; background: #15161a; border-left: 1px solid var(--border-light); z-index: 9999; transform: translateX(100%); transition: var(--transition-smooth); overflow-y: auto; padding: 60px 40px; }
+html[data-theme="light"] .modal-wrapper { background: #FFFFFF; }
 .modal-wrapper.active { transform: translateX(0); }
-.close-btn { position: absolute; top: 25px; right: 25px; color: var(--text-secondary); background: none; border: none; cursor: pointer; transition: 0.3s; padding: 10px; }
-.close-btn:hover { color: var(--text-primary); transform: rotate(90deg); }
-.modal-header-flex { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
-.modal-date { font-family: var(--font-num); font-size: 24px; font-weight: 300; color: var(--text-primary); letter-spacing: 1px; }
-.schedule-detail-card { margin-bottom: 30px; }
-.sd-row { display: flex; align-items: flex-start; padding: 0 0 20px 0; }
-.sd-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 8px; margin-right: 16px; flex-shrink: 0; }
-.sd-time { font-weight: 500; font-family: var(--font-num); width: 55px; flex-shrink: 0; font-size: 15px; }
-.sd-title { color: var(--text-primary); font-weight: 500; font-size: 17px; flex: 1; line-height: 1.4; }
-.sd-img-wrapper { padding: 0 0 30px 22px; }
-.sd-img-wrapper img { width: 100%; height: 280px; object-fit: contain; background: var(--bg-surface); border-radius: 16px; border: 1px solid var(--border-light); }
-.schedule-detail-empty { text-align: center; color: var(--text-muted); font-size: 14px; padding: 40px 0; font-weight: 300; }
+.close-btn { position: absolute; top: 25px; right: 25px; color: var(--text-secondary); background: none; border: none; cursor: pointer; padding: 10px; }
+.close-btn:hover { color: var(--text-primary); }
 
-/* 메인 전용 모바일 반응형 */
 @media (max-width: 800px) {
     .calendar-popup-wrapper { width: 95%; padding: 45px 15px 25px !important; }
     #calendarPopupModal .close-btn { top: 8px !important; right: 8px !important; padding: 5px !important; }
@@ -220,11 +184,11 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: -30px
     .calendar-grid { gap: 6px; }
     .day-cell { height: 95px !important; min-height: 95px !important; padding: 8px; }
     .modal-wrapper { width: 100%; padding: 40px 20px; }
-    .ticker-songs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; padding-right: 20px; -ms-overflow-style: none; scrollbar-width: none; }
+    .ticker-songs { overflow-x: auto !important; padding-right: 20px; scrollbar-width: none; }
     .ticker-songs::-webkit-scrollbar { display: none; }
-    .foliage-gif { width: 200px; }
-    .history-intro-stage.burst .foliage-gif.spread-1 { transform: translate(-105%, -95%) scale(1); }
-    .history-intro-stage.burst .foliage-gif.spread-2 { transform: translate(5%, -95%) scale(1); }
-    .history-intro-stage.burst .foliage-gif.spread-3 { transform: translate(-105%, 5%) scale(1); }
-    .history-intro-stage.burst .foliage-gif.spread-4 { transform: translate(5%, 5%) scale(1); }
+    
+    /* 모바일 가로 스크롤 최적화 */
+    .journey-track { gap: 30px; }
+    .journey-item { width: 85vw; }
+    .ji-title { font-size: 20px; }
 }

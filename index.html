@@ -51,9 +51,9 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             </button>
             <div class="mobile-sns-box">
-                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.style.display='none'"></a>
-                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
-                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
+                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X"></a>
+                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG"></a>
+                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT"></a>
             </div>
         </div>
         <ul class="mobile-menu-list">
@@ -66,7 +66,7 @@
     </div>
 
     <div id="mainWrapper">
-        <!-- ⭐️ 메인 히어로 — 배경 영상 무한 루프 -->
+        <!-- 메인 히어로 -->
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay muted loop playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
@@ -79,34 +79,36 @@
             </div>
         </div>
 
-        <!-- ⭐️ 히스토리 인트로 — 나뭇잎이 퍼지며 "리센느의 발걸음" 타이틀 등장 -->
-        <div class="history-intro-stage" id="historyIntroStage">
-            <img class="foliage-gif spread-1" src="images/foliage.gif" alt="" onerror="console.warn('foliage.gif 로드 실패: images/foliage.gif 경로를 확인해주세요')">
-            <img class="foliage-gif spread-2" src="images/foliage.gif" alt="">
-            <img class="foliage-gif spread-3" src="images/foliage.gif" alt="">
-            <img class="foliage-gif spread-4" src="images/foliage.gif" alt="">
-            <h2 class="history-intro-title">리센느의 발걸음</h2>
-        </div>
+        <!-- ⭐️ 완벽하게 수정한 가로 스크롤 일대기 섹션 -->
+        <div class="journey-section" id="journeySection">
+            <!-- 휠을 내려도 이 화면이 고정(Sticky)됩니다 -->
+            <div class="journey-sticky">
+                
+                <!-- 진입 시 가운데서 쫙 퍼지는 나뭇잎 이펙트 -->
+                <div id="foliageEffect" class="foliage-effect">
+                    <img src="images/foliage.gif" alt="">
+                </div>
+                
+                <!-- 상단 타이틀 -->
+                <div class="journey-header">
+                    <h2>RESCENE <span>HISTORY</span></h2>
+                    <p>마우스 휠을 내리면 오른쪽으로 발걸음이 이동합니다 ➔</p>
+                </div>
 
-        <!-- ⭐️ 발걸음 저니 — 스크롤에 따라 발걸음이 이동하며 연혁이 전환됨 -->
-        <div class="section-container reveal" id="journeySection">
-            <div class="section-header">
-                <div class="section-title">RESCENE <span>HISTORY</span></div>
-                <div style="font-size:12px; color:var(--text-muted);">마우스 휠로 넘겨보세요 →</div>
-            </div>
+                <!-- 휠을 내리면 왼쪽으로 이동하여 오른쪽 콘텐츠를 보여주는 트랙 -->
+                <div class="journey-window">
+                    <div class="journey-track" id="journeyTrack">
+                        <!-- 자바스크립트로 유튜브와 글귀가 이곳에 가로로 렌더링됩니다 -->
+                    </div>
+                </div>
 
-            <div class="journey-path-wrap">
-                <div class="journey-path" id="journeyPath">
-                    <div class="journey-progress-fill" id="journeyProgressFill"></div>
-                    <div class="journey-footstep" id="journeyFootstep">👣</div>
+                <!-- 하단 발걸음 진행바 -->
+                <div class="journey-progress-container">
+                    <div class="journey-line"></div>
+                    <div class="journey-fill" id="journeyFill"></div>
+                    <div class="journey-foot" id="journeyFoot">👣</div>
                 </div>
             </div>
-
-            <div class="journey-track-viewport">
-                <div class="journey-track" id="journeyTrack"></div>
-            </div>
-
-            <div class="journey-scroll-hint">마우스 휠을 내리면 발걸음이 오른쪽으로 이동해요 →</div>
         </div>
 
         <div class="section-container reveal" id="chartSection">
@@ -147,7 +149,6 @@
             </div>
         </div>
 
-        <!-- ⭐️ RESCENE GOODS & ALBUM -->
         <div class="section-container reveal" id="goodsLinksSection" style="padding-bottom: 120px;">
             <div class="section-header">
                 <div class="section-title">RESCENE <span>GOODS &amp; ALBUM</span></div>
@@ -170,22 +171,23 @@
 
         <footer class="global-footer">
             <div class="footer-sns">
-                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.style.display='none'"></a>
-                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
-                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
+                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X"></a>
+                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG"></a>
+                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT"></a>
             </div>
             <p>&copy; 2024 RESCENE ARCHIVE. All Rights Reserved.</p>
         </footer>
 
     </div>
 
-    <!-- 모달 컨테이너 (일대기 이어보기, 캘린더, 스케줄) -->
+    <!-- 발자취 확인하기 팝업 모달 -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="calendar-popup-wrapper" id="historyModal">
         <button class="close-btn" onclick="closeHistoryModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
         <div id="historyModalContent" style="padding-top: 10px;"></div>
     </div>
 
+    <!-- 캘린더/스케줄 모달 -->
     <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
     <div class="calendar-popup-wrapper" id="calendarPopupModal">
         <button class="close-btn" onclick="closeCalendarPopup()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
@@ -205,113 +207,112 @@
         <div id="modalScheduleText"></div>
     </div>
 
-    <script src="js/schedule-data.js"></script>
     <script>
-        // 하위 폴더가 아닌 루트 페이지이므로 SITE_ROOT는 빈 문자열
-        var SITE_ROOT = '';
-    </script>
-    <script src="js/common.js"></script>
-    <script>
-        // ⭐️ 여기서부터는 index.html 전용 로직만 남겼어요.
-        //    모바일메뉴 / 테마토글 / 캘린더 / 스케줄모달 / reveal 공통 로직은 js/common.js 에서 관리됩니다.
-
-        /* =====================================================
-           1) 히스토리 인트로 — 나뭇잎이 퍼지며 타이틀 등장 (1회 재생)
-           ===================================================== */
-        let introTriggered = false;
-        const introStage = document.getElementById('historyIntroStage');
-        const introObserver = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting && !introTriggered) {
-                    introTriggered = true;
-                    introStage.classList.add('burst');
-                }
-            });
-        }, { threshold: 0.35 });
-        if (introStage) introObserver.observe(introStage);
-
-        /* =====================================================
-           2) 발걸음 저니 — 페이지는 스크롤되지 않고, 이 박스 안에서만
-           마우스 휠(세로)을 가로 스크롤로 변환해 발걸음이 오른쪽으로 이동
-           ===================================================== */
-        // ⭐️ 영상은 mp4가 아니라 유튜브 링크로 넣어주세요. videoId만 교체하면 됩니다.
-        //    (데뷔 쇼케이스는 실제로 주신 링크로 채워뒀고, 나머지 2개는 임시로 대표 영상을 넣어뒀어요 — 실제 링크로 바꿔주세요)
-        const JOURNEY_STOPS = [
-            { date: "2024년 3월 26일", title: "RESCENE 첫 데뷔 및 쇼케이스", desc: "우리의 첫 장면이 시작된 날. 데뷔 싱글 [Re:Scene] 발매와 함께 팬들과 처음 마주하다.", videoId: "8T0J9NrvxYs" },
-            { date: "2024년 3월 29일", title: "KBS 뮤직뱅크 첫 음악방송 데뷔", desc: "지상파 첫 입성! 타이틀곡 'UhUh'로 화려한 퍼포먼스를 선보이며 대중에게 눈도장을 찍다.", videoId: "ZbO9PBdFRdc" /* TODO: 실제 뮤직뱅크 영상 링크로 교체 */ },
-            { date: "2024년 4월 15일", title: "뮤직비디오 1,000만 뷰 돌파", desc: "글로벌 팬덤의 폭발적인 반응! 데뷔곡 뮤직비디오가 초고속으로 천만 뷰를 달성하며 저력을 입증하다.", videoId: "ZbO9PBdFRdc" /* TODO: 실제 뮤직비디오 링크로 교체 */ },
-            { more: true, title: "발자취 확인하기", desc: "첫 미니앨범, 데뷔 첫 음악방송 1위, 역주행까지. 계속되는 리센느의 이야기를 확인해보세요." }
-        ];
-
-        // ⭐️ "발자취 확인하기" 팝업 전용 목록 (최초/처음/목표 달성 위주로 구성)
-        const HISTORY_MORE = [
-            { date: "2024.08.27", title: "첫 미니앨범 SCENEDROME 발매", desc: "타이틀곡 'LOVE ATTACK', 'Pinball'과 함께 발매된 첫 미니 1집. 데뷔 5개월 만에 완성한 첫 정규 라인업의 결과물." },
-            { date: "2025.02.05", title: "미니 2집 Glow Up 발매", desc: "타이틀곡 'Glow Up'으로 두 번째 미니앨범 발매, 성장한 팀 컬러를 보여준 앨범." },
-            { date: "2025.11.25", title: "미니 3집 lip bomb 발매", desc: "타이틀곡 'Heart Drop', 'Bloom'과 함께한 세 번째 미니앨범. 데뷔 이후 가장 짙어진 리센느만의 향을 담았다." },
-            { date: "2026.07.09", title: "LOVE ATTACK 멜론 TOP100 1위 역주행", desc: "발매 약 2년 만에 'LOVE ATTACK'이 멜론 TOP100 1위에 오르며 역주행에 성공. 초기 곡이 뒤늦게 재조명된 상징적인 순간." },
-            { date: "2026.07.14", title: "데뷔 첫 음악방송 1위", desc: "'Pretty Girl' 활동으로 더쇼에서 데뷔 후 첫 음악방송 1위를 달성. 데뷔곡부터 함께한 팬들과 처음으로 함께 나눈 목표 달성의 순간." }
-        ];
-
-        const journeyTrack = document.getElementById('journeyTrack');
-        const journeyPath = document.getElementById('journeyPath');
-        const journeyFootstep = document.getElementById('journeyFootstep');
-        const journeyProgressFill = document.getElementById('journeyProgressFill');
-        const N = JOURNEY_STOPS.length;
-
-        // 정거장(슬라이드) 생성
-        JOURNEY_STOPS.forEach((stop) => {
-            const el = document.createElement('div');
-            el.className = 'journey-stop' + (stop.more ? ' journey-more' : '');
-            if (stop.more) {
-                el.innerHTML = `
-                    <div class="history-more-icon">→</div>
-                    <div class="js-title">${stop.title}</div>
-                    <div class="js-desc">${stop.desc}</div>
-                    <button class="journey-more-btn" onclick="openHistoryContinued()">발자취 확인하기</button>
-                `;
-            } else {
-                el.innerHTML = `
-                    <div class="js-date">${stop.date}</div>
-                    <div class="js-title">${stop.title}</div>
-                    <div class="js-desc">${stop.desc}</div>
-                    <div class="js-video-wrap">
-                        <iframe src="https://www.youtube.com/embed/${stop.videoId}" title="${stop.title}" allow="encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                    </div>
-                `;
-            }
-            journeyTrack.appendChild(el);
-        });
-
-        // 경로 위 정거장 마커 생성
-        JOURNEY_STOPS.forEach((stop, i) => {
-            const marker = document.createElement('div');
-            marker.className = 'journey-marker';
-            marker.style.left = (N === 1 ? 0 : (i / (N - 1)) * 100) + '%';
-            journeyPath.appendChild(marker);
-        });
-        const journeyMarkerEls = journeyPath.querySelectorAll('.journey-marker');
-
-        // 트랙 스크롤 진행률에 따라 발걸음/진행바/마커 갱신
-        function updateJourneyProgress() {
-            const maxScroll = journeyTrack.scrollWidth - journeyTrack.clientWidth;
-            const progress = maxScroll > 0 ? (journeyTrack.scrollLeft / maxScroll) : 0;
-            journeyFootstep.style.left = (progress * 100) + '%';
-            journeyProgressFill.style.width = (progress * 100) + '%';
-            journeyMarkerEls.forEach((m, i) => {
-                const p_i = (N === 1) ? 0 : i / (N - 1);
-                m.classList.toggle('passed', progress >= p_i - 0.02);
-            });
+        // --- 1. 테마 및 네비게이션 공통 로직 ---
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+        function toggleMobileMenu() {
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+            document.getElementById('mobileMenuPanel').classList.toggle('active');
+            document.getElementById('mobileMenuBackdrop').classList.toggle('active');
+            document.body.style.overflow = document.getElementById('mobileMenuPanel').classList.contains('active') ? 'hidden' : 'auto';
         }
-        journeyTrack.addEventListener('scroll', updateJourneyProgress, { passive: true });
-        updateJourneyProgress();
+        const sunIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+        const moonIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+        function updateThemeIcon(theme) { const btn = document.getElementById('themeToggleBtn'); if (btn) btn.innerHTML = (theme === 'dark') ? sunIcon : moonIcon; }
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('rescene-theme', next);
+            updateThemeIcon(next);
+        }
+        updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
 
-        // ⭐️ 마우스 휠(세로)을 가로 스크롤로 변환 — 페이지 자체는 움직이지 않음
-        journeyTrack.addEventListener('wheel', (e) => {
-            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-                e.preventDefault();
-                journeyTrack.scrollLeft += e.deltaY * 1.4;
+        // 스크롤 시 드러나는 reveal 효과
+        const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 2. ⭐️ 가로 스크롤 저니 (스크롤리텔링) 로직 ---
+        
+        // 데이터 (회원님이 요청하신 쇼케이스 유튜브 링크 및 정보 포함)
+        const JOURNEY_STOPS = [
+            { date: "2024. 03. 26", title: "RESCENE 첫 데뷔 및 쇼케이스", desc: "우리의 첫 장면이 시작된 날. 데뷔 싱글 [Re:Scene] 발매와 함께 팬들과 처음 마주하다.", type: "youtube", media: "https://www.youtube.com/embed/8T0J9NrvxYs?autoplay=0&mute=0" },
+            { date: "2024. 03. 29", title: "KBS 뮤직뱅크 첫 음악방송 데뷔", desc: "지상파 첫 입성! 타이틀곡 'UhUh'로 화려한 퍼포먼스를 선보이며 대중에게 눈도장을 찍다.", type: "video", media: "video/yoyo_teaser.mp4" },
+            { date: "2024. 04. 15", title: "뮤직비디오 1,000만 뷰 돌파", desc: "글로벌 팬덤의 폭발적인 반응! 데뷔곡 뮤직비디오가 초고속으로 천만 뷰를 달성하며 저력을 입증하다.", type: "video", media: "video/member.mp4" },
+            { type: "more" } // 마지막 아이템: 팝업 버튼
+        ];
+
+        const track = document.getElementById('journeyTrack');
+        
+        // HTML 요소 생성
+        JOURNEY_STOPS.forEach(stop => {
+            const el = document.createElement('div');
+            el.className = 'journey-item' + (stop.type === 'more' ? ' more-btn-item' : '');
+            
+            if(stop.type === 'more') {
+                el.innerHTML = `<button onclick="openHistoryContinued()">발자취 확인하기 ➔</button>`;
+            } else {
+                let mediaHtml = '';
+                if(stop.type === 'youtube') {
+                    // 유튜브 Iframe 렌더링
+                    mediaHtml = `<iframe src="${stop.media}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                } else {
+                    // 일반 MP4 비디오
+                    mediaHtml = `<video src="${stop.media}" muted loop playsinline autoplay></video>`;
+                }
+                el.innerHTML = `
+                    <div class="ji-date">${stop.date}</div>
+                    <div class="ji-title">${stop.title}</div>
+                    <div class="ji-desc">${stop.desc}</div>
+                    <div class="ji-media">${mediaHtml}</div>
+                `;
             }
-        }, { passive: false });
+            track.appendChild(el);
+        });
+
+        // 스크롤 및 잎사귀 이펙트 계산
+        const journeySection = document.getElementById('journeySection');
+        const journeyFill = document.getElementById('journeyFill');
+        const journeyFoot = document.getElementById('journeyFoot');
+        const foliageEffect = document.getElementById('foliageEffect');
+        let foliageTriggered = false;
+
+        // 아이템 개수에 비례하여 섹션 높이를 부여 (휠을 내릴 수 있는 공간 확보)
+        journeySection.style.height = `${JOURNEY_STOPS.length * 100}vh`;
+
+        window.addEventListener('scroll', () => {
+            const rect = journeySection.getBoundingClientRect();
+            // 화면에서 스크롤 가능한 총 길이
+            const scrollableHeight = journeySection.offsetHeight - window.innerHeight;
+            
+            // 진행률 계산 (0 ~ 1)
+            let progress = -rect.top / scrollableHeight;
+            if(progress < 0) progress = 0;
+            if(progress > 1) progress = 1;
+
+            // 진입 시 나뭇잎 퍼지는 효과 1회 트리거
+            if(progress > 0 && !foliageTriggered) {
+                foliageTriggered = true;
+                foliageEffect.classList.add('active');
+            }
+
+            // 트랙 가로 이동 (progress 1일 때 맨 끝으로 이동)
+            const maxTranslate = track.scrollWidth - window.innerWidth + 100; // 여백 추가
+            if(maxTranslate > 0) {
+                track.style.transform = `translateX(${-progress * maxTranslate}px)`;
+            }
+
+            // 하단 👣 발걸음 바 이동
+            journeyFill.style.width = `${progress * 100}%`;
+            journeyFoot.style.left = `${progress * 100}%`;
+        });
+
+        // 팝업 열기 로직
+        const HISTORY_MORE = [
+            { date: "2024.08.27", title: "첫 미니앨범 SCENEDROME 발매", desc: "타이틀곡 'LOVE ATTACK' 발매." },
+            { date: "2025.02.05", title: "미니 2집 Glow Up 발매", desc: "타이틀곡 'Glow Up'으로 두 번째 미니앨범 발매." },
+            { date: "2026.07.14", title: "데뷔 첫 음악방송 1위", desc: "'Pretty Girl' 활동으로 더쇼 데뷔 첫 음악방송 1위 달성." }
+        ];
 
         function openHistoryContinued() {
             const listHtml = HISTORY_MORE.map(h => `
@@ -325,8 +326,8 @@
             `).join('');
             const html = `
                 <div style="text-align:center; margin-bottom: 20px;">
-                    <div style="color:var(--c-accent); font-family:var(--font-num); font-size:14px; font-weight:700;">RESCENE STORY</div>
-                    <h2 style="font-size:24px; font-family:var(--font-head); margin:10px 0;">이어서 보기</h2>
+                    <div style="color:var(--c-accent); font-size:14px; font-weight:700;">RESCENE STORY</div>
+                    <h2 style="font-size:24px; font-family:var(--font-head); margin:10px 0;">발자취 이어서 보기</h2>
                 </div>
                 <div class="history-more-list">${listHtml}</div>
             `;
@@ -342,9 +343,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        /* =====================================================
-           3) 데뷔 타이머
-           ===================================================== */
+        // --- 3. 차트, 캘린더 등 나머지 로직 ---
         const debutDate = new Date("2024-03-26T18:00:00+09:00");
         setInterval(() => {
             const diff = new Date() - debutDate;
@@ -352,9 +351,6 @@
             document.getElementById('timeFlowText').innerText = `${String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0')}:${String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0')}:${String(Math.floor((diff / 1000) % 60)).padStart(2, '0')}`;
         }, 1000);
 
-        /* =====================================================
-           4) 실시간 음악 차트
-           ===================================================== */
         let tickerInterval;
         async function fetchSongCharts() {
             try {
@@ -396,6 +392,17 @@
             } catch (e) { console.log("차트 대기 중"); }
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
+
+        // 스케줄러 렌더링
+        const scheduleDB = { "2026-07-25": { items: [{ time: "12:45", title: "2026 원 유니버스 페스티벌" }] } };
+        let currentCalYear = 2026; let currentCalMonth = 7;
+        function changeMonth(delta) { currentCalMonth += delta; if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } renderCalendar(); }
+        function renderCalendar() { const calendarDays = document.getElementById('calendarDays'); document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); let html = ''; for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; } for (let i = 1; i <= lastDate; i++) { const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; const data = scheduleDB[dateKey]; const hasEvent = data ? 'has-event' : ''; html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span></div>`; } calendarDays.innerHTML = html; }
+        function openCalendarPopup() { document.getElementById('calendarPopupModal').classList.add('active'); document.getElementById('calPopupBackdrop').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeCalendarPopup() { document.getElementById('calendarPopupModal').classList.remove('active'); document.getElementById('calPopupBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
+        function openModal(year, month, day, dateKey) { document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`; document.getElementById('scheduleModal').classList.add('active'); document.getElementById('modalBackdrop').classList.add('active'); }
+        function closeModal() { document.getElementById('scheduleModal').classList.remove('active'); document.getElementById('modalBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
+        window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
     </script>
 </body>
 </html>

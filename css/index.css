@@ -70,44 +70,46 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
     transform: translateY(-2px);
 }
 
-/* --- 시네마틱 발자취 모달 스타일 --- */
+/* --- ⭐️ 시네마틱 발자취 모달 (UI 고급화/풀스크린) --- */
 .history-modal-wrapper {
     position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -45%);
-    width: 95%; max-width: 1200px;
-    height: 85vh; 
-    background: transparent; 
-    border: 1px solid var(--border-light);
-    border-radius: 24px;
+    top: 0; left: 0;
+    width: 100vw; 
+    height: 100vh; 
+    background: #000; 
+    border: none;
+    border-radius: 0;
     z-index: 9999;
-    box-shadow: 0 20px 80px rgba(0,0,0,0.9);
     opacity: 0; pointer-events: none;
-    transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* 서서히 스케일업 되며 몰입감 있게 등장 */
+    transform: scale(0.95);
+    transition: 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
-html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
-.history-modal-wrapper.active { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
+.history-modal-wrapper.active { 
+    opacity: 1; 
+    transform: scale(1); 
+    pointer-events: auto; 
+}
 
 /* 유튜브 영상 백그라운드 */
 .history-modal-bg {
     position: absolute; top: 0; left: 0; 
     width: 100%; height: 100%;
     z-index: 0; pointer-events: none;
-    opacity: 0; /* JS에서 직접 transition 제어 */
+    opacity: 0; 
 }
-.history-modal-bg.show {
-    opacity: 1; 
-}
+.history-modal-bg.show { opacity: 1; }
 .history-modal-bg iframe {
     position: absolute; top: 50%; left: 50%;
     width: 150%; height: 150%; 
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
+/* 은은한 비네팅 효과 (가장자리를 어둡게 하여 텍스트 집중도 상승) */
 .history-modal-overlay {
     position: absolute; top: 0; left: 0; 
     width: 100%; height: 100%;
-    background: rgba(18, 19, 24, 0.6); 
+    background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.85) 100%);
     z-index: 1;
 }
 
@@ -117,13 +119,21 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     width: 100%; height: 100%;
     box-sizing: border-box;
 }
+
+/* 고급스러운 우측 상단 닫기 버튼 */
 .close-btn {
-    position: absolute; right: 25px; top: 25px;
-    z-index: 99999; color: #fff;
-    background: rgba(0,0,0,0.4); border-radius: 50%;
-    padding: 10px; cursor: pointer; transition: 0.3s; border: none;
+    position: absolute; right: 40px; top: 40px;
+    z-index: 99999; color: rgba(255, 255, 255, 0.6);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    padding: 12px; cursor: pointer; transition: 0.4s ease;
 }
-.close-btn:hover { background: rgba(0,0,0,0.8); transform: rotate(90deg); }
+.close-btn:hover { 
+    background: #fff; color: #000; 
+    transform: rotate(90deg); 
+    border-color: #fff;
+}
 
 .history-page {
     width: 100%; height: 100%;
@@ -133,16 +143,29 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     padding: 20px; box-sizing: border-box;
 }
 
-/* ⭐️ 날짜 스타일 */
+/* ⭐️ 날짜 폰트 디자인 (더 얇고 세련되게) */
 .h-date {
-    font-family: var(--font-num); font-size: 64px; font-weight: 800;
+    font-family: var(--font-num); font-size: 72px; font-weight: 300;
     color: #ffffff;
-    letter-spacing: 6px;
+    letter-spacing: 12px;
     margin-bottom: 25px;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.9);
+    text-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
-/* ⭐️ 문구 서서히 상승하는 효과 */
+/* ⭐️ 옛날 필름/VHS 노이즈 애니메이션 (카운트다운 전용) */
+@keyframes vhsFlicker {
+    0% { opacity: 0.8; filter: blur(1px) drop-shadow(3px 0 0 rgba(255,0,0,0.5)) drop-shadow(-3px 0 0 rgba(0,255,255,0.5)); }
+    25% { opacity: 0.5; filter: blur(2px) drop-shadow(-2px 0 0 rgba(255,0,0,0.4)) drop-shadow(2px 0 0 rgba(0,255,255,0.4)); transform: translate(1px, -1px); }
+    50% { opacity: 0.9; filter: blur(0px) drop-shadow(2px 0 0 rgba(255,0,0,0.6)) drop-shadow(-2px 0 0 rgba(0,255,255,0.6)); transform: translate(-1px, 1px); }
+    75% { opacity: 0.4; filter: blur(3px) drop-shadow(4px 0 0 rgba(255,0,0,0.3)) drop-shadow(-4px 0 0 rgba(0,255,255,0.3)); transform: translate(0, 2px); }
+    100% { opacity: 0.8; filter: blur(1px) drop-shadow(3px 0 0 rgba(255,0,0,0.5)) drop-shadow(-3px 0 0 rgba(0,255,255,0.5)); }
+}
+.h-date.counting {
+    animation: vhsFlicker 0.12s infinite;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ⭐️ 문구 서서히 상승하는 효과 (얇고 모던하게) */
 .hidden-title {
     opacity: 0;
     transform: translateY(30px); 
@@ -152,9 +175,10 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     transform: translateY(0); 
 }
 .h-title {
-    font-family: var(--font-body); font-size: 36px; font-weight: 700;
-    color: #fff; line-height: 1.4;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.9);
+    font-family: var(--font-body); font-size: 32px; font-weight: 300;
+    color: rgba(255, 255, 255, 0.95); line-height: 1.5;
+    letter-spacing: 2px;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
 /* ⭐️ 가운데 정렬 헤더 구조 변경 */
@@ -246,12 +270,16 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: -30px
     .ticker-songs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; padding-right: 20px; -ms-overflow-style: none; scrollbar-width: none; }
     .ticker-songs::-webkit-scrollbar { display: none; }
     
-    .history-modal-wrapper { height: 90vh; }
-    .h-date { font-size: 40px; }
-    .h-title { font-size: 24px; }
+    .history-modal-wrapper { 
+        height: 100vh;
+        transform: scale(0.95);
+    }
+    /* 모바일에서는 닫기 버튼 크기/위치 조정 */
+    .close-btn { top: 20px; right: 20px; padding: 8px; }
+    .h-date { font-size: 44px; letter-spacing: 6px; }
+    .h-title { font-size: 22px; }
     
     #historySection .section-title { font-size: 40px; }
-    
     .update-time { position: static; margin-top: 10px; }
     .section-header.center-header { align-items: center; flex-direction: column; }
 }

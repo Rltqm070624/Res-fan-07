@@ -4,7 +4,7 @@
 .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(18,19,24,0.2) 0%, rgba(18,19,24,0.6) 60%, var(--bg-base) 100%); z-index: 2; }
 html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 60%, var(--bg-base) 100%); }
 
-/* ⭐️ 히어로 영역(로고 및 시간) 1.5초 부드러운 애니메이션 추가 */
+/* ⭐️ 히어로 영역 1.5초 부드러운 등장 */
 .hero-content { 
     position: relative; z-index: 5; text-align: center; margin-top: 60px; 
     opacity: 0;
@@ -33,7 +33,7 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
     overflow: hidden;
 }
 
-/* ⭐️ WITH RESCENE 배경 영상 & 흩날리는 벚꽃 3초 서서히 등장 */
+/* WITH RESCENE 배경 영상 & 흩날리는 벚꽃 3초 서서히 등장 */
 #historySection .history-bg-video {
     position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1;
     opacity: 0; transition: opacity 3s ease-in-out;
@@ -87,24 +87,34 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
     transform: translateY(-2px);
 }
 
-/* --- ⭐️ 시네마틱 오토 플레이 발자취 모달 스타일 --- */
+/* --- 시네마틱 발자취 모달 스타일 --- */
 .history-modal-wrapper {
     position: fixed;
     top: 50%; left: 50%;
     transform: translate(-50%, -45%);
     width: 95%; max-width: 1200px;
     height: 85vh; 
-    background: #000; 
+    background: transparent; 
     border: 1px solid var(--border-light);
     border-radius: 24px;
     z-index: 9999;
     box-shadow: 0 20px 80px rgba(0,0,0,0.9);
     opacity: 0; pointer-events: none;
     transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
 }
 html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
 .history-modal-wrapper.active { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
+
+/* ⭐️ 완벽한 구형 TV 파직! 꺼지는 효과 */
+.tv-off-effect {
+    animation: tvOff 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+@keyframes tvOff {
+    0% { transform: scale(1, 1); filter: brightness(1); }
+    30% { transform: scale(1, 0.01); filter: brightness(10); background: #fff; }
+    60% { transform: scale(1, 0.01); filter: brightness(20); background: #fff; box-shadow: 0 0 50px 20px #fff; }
+    100% { transform: scale(0, 0); filter: brightness(0); }
+}
 
 /* 유튜브 영상 백그라운드 (페이드 인/아웃 효과) */
 .history-modal-bg {
@@ -136,15 +146,14 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     width: 100%; height: 100%;
     box-sizing: border-box;
 }
-.history-modal-wrapper .close-btn {
+.close-btn {
     position: absolute; right: 25px; top: 25px;
-    z-index: 20; color: #fff;
+    z-index: 99999; color: #fff;
     background: rgba(0,0,0,0.4); border-radius: 50%;
     padding: 10px; cursor: pointer; transition: 0.3s; border: none;
 }
-.history-modal-wrapper .close-btn:hover { background: rgba(0,0,0,0.8); transform: rotate(90deg); }
+.close-btn:hover { background: rgba(0,0,0,0.8); transform: rotate(90deg); }
 
-/* 오토 스크롤되는 페이지 영역 */
 .history-page {
     width: 100%; height: 100%;
     display: flex; flex-direction: column;
@@ -153,21 +162,25 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     padding: 20px; box-sizing: border-box;
 }
 
-/* ⭐️ 날짜 촤라락 + 문구 서서히 상승 효과 */
+/* ⭐️ 날짜 대쉬 블러 효과 */
 .h-date {
     font-family: var(--font-num); font-size: 64px; font-weight: 800;
     color: var(--c-accent); letter-spacing: 6px;
     margin-bottom: 25px;
     text-shadow: 0 4px 20px rgba(0,0,0,0.9);
-    transition: opacity 0.3s ease;
 }
-.h-date.spinning {
-    opacity: 0.35; /* 돌아갈 때 연하게 */
+.h-date.dash-blur {
+    opacity: 0.7; 
+    transform: scale(1.05);
+    filter: blur(2px);
+    letter-spacing: 8px;
 }
+
+/* ⭐️ 문구 서서히 상승하는 효과 */
 .hidden-title {
     opacity: 0;
-    transform: translateY(20px); 
-    transition: opacity 1s ease-out, transform 1s ease-out; /* 1초 동안 부드럽게 상승 */
+    transform: translateY(30px); 
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out; 
 }
 .hidden-title.show {
     opacity: 1;
@@ -178,20 +191,6 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     color: #fff; line-height: 1.4;
     text-shadow: 0 4px 20px rgba(0,0,0,0.9);
 }
-
-/* ⭐️ 화면 지지직(Glitch) 효과 클래스 */
-.glitch-effect {
-    animation: glitchAnim 0.2s linear infinite;
-    filter: invert(1) grayscale(1);
-}
-@keyframes glitchAnim {
-    0% { transform: translate(2px, 2px); }
-    25% { transform: translate(-2px, -2px); }
-    50% { transform: translate(2px, -2px); }
-    75% { transform: translate(-2px, 2px); }
-    100% { transform: translate(2px, 2px); }
-}
-
 
 /* ⭐️ 가운데 정렬 헤더 구조 변경 (섹션 헤더 공통) */
 .section-header { 
@@ -205,14 +204,14 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     justify-content: center;
     text-align: center;
 }
-/* 시간 기준 텍스트 우측 고정 */
+/* ⭐️ 시간 기준 텍스트 우측 상단 고정 */
 .update-time { 
-    position: absolute; right: 0; bottom: 0;
+    position: absolute; right: 10px; top: -30px;
     font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 500; 
 }
 
 /* 차트 Ticker */
-.ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); margin-top: 15px; }
+.ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }
 .ticker-wrapper { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
 .ticker-item { height: 56px; display: flex; align-items: center; padding: 0 25px; gap: 30px; width: 100%; box-sizing: border-box; }
 .ticker-platform { width: 70px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }

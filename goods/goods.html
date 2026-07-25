@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESCENE ARCHIVE | MERCH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <!-- ⭐️ 상위 폴더의 공통 CSS와 자신의 폴더에 있는 CSS 호출 -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="goods.css">
+
+    <script>
+        (function() { const saved = localStorage.getItem('rescene-theme') || 'dark'; document.documentElement.setAttribute('data-theme', saved); })();
+    </script>
+</head>
+<body>
+    <nav class="top-nav">
+        <!-- ⭐️ 로고 클릭 시 상위 폴더의 메인으로 이동 -->
+        <div class="nav-brand"><a href="../index.html" style="color:inherit; text-decoration:none;">RESCENE</a></div>
+        <ul class="desktop-menu">
+            <li><a href="../index.html">HOME</a></li>
+            <li><a href="../member/member.html">MEMBERS</a></li>
+            <li><a href="../index.html#chartSection">CHARTS</a></li>
+            <li><a href="../index.html#todayScheduleSection">SCHEDULE</a></li>
+            <li><a href="goods.html">GOODS</a></li>
+        </ul>
+        <div class="nav-right">
+            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()"></button>
+            <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-menu-panel" id="mobileMenuPanel">
+        <ul class="mobile-menu-list">
+            <li><a href="../index.html">HOME</a></li>
+            <li><a href="../member/member.html">MEMBERS</a></li>
+            <li><a href="../index.html#chartSection">CHARTS</a></li>
+            <li><a href="../index.html#todayScheduleSection">SCHEDULE</a></li>
+            <li><a href="goods.html">GOODS</a></li>
+        </ul>
+    </div>
+
+    <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
+        <div class="section-container reveal active" style="flex: 1;">
+            <div class="section-header">
+                <div class="section-title">OFFICIAL <span>MERCH</span></div>
+                <div style="font-size:12px; color:var(--text-muted);">실시간 재고 상태 자동 확인중...</div>
+            </div>
+            
+            <div class="goods-grid-v2">
+                <!-- ⭐️ 이미지는 상위 폴더의 images 폴더 참조 -->
+                <div class="goods-item">
+                    <div class="goods-img" id="remini-img-wrap"><img src="../images/goods/REMINI.jpg" alt="REMINI Set"><div class="soldout-stamp"><span>SOLD</span></div></div>
+                    <div class="goods-price-text" id="remini-price">가격 확인중...</div>
+                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">WITHMUU <span class="stock-num" id="remini-weverse-status"></span></span><a href="https://withmuu.com/goods/goods_view.php?goodsNo=1000014598" target="_blank" class="buy-btn" id="remini-weverse-btn">바로가기</a></div></div>
+                </div>
+                <div class="goods-item">
+                    <div class="goods-img" id="jota-img-wrap"><img src="../images/goods/jota.jpg" alt="Jota"><div class="soldout-stamp"><span>SOLD</span></div></div>
+                    <div class="goods-price-text" id="jota-price">가격 확인중...</div>
+                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="jota-weverse-status"></span></span><a href="https://kream.co.kr/products/985255" target="_blank" class="buy-btn" id="jota-weverse-btn">바로가기</a></div></div>
+                </div>
+                <div class="goods-item">
+                    <div class="goods-img" id="ming-img-wrap"><img src="../images/goods/ming.jpg" alt="Ming"><div class="soldout-stamp"><span>SOLD</span></div></div>
+                    <div class="goods-price-text" id="ming-price">가격 확인중...</div>
+                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="ming-weverse-status"></span></span><a href="https://kream.co.kr/products/985257" target="_blank" class="buy-btn" id="ming-weverse-btn">바로가기</a></div></div>
+                </div>
+                <div class="goods-item">
+                    <div class="goods-img" id="ribbu-img-wrap"><img src="../images/goods/ribbu.jpg" alt="Ribbu"><div class="soldout-stamp"><span>SOLD</span></div></div>
+                    <div class="goods-price-text" id="ribbu-price">가격 확인중...</div>
+                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="ribbu-weverse-status"></span></span><a href="https://kream.co.kr/products/985256" target="_blank" class="buy-btn" id="ribbu-weverse-btn">바로가기</a></div></div>
+                </div>
+                <div class="goods-item">
+                    <div class="goods-img" id="jjaero-img-wrap"><img src="../images/goods/jjaero.jpg" alt="Jjaero"><div class="soldout-stamp"><span>SOLD</span></div></div>
+                    <div class="goods-price-text" id="jjaero-price">가격 확인중...</div>
+                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="jjaero-weverse-status"></span></span><a href="https://kream.co.kr/products/985259" target="_blank" class="buy-btn" id="jjaero-weverse-btn">바로가기</a></div></div>
+                </div>
+                <div class="goods-item">
+                    <div class="goods-img" id="yam-img-wrap"><img src="../images/goods/yam.jpg" alt="Yam"><div class="soldout-stamp"><span>SOLD</span></div></div>
+                    <div class="goods-price-text" id="yam-price">가격 확인중...</div>
+                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="yam-weverse-status"></span></span><a href="https://kream.co.kr/products/985258" target="_blank" class="buy-btn" id="yam-weverse-btn">바로가기</a></div></div>
+                </div>
+            </div>
+        </div>
+        <footer class="global-footer"><p>&copy; 2024 RESCENE ARCHIVE. All Rights Reserved.</p></footer>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+            document.getElementById('mobileMenuPanel').classList.toggle('active');
+            document.getElementById('mobileMenuBackdrop').classList.toggle('active');
+            document.body.style.overflow = document.getElementById('mobileMenuPanel').classList.contains('active') ? 'hidden' : 'auto';
+        }
+        const sunIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+        const moonIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+        function updateThemeIcon(theme) { const btn = document.getElementById('themeToggleBtn'); if (btn) btn.innerHTML = (theme === 'dark') ? sunIcon : moonIcon; }
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('rescene-theme', next);
+            updateThemeIcon(next);
+        }
+        updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+
+        // ⭐️ 실시간 재고 크롤링 로직 (현재 폴더의 goods_data.json 호출)
+        async function fetchGoodsInventory() {
+            try {
+                const response = await fetch('goods_data.json?t=' + new Date().getTime());
+                const data = await response.json();
+                const itemShopMap = { remini: 'withmuu', jota: 'kream', ming: 'kream', ribbu: 'kream', jjaero: 'kream', yam: 'kream' };
+                const items = ['remini', 'jota', 'ming', 'ribbu', 'jjaero', 'yam'];
+                items.forEach(item => {
+                    if (data[item]) {
+                        if (data[item].price) document.getElementById(`${item}-price`).innerText = data[item].price;
+                        const status = data[item][itemShopMap[item]];
+                        const statusElem = document.getElementById(`${item}-weverse-status`);
+                        const btnElem = document.getElementById(`${item}-weverse-btn`);
+                        const imgWrapper = document.getElementById(`${item}-img-wrap`);
+                        if (status !== undefined && statusElem && btnElem) {
+                            if (status === "soldout") {
+                                statusElem.innerText = "(품절)"; btnElem.innerText = "품절"; btnElem.classList.add("sold-out");
+                                if (imgWrapper) imgWrapper.classList.add('is-soldout');
+                            } else {
+                                statusElem.innerText = "(재고: 여유)"; btnElem.innerText = "바로가기"; btnElem.classList.remove("sold-out");
+                                if (imgWrapper) imgWrapper.classList.remove('is-soldout');
+                            }
+                        }
+                    }
+                });
+            } catch (e) { console.log("굿즈 데이터 JSON 대기중..."); }
+        }
+        fetchGoodsInventory();
+    </script>
+</body>
+</html>

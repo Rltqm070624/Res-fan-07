@@ -6,7 +6,7 @@
     <title>RESCENE ARCHIVE | 메인</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
@@ -146,14 +146,14 @@
 
     </div> 
 
-    <!-- ⭐️ 시네마틱 모달 -->
+    <!-- ⭐️ 시네마틱 모달 (고급 풀스크린 버전) -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
         <button class="close-btn" onclick="closeHistoryModal()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
         
-        <div id="tvContainer" style="width: 100%; height: 100%; position: relative; overflow: hidden; background: #000;">
+        <div id="tvContainer" style="width: 100%; height: 100%; position: relative; overflow: hidden; background: transparent;">
             <div class="history-modal-bg" id="historyModalBg">
                 <iframe id="historyYoutubeBg" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 <div class="history-modal-overlay"></div>
@@ -171,7 +171,7 @@
     <!-- 캘린더, 스케줄 모달 컨테이너 -->
     <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
     <div class="calendar-popup-wrapper" id="calendarPopupModal">
-        <button class="close-btn" onclick="closeCalendarPopup()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="close-btn" style="top:25px; right:25px; border:none; background:rgba(0,0,0,0.2);" onclick="closeCalendarPopup()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
         <div class="calendar-header-controls">
             <button class="cal-btn" onclick="changeMonth(-1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
             <div class="calendar-title" id="calendarMonthText">2026. 07</div>
@@ -183,7 +183,7 @@
 
     <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
     <div class="modal-wrapper" id="scheduleModal">
-        <button class="close-btn" onclick="closeModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        <button class="close-btn" style="top:25px; right:25px; border:none; background:rgba(0,0,0,0.2);" onclick="closeModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
         <div class="modal-header-flex"><div class="modal-date" id="modalDateTitle"></div></div>
         <div id="modalScheduleText"></div>
     </div>
@@ -239,14 +239,14 @@
             { date: "2026. 06. 29", title: "경상북도 경주시 홍보대사" },
             { date: "2026. 07. 02", title: "경기도 고양시 홍보대사" },
             { date: "2026. 07. 08", title: "리메이크 싱글 'Pretty Girl' 발매" },
-            // ⭐️ 인덱스 19 (요청 사항 반영)
+            // ⭐️ 인덱스 19
             { date: "2026. 07. 08", title: "멜론 1위 소감 라이브", vid: "v6n4XQdX6_8" }, 
             { date: "2026. 07. 14", title: "저스트 메이크업 IN TOKYO 2027 홍보대사" },
-            // ⭐️ 인덱스 21 (더쇼)
-            { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위<br><span style='font-size:16px; font-weight:400; opacity:0.8;'>(SBS M 《더쇼》)</span>", vid: "dOllJ26kfIY" }, 
+            // ⭐️ 인덱스 21
+            { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위<br><span style='font-size:16px; font-weight:300; opacity:0.8;'>(SBS M 《더쇼》)</span>", vid: "dOllJ26kfIY" }, 
             { date: "2026. 07. 21", title: "전남광주통합특별시 섬의 날 홍보대사" },
             { date: "2026. 07. 23", title: "MBC 아시안게임 중계방송 홍보대사" },
-            { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 음악방송 1위<br><span style='font-size:16px; font-weight:400; opacity:0.8;'>(MBC 《쇼! 음악중심》)</span>" },
+            { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 음악방송 1위<br><span style='font-size:16px; font-weight:300; opacity:0.8;'>(MBC 《쇼! 음악중심》)</span>" },
             { date: "2026. 08", title: "하퍼스 바자 코리아 8월호 화보" }
         ];
 
@@ -269,17 +269,16 @@
             
             dateEl.style.transition = "none";
             dateEl.style.opacity = 1;
-            dateEl.classList.remove('dash-blur');
+            dateEl.classList.remove('counting');
             dateEl.innerText = "";
             
-            // 모든 트랜지션 초기화
             titleEl.style.transition = ""; 
             titleEl.style.transform = "";
             titleEl.style.opacity = "";
             titleEl.classList.remove('show');
         }
 
-        // 1. 처음 등장시 날짜가 연하게 카운트 되다가 완료 시점에만 선명해지도록 수정
+        // 1. 처음 등장시 VHS 느낌의 카운트다운 효과
         function startHistorySequence() {
             clearHistorySequence();
             
@@ -288,8 +287,9 @@
             const bg = document.getElementById('historyModalBg');
             const yt = document.getElementById('historyYoutubeBg');
             
-            dateEl.style.transition = "opacity 0.5s ease";
-            dateEl.style.opacity = 0.4; // 올라가는 동안 연하게 유지
+            // 카운팅 이펙트(옛날 필름 감성 노이즈) 클래스 추가
+            dateEl.classList.add('counting');
+            dateEl.style.transition = "none";
             dateEl.innerText = "0000. 01. 01";
             
             const startTime = Date.now();
@@ -321,7 +321,8 @@
                     if (elapsed === duration) {
                         clearInterval(slotTimer);
                         
-                        // 도착 시점에 완전히 선명해짐
+                        // 도착 시점에 노이즈를 끄고 투명도를 올려 완전히 선명해짐
+                        dateEl.classList.remove('counting');
                         dateEl.style.transition = "opacity 0.3s ease";
                         dateEl.style.opacity = 1;
                         
@@ -370,7 +371,6 @@
             const yt = document.getElementById('historyYoutubeBg');
             const item = historyData[idx];
 
-            // 2. 인덱스 1 구간 (첫 앨범 발매 후 모션 없이 바로 넘어가기)
             if (idx === 1) {
                 dateEl.innerText = item.date;
                 titleEl.innerHTML = item.title;
@@ -389,7 +389,6 @@
                 titleEl.classList.add('show');
                 
                 seqTimeouts.push(setTimeout(() => {
-                    // 모션 없이 그 자리에서 바로 페이드아웃 되도록 고정
                     titleEl.style.transform = "translateY(0)"; 
                     titleEl.style.transition = "opacity 0.6s ease";
                     titleEl.style.opacity = 0;
@@ -407,7 +406,7 @@
                 return;
             }
 
-            // 2.5 멜론 1위 소감 (인덱스 19 특별 연출)
+            // 2. 멜론 1위 소감 (인덱스 19) 후 1초 대기 로직 적용
             if (idx === 19) {
                 dateEl.innerText = item.date;
                 dateEl.style.transition = "none";
@@ -416,9 +415,7 @@
                 bg.classList.remove('show');
                 yt.src = "";
                 
-                // 날짜가 나오고 2초간 멈춰있다가
                 seqTimeouts.push(setTimeout(() => {
-                    // 천천히 사라짐
                     dateEl.style.transition = "opacity 1.5s ease";
                     dateEl.style.opacity = 0;
                     
@@ -435,7 +432,7 @@
                             bg.classList.add('show');
                         }
                         
-                        // 10초 유지
+                        // 10초 유지 후 사라지기
                         seqTimeouts.push(setTimeout(() => {
                             titleEl.style.transform = "translateY(0)";
                             titleEl.style.transition = "opacity 0.6s ease";
@@ -446,15 +443,19 @@
                                 titleEl.classList.remove('show');
                                 titleEl.style.transform = "";
                                 titleEl.style.opacity = ""; 
-                                playSequenceIdx(20);
-                            }, 600));
+                                
+                                // ⭐️ 여기서 추가된 1초 완벽한 암전 대기 (바로 올라오지 않음)
+                                seqTimeouts.push(setTimeout(() => {
+                                    playSequenceIdx(20);
+                                }, 1000));
+
+                            }, 600)); // 기존 페이드아웃 완료 대기 시간
                         }, 10000));
                     }, 1500)); 
                 }, 2000)); 
                 return;
             }
 
-            // 3. 더 쇼 1위 (인덱스 21 특별 연출 및 정지)
             if (idx === 21) {
                 dateEl.innerText = item.date;
                 dateEl.style.transition = "none";
@@ -463,9 +464,7 @@
                 bg.classList.remove('show');
                 yt.src = "";
                 
-                // 날짜가 2초 멈춰있다가
                 seqTimeouts.push(setTimeout(() => {
-                    // 천천히 사라짐
                     dateEl.style.transition = "opacity 1.5s ease";
                     dateEl.style.opacity = 0;
                     
@@ -482,7 +481,6 @@
                             bg.classList.add('show');
                         }
                         
-                        // 10초 유지 후 천천히 사라지기
                         seqTimeouts.push(setTimeout(() => {
                             titleEl.style.transform = "translateY(0)";
                             titleEl.style.transition = "opacity 2s ease";
@@ -496,7 +494,6 @@
                                 titleEl.style.transform = "";
                                 titleEl.style.opacity = "";
                                 yt.src = "";
-                                // 요구사항: "일단은 딱 여기까지만" -> 여기서 정지
                             }, 2000));
                         }, 10000));
                     }, 1500));
@@ -504,7 +501,6 @@
                 return;
             }
 
-            // 그 외 일반 항목 (빠르게 지나가는 가속 구간)
             dateEl.style.transition = "none";
             dateEl.style.opacity = 1;
             titleEl.style.transition = "none";
@@ -526,8 +522,8 @@
             if (idx >= 2 && idx <= 3) dur = 1000;
             else if (idx >= 4 && idx <= 7) dur = 500;
             else if (idx >= 8 && idx <= 12) dur = 200;
-            else if (idx >= 13 && idx <= 18) dur = 100; // 19는 따로 처리
-            else if (idx === 20) dur = 100; // 21로 넘어가기 전
+            else if (idx >= 13 && idx <= 18) dur = 100;
+            else if (idx === 20) dur = 100; 
             else dur = 70;
             
             seqTimeouts.push(setTimeout(() => {

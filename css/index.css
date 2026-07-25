@@ -134,7 +134,7 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     border-color: #fff;
 }
 
-/* ⭐️ '걸어온 길' 감성 문구 (화면 정중앙 배치 & 모던 폰트 적용) */
+/* ⭐️ '걸어온 길' 감성 문구 (손글씨 폰트 적용) */
 .timeline-link-text {
     position: absolute;
     top: 50%;
@@ -142,10 +142,10 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     transform: translate(-50%, -50%);
     z-index: 999999;
     color: rgba(255, 255, 255, 0.7);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 28px;
-    font-weight: 300;
-    letter-spacing: 4px;
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 52px; /* 손글씨 특성상 크기를 대폭 상향 */
+    font-weight: 400;
+    letter-spacing: 2px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -153,6 +153,7 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     pointer-events: none;
     transition: opacity 2s ease, letter-spacing 0.5s ease, color 0.5s ease;
     text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+    display: none; 
 }
 .timeline-link-text.show {
     opacity: 1;
@@ -174,7 +175,7 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     letter-spacing: 6px;
 }
 .timeline-link-text:hover::after {
-    width: 60%;
+    width: 50%;
 }
 
 .history-page {
@@ -185,14 +186,14 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     padding: 20px; box-sizing: border-box;
 }
 
-/* ⭐️ 극도로 얇고 세련된 산세리프 폰트 (날짜) */
+/* ⭐️ 날짜 폰트 (손글씨) */
 .h-date {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 72px; 
-    font-weight: 200; /* Extra Light */
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: 100px; 
+    font-weight: 400;
     color: #ffffff;
-    letter-spacing: 16px;
-    margin-bottom: 25px;
+    letter-spacing: 8px;
+    margin-bottom: 10px;
     text-shadow: 0 4px 20px rgba(0,0,0,0.8);
 }
 
@@ -217,14 +218,14 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
     transform: translateY(0); 
 }
 
-/* ⭐️ 얇고 모던한 한글 폰트 (타이틀) */
+/* ⭐️ 한글 타이틀 폰트 (손글씨) */
 .h-title {
-    font-family: 'Noto Sans KR', sans-serif; 
-    font-size: 30px; 
-    font-weight: 300; /* Light */
+    font-family: 'Nanum Pen Script', cursive; 
+    font-size: 54px; 
+    font-weight: 400; 
     color: rgba(255, 255, 255, 0.95); 
-    line-height: 1.6;
-    letter-spacing: 4px;
+    line-height: 1.4;
+    letter-spacing: 2px;
     text-shadow: 0 4px 20px rgba(0,0,0,0.8);
 }
 
@@ -317,11 +318,11 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: -30px
     .ticker-songs::-webkit-scrollbar { display: none; }
     
     .history-modal-wrapper { height: 90vh; }
-    .h-date { font-size: 44px; letter-spacing: 6px; }
-    .h-title { font-size: 22px; }
+    .h-date { font-size: 60px; letter-spacing: 4px; }
+    .h-title { font-size: 32px; }
     
     #historySection .section-title { font-size: 40px; }
     .update-time { position: static; margin-top: 10px; }
     .section-header.center-header { align-items: center; flex-direction: column; }
-    .timeline-link-text { font-size: 18px; width: 80%; }
+    .timeline-link-text { font-size: 32px; width: 90%; line-height: 1.4; }
 }

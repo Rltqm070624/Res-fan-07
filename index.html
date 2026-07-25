@@ -79,6 +79,59 @@
             </div>
         </div>
 
+        <!-- 새롭게 추가된 RESCENE HISTORY 섹션 (가로 스크롤) -->
+        <div class="section-container reveal" id="historySection">
+            <div class="section-header">
+                <div class="section-title">RESCENE <span>HISTORY</span></div>
+                <div style="font-size:12px; color:var(--text-muted);">마우스 휠로 넘겨보세요 ➔</div>
+            </div>
+            
+            <div class="history-track-container">
+                <div class="history-track" id="historyTrack">
+                    <div class="history-card">
+                        <div class="history-date">2024. 02. 29</div>
+                        <div class="history-title">선공개 곡 'YoYo' 발매</div>
+                    </div>
+                    <div class="history-card">
+                        <div class="history-date">2024. 03. 26</div>
+                        <div class="history-title">싱글 1집 《Re:Scene》 발매 (데뷔)</div>
+                    </div>
+                    <div class="history-card">
+                        <div class="history-date">2024. 08. 27</div>
+                        <div class="history-title">미니 1집 《SCENEDROME》 발매</div>
+                    </div>
+                    <div class="history-card">
+                        <div class="history-date">2025. 02. 05</div>
+                        <div class="history-title">미니 2집 《Glow Up》 발매</div>
+                    </div>
+                    <div class="history-card">
+                        <div class="history-date">2025. 07. 02</div>
+                        <div class="history-title">싱글 2집 《Dearest》 발매</div>
+                    </div>
+                    <div class="history-card">
+                        <div class="history-date">2025. 11. 25</div>
+                        <div class="history-title">미니 3집 《Lip Bomb》 발매</div>
+                    </div>
+                    <div class="history-card" style="border-color: var(--c-accent);">
+                        <div class="history-date">2026. 07. 08</div>
+                        <div class="history-title">리메이크 싱글 'Pretty Girl' 발매</div>
+                    </div>
+                    <div class="history-card" style="border-color: var(--c-accent);">
+                        <div class="history-date">2026. 07. 08</div>
+                        <div class="history-title">'LOVE ATTACK' 멜론 첫 음원차트 1위</div>
+                    </div>
+                    <div class="history-card" style="border-color: var(--c-accent);">
+                        <div class="history-date">2026. 07. 14</div>
+                        <div class="history-title">'Pretty Girl' 첫 음악방송 1위<br><span style="font-size:14px; color:var(--text-secondary);">(SBS M 《더쇼》)</span></div>
+                    </div>
+                    <div class="history-card" style="border-color: var(--c-accent);">
+                        <div class="history-date">2026. 07. 25</div>
+                        <div class="history-title">'Pretty Girl' 첫 지상파 음악방송 1위<br><span style="font-size:14px; color:var(--text-secondary);">(MBC 《쇼! 음악중심》)</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="section-container reveal" id="chartSection">
             <div class="section-header chart-header">
                 <div class="section-title">MUSIC <span>CHARTS</span></div>
@@ -188,6 +241,15 @@
             }); 
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // History 가로 스크롤 스와이프 기능
+        const historyTrack = document.getElementById('historyTrack');
+        if (historyTrack) {
+            historyTrack.addEventListener('wheel', (e) => {
+                e.preventDefault(); 
+                historyTrack.scrollLeft += e.deltaY;
+            }, { passive: false });
+        }
 
         const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
         setInterval(() => {

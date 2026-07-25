@@ -9,7 +9,141 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
 .debut-timer .d-day { font-family: var(--font-head); font-size: 28px; font-weight: 200; color: var(--text-on-media); letter-spacing: 4px; margin-bottom: 8px; }
 .debut-timer .time-flow { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: rgba(244,244,245,0.7); letter-spacing: 3px; }
 
-/* 차트 Ticker */
+/* ==========================================================================
+   ⭐️ 1. 히스토리 인트로 영역 (영상과 차트 사이)
+   ========================================================================== */
+.history-intro-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px 80px;
+}
+.foliage-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 180px;
+    width: 100%;
+}
+
+/* RESCENE 문구 (나중에 선명해짐) */
+.rescene-huge-text {
+    font-family: var(--font-head);
+    font-size: clamp(40px, 6vw, 68px);
+    letter-spacing: 12px;
+    font-weight: 900;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1.5s ease 0.5s, transform 1.5s ease 0.5s;
+    margin: 0;
+}
+
+/* 나뭇잎 gif (처음엔 작게 있다가 확 퍼지면서 사라짐) */
+.foliage-gif {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    width: 300px;
+    opacity: 1;
+    z-index: 1;
+    transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease 0.3s;
+    pointer-events: none;
+}
+
+/* JS로 active 클래스가 붙었을 때의 애니메이션 */
+.foliage-wrapper.active .rescene-huge-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+.foliage-wrapper.active .foliage-gif {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+}
+
+/* 지금 확인해보시겠어요? 클릭 텍스트 */
+.check-now-text {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-top: 50px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    transition: 0.3s ease;
+}
+.check-now-text:hover { color: var(--c-accent); }
+
+/* ==========================================================================
+   ⭐️ 2. 연한 배경의 팝업 모달창 (가운데 위치)
+   ========================================================================== */
+.journey-backdrop {
+    background: rgba(18, 19, 24, 0.95); /* 어둡고 연한 투명도 배경 */
+    backdrop-filter: blur(10px);
+}
+html[data-theme="light"] .journey-backdrop {
+    background: rgba(247, 247, 245, 0.95);
+}
+
+.journey-modal-wrapper {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%);
+    width: 95vw; height: 80vh; max-width: 1300px;
+    background: transparent; /* 배경 없이 뚫림 */
+    z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s ease;
+    display: flex; align-items: center; overflow: hidden;
+}
+.journey-modal-wrapper.active {
+    opacity: 1; transform: translate(-50%, -50%); pointer-events: auto;
+}
+
+/* ⭐️ 3. 가로 스크롤 영역 (팝업 내부) */
+.journey-scroll-track {
+    display: flex; align-items: center; width: 100%; height: 100%;
+    overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none; -ms-overflow-style: none; /* 스크롤바 숨김 */
+}
+.journey-scroll-track::-webkit-scrollbar { display: none; }
+
+.journey-scene {
+    width: 100%; height: 100%;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+
+/* 첫 번째 씬: 2024년 */
+.year-title {
+    font-family: var(--font-num); font-size: 80px; font-weight: 800; color: var(--c-accent);
+    opacity: 0; transform: translateY(40px); transition: opacity 1.5s ease, transform 1.5s ease;
+}
+.year-title.active { opacity: 1; transform: translateY(0); }
+
+/* 씬 사이 여백 & 발자국 */
+.scene-gap { width: 30%; flex-shrink: 0; position: relative; }
+.footprint { font-size: 40px; filter: grayscale(100%) opacity(0.5); opacity: 0; transition: opacity 0.4s; }
+.footprint.show { opacity: 1; }
+
+/* 데뷔 쇼케이스 콘텐츠 */
+.showcase-content {
+    display: flex; align-items: center; gap: 40px; width: 90%; max-width: 900px;
+}
+.sc-text h3 { font-family: var(--font-num); color: var(--c-accent); font-size: 20px; margin: 0 0 10px 0; }
+.sc-text p { font-size: 32px; font-weight: 800; color: var(--text-primary); margin: 0; white-space: nowrap;}
+.sc-video { flex: 1; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-light); width: 600px; }
+.sc-video iframe { width: 100%; height: 100%; }
+
+@media (max-width: 800px) {
+    .showcase-content { flex-direction: column; text-align: center; }
+    .sc-video { width: 100%; }
+    .year-title { font-size: 50px; }
+}
+
+
+/* ==========================================================================
+   나머지 차트 / 스케줄 / 굿즈
+   ========================================================================== */
 .update-time { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 500; }
 .ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }
 .ticker-wrapper { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
@@ -24,7 +158,6 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
 .rank-diff { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); }
 html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
 
-/* 방송 스케줄 (Broadcast) */
 .today-broadcast-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .broadcast-card { position: relative; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-light); transition: var(--transition-smooth); }
 .broadcast-card:hover { border-color: var(--border-highlight); transform: translateY(-5px); }
@@ -34,7 +167,6 @@ html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
 .live-badge { align-self: flex-start; background: var(--c-accent); color: #000; font-family: var(--font-num); font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 30px; margin-bottom: 15px; letter-spacing: 1px; }
 .bc-title { font-size: 20px; font-weight: 600; color: var(--text-on-media); margin: 0; line-height: 1.4; letter-spacing: -0.5px; }
 
-/* RESCENE GOODS & ALBUM 링크 */
 .goods-links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 .goods-link-card {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -49,9 +181,7 @@ html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
 }
 .goods-link-card:hover .glc-go { background: var(--c-accent); color: var(--bg-base); border-color: var(--c-accent); }
 
-/* ==========================================================================
-   ⭐️ 모달 및 캘린더 (복구 완료)
-   ========================================================================== */
+/* 모달 및 캘린더 (유지) */
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9998; opacity: 0; pointer-events: none; transition: 0.4s ease; }
 .modal-backdrop.active { opacity: 1; pointer-events: auto; }
 .modal-backdrop.cal-backdrop { z-index: 8900; } 
@@ -66,7 +196,6 @@ html[data-theme="light"] .calendar-popup-wrapper { box-shadow: 0 20px 60px rgba(
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
 .weekday { text-align: center; color: var(--text-muted); font-family: var(--font-head); font-size: 11px; font-weight: 600; padding-bottom: 10px; letter-spacing: 1px; }
 
-/* 날짜 셀 */
 .day-cell { position: relative; border-radius: 12px; height: 110px !important; min-height: 110px !important; max-height: 110px !important; padding: 12px; border: 1px solid transparent; display: flex; flex-direction: column; cursor: pointer; transition: 0.3s; box-sizing: border-box; overflow: hidden; }
 .day-cell.has-event { background: rgba(255,255,255,0.03); border-color: var(--border-light); }
 html[data-theme="light"] .day-cell.has-event { background: rgba(0,0,0,0.025); }
@@ -75,21 +204,18 @@ html[data-theme="light"] .day-cell.has-event { background: rgba(0,0,0,0.025); }
 .day-number { font-family: var(--font-num); font-size: 14px; color: var(--text-secondary); font-weight: 500; margin-bottom: 8px; flex-shrink: 0;}
 .day-cell.has-event .day-number { color: var(--text-primary); font-weight: 700; }
 
-/* ⭐️ 삭제되었던 캘린더 내부 점/시간/제목 부활 ⭐️ */
 .cell-event-list { display: flex; flex-direction: column; gap: 5px; width: 100%; overflow: hidden; flex: 1; justify-content: center; }
 .cal-event-row { display: flex; align-items: center; gap: 8px; width: 100%; overflow: hidden; }
 .cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 .cal-event-time { font-size: 11px; font-weight: 600; font-family: var(--font-num); flex-shrink: 0; }
 .cal-event-title { color: var(--text-primary); font-size: 11px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
 
-/* 우측 슬라이드 팝업창 */
 .modal-wrapper { position: fixed; top: 0; right: 0; width: 440px; height: 100vh; background: #15161a; border-left: 1px solid var(--border-light); z-index: 9999; transform: translateX(100%); transition: var(--transition-smooth); overflow-y: auto; padding: 60px 40px; box-shadow: -30px 0 60px rgba(0,0,0,0.8); box-sizing: border-box; }
 html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: -30px 0 60px rgba(0,0,0,0.1); }
 .modal-wrapper.active { transform: translateX(0); }
 .close-btn { position: absolute; top: 25px; right: 25px; color: var(--text-secondary); background: none; border: none; cursor: pointer; padding: 10px; transition: 0.3s;}
 .close-btn:hover { color: var(--text-primary); transform: rotate(90deg);}
 
-/* ⭐️ 삭제되었던 우측 팝업창 내용물 디자인 부활 ⭐️ */
 .modal-header-flex { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
 .modal-date { font-family: var(--font-num); font-size: 24px; font-weight: 300; color: var(--text-primary); letter-spacing: 1px; }
 .schedule-detail-card { margin-bottom: 30px; }
@@ -101,7 +227,6 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: -30px
 .sd-img-wrapper img { width: 100%; height: 280px; object-fit: contain; background: var(--bg-surface); border-radius: 16px; border: 1px solid var(--border-light); }
 .schedule-detail-empty { text-align: center; color: var(--text-muted); font-size: 14px; padding: 40px 0; font-weight: 300; }
 
-/* 모바일 반응형 */
 @media (max-width: 800px) {
     .calendar-popup-wrapper { width: 95%; padding: 45px 15px 25px !important; }
     #calendarPopupModal .close-btn { top: 8px !important; right: 8px !important; padding: 5px !important; }

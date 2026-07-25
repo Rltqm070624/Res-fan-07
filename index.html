@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
 
-    <!-- 공통 CSS와 메인 전용 CSS 호출 -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
 
@@ -30,7 +29,6 @@
             <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection')">SCHEDULE</a></li>
             <li><a href="goods/goods.html">GOODS</a></li>
         </ul>
-
         <div class="nav-right">
             <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="테마 변경"></button>
             <div class="desktop-only-utils">
@@ -48,7 +46,7 @@
     <div class="mobile-menu-panel" id="mobileMenuPanel">
         <div class="mobile-top-utils">
             <button class="mobile-cal-btn" onclick="openCalendarPopup(); toggleMobileMenu();" title="Calendar">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg>
             </button>
             <div class="mobile-sns-box">
                 <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X"></a>
@@ -66,7 +64,7 @@
     </div>
 
     <div id="mainWrapper">
-        <!-- ⭐️ 메인 히어로 -->
+        <!-- 메인 배경 영상 -->
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay muted loop playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
@@ -79,7 +77,19 @@
             </div>
         </div>
 
-        <!-- ⭐️ 차트 섹션 -->
+        <!-- ⭐️ 1. 새롭게 추가된 인트로 영역 (나뭇잎 확 퍼짐 + WITH RESCENE) -->
+        <div class="section-container history-intro-section" id="historyIntroSection">
+            <div class="foliage-wrapper" id="foliageWrapper">
+                <h2 class="with-rescene-text">WITH RESCENE</h2>
+                <!-- 나뭇잎 gif 경로 -->
+                <img src="images/foliage.gif" alt="" class="foliage-anim-img">
+            </div>
+            
+            <div class="check-now-text" onclick="openJourneyModal()">
+                지금 확인해보시겠어요?
+            </div>
+        </div>
+
         <div class="section-container reveal" id="chartSection">
             <div class="section-header chart-header">
                 <div class="section-title">MUSIC <span>CHARTS</span></div>
@@ -90,27 +100,8 @@
                     <div class="ticker-item skeleton"></div>
                 </div>
             </div>
-
-            <!-- ⭐️ NEW: 멜론 차트 <> 배경 사이 - RESCENE 리빌 + 낙엽 애니메이션 -->
-            <div class="chart-decor-layer" id="chartDecor">
-                <div class="leaf-field" id="leafField"></div>
-                <div class="chart-decor-wordmark">RESCENE</div>
-            </div>
         </div>
 
-        <!-- ⭐️ NEW: WITH RESCENE 섹션 (스크롤 진입 시 색이 스멀스멀 번지며 등장) -->
-        <div class="section-container reveal with-rescene-section" id="withResceneSection">
-            <div class="wr-color-wash"></div>
-            <div class="wr-title">WITH RESCENE</div>
-            <div class="wr-trigger-wrap">
-                <button class="story-trigger-btn" onclick="openStoryPopup()">
-                    <span>지금 확인해보시겠어요?</span>
-                    <span class="str-arrow">→</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- ⭐️ 스케줄 섹션 -->
         <div class="section-container reveal" id="todayScheduleSection">
             <div class="section-header">
                 <div class="section-title">TODAY'S <span>BROADCAST</span></div>
@@ -137,40 +128,69 @@
             </div>
         </div>
 
-        <!-- ⭐️ 굿즈/앨범 링크 섹션 -->
         <div class="section-container reveal" id="goodsLinksSection" style="padding-bottom: 120px;">
             <div class="section-header">
                 <div class="section-title">RESCENE <span>GOODS &amp; ALBUM</span></div>
             </div>
             <div class="goods-links-grid">
-                <a class="goods-link-card" href="https://withmuu.com" target="_blank" rel="noopener">
-                    <span class="glc-name">WITHMUU</span><span class="glc-go">바로가기 →</span>
-                </a>
-                <a class="goods-link-card" href="https://kream.co.kr" target="_blank" rel="noopener">
-                    <span class="glc-name">KREAM</span><span class="glc-go">바로가기 →</span>
-                </a>
-                <a class="goods-link-card" href="https://kr.ktown4u.com/" target="_blank" rel="noopener">
-                    <span class="glc-name">Ktown4u</span><span class="glc-go">바로가기 →</span>
-                </a>
-                <a class="goods-link-card" href="https://kpopstore.co.kr/" target="_blank" rel="noopener">
-                    <span class="glc-name">KPOP STORE</span><span class="glc-go">바로가기 →</span>
-                </a>
+                <a class="goods-link-card" href="https://withmuu.com" target="_blank" rel="noopener"><span class="glc-name">WITHMUU</span><span class="glc-go">바로가기 →</span></a>
+                <a class="goods-link-card" href="https://kream.co.kr" target="_blank" rel="noopener"><span class="glc-name">KREAM</span><span class="glc-go">바로가기 →</span></a>
+                <a class="goods-link-card" href="https://kr.ktown4u.com/" target="_blank" rel="noopener"><span class="glc-name">Ktown4u</span><span class="glc-go">바로가기 →</span></a>
+                <a class="goods-link-card" href="https://kpopstore.co.kr/" target="_blank" rel="noopener"><span class="glc-name">KPOP STORE</span><span class="glc-go">바로가기 →</span></a>
             </div>
         </div>
 
-        <!-- ⭐️ 글로벌 푸터 -->
         <footer class="global-footer">
             <div class="footer-sns">
-                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X" onerror="this.style.display='none'"></a>
-                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
-                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
+                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="images/x.png" alt="X"></a>
+                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="images/instagram.png" alt="IG"></a>
+                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="images/youtube.png" alt="YT"></a>
             </div>
             <p>&copy; 2024 RESCENE ARCHIVE. All Rights Reserved.</p>
         </footer>
+    </div> 
 
+    <!-- ⭐️ 2. 일대기 팝업 모달창 (블라썸 배경 + 가로스크롤 + 2024년 + 유튜브) -->
+    <div class="modal-backdrop journey-backdrop" id="journeyModalBackdrop" onclick="closeJourneyModal()"></div>
+    <div class="journey-modal" id="journeyModal">
+        <button class="journey-close-btn" onclick="closeJourneyModal()">✕</button>
+        
+        <!-- 연한 벚꽃 배경 (진짜 blossom.jpg 연결) -->
+        <div class="journey-bg"></div>
+        
+        <div class="journey-track-container" id="journeyTrack">
+            <!-- 하얀색 연결 곡선 -->
+            <svg class="journey-curve" viewBox="0 0 1000 200" preserveAspectRatio="none">
+                <path d="M 0,100 C 300,100 400,180 600,180 C 800,180 900,80 1500,80" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"></path>
+            </svg>
+            
+            <!-- 씬 1: 2024년 텍스트 -->
+            <div class="journey-item">
+                <div class="year-box" id="yearBoxAnim">2024년</div>
+            </div>
+            
+            <!-- 여백과 발자국 -->
+            <div class="journey-item scene-gap">
+                <div class="footprint" id="footprintAnim">👣</div>
+            </div>
+            
+            <!-- 씬 2: 데뷔 쇼케이스 유튜브 영상 -->
+            <div class="journey-item">
+                <div class="event-card">
+                    <div class="ec-header">
+                        <span class="ec-date">03월 26일</span>
+                        <h3 class="ec-title">첫 데뷔 쇼케이스</h3>
+                    </div>
+                    <div class="ec-video">
+                        <!-- 전달해주신 데뷔 쇼케이스 링크 적용 -->
+                        <iframe src="https://www.youtube.com/embed/8T0J9NrvxYs?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- 캘린더 모달 -->
+    <!-- 캘린더 모달 (유지) -->
     <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
     <div class="calendar-popup-wrapper" id="calendarPopupModal">
         <button class="close-btn" onclick="closeCalendarPopup()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
@@ -183,7 +203,7 @@
         <div class="calendar-grid" id="calendarDays"></div>
     </div>
 
-    <!-- 스케줄 모달 -->
+    <!-- 스케줄 모달 (유지) -->
     <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
     <div class="modal-wrapper" id="scheduleModal">
         <button class="close-btn" onclick="closeModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
@@ -191,49 +211,8 @@
         <div id="modalScheduleText"></div>
     </div>
 
-    <!-- ⭐️ NEW: 데뷔 스토리 팝업 (가운데, 가로 스크롤형) -->
-    <div class="modal-backdrop story-backdrop" id="storyBackdrop" onclick="closeStoryPopup()"></div>
-    <div class="story-popup-wrapper" id="storyPopup">
-        <button class="close-btn" onclick="closeStoryPopup()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-        <div class="story-bg-sakura" id="storyBgSakura"></div>
-
-        <div class="story-track" id="storyTrack">
-            <!-- ⭐️ NEW: 2024년 → 오늘까지 이어지는 연결선 -->
-            <svg class="story-thread" id="storyThread" viewBox="0 0 1600 640" preserveAspectRatio="none">
-                <path class="thread-path" d="M 420 300 C 540 260, 560 200, 660 195 S 830 235, 910 265 S 1060 335, 1180 300" />
-                <path class="thread-path thread-2" d="M 420 340 C 550 380, 610 415, 705 400 S 880 355, 985 340 S 1100 320, 1180 340" />
-                <path class="thread-path thread-3" d="M 420 320 C 510 320, 630 300, 730 300 S 955 300, 1180 320" />
-            </svg>
-
-            <!-- Panel 0 : 2024년 -->
-            <section class="story-panel" data-panel="0">
-                <div class="story-year" id="storyYear">2024년</div>
-            </section>
-
-            <!-- Panel 1 : 첫 데뷔 쇼케이스 -->
-            <section class="story-panel" data-panel="1">
-                <div class="footstep-field" id="footstepField"></div>
-                <div class="story-debut-content" id="storyDebutContent">
-                    <div class="story-debut-text">
-                        <div class="story-debut-date">00월 00일</div>
-                        <div class="story-debut-title">첫 데뷔<br>쇼케이스</div>
-                    </div>
-                    <div class="story-video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/8T0J9NrvxYs" title="데뷔 쇼케이스" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <div class="story-progress" id="storyProgress">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-        </div>
-        <div class="story-hint">SCROLL</div>
-    </div>
-
     <script>
-        // --- 1. 테마 및 네비게이션 공통 로직 ---
+        // 기본 UI 설정
         function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
         function toggleMobileMenu() {
             document.getElementById('hamburgerBtn').classList.toggle('active');
@@ -256,7 +235,6 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // --- 2. 데뷔 타이머 ---
         const debutDate = new Date("2024-03-26T18:00:00+09:00");
         setInterval(() => {
             const diff = new Date() - debutDate;
@@ -264,7 +242,57 @@
             document.getElementById('timeFlowText').innerText = `${String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0')}:${String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0')}:${String(Math.floor((diff / 1000) % 60)).padStart(2, '0')}`;
         }, 1000);
 
-        // --- 3. 실시간 차트 로직 ---
+        // ⭐️ 1. 인트로 애니메이션 (스크롤 내릴 때 실행)
+        const introSection = document.getElementById('historyIntroSection');
+        const introObserver = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting) {
+                document.querySelector('.with-rescene-text').classList.add('show');
+                document.querySelector('.foliage-wrapper').classList.add('show');
+                document.querySelector('.check-now-text').classList.add('show');
+            }
+        }, { threshold: 0.4 });
+        if(introSection) introObserver.observe(introSection);
+
+        // ⭐️ 2. 팝업 모달창 제어 로직
+        function openJourneyModal() {
+            document.getElementById('journeyModalBackdrop').classList.add('active');
+            document.getElementById('journeyModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // 모달이 열리고 0.4초 뒤에 2024년 텍스트가 천천히 떠오름
+            setTimeout(() => {
+                document.getElementById('yearBoxAnim').classList.add('active');
+            }, 400);
+        }
+
+        function closeJourneyModal() {
+            document.getElementById('journeyModalBackdrop').classList.remove('active');
+            document.getElementById('journeyModal').classList.remove('active');
+            document.getElementById('yearBoxAnim').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ⭐️ 3. 모달 안에서 휠 가로 스크롤 및 발자국 표시
+        const jTrack = document.getElementById('journeyTrack');
+        const footprint = document.getElementById('footprintAnim');
+        if (jTrack) {
+            jTrack.addEventListener('wheel', (e) => {
+                e.preventDefault(); // 기본 세로 스크롤 방지
+                jTrack.scrollLeft += e.deltaY * 1.2; // 휠 내리면 오른쪽으로 이동
+                
+                // 가로 스크롤 진행률 (0 ~ 1)
+                const scrollRatio = jTrack.scrollLeft / (jTrack.scrollWidth - jTrack.clientWidth);
+                
+                // 스크롤 중간 지점을 지날 때 발자국 스멀스멀 나타났다 사라짐
+                if (scrollRatio > 0.15 && scrollRatio < 0.7) {
+                    footprint.classList.add('active');
+                } else {
+                    footprint.classList.remove('active');
+                }
+            });
+        }
+
+        // 차트, 스케줄 (기존 기능)
         let tickerInterval;
         async function fetchSongCharts() {
             try {
@@ -291,8 +319,6 @@
                     if (songsHtml !== '') {
                         validCount++;
                         let logoHtml = `<span class="p-logo">${platform}</span>`;
-                        if (platform === 'Melon') logoHtml = `<img src="images/melon.jpeg" alt="Melon" class="p-logo-img" onerror="this.style.display='none'">`;
-                        if (platform === 'Bugs') logoHtml = `<img src="images/bugs.jpg" alt="Bugs" class="p-logo-img" onerror="this.style.display='none'">`;
                         tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${logoHtml}</div><div class="ticker-songs">${songsHtml}</div></div>`;
                     }
                 });
@@ -303,202 +329,18 @@
                     let cIdx = 0;
                     tickerInterval = setInterval(() => { cIdx = (cIdx + 1) % validCount; wrapper.style.transform = `translateY(-${cIdx * 56}px)`; }, 4000);
                 }
-            } catch (e) { console.log("차트 대기 중"); }
+            } catch (e) {}
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
-        // --- 4. 캘린더 스케줄 로직 ---
-        const scheduleDB = {
-            "2026-07-25": { 
-                items: [
-                    { time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" },
-                    { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }
-                ] 
-            },
-            "2026-07-26": { 
-                items: [
-                    { time: "14:00", title: "2026 캐리비안베이 워터뮤직풀파티", color: "#e78b54" },
-                    { time: "19:00", title: "별방수련회", color: "#72a58b" }
-                ] 
-            }
-        };
-
-        let currentCalYear = 2026; 
-        let currentCalMonth = 7;
-
-        function changeMonth(delta) { 
-            currentCalMonth += delta; 
-            if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } 
-            else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } 
-            renderCalendar(); 
-        }
-
-        function renderCalendar() { 
-            const calendarDays = document.getElementById('calendarDays'); 
-            document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; 
-            const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); 
-            const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); 
-            let html = ''; 
-            for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; } 
-            for (let i = 1; i <= lastDate; i++) { 
-                const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; 
-                const data = scheduleDB[dateKey]; 
-                const hasEvent = data ? 'has-event' : ''; 
-                let eventsHtml = '';
-                if (data && data.items) {
-                    data.items.forEach(item => {
-                        let dotColor = item.color ? item.color : 'var(--c-accent)';
-                        eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div><div class="cal-event-title">${item.title}</div></div>`;
-                    });
-                }
-                html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`; 
-            } 
-            calendarDays.innerHTML = html; 
-        }
-
-        function openCalendarPopup() { 
-            document.getElementById('calendarPopupModal').classList.add('active'); 
-            document.getElementById('calPopupBackdrop').classList.add('active'); 
-            document.body.style.overflow = 'hidden'; 
-        }
-
-        function closeCalendarPopup() { 
-            document.getElementById('calendarPopupModal').classList.remove('active'); 
-            document.getElementById('calPopupBackdrop').classList.remove('active'); 
-            document.body.style.overflow = 'auto'; 
-        }
-
-        function openModal(year, month, day, dateKey) { 
-            document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`; 
-            const data = scheduleDB[dateKey];
-            let scheduleHtml = '';
-            
-            if (data && data.items) {
-                scheduleHtml += `<div class="schedule-detail-card"><div class="sd-body">`;
-                data.items.forEach(item => {
-                    let dotColor = item.color ? item.color : 'var(--c-accent)';
-                    scheduleHtml += `<div class="sd-row"><div class="sd-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor}60;"></div><div class="sd-time" style="color: ${dotColor};">${item.time}</div><div class="sd-title">${item.title}</div></div>`;
-                    if (item.image) {
-                        scheduleHtml += `<div class="sd-img-wrapper"><img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`;
-                    }
-                });
-                scheduleHtml += `</div></div>`;
-            } else {
-                scheduleHtml = `<div class="schedule-detail-empty">등록된 일정이 없습니다.</div>`;
-            }
-            
-            document.getElementById('modalScheduleText').innerHTML = scheduleHtml;
-            document.getElementById('scheduleModal').classList.add('active'); 
-            document.getElementById('modalBackdrop').classList.add('active'); 
-        }
-
-        function closeModal() { 
-            document.getElementById('scheduleModal').classList.remove('active'); 
-            document.getElementById('modalBackdrop').classList.remove('active'); 
-            if(!document.getElementById('calendarPopupModal').classList.contains('active')){
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        // --- 5. ⭐️ NEW: 낙엽 애니메이션 (RESCENE 리빌 영역) ---
-        const leafSVG = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C7 6 3 10 3 15c0 3.3 2.7 6 6 6 1.8 0 3.4-.8 4.5-2C10.4 17.6 9 15 9 12c0-4 1.5-7.3 3-10z" fill="currentColor" opacity="0.9"/><path d="M12 2c5 4 9 8 9 13 0 3.3-2.7 6-6 6-1.8 0-3.4-.8-4.5-2 1.6-1.6 3-3.6 3-6.5-3.5 1.5-5.5 4-6.5 6.5C10.6 20.2 12 21 12 21" fill="currentColor" opacity="0.65"/></svg>`;
-
-        function spawnLeaves(container, count) {
-            for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    if (!container) return;
-                    const el = document.createElement('div');
-                    el.className = 'leaf';
-                    const left = 8 + Math.random() * 84;
-                    const dx = (Math.random() * 170 - 85) + 'px';
-                    const dur = (2.6 + Math.random() * 1.8).toFixed(2) + 's';
-                    const size = 12 + Math.random() * 10;
-                    el.style.left = left + '%';
-                    el.style.width = size + 'px';
-                    el.style.height = size + 'px';
-                    el.style.setProperty('--dx', dx);
-                    el.style.animationDuration = dur;
-                    el.innerHTML = leafSVG;
-                    container.appendChild(el);
-                    el.addEventListener('animationend', () => el.remove());
-                }, i * 85);
-            }
-        }
-        spawnLeaves(document.getElementById('leafField'), 24);
-
-        // --- 6. ⭐️ NEW: 데뷔 스토리 팝업 (가로 스크롤 내비게이션) ---
-        const footstepSVG = `<svg viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="10" rx="6" ry="9" fill="currentColor"/><circle cx="6" cy="2" r="2" fill="currentColor"/><circle cx="11" cy="1" r="2.2" fill="currentColor"/><circle cx="16.5" cy="1.5" r="2" fill="currentColor"/><circle cx="20.5" cy="4" r="1.6" fill="currentColor"/></svg>`;
-
-        let storyIndex = 0;
-        let storyLocked = false;
-        const STORY_PANEL_COUNT = 2;
-
-        function openStoryPopup() {
-            document.getElementById('storyPopup').classList.add('active');
-            document.getElementById('storyBackdrop').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            storyIndex = 0;
-            updateStoryTrack();
-        }
-
-        function closeStoryPopup() {
-            document.getElementById('storyPopup').classList.remove('active');
-            document.getElementById('storyBackdrop').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        function updateStoryTrack() {
-            const track = document.getElementById('storyTrack');
-            track.style.transform = `translateX(-${storyIndex * 50}%)`;
-
-            document.querySelectorAll('#storyProgress .dot').forEach((dot, idx) => {
-                dot.classList.toggle('active', idx === storyIndex);
-            });
-
-            // 2024년 → 오늘까지 이어지는 연결선: 다음 패널로 넘어갈 때 서서히 그려짐
-            document.getElementById('storyThread').classList.toggle('drawn', storyIndex === 1);
-
-            const debutContent = document.getElementById('storyDebutContent');
-            if (storyIndex === 1) {
-                spawnFootsteps();
-                setTimeout(() => { debutContent.classList.add('reveal'); }, 550);
-            } else {
-                debutContent.classList.remove('reveal');
-            }
-        }
-
-        document.getElementById('storyPopup').addEventListener('wheel', (e) => {
-            e.preventDefault();
-            if (storyLocked) return;
-            if (e.deltaY > 12 && storyIndex < STORY_PANEL_COUNT - 1) {
-                storyLocked = true;
-                storyIndex++;
-                updateStoryTrack();
-                setTimeout(() => { storyLocked = false; }, 950);
-            } else if (e.deltaY < -12 && storyIndex > 0) {
-                storyLocked = true;
-                storyIndex--;
-                updateStoryTrack();
-                setTimeout(() => { storyLocked = false; }, 950);
-            }
-        }, { passive: false });
-
-        function spawnFootsteps() {
-            const field = document.getElementById('footstepField');
-            field.innerHTML = '';
-            const steps = 7;
-            for (let i = 0; i < steps; i++) {
-                const el = document.createElement('div');
-                el.className = 'footstep';
-                el.style.left = (8 + i * 11) + '%';
-                el.style.top = `calc(50% + ${(i % 2 === 0 ? -22 : 14)}px)`;
-                el.style.animationDelay = (i * 0.14) + 's';
-                el.innerHTML = footstepSVG;
-                field.appendChild(el);
-            }
-            setTimeout(() => { field.innerHTML = ''; }, 2200);
-        }
-
+        const scheduleDB = { "2026-07-25": { items: [{ time: "12:45", title: "2026 원 유니버스 페스티벌" }] } };
+        let currentCalYear = 2026; let currentCalMonth = 7;
+        function changeMonth(delta) { currentCalMonth += delta; if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } renderCalendar(); }
+        function renderCalendar() { const calendarDays = document.getElementById('calendarDays'); document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); let html = ''; for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; } for (let i = 1; i <= lastDate; i++) { const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; const data = scheduleDB[dateKey]; const hasEvent = data ? 'has-event' : ''; html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span></div>`; } calendarDays.innerHTML = html; }
+        function openCalendarPopup() { document.getElementById('calendarPopupModal').classList.add('active'); document.getElementById('calPopupBackdrop').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeCalendarPopup() { document.getElementById('calendarPopupModal').classList.remove('active'); document.getElementById('calPopupBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
+        function openModal(year, month, day, dateKey) { document.getElementById('modalDateTitle').innerText = `${year}년 ${month}월 ${day}일`; document.getElementById('scheduleModal').classList.add('active'); document.getElementById('modalBackdrop').classList.add('active'); }
+        function closeModal() { document.getElementById('scheduleModal').classList.remove('active'); document.getElementById('modalBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
         window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
     </script>
 </body>

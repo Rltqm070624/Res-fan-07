@@ -79,13 +79,6 @@
         </div>
 
         <div id="historySection" class="slow-reveal">
-            <!-- 3초 동안 서서히 나타나는 배경영상과 벚꽃 -->
-            <video src="" autoplay loop muted playsinline class="history-bg-video"></video>
-            <div class="blossom-layer">
-                <img src="" alt="blossom" class="blossom left">
-                <img src="" alt="blossom" class="blossom right">
-            </div>
-            
             <div class="section-title">WITH <span>RESCENE</span></div>
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
         </div>
@@ -259,9 +252,6 @@
             { date: "2026. 08", title: "하퍼스 바자 코리아 8월호 화보" }
         ];
 
-        // 속도 가속화 배열 (5초, 4.5초, 3.5초, 3초, 2.5초 ... 나머진 1.5초)
-        const sequenceDurations = [0, 5000, 4500, 3500, 3000, 2500]; 
-
         let slotTimer;
         let seqTimeouts = [];
 
@@ -297,16 +287,18 @@
             const tv = document.getElementById('tvContainer');
             const yt = document.getElementById('historyYoutubeBg');
             
-            // 1. 대쉬 부스트 모션 (흐릿하고 엄청 빠르게)
+            // 1. 흐린 상태로 숫자가 빠르게 올라감
+            dateEl.style.transition = "none";
             dateEl.style.opacity = 1;
-            dateEl.innerText = "0000. 00. 00";
             dateEl.classList.add('dash-blur');
             
-            let frames = 0;
+            const startTime = Date.now();
+            
             slotTimer = setInterval(() => {
-                frames++;
-                if(frames < 38) { // 약 1.5초
-                    const rY = Math.floor(Math.random() * (2026 - 2024 + 1) + 2024);
+                const elapsed = Date.now() - startTime;
+                
+                if(elapsed < 3000) { // 3초 동안 진행
+                    const rY = String(Math.floor(Math.random() * 9999)).padStart(4, '0');
                     const rM = String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0');
                     const rD = String(Math.floor(Math.random() * 31 + 1)).padStart(2, '0');
                     dateEl.innerText = `${rY}. ${rM}. ${rD}`;
@@ -316,15 +308,14 @@
                     dateEl.innerText = "2024. 03. 26";
                     dateEl.classList.remove('dash-blur'); // 선명해짐
                     
-                    // 3. 2초 유지
+                    // 3. 2초 유지 후 날짜가 사라지고 데뷔 영상/문구 나타남
                     seqTimeouts.push(setTimeout(() => {
                         
-                        // 4. 서서히 3초동안 사라짐
-                        dateEl.style.transition = "opacity 3s ease";
+                        dateEl.style.transition = "opacity 0.6s ease";
                         dateEl.style.opacity = 0;
                         
-                        // 5. 사라지는 도중(1초 후) DEBUT 문구 + 영상 등장
                         seqTimeouts.push(setTimeout(() => {
+                            dateEl.innerText = ""; // 자리 비워주기
                             titleEl.innerHTML = historyData[0].title;
                             titleEl.classList.add('show');
                             yt.src = `https://www.youtube.com/embed/${historyData[0].vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${historyData[0].vid}&playsinline=1&modestbranding=1`;
@@ -349,13 +340,13 @@
                                     
                                 }, 600)); // tv 꺼지는 애니메이션 지속시간
                             }, 5000));
-                        }, 1000));
+                        }, 600)); 
                     }, 2000));
                 }
             }, 40);
         }
 
-        // 8. 5초 -> 4.5초 -> 3.5초 가속하며 지나가는 오토 플레이
+        // 점점 가속하며 수수수수숙 지나가는 효과
         function playSequenceIdx(idx) {
             if(idx >= historyData.length) return; 
 
@@ -365,6 +356,47 @@
             const yt = document.getElementById('historyYoutubeBg');
             const item = historyData[idx];
 
+            // ⭐️ 더 쇼 1위(인덱스 21)에서 멈추고 음악중심(인덱스 24)으로 이어지는 최종 씬
+            if (idx === 21) {
+                // 진입 전 1.5초 암전 유지
+                dateEl.innerText = "";
+                titleEl.classList.remove('show');
+                bg.classList.remove('show');
+                yt.src = "";
+
+                seqTimeouts.push(setTimeout(() => {
+                    // 더 쇼 1위 정보 및 유튜브 영상 출력
+                    dateEl.style.opacity = 1;
+                    dateEl.innerText = item.date;
+                    titleEl.innerHTML = item.title;
+                    titleEl.classList.add('show');
+                    if (item.vid) {
+                        yt.src = `https://www.youtube.com/embed/${item.vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${item.vid}&playsinline=1&modestbranding=1`;
+                        bg.classList.add('show');
+                    }
+                    
+                    // 더 쇼 1위를 4초간 재생한 뒤, 음악중심 1위 항목으로 넘어가 정지
+                    seqTimeouts.push(setTimeout(() => {
+                        titleEl.classList.remove('show');
+                        dateEl.innerText = "";
+                        bg.classList.remove('show');
+                        yt.src = "";
+                        
+                        seqTimeouts.push(setTimeout(() => {
+                            const musicCoreItem = historyData[24];
+                            dateEl.innerText = musicCoreItem.date;
+                            titleEl.innerHTML = musicCoreItem.title;
+                            titleEl.classList.add('show');
+                            // 여기서 시퀀스 최종 종료
+                        }, 500));
+                    }, 4000));
+
+                }, 1500)); 
+                return; // 함수 종료 (자동 진행 스탑)
+            }
+
+            // 일반 항목 출력 
+            dateEl.style.opacity = 1;
             dateEl.innerText = item.date;
             titleEl.innerHTML = item.title;
             titleEl.classList.add('show');
@@ -377,16 +409,22 @@
                 yt.src = "";
             }
 
-            // 가속 타이머 적용
-            let dur = sequenceDurations[idx] || 1500; 
+            // ⭐️ 점진적 속도 가속화 로직
+            let dur = 2000;
+            if (idx >= 1 && idx <= 3) dur = 2000;
+            else if (idx >= 4 && idx <= 7) dur = 1000;
+            else if (idx >= 8 && idx <= 12) dur = 400;
+            else if (idx >= 13 && idx <= 17) dur = 150;
+            else dur = 80;
             
             seqTimeouts.push(setTimeout(() => {
                 titleEl.classList.remove('show');
                 dateEl.innerText = "";
                 // 항목 사이 잠깐의 깜빡임 여백
+                let gap = (dur < 200) ? 30 : 200;
                 seqTimeouts.push(setTimeout(() => {
                     playSequenceIdx(idx + 1);
-                }, 200));
+                }, gap));
             }, dur));
         }
 
@@ -404,7 +442,6 @@
             document.body.style.overflow = 'auto';
             clearHistorySequence();
         }
-
 
         const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
         setInterval(() => {

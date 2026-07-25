@@ -9,6 +9,37 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
 .debut-timer .d-day { font-family: var(--font-head); font-size: 28px; font-weight: 200; color: var(--text-on-media); letter-spacing: 4px; margin-bottom: 8px; }
 .debut-timer .time-flow { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: rgba(244,244,245,0.7); letter-spacing: 3px; }
 
+/* 일대기 (History Timeline) */
+.history-track-container { width: 100%; overflow: hidden; }
+.history-track { 
+    display: flex; gap: 24px; overflow-x: auto; 
+    padding: 10px 10px 40px 10px; margin: -10px;
+    scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: auto; 
+}
+.history-track::-webkit-scrollbar { display: none; }
+.history-card { 
+    min-width: 260px; max-width: 260px; 
+    background: var(--bg-surface); 
+    border: 1px solid var(--border-light); 
+    border-radius: 16px; padding: 30px 25px; 
+    transition: var(--transition-smooth); 
+    display: flex; flex-direction: column; justify-content: center;
+}
+.history-card:hover { 
+    transform: translateY(-8px); 
+    border-color: var(--c-accent) !important; 
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2); 
+}
+html[data-theme="light"] .history-card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+.history-date { 
+    font-family: var(--font-num); font-size: 15px; 
+    color: var(--c-accent); font-weight: 700; margin-bottom: 12px; letter-spacing: 1px; 
+}
+.history-title { 
+    font-family: var(--font-body); font-size: 18px; 
+    color: var(--text-primary); font-weight: 600; line-height: 1.4; word-break: keep-all; 
+}
+
 /* 차트 Ticker */
 .update-time { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 500; }
 .ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }

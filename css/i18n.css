@@ -1,0 +1,96 @@
+/* ==========================================================================
+   ⭐️ 언어 전환 스위처 (좌측 하단 고정)
+   ========================================================================== */
+.lang-switcher {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    z-index: 8100;
+
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+
+    background: rgba(18, 19, 24, 0.7);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-light);
+    border-radius: 999px;
+
+    opacity: 0.5;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+html[data-theme="light"] .lang-switcher { background: rgba(247, 247, 245, 0.8); }
+
+.lang-switcher:hover { opacity: 1; }
+
+.lang-switcher button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    padding: 7px 13px;
+    border-radius: 999px;
+
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+
+    transition: 0.25s ease;
+}
+.lang-switcher button:hover { color: var(--text-primary); }
+
+.lang-switcher button.active {
+    background: var(--text-primary);
+    color: var(--bg-base);
+}
+
+/* 일본어 라벨은 자간이 넓으면 어색해서 따로 조정 */
+.lang-switcher button[data-lang="ja"] {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0;
+}
+
+/* 모달이 열려 있을 때는 방해되지 않게 숨김 */
+body:has(#historyModal.active) .lang-switcher,
+body:has(#calendarPopupModal.active) .lang-switcher,
+body:has(#scheduleModal.active) .lang-switcher,
+body:has(#mobileMenuPanel.active) .lang-switcher {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+}
+
+/* ==========================================================================
+   ⭐️ 일본어 전용 손글씨 폰트 (Nanum Pen Script에는 가나/한자가 없음)
+   ========================================================================== */
+html[lang="ja"] .h-date,
+html[lang="ja"] .h-title,
+html[lang="ja"] .timeline-link-text {
+    font-family: 'Yomogi', 'Nanum Pen Script', cursive;
+}
+
+/* Yomogi는 Nanum Pen Script보다 글자가 커 보여서 크기를 살짝 낮춤 */
+html[lang="ja"] .h-date { font-size: 82px; letter-spacing: 4px; }
+html[lang="ja"] .h-title { font-size: 42px; letter-spacing: 1px; }
+html[lang="ja"] .timeline-link-text { font-size: 40px; }
+
+/* 영문은 한글보다 문장이 길어서 타이틀만 살짝 줄임 */
+html[lang="en"] .h-title { font-size: 46px; }
+html[lang="en"] .timeline-link-text { font-size: 44px; }
+
+@media (max-width: 800px) {
+    .lang-switcher { left: 14px; bottom: 14px; padding: 3px; }
+    .lang-switcher button { padding: 6px 10px; font-size: 10px; }
+
+    html[lang="ja"] .h-date { font-size: 48px; letter-spacing: 2px; }
+    html[lang="ja"] .h-title { font-size: 26px; }
+    html[lang="ja"] .timeline-link-text { font-size: 24px; }
+    html[lang="en"] .h-title { font-size: 28px; }
+    html[lang="en"] .timeline-link-text { font-size: 26px; }
+}

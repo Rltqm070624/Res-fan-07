@@ -6,8 +6,8 @@
     <title>RESCENE ARCHIVE | 메인</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- ⭐️ 구글 폰트 최적화: 가장 얇고 세련된 Montserrat & Noto Sans KR 만 사용 -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- ⭐️ 구글 폰트 추가: 손글씨 폰트 Nanum Pen Script 적용 -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
@@ -150,9 +150,24 @@
     <!-- ⭐️ 시네마틱 모달 -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
-        <button class="close-btn" onclick="closeHistoryModal()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
+        
+        <!-- ⭐️ 모달 우측 상단 햄버거 메뉴 -->
+        <div class="modal-menu-container">
+            <button class="modal-hamburger-btn" onclick="toggleHistoryMenu()" id="historyMenuBtn">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="history-dropdown" id="historyDropdown">
+                <button onclick="closeHistoryModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg> 창 닫기
+                </button>
+                <button onclick="skipHistorySequence()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg> Skip
+                </button>
+                <button onclick="openDetailedTimeline()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> 상세보기
+                </button>
+            </div>
+        </div>
         
         <!-- ⭐️ 맨 마지막 정중앙에 나타날 텍스트 버튼 -->
         <button class="timeline-link-text" onclick="openDetailedTimeline()">
@@ -202,6 +217,26 @@
             document.getElementById('mobileMenuBackdrop').classList.toggle('active');
             document.body.style.overflow = document.getElementById('mobileMenuPanel').classList.contains('active') ? 'hidden' : 'auto';
         }
+        
+        // ⭐️ 발자취 모달 햄버거 메뉴 토글 로직
+        function toggleHistoryMenu() {
+            const btn = document.getElementById('historyMenuBtn');
+            const dropdown = document.getElementById('historyDropdown');
+            btn.classList.toggle('active');
+            dropdown.classList.toggle('active');
+        }
+
+        // 모달 외부 클릭 시 드롭다운 닫기
+        document.addEventListener('click', function(event) {
+            const container = document.querySelector('.modal-menu-container');
+            const dropdown = document.getElementById('historyDropdown');
+            const btn = document.getElementById('historyMenuBtn');
+            if (container && !container.contains(event.target) && dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+                btn.classList.remove('active');
+            }
+        });
+
         const sunIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
         const moonIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
         function updateThemeIcon(theme) { const btn = document.getElementById('themeToggleBtn'); if (btn) btn.innerHTML = (theme === 'dark') ? sunIcon : moonIcon; }
@@ -223,7 +258,7 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
-
+        // ⭐️ 폰트에 맞춰 세부 글씨(span) 크기를 26px 수준으로 조정
         const historyData = [
             { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o" }, 
             { date: "2024. 03. 26", title: "싱글 1집 《Re:Scene》 발매 (데뷔)" }, 
@@ -236,7 +271,7 @@
             { date: "2025. 05", title: "BEAUTY+ 5월호 화보" },
             { date: "2025. 07. 02", title: "싱글 2집 《Dearest》 발매" },
             { date: "2025. 11. 25", title: "미니 3집 《Lip Bomb》 발매" },
-            { date: "2026. 01", title: "I-SHA, 넥슨, CU, 도미노피자, KREAM 등<br><span style='font-size:16px; opacity:0.8; font-weight:400;'>다수 브랜드 광고 및 콜라보레이션</span>" },
+            { date: "2026. 01", title: "I-SHA, 넥슨, CU, 도미노피자, KREAM 등<br><span style='font-size:26px; opacity:0.8; font-weight:400;'>다수 브랜드 광고 및 콜라보레이션</span>" },
             { date: "2026. 05. 22", title: "경상남도 거제시 홍보대사" },
             { date: "2026. 06", title: "앳스타일 6월호 화보" },
             { date: "2026. 06. 04", title: "화보 MIIM (원이, 미나미)" },
@@ -246,10 +281,10 @@
             { date: "2026. 07. 08", title: "리메이크 싱글 'Pretty Girl' 발매" },
             { date: "2026. 07. 08", title: "멜론 1위 소감 라이브", vid: "v6n4XQdX6_8" }, 
             { date: "2026. 07. 14", title: "저스트 메이크업 IN TOKYO 2027 홍보대사" },
-            { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위<br><span style='font-size:16px; font-weight:300; opacity:0.8;'>(SBS M 《더쇼》)</span>", vid: "dOllJ26kfIY" }, 
+            { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위<br><span style='font-size:26px; font-weight:400; opacity:0.8;'>(SBS M 《더쇼》)</span>", vid: "dOllJ26kfIY" }, 
             { date: "2026. 07. 21", title: "전남광주통합특별시 섬의 날 홍보대사" },
             { date: "2026. 07. 23", title: "MBC 아시안게임 중계방송 홍보대사" },
-            { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 음악방송 1위<br><span style='font-size:16px; font-weight:300; opacity:0.8;'>(MBC 《쇼! 음악중심》)</span>" },
+            { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 음악방송 1위<br><span style='font-size:26px; font-weight:400; opacity:0.8;'>(MBC 《쇼! 음악중심》)</span>" },
             { date: "2026. 08", title: "하퍼스 바자 코리아 8월호 화보" }
         ];
 
@@ -281,10 +316,14 @@
             titleEl.style.opacity = "";
             titleEl.classList.remove('show');
             
-            // 모달을 닫거나 초기화 시 중앙 버튼도 함께 숨김
+            // 모달 초기화 시 문구 숨김
             if (btnEl) {
                 btnEl.classList.remove('show');
             }
+            
+            // 햄버거 메뉴 닫기
+            document.getElementById('historyDropdown').classList.remove('active');
+            document.getElementById('historyMenuBtn').classList.remove('active');
         }
 
         function startHistorySequence() {
@@ -411,7 +450,6 @@
                 return;
             }
 
-            // 2. 멜론 1위 소감 (인덱스 19)
             if (idx === 19) {
                 dateEl.innerText = item.date;
                 dateEl.style.transition = "none";
@@ -448,7 +486,7 @@
                                 titleEl.style.transform = "";
                                 titleEl.style.opacity = ""; 
                                 
-                                // ⭐️ 1초 암전 대기 후 더 쇼(인덱스 21)로 바로 연결
+                                // ⭐️ 1초 암전 대기 후 바로 더 쇼(21번)로 진입 (텍스트 날아가던 구간 생략)
                                 seqTimeouts.push(setTimeout(() => {
                                     playSequenceIdx(21);
                                 }, 1000));
@@ -460,7 +498,7 @@
                 return;
             }
 
-            // 3. 더쇼 1위 (인덱스 21) - 튀어나옴 방지 (투명한 상태로 세팅 후 천천히 등장)
+            // ⭐️ 2026. 07. 14 (더 쇼) 튀어나옴 방지 (투명한 상태로 세팅 후 천천히 스르륵 등장)
             if (idx === 21) {
                 dateEl.innerText = "";
                 dateEl.style.transition = "none";
@@ -469,12 +507,11 @@
                 bg.classList.remove('show');
                 yt.src = "";
                 
-                // DOM이 빈 화면을 인식할 수 있도록 아주 짧은 딜레이 부여 후 텍스트 삽입
+                // 100ms의 짧은 안전 대기 후 텍스트 삽입 (번쩍임 현상 방지)
                 seqTimeouts.push(setTimeout(() => {
                     dateEl.innerText = item.date;
-                    void dateEl.offsetWidth; // 렌더링 강제 업데이트
+                    void dateEl.offsetWidth; 
                     
-                    // ⭐️ 여기서부터 날짜가 천천히 스르륵 나타납니다
                     dateEl.style.transition = "opacity 2.5s ease";
                     dateEl.style.opacity = 1;
                     
@@ -509,7 +546,7 @@
                                     titleEl.style.opacity = "";
                                     yt.src = "";
                                     
-                                    // ⭐️ 영상이 끝나고 1.5초간 완벽한 암전 유지 후 화면 정중앙에 최종 문구 등장
+                                    // ⭐️ 영상이 완전히 끝난 후 정중앙에 최종 문구 스르륵 등장
                                     seqTimeouts.push(setTimeout(() => {
                                         const endBtn = document.querySelector('.timeline-link-text');
                                         if (endBtn) {
@@ -521,11 +558,10 @@
                             }, 10000));
                         }, 1500));
                     }, 3000));
-                }, 100)); // 100ms 번쩍임 방지 버퍼
+                }, 100)); 
                 return;
             }
 
-            // 가속 구간
             dateEl.style.transition = "none";
             dateEl.style.opacity = 1;
             titleEl.style.transition = "none";
@@ -559,6 +595,16 @@
                     playSequenceIdx(idx + 1);
                 }, gap));
             }, dur));
+        }
+
+        // ⭐️ Skip 버튼 클릭 시 즉시 마지막 문구로 스킵하는 기능
+        function skipHistorySequence() {
+            clearHistorySequence();
+            
+            const endBtn = document.querySelector('.timeline-link-text');
+            if (endBtn) {
+                endBtn.classList.add('show');
+            }
         }
 
         function openHistoryModal() {

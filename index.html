@@ -66,7 +66,6 @@
     </div>
 
     <div id="mainWrapper">
-        <!-- 1. 배경 영상 영역 (100vh) -->
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
@@ -79,7 +78,6 @@
             </div>
         </div>
 
-        <!-- 2. 배경 영상과 똑같은 크기(100vh)를 가지는 독립된 발자취 진입 섹션 -->
         <div id="historySection" class="slow-reveal">
             <div class="section-title">WITH <span>RESCENE</span></div>
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
@@ -146,28 +144,41 @@
 
     </div> 
 
-    <!-- 발자취(History) 모달 컨테이너 -->
+    <!-- 발자취(History) 모달 컨테이너 (배경 유튜브 적용) -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
-        <button class="close-btn" onclick="closeHistoryModal()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-        <div class="section-header" style="margin-bottom: 30px; border-bottom: none;">
-            <div class="section-title">RESCENE <span>HISTORY</span></div>
-            <div style="font-size:12px; color:var(--text-muted);">마우스 휠로 넘겨보세요 ➔</div>
+        
+        <!-- 유튜브 백그라운드 영상 및 오버레이 -->
+        <div class="history-modal-bg">
+            <iframe id="historyYoutubeBg" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <div class="history-modal-overlay"></div>
         </div>
-        <div class="history-track-container">
-            <div class="history-track" id="historyTrack">
-                <div class="history-card"><div class="history-date">2024. 02. 29</div><div class="history-title">선공개 곡 'YoYo' 발매</div></div>
-                <div class="history-card"><div class="history-date">2024. 03. 26</div><div class="history-title">싱글 1집 《Re:Scene》 발매 (데뷔)</div></div>
-                <div class="history-card"><div class="history-date">2024. 08. 27</div><div class="history-title">미니 1집 《SCENEDROME》 발매</div></div>
-                <div class="history-card"><div class="history-date">2025. 02. 05</div><div class="history-title">미니 2집 《Glow Up》 발매</div></div>
-                <div class="history-card"><div class="history-date">2025. 07. 02</div><div class="history-title">싱글 2집 《Dearest》 발매</div></div>
-                <div class="history-card"><div class="history-date">2025. 11. 25</div><div class="history-title">미니 3집 《Lip Bomb》 발매</div></div>
-                <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 08</div><div class="history-title">리메이크 싱글 'Pretty Girl' 발매</div></div>
-                <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 08</div><div class="history-title">'LOVE ATTACK' 멜론 첫 음원차트 1위</div></div>
-                <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 14</div><div class="history-title">'Pretty Girl' 첫 음악방송 1위<br><span style="font-size:14px; color:var(--text-secondary);">(SBS M 《더쇼》)</span></div></div>
-                <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 25</div><div class="history-title">'Pretty Girl' 첫 지상파 음악방송 1위<br><span style="font-size:14px; color:var(--text-secondary);">(MBC 《쇼! 음악중심》)</span></div></div>
+
+        <div class="history-modal-content">
+            <button class="close-btn" onclick="closeHistoryModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="section-header" style="margin-bottom: 30px; border-bottom: none; display:flex; flex-direction:column; align-items:center; position: relative; z-index: 5;">
+                <div class="section-title">RESCENE <span>HISTORY</span></div>
+                <!-- 숫자 촤라락 애니메이션용 텍스트 -->
+                <div id="historyCounter" class="history-counter">0000. 00. 00</div>
+                <div style="font-size:12px; color:var(--text-primary); margin-top:15px; opacity:0.8;">마우스 휠로 넘겨보세요 ➔</div>
+            </div>
+            
+            <div class="history-track-container" style="position: relative; z-index: 5;">
+                <div class="history-track" id="historyTrack">
+                    <div class="history-card"><div class="history-date">2024. 02. 29</div><div class="history-title">선공개 곡 'YoYo' 발매</div></div>
+                    <div class="history-card"><div class="history-date">2024. 03. 26</div><div class="history-title">싱글 1집 《Re:Scene》 발매 (데뷔)</div></div>
+                    <div class="history-card"><div class="history-date">2024. 08. 27</div><div class="history-title">미니 1집 《SCENEDROME》 발매</div></div>
+                    <div class="history-card"><div class="history-date">2025. 02. 05</div><div class="history-title">미니 2집 《Glow Up》 발매</div></div>
+                    <div class="history-card"><div class="history-date">2025. 07. 02</div><div class="history-title">싱글 2집 《Dearest》 발매</div></div>
+                    <div class="history-card"><div class="history-date">2025. 11. 25</div><div class="history-title">미니 3집 《Lip Bomb》 발매</div></div>
+                    <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 08</div><div class="history-title">리메이크 싱글 'Pretty Girl' 발매</div></div>
+                    <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 08</div><div class="history-title">'LOVE ATTACK' 멜론 첫 음원차트 1위</div></div>
+                    <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 14</div><div class="history-title">'Pretty Girl' 첫 음악방송 1위<br><span style="font-size:14px; color:var(--text-secondary);">(SBS M 《더쇼》)</span></div></div>
+                    <div class="history-card" style="border-color: var(--c-accent);"><div class="history-date">2026. 07. 25</div><div class="history-title">'Pretty Girl' 첫 지상파 음악방송 1위<br><span style="font-size:14px; color:var(--text-secondary);">(MBC 《쇼! 음악중심》)</span></div></div>
+                </div>
             </div>
         </div>
     </div>
@@ -212,7 +223,6 @@
         }
         updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
 
-        // 스크롤 시 reveal 클래스 추가옵저버 (기존 일반 요소용과 slow 요소용 분리 처리)
         const observer = new IntersectionObserver((entries) => { 
             entries.forEach(e => { 
                 if(e.isIntersecting) {
@@ -222,16 +232,48 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
-        // 발자취 모달 열기/닫기 함수
+        // 모달 관련 타이머 및 로직
+        let counterInterval;
         function openHistoryModal() {
             document.getElementById('historyModal').classList.add('active');
             document.getElementById('historyBackdrop').classList.add('active');
             document.body.style.overflow = 'hidden';
+            
+            // 1. 유튜브 백그라운드 영상 재생 (소리 끔, 자동재생, 반복)
+            const ytIframe = document.getElementById('historyYoutubeBg');
+            if(!ytIframe.src.includes('jgaWSOXyH_o')) {
+                ytIframe.src = "https://www.youtube.com/embed/jgaWSOXyH_o?autoplay=1&mute=1&controls=0&loop=1&playlist=jgaWSOXyH_o&playsinline=1&modestbranding=1";
+            }
+
+            // 2. 숫자 촤라락 애니메이션 (약 1.5초 후 2024. 03. 26 정지)
+            const counter = document.getElementById('historyCounter');
+            clearInterval(counterInterval);
+            let frame = 0;
+            const maxFrames = 35; // 애니메이션 지속 시간 (프레임 수)
+            
+            counterInterval = setInterval(() => {
+                frame++;
+                if(frame < maxFrames) {
+                    // 무작위 날짜 생성
+                    const rY = Math.floor(Math.random() * (2025 - 1990) + 1990);
+                    const rM = String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0');
+                    const rD = String(Math.floor(Math.random() * 31 + 1)).padStart(2, '0');
+                    counter.innerText = `${rY}. ${rM}. ${rD}`;
+                } else {
+                    // 데뷔일 고정
+                    counter.innerText = "2024. 03. 26";
+                    clearInterval(counterInterval);
+                }
+            }, 40); // 숫자 교체 속도
         }
+
         function closeHistoryModal() {
             document.getElementById('historyModal').classList.remove('active');
             document.getElementById('historyBackdrop').classList.remove('active');
             document.body.style.overflow = 'auto';
+            
+            // 모달을 닫을 때 백그라운드 유튜브 영상 정지 (자원 절약 및 오디오 사고 방지)
+            document.getElementById('historyYoutubeBg').src = "";
         }
 
         // History 가로 스크롤 스와이프 기능

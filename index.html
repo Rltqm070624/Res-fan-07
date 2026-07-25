@@ -239,9 +239,11 @@
             { date: "2026. 06. 29", title: "경상북도 경주시 홍보대사" },
             { date: "2026. 07. 02", title: "경기도 고양시 홍보대사" },
             { date: "2026. 07. 08", title: "리메이크 싱글 'Pretty Girl' 발매" },
-            { date: "2026. 07. 08", title: "'LOVE ATTACK' 멜론 첫 음원차트 1위", vid: "v6n4XQdX6_8" },
+            // ⭐️ 인덱스 19 (요청 사항 반영)
+            { date: "2026. 07. 08", title: "멜론 1위 소감 라이브", vid: "v6n4XQdX6_8" }, 
             { date: "2026. 07. 14", title: "저스트 메이크업 IN TOKYO 2027 홍보대사" },
-            { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위<br><span style='font-size:16px; font-weight:400; opacity:0.8;'>(SBS M 《더쇼》)</span>", vid: "dOllJ26kfIY" }, // 인덱스 21 (더쇼)
+            // ⭐️ 인덱스 21 (더쇼)
+            { date: "2026. 07. 14", title: "'Pretty Girl' 첫 음악방송 1위<br><span style='font-size:16px; font-weight:400; opacity:0.8;'>(SBS M 《더쇼》)</span>", vid: "dOllJ26kfIY" }, 
             { date: "2026. 07. 21", title: "전남광주통합특별시 섬의 날 홍보대사" },
             { date: "2026. 07. 23", title: "MBC 아시안게임 중계방송 홍보대사" },
             { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 음악방송 1위<br><span style='font-size:16px; font-weight:400; opacity:0.8;'>(MBC 《쇼! 음악중심》)</span>" },
@@ -267,13 +269,17 @@
             
             dateEl.style.transition = "none";
             dateEl.style.opacity = 1;
+            dateEl.classList.remove('dash-blur');
             dateEl.innerText = "";
             
-            titleEl.style.transition = "none"; 
+            // 모든 트랜지션 초기화
+            titleEl.style.transition = ""; 
+            titleEl.style.transform = "";
+            titleEl.style.opacity = "";
             titleEl.classList.remove('show');
         }
 
-        // 모달 켰을 때 메인 시퀀스 (부드러운 페이드인과 순차적 숫자 상승)
+        // 1. 처음 등장시 날짜가 연하게 카운트 되다가 완료 시점에만 선명해지도록 수정
         function startHistorySequence() {
             clearHistorySequence();
             
@@ -282,27 +288,20 @@
             const bg = document.getElementById('historyModalBg');
             const yt = document.getElementById('historyYoutubeBg');
             
-            // 초기 셋팅: 처음부터 대놓고 있지 않게 투명 상태 유지
-            dateEl.style.transition = "none";
-            dateEl.style.opacity = 0;
+            dateEl.style.transition = "opacity 0.5s ease";
+            dateEl.style.opacity = 0.4; // 올라가는 동안 연하게 유지
             dateEl.innerText = "0000. 01. 01";
             
             const startTime = Date.now();
             const duration = 3000;
-            // 0년부터 2024년 3월 26일까지의 대략적인 총 일수 산정
             const targetDays = (2024 * 365) + (3 * 30) + 26; 
             
-            // 약간의 딜레이 후 부드럽게 페이드인 시키면서 숫자가 순차적으로 상승하도록 함
             seqTimeouts.push(setTimeout(() => {
-                dateEl.style.transition = "opacity 2s ease";
-                dateEl.style.opacity = 1;
-                
                 slotTimer = setInterval(() => {
                     let elapsed = Date.now() - startTime;
                     if (elapsed > duration) elapsed = duration;
                     
                     let progress = elapsed / duration;
-                    // 점점 빠르게 돌다가 마지막에 속도가 줄어들며 멈추는 공식
                     let eased = 1 - Math.pow(1 - progress, 4); 
                     
                     let currentDays = Math.floor(targetDays * eased);
@@ -322,30 +321,36 @@
                     if (elapsed === duration) {
                         clearInterval(slotTimer);
                         
-                        // 데뷔 일자에 도달 후 2초 유지 -> 날짜 부드럽게 사라짐
+                        // 도착 시점에 완전히 선명해짐
+                        dateEl.style.transition = "opacity 0.3s ease";
+                        dateEl.style.opacity = 1;
+                        
                         seqTimeouts.push(setTimeout(() => {
                             dateEl.style.transition = "opacity 1s ease";
                             dateEl.style.opacity = 0;
                             
-                            // 날짜가 사라진 자리에 데뷔 영상과 문구 부드럽게 등장
                             seqTimeouts.push(setTimeout(() => {
                                 dateEl.innerText = ""; 
                                 
                                 titleEl.innerHTML = historyData[0].title;
                                 titleEl.style.transition = "opacity 2s ease, transform 2s ease";
+                                titleEl.style.opacity = 1;
                                 titleEl.classList.add('show');
                                 
                                 yt.src = `https://www.youtube.com/embed/${historyData[0].vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${historyData[0].vid}&playsinline=1&modestbranding=1`;
                                 bg.style.transition = "opacity 2s ease";
                                 bg.classList.add('show');
                                 
-                                // 영상 5초 재생 후 자연스럽게 까매지며 사라짐
                                 seqTimeouts.push(setTimeout(() => {
                                     bg.classList.remove('show');
-                                    titleEl.classList.remove('show');
+                                    // 떨어지는 모션 방지를 위해 위치 고정 후 페이드아웃
+                                    titleEl.style.transform = "translateY(0)";
+                                    titleEl.style.transition = "opacity 1.5s ease";
+                                    titleEl.style.opacity = 0;
                                     
-                                    // 1.5초 암전 후 인덱스 1 (그 다음 날짜)로 자연스럽게 연결
                                     seqTimeouts.push(setTimeout(() => {
+                                        titleEl.classList.remove('show');
+                                        titleEl.style.transform = ""; 
                                         playSequenceIdx(1);
                                     }, 1500)); 
                                 }, 5000));
@@ -356,7 +361,6 @@
             }, 100));
         }
 
-        // 잔상없이 가속하며 지나가는 효과 및 특정 인덱스 스페셜 연출
         function playSequenceIdx(idx) {
             if(idx >= historyData.length) return; 
 
@@ -366,64 +370,63 @@
             const yt = document.getElementById('historyYoutubeBg');
             const item = historyData[idx];
 
-            // ⭐️ 인덱스 1: 데뷔 영상 후 이어지는 첫 날짜 (부드럽게 페이드인)
+            // 2. 인덱스 1 구간 (첫 앨범 발매 후 모션 없이 바로 넘어가기)
             if (idx === 1) {
                 dateEl.innerText = item.date;
                 titleEl.innerHTML = item.title;
                 
-                // 트랜지션 초기화 및 투명 세팅
                 dateEl.style.transition = "none";
                 dateEl.style.opacity = 0;
                 titleEl.style.transition = "none";
+                titleEl.style.opacity = 1;
                 titleEl.classList.remove('show');
                 
-                void dateEl.offsetWidth; // 리플로우 강제 발생 
+                void dateEl.offsetWidth; 
                 
-                // 천천히 페이드인
                 dateEl.style.transition = "opacity 2s ease";
                 dateEl.style.opacity = 1;
                 titleEl.style.transition = "opacity 2s ease, transform 2s ease";
                 titleEl.classList.add('show');
                 
                 seqTimeouts.push(setTimeout(() => {
-                    // 3초 유지 후, 가속 구간 진입을 위해 다시 부드럽게 사라짐
-                    titleEl.classList.remove('show');
+                    // 모션 없이 그 자리에서 바로 페이드아웃 되도록 고정
+                    titleEl.style.transform = "translateY(0)"; 
+                    titleEl.style.transition = "opacity 0.6s ease";
+                    titleEl.style.opacity = 0;
+                    
                     dateEl.style.transition = "opacity 0.6s ease";
                     dateEl.style.opacity = 0;
                     
                     seqTimeouts.push(setTimeout(() => {
+                        titleEl.classList.remove('show');
+                        titleEl.style.transform = ""; 
+                        titleEl.style.opacity = "";
                         playSequenceIdx(2);
                     }, 600));
                 }, 3000));
                 return;
             }
 
-            // ⭐️ 인덱스 21: 더 쇼 1위 (날짜 천천히 등장 -> 사라지며 영상/타이틀 천천히 등장)
-            if (idx === 21) {
-                dateEl.innerText = "";
+            // 2.5 멜론 1위 소감 (인덱스 19 특별 연출)
+            if (idx === 19) {
+                dateEl.innerText = item.date;
+                dateEl.style.transition = "none";
+                dateEl.style.opacity = 1; 
                 titleEl.classList.remove('show');
                 bg.classList.remove('show');
                 yt.src = "";
-
-                // 암전 대기 후 날짜 단독 페이드인
+                
+                // 날짜가 나오고 2초간 멈춰있다가
                 seqTimeouts.push(setTimeout(() => {
-                    dateEl.innerText = item.date;
-                    dateEl.style.transition = "none";
+                    // 천천히 사라짐
+                    dateEl.style.transition = "opacity 1.5s ease";
                     dateEl.style.opacity = 0;
-                    void dateEl.offsetWidth;
                     
-                    dateEl.style.transition = "opacity 2.5s ease";
-                    dateEl.style.opacity = 1;
-                    
-                    // 날짜를 충분히 보여준 후
                     seqTimeouts.push(setTimeout(() => {
-                        // 날짜는 부드럽게 페이드아웃
-                        dateEl.style.transition = "opacity 1.5s ease";
-                        dateEl.style.opacity = 0;
-                        
-                        // 타이틀(문구)과 영상이 부드럽게 페이드인
+                        dateEl.innerText = "";
                         titleEl.innerHTML = item.title;
                         titleEl.style.transition = "opacity 2s ease, transform 2s ease";
+                        titleEl.style.opacity = 1;
                         titleEl.classList.add('show');
                         
                         if (item.vid) {
@@ -432,34 +435,76 @@
                             bg.classList.add('show');
                         }
                         
-                        // 4초간 영상 감상 후 최종 음악중심으로 이동
+                        // 10초 유지
                         seqTimeouts.push(setTimeout(() => {
-                            titleEl.classList.remove('show');
+                            titleEl.style.transform = "translateY(0)";
+                            titleEl.style.transition = "opacity 0.6s ease";
+                            titleEl.style.opacity = 0;
                             bg.classList.remove('show');
-                            yt.src = "";
-                            dateEl.innerText = "";
                             
                             seqTimeouts.push(setTimeout(() => {
-                                const musicCoreItem = historyData[24];
-                                
-                                dateEl.innerText = musicCoreItem.date;
-                                titleEl.innerHTML = musicCoreItem.title;
-                                
-                                dateEl.style.transition = "opacity 2s ease";
-                                dateEl.style.opacity = 1;
-                                titleEl.style.transition = "opacity 2s ease, transform 2s ease";
-                                titleEl.classList.add('show');
-                                // 시퀀스 최종 스탑
-                            }, 1000));
-                        }, 4000));
-                        
-                    }, 2500)); // 날짜가 단독으로 떠있는 시간
-                }, 1000));
+                                titleEl.classList.remove('show');
+                                titleEl.style.transform = "";
+                                titleEl.style.opacity = ""; 
+                                playSequenceIdx(20);
+                            }, 600));
+                        }, 10000));
+                    }, 1500)); 
+                }, 2000)); 
                 return;
             }
 
-            // 일반 항목 (빠르게 지나가는 가속 구간)
-            // 겹침/잔상을 막기위해 트랜지션 강제 해제
+            // 3. 더 쇼 1위 (인덱스 21 특별 연출 및 정지)
+            if (idx === 21) {
+                dateEl.innerText = item.date;
+                dateEl.style.transition = "none";
+                dateEl.style.opacity = 1;
+                titleEl.classList.remove('show');
+                bg.classList.remove('show');
+                yt.src = "";
+                
+                // 날짜가 2초 멈춰있다가
+                seqTimeouts.push(setTimeout(() => {
+                    // 천천히 사라짐
+                    dateEl.style.transition = "opacity 1.5s ease";
+                    dateEl.style.opacity = 0;
+                    
+                    seqTimeouts.push(setTimeout(() => {
+                        dateEl.innerText = "";
+                        titleEl.innerHTML = item.title;
+                        titleEl.style.transition = "opacity 2s ease, transform 2s ease";
+                        titleEl.style.opacity = 1;
+                        titleEl.classList.add('show');
+                        
+                        if (item.vid) {
+                            yt.src = `https://www.youtube.com/embed/${item.vid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${item.vid}&playsinline=1&modestbranding=1`;
+                            bg.style.transition = "opacity 2s ease";
+                            bg.classList.add('show');
+                        }
+                        
+                        // 10초 유지 후 천천히 사라지기
+                        seqTimeouts.push(setTimeout(() => {
+                            titleEl.style.transform = "translateY(0)";
+                            titleEl.style.transition = "opacity 2s ease";
+                            titleEl.style.opacity = 0;
+                            
+                            bg.style.transition = "opacity 2s ease";
+                            bg.classList.remove('show');
+                            
+                            seqTimeouts.push(setTimeout(() => {
+                                titleEl.classList.remove('show');
+                                titleEl.style.transform = "";
+                                titleEl.style.opacity = "";
+                                yt.src = "";
+                                // 요구사항: "일단은 딱 여기까지만" -> 여기서 정지
+                            }, 2000));
+                        }, 10000));
+                    }, 1500));
+                }, 2000));
+                return;
+            }
+
+            // 그 외 일반 항목 (빠르게 지나가는 가속 구간)
             dateEl.style.transition = "none";
             dateEl.style.opacity = 1;
             titleEl.style.transition = "none";
@@ -477,12 +522,12 @@
                 yt.src = "";
             }
 
-            // 속도 점진적 가속 로직
             let dur = 2000;
             if (idx >= 2 && idx <= 3) dur = 1000;
             else if (idx >= 4 && idx <= 7) dur = 500;
             else if (idx >= 8 && idx <= 12) dur = 200;
-            else if (idx >= 13 && idx <= 17) dur = 100;
+            else if (idx >= 13 && idx <= 18) dur = 100; // 19는 따로 처리
+            else if (idx === 20) dur = 100; // 21로 넘어가기 전
             else dur = 70;
             
             seqTimeouts.push(setTimeout(() => {

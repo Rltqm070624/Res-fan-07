@@ -155,7 +155,7 @@ html[data-theme="light"] .footer-sns a img { filter: invert(0); }
     
     /* 모바일 상단 바에서는 데스크탑 전용 요소 숨김 */
     .desktop-only-utils { display: none !important; }
-    
+
     .hamburger-btn { display: flex; }
     .nav-right { gap: 4px; }
     
@@ -175,3 +175,27 @@ html[data-theme="light"] .footer-sns a img { filter: invert(0); }
     .mobile-sns-box a img { width: 18px; height: 18px; filter: invert(1); opacity: 0.6; }
     html[data-theme="light"] .mobile-sns-box a img { filter: invert(0); }
 }
+
+/* ==========================================================================
+   ⭐️ 7. 스켈레톤 로딩 (차트 / 캘린더 / 굿즈 등 공통)
+   ========================================================================== */
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-surface);
+}
+.skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.09), transparent);
+    animation: skeletonShimmer 1.4s infinite;
+}
+html[data-theme="light"] .skeleton::after {
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent);
+}
+@keyframes skeletonShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+.ticker-item.skeleton { display: block; }

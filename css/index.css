@@ -64,23 +64,20 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
 }
 .journey-close-btn:hover { color: var(--c-accent); transform: rotate(90deg); }
 
-/* 블라썸 배경 이미지 (매우 연하게) */
-.journey-bg {
-    position: absolute; inset: 0;
-    background: url('../images/blossom.gif') center/cover no-repeat;
-    opacity: 0.06; z-index: 0; pointer-events: none;
-    transition: opacity 1s ease;
-}
-html[data-theme="light"] .journey-bg { opacity: 0.12; }
-
-/* 데뷔 씬에 도달하면 서서히 등장하는 배경 영상 */
+/* 모달 배경: 처음부터 debut.mp4가 재생됨 */
 .journey-bg-video {
     position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-    opacity: 0; z-index: 0; pointer-events: none;
-    transition: opacity 1.8s ease;
+    z-index: 0; pointer-events: none;
 }
-.journey-bg-video.show { opacity: 0.35; }
-html[data-theme="light"] .journey-bg-video.show { opacity: 0.25; }
+
+/* 영상 위에 살짝 어둡게 깔아서 텍스트/카드 가독성 확보 */
+.journey-video-overlay {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(10,10,12,0.55) 0%, rgba(10,10,12,0.75) 100%);
+}
+html[data-theme="light"] .journey-video-overlay {
+    background: linear-gradient(180deg, rgba(10,10,12,0.35) 0%, rgba(10,10,12,0.55) 100%);
+}
 
 /* ==========================================================================
    ⭐️ 3. 모달 안쪽 가로 스크롤 및 카드 디자인
@@ -92,31 +89,20 @@ html[data-theme="light"] .journey-bg-video.show { opacity: 0.25; }
 }
 .journey-track-container::-webkit-scrollbar { display: none; }
 
-/* 배경 곡선 라인 (스크롤에 따라 서서히 그려짐) */
-.journey-curve {
-    position: absolute; top: 50%; left: 10vw; width: 200vw; height: 200px;
-    transform: translateY(-50%); z-index: 0; pointer-events: none;
-}
-.journey-curve path {
-    transition: stroke-dashoffset 0.2s ease-out;
-}
-
 .journey-item { position: relative; z-index: 2; flex-shrink: 0; }
 
-/* 첫 화면: 2024년 블랙 박스 (천천히 떠오름) */
+/* 첫 화면: 2024년 (박스 없이, 얇고 큰 글씨로 천천히 떠오름) */
 .year-box {
-    background: #0b0b0b; border: 1px solid rgba(255,255,255,0.1); padding: 20px 80px;
-    font-family: var(--font-head); font-size: 42px; font-weight: 800; color: var(--c-accent);
-    opacity: 0; transform: translateY(40px); transition: 1.5s ease;
+    font-family: var(--font-head); font-weight: 200; font-size: clamp(56px, 9vw, 120px);
+    letter-spacing: 14px; color: var(--text-on-media);
+    text-shadow: 0 0 60px rgba(229,192,123,0.35);
+    opacity: 0; transform: translateY(50px) scale(0.96);
+    transition: 1.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.year-box.active { opacity: 1; transform: translateY(0); }
+.year-box.active { opacity: 1; transform: translateY(0) scale(1); }
+.year-box .yb-suffix { font-size: 0.4em; letter-spacing: 6px; font-weight: 300; color: var(--c-accent); margin-left: 6px; vertical-align: middle; }
 
-/* 스크롤 시 스멀스멀 나오는 발자국 */
-.scene-gap { width: 5vw; display: flex; justify-content: center; }
-.footprint { font-size: 36px; opacity: 0; transition: 0.4s; filter: grayscale(100%); }
-.footprint.active { opacity: 0.5; }
-
-/* 오른쪽 이동: 데뷔 쇼케이스 카드 (곡선이 도달하면 서서히 등장) */
+/* 오른쪽 이동: 데뷔 쇼케이스 카드 (한 번의 스크롤 이동으로 등장) */
 .event-card {
     width: 560px; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     opacity: 0; transform: translateX(60px); transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -139,7 +125,7 @@ html[data-theme="light"] .journey-bg-video.show { opacity: 0.25; }
 
 @media (max-width: 800px) {
     .event-card { width: 85vw; }
-    .year-box { padding: 15px 50px; font-size: 32px; }
+    .year-box { letter-spacing: 8px; }
 }
 
 

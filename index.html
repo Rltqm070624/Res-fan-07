@@ -66,6 +66,7 @@
     </div>
 
     <div id="mainWrapper">
+        <!-- 1. 배경 영상 영역 (100vh) -->
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
@@ -78,14 +79,11 @@
             </div>
         </div>
 
-        <!-- 1. 발자취 진입 섹션 (텍스트 영역) -->
-        <div class="section-container slow-reveal" id="historySection">
+        <!-- 2. 배경 영상과 똑같은 크기(100vh)를 가지는 독립된 발자취 진입 섹션 -->
+        <div id="historySection" class="slow-reveal">
             <div class="section-title">WITH <span>RESCENE</span></div>
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
         </div>
-        
-        <!-- 2. 말씀하신 대로 문구를 정중앙에 맞추기 위해 밑에 하나 더 만든 영역 (Spacer) -->
-        <div id="visualSpacer" style="height: 220px; width: 100%;"></div>
 
         <div class="section-container reveal" id="chartSection">
             <div class="section-header chart-header">

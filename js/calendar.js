@@ -4,7 +4,6 @@ let scheduleDB = {};
 
 async function loadScheduleData() {
     try {
-        // GitHub Action이 6시간마다 만들어두는 안전한 JSON 파일을 가져옴
         const response = await fetch('schedule_data.json?t=' + new Date().getTime());
         scheduleDB = await response.json();
     } catch (error) {
@@ -18,7 +17,6 @@ function changeMonth(delta) {
     if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } 
     else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } 
     
-    // ⭐️ 버튼 누를 때마다 서버 통신 X -> 렌더링만 0.01초만에 다시 함
     renderCalendar(); 
 }
 
@@ -87,7 +85,6 @@ function closeModal() {
     if(!document.getElementById('calendarPopupModal').classList.contains('active')){ document.body.style.overflow = 'auto'; } 
 }
 
-// 초기 렌더링 시 안전한 JSON 파일 불러오기
 window.addEventListener('DOMContentLoaded', () => { 
     loadScheduleData(); 
 });

@@ -3,7 +3,7 @@ import fs from 'fs';
 async function fetchSchedules() {
     // ⭐️ 주소를 직접 노출하지 않고, 깃허브에 숨겨둔 환경변수를 불러옵니다.
     const targetUrl = process.env.SECRET_DATA_URL;
-    const filePath = 'schedule_data.json';
+    const filePath = 'js/schedule_data.json';
 
     if (!targetUrl) {
         console.error("숨겨진 URL을 찾을 수 없습니다. GitHub Secrets 설정을 확인해주세요.");

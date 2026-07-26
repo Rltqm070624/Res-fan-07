@@ -821,7 +821,9 @@
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
-        const scheduleDB = { "2026-07-25": { items: [{ time: "12:45", title: "2026 원 유니버스 페스티벌", image: "images/one.jpg" }, { time: "16:45", title: "보령 KBS 슈퍼라이브", image: "images/boryung.jpg" }] }, "2026-07-26": { items: [{ time: "14:00", title: "2026 캐리비안베이 워터뮤직풀파티", color: "#e78b54" }, { time: "19:00", title: "별방수련회", color: "#72a58b" }] } };
+        // ⭐️ 스케줄 변수 선언 (데이터는 이제 fetchScheduleData()에서 할당됨)
+        let scheduleDB = {};
+        
         let currentCalYear = 2026; let currentCalMonth = 7;
         function changeMonth(delta) { currentCalMonth += delta; if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } renderCalendar(); }
         function renderCalendar() { const calendarDays = document.getElementById('calendarDays'); document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); let html = ''; for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; } for (let i = 1; i <= lastDate; i++) { const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; const data = scheduleDB[dateKey]; const hasEvent = data ? 'has-event' : ''; let eventsHtml = ''; if (data && data.items) { data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div><div class="cal-event-title">${item.title}</div></div>`; }); } html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`; } calendarDays.innerHTML = html; }
@@ -845,7 +847,25 @@
             document.getElementById('modalBackdrop').classList.add('active');
         }
         function closeModal() { document.getElementById('scheduleModal').classList.remove('active'); document.getElementById('modalBackdrop').classList.remove('active'); if(!document.getElementById('calendarPopupModal').classList.contains('active')){ document.body.style.overflow = 'auto'; } }
-        window.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
+
+        // ⭐️ 스케줄 데이터를 동적으로 불러오는 비동기 함수
+        async function fetchScheduleData() {
+            try {
+                // 브라우저 캐싱 방지를 위해 URL 끝에 타임스탬프 추가
+                const response = await fetch('schedule_data.json?t=' + new Date().getTime());
+                scheduleDB = await response.json();
+                renderCalendar();
+            } catch (error) {
+                console.error("스케줄 데이터를 불러오는 데 실패했습니다.", error);
+                // 실패하더라도 빈 달력 UI를 보여주기 위해 호출
+                renderCalendar();
+            }
+        }
+
+        // ⭐️ DOM이 모두 로드되면 데이터를 가져와 캘린더를 렌더링하도록 수정
+        window.addEventListener('DOMContentLoaded', () => { 
+            fetchScheduleData(); 
+        });
     </script>
 </body>
 </html>

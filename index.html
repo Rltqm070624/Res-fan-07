@@ -330,14 +330,13 @@
             { date: "2026. 07. 25", title: "'Pretty Girl' 첫 지상파 1위 (음악중심)", timeIndex: 37 },
             { date: "2026. 08", title: "하퍼스 바자 코리아 8월호 화보", timeIndex: 38 }
         ];
-        // ⭐️ i18n.js 가 위 historyData 의 title 을 현재 언어로 덮어씁니다.
-        //    항목을 추가할 땐 i18n.js 의 HISTORY(ko/en/ja) 세 배열에도 같은 순서로 추가해 주세요.
+        
         window.historyData = historyData;
 
         let slotTimer;
         let seqTimeouts = [];
         let progressInterval;
-        const TOTAL_DURATION_MS = 38000; // 총 가상 재생시간 38초
+        const TOTAL_DURATION_MS = 38000; 
         let currentElapsedMs = 0;
 
         function clearHistorySequence() {
@@ -669,7 +668,6 @@
                 yt.src = "";
             }
 
-            // ⭐️ 언어별 가독 시간 보정 (영문/일본어는 문장이 길어 조금 더 오래 노출)
             const langFactor = (typeof getLang === 'function' && getLang() !== 'ko') ? 1.35 : 1;
 
             let dur = 2000;
@@ -692,7 +690,6 @@
             }, dur));
         }
 
-        // ⭐️ 프로그레스 바 클릭/드래그 시 원하는 위치(시간)로 점프하는 Seek 기능
         function seekTimeline(event) {
             const container = document.getElementById('historyProgressContainer');
             const rect = container.getBoundingClientRect();
@@ -713,11 +710,10 @@
             const bg = document.getElementById('historyModalBg');
             const yt = document.getElementById('historyYoutubeBg');
             
-            // 시간에 따른 대략적 인덱스 분기 점프
             let targetIdx = 1;
-            if (ms > 22000) targetIdx = 21; // 더쇼 1위 구간
-            else if (ms > 15000) targetIdx = 19; // 멜론 1위 구간
-            else if (ms > 5000) targetIdx = 2; // 일반 가속 구간
+            if (ms > 22000) targetIdx = 21; 
+            else if (ms > 15000) targetIdx = 19; 
+            else if (ms > 5000) targetIdx = 2; 
             
             const item = historyData[targetIdx];
             if (item) {
@@ -730,7 +726,6 @@
                     bg.classList.add('show');
                 }
                 
-                // 남은 시간만큼 재생 후 다음으로 진행
                 seqTimeouts.push(setTimeout(() => {
                     playSequenceIdx(targetIdx + 1);
                 }, 4000));
@@ -820,48 +815,160 @@
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
-        // ⭐️ 스케줄 변수 선언 (데이터는 이제 fetchScheduleData()에서 할당됨)
+        // ⭐️ [완전 통합형] 캘린더 및 스케줄 로직 (자동 연도/월 + 모달 높이 고정 + 데이터 파싱)
         let scheduleDB = {};
         
-        let currentCalYear = 2026; let currentCalMonth = 7;
-        function changeMonth(delta) { currentCalMonth += delta; if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } renderCalendar(); }
-        function renderCalendar() { const calendarDays = document.getElementById('calendarDays'); document.getElementById('calendarMonthText').innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); let html = ''; for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; } for (let i = 1; i <= lastDate; i++) { const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; const data = scheduleDB[dateKey]; const hasEvent = data ? 'has-event' : ''; let eventsHtml = ''; if (data && data.items) { data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div><div class="cal-event-title">${item.title}</div></div>`; }); } html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`; } calendarDays.innerHTML = html; }
-        function openCalendarPopup() { document.getElementById('calendarPopupModal').classList.add('active'); document.getElementById('calPopupBackdrop').classList.add('active'); document.body.style.overflow = 'hidden'; }
-        function closeCalendarPopup() { document.getElementById('calendarPopupModal').classList.remove('active'); document.getElementById('calPopupBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
+        // ⭐️ 현재 실제 날짜로 연도와 월 초기화 (수동 수정 불필요)
+        let currentCalYear = new Date().getFullYear(); 
+        let currentCalMonth = new Date().getMonth() + 1; 
+
+        const colorMap = { 
+            "broadcast": "#7e57c2", 
+            "fansign": "#ec407a",   
+            "event": "#66bb6a",     
+            "concert": "#26c6da",   
+            "radio": "#ffa726",     
+            "notice": "#78909c"     
+        };
+
+        // ⭐️ 데이터 불러와서 파싱하는 함수
+        async function fetchScheduleData() {
+            try {
+                const response = await fetch('js/schedule_data.json?t=' + new Date().getTime());
+                const rawData = await response.json();
+                
+                scheduleDB = {}; // 초기화
+
+                if (rawData && rawData.events && Array.isArray(rawData.events)) {
+                    rawData.events.forEach(ev => {
+                        const dateKey = ev.date; 
+                        if (!dateKey) return;
+                        
+                        if (!scheduleDB[dateKey]) {
+                            scheduleDB[dateKey] = { items: [] };
+                        }
+                        
+                        scheduleDB[dateKey].items.push({
+                            time: ev.time || "",
+                            title: ev.title,
+                            color: colorMap[ev.type] || "var(--c-accent)",
+                            image: ""
+                        });
+                    });
+                }
+                renderCalendar();
+            } catch (error) {
+                console.error("스케줄 데이터를 불러오는 데 실패했습니다.", error);
+                renderCalendar();
+            }
+        }
+
+        function changeMonth(delta) { 
+            currentCalMonth += delta; 
+            if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } 
+            else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } 
+            renderCalendar(); 
+        }
+
+        function renderCalendar() { 
+            const calendarDays = document.getElementById('calendarDays'); 
+            if (!calendarDays) return;
+            
+            // ⭐️ 모달창 높이 고정 (무조건 6줄 꽉 채우기)
+            calendarDays.style.gridTemplateRows = 'repeat(6, 1fr)';
+
+            const monthText = document.getElementById('calendarMonthText');
+            if(monthText) monthText.innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; 
+            
+            const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); 
+            const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); 
+            
+            let html = ''; 
+            for (let i = 0; i < firstDayIndex; i++) { 
+                html += `<div class="day-cell empty"></div>`; 
+            } 
+            
+            for (let i = 1; i <= lastDate; i++) { 
+                const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; 
+                const data = scheduleDB[dateKey]; 
+                const hasEvent = data && data.items && data.items.length > 0 ? 'has-event' : ''; 
+                
+                let eventsHtml = ''; 
+                if (data && data.items) { 
+                    data.items.forEach(item => { 
+                        let dotColor = item.color ? item.color : 'var(--c-accent)'; 
+                        eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div><div class="cal-event-title">${item.title}</div></div>`; 
+                    }); 
+                } 
+                html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`; 
+            } 
+
+            const totalCells = firstDayIndex + lastDate;
+            const remainingCells = 42 - totalCells;
+            for (let i = 0; i < remainingCells; i++) {
+                html += `<div class="day-cell empty"></div>`;
+            }
+
+            calendarDays.innerHTML = html; 
+        }
+
+        function openCalendarPopup() { 
+            const modal = document.getElementById('calendarPopupModal');
+            const backdrop = document.getElementById('calPopupBackdrop');
+            if(modal && backdrop) {
+                modal.classList.add('active'); 
+                backdrop.classList.add('active'); 
+                document.body.style.overflow = 'hidden'; 
+            }
+        }
+
+        function closeCalendarPopup() { 
+            const modal = document.getElementById('calendarPopupModal');
+            const backdrop = document.getElementById('calPopupBackdrop');
+            if(modal) modal.classList.remove('active'); 
+            if(backdrop) backdrop.classList.remove('active'); 
+            document.body.style.overflow = 'auto'; 
+        }
+
         function openModal(year, month, day, dateKey) {
-            // ⭐️ 날짜 표기를 언어에 맞게 변환
             const dateTitle = (typeof tDate === 'function') ? tDate(year, month, day) : `${year}년 ${month}월 ${day}일`;
-            document.getElementById('modalDateTitle').innerText = dateTitle;
+            const titleEl = document.getElementById('modalDateTitle');
+            if(titleEl) titleEl.innerText = dateTitle;
+            
             const data = scheduleDB[dateKey]; let scheduleHtml = '';
-            if (data && data.items) {
+            if (data && data.items && data.items.length > 0) {
                 scheduleHtml += `<div class="schedule-detail-card"><div class="sd-body">`;
-                data.items.forEach(item => { let dotColor = item.color ? item.color : 'var(--c-accent)'; scheduleHtml += `<div class="sd-row"><div class="sd-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor}60;"></div><div class="sd-time" style="color: ${dotColor};">${item.time}</div><div class="sd-title">${item.title}</div></div>`; if (item.image) { scheduleHtml += `<div class="sd-img-wrapper"><img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`; } });
+                data.items.forEach(item => { 
+                    let dotColor = item.color ? item.color : 'var(--c-accent)'; 
+                    scheduleHtml += `<div class="sd-row"><div class="sd-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor}60;"></div><div class="sd-time" style="color: ${dotColor};">${item.time}</div><div class="sd-title">${item.title}</div></div>`; 
+                    if (item.image) { scheduleHtml += `<div class="sd-img-wrapper"><img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`; } 
+                });
                 scheduleHtml += `</div></div>`;
             } else {
                 const emptyMsg = (typeof t === 'function') ? t('noSchedule') : '등록된 일정이 없습니다.';
                 scheduleHtml = `<div class="schedule-detail-empty">${emptyMsg}</div>`;
             }
-            document.getElementById('modalScheduleText').innerHTML = scheduleHtml;
-            document.getElementById('scheduleModal').classList.add('active');
-            document.getElementById('modalBackdrop').classList.add('active');
-        }
-        function closeModal() { document.getElementById('scheduleModal').classList.remove('active'); document.getElementById('modalBackdrop').classList.remove('active'); if(!document.getElementById('calendarPopupModal').classList.contains('active')){ document.body.style.overflow = 'auto'; } }
-
-        // ⭐️ 스케줄 데이터를 동적으로 불러오는 비동기 함수
-        async function fetchScheduleData() {
-            try {
-                // 브라우저 캐싱 방지를 위해 URL 끝에 타임스탬프 추가
-                const response = await fetch('js/schedule_data.json?t=' + new Date().getTime());
-                scheduleDB = await response.json();
-                renderCalendar();
-            } catch (error) {
-                console.error("스케줄 데이터를 불러오는 데 실패했습니다.", error);
-                // 실패하더라도 빈 달력 UI를 보여주기 위해 호출
-                renderCalendar();
-            }
+            
+            const textEl = document.getElementById('modalScheduleText');
+            if(textEl) textEl.innerHTML = scheduleHtml;
+            
+            const scheduleModal = document.getElementById('scheduleModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            if(scheduleModal) scheduleModal.classList.add('active');
+            if(backdrop) backdrop.classList.add('active');
         }
 
-        // ⭐️ DOM이 모두 로드되면 데이터를 가져와 캘린더를 렌더링하도록 수정
+        function closeModal() { 
+            const scheduleModal = document.getElementById('scheduleModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            const calModal = document.getElementById('calendarPopupModal');
+            
+            if(scheduleModal) scheduleModal.classList.remove('active'); 
+            if(backdrop) backdrop.classList.remove('active'); 
+            if(calModal && !calModal.classList.contains('active')){ document.body.style.overflow = 'auto'; } 
+        }
+
+        // ⭐️ DOM 로드 시 실행
         window.addEventListener('DOMContentLoaded', () => { 
             fetchScheduleData(); 
         });

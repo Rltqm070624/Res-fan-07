@@ -1,41 +1,8 @@
-        let scheduleDB = {};
-        const colorMap = { 
-            "broadcast": "#7e57c2", 
-            "fansign": "#ec407a",   
-            "event": "#66bb6a",     
-            "concert": "#26c6da",   
-            "radio": "#ffa726",     
-            "notice": "#78909c"     
-        };
-
-        async function fetchScheduleData() {
-            try {
-                const response = await fetch('schedule_data.json?t=' + new Date().getTime());
-                const rawData = await response.json();
-                
-                scheduleDB = {}; // 초기화
-
-                if (rawData && rawData.events && Array.isArray(rawData.events)) {
-                    rawData.events.forEach(ev => {
-                        const dateKey = ev.date; // 예: "2026-07-06"
-                        if (!dateKey) return;
-                        
-                        if (!scheduleDB[dateKey]) {
-                            scheduleDB[dateKey] = { items: [] };
-                        }
-                        
-                        scheduleDB[dateKey].items.push({
-                            time: ev.time || "",
-                            title: ev.title,
-                            color: colorMap[ev.type] || "var(--c-accent)",
-                            image: ""
-                        });
-                    });
-                }
-              
-                renderCalendar();
-            } catch (error) {
-                console.error("스케줄 데이터를 불러오는 데 실패했습니다.", error);
-                renderCalendar();
-            }
-        }
+{
+    "events": [
+        { "date": "2026-07-25", "time": "12:45", "title": "2026 원 유니버스 페스티벌", "type": "concert" },
+        { "date": "2026-07-25", "time": "16:45", "title": "보령 KBS 슈퍼라이브", "type": "broadcast" },
+        { "date": "2026-07-26", "time": "14:00", "title": "2026 캐리비안베이 워터뮤직풀파티", "type": "event" },
+        { "date": "2026-07-26", "time": "19:00", "title": "별방수련회", "type": "event" }
+    ]
+}

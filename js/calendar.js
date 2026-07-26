@@ -2,10 +2,39 @@ let currentCalYear = 2026;
 let currentCalMonth = 7;
 let scheduleDB = {}; 
 
+const colorMap = { 
+    "broadcast": "#7e57c2", 
+    "fansign": "#ec407a",   
+    "event": "#66bb6a",     
+    "concert": "#26c6da",   
+    "radio": "#ffa726",     
+    "notice": "#78909c"     
+};
+
 async function loadScheduleData() {
     try {
-        const response = await fetch('schedule_data.json?t=' + new Date().getTime());
-        scheduleDB = await response.json();
+        const response = await fetch('js/schedule_data.json?t=' + new Date().getTime());
+        const rawData = await response.json();
+        
+        scheduleDB = {}; 
+
+        if (rawData && rawData.events && Array.isArray(rawData.events)) {
+            rawData.events.forEach(ev => {
+                const dateKey = ev.date;
+                if (!dateKey) return;
+                
+                if (!scheduleDB[dateKey]) {
+                    scheduleDB[dateKey] = { items: [] };
+                }
+                
+                scheduleDB[dateKey].items.push({
+                    time: ev.time || "",
+                    title: ev.title,
+                    color: colorMap[ev.type] || "var(--c-accent)",
+                    image: ""
+                });
+            });
+        }
     } catch (error) {
         console.warn("스케줄 데이터를 불러오는 데 실패했습니다.", error);
     }

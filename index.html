@@ -27,6 +27,111 @@
 
     <!-- ⭐️ i18n 로직 (window.t / window.setLang 을 미리 정의해 둠) -->
     <script src="js/i18n.js"></script>
+
+    <!-- ⭐️ TODAY'S SCHEDULE 카드 전용 스타일 (기존 css는 건드리지 않고 여기서만 추가) -->
+    <style>
+        .today-date-sub {
+            text-align: center;
+            margin-bottom: 36px;
+            font-size: 14px;
+            letter-spacing: 0.06em;
+            opacity: 0.55;
+            font-weight: 500;
+        }
+        .today-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .today-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 26px 24px 22px;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .today-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.35);
+            border-color: rgba(255,255,255,0.16);
+        }
+        .today-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--accent-color, #999);
+        }
+        .today-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .today-badge-type {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+        .today-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            opacity: 0.75;
+        }
+        .today-status.is-live {
+            color: #ff5470;
+            opacity: 1;
+        }
+        .today-status .live-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #ff5470;
+            animation: todayPulse 1.4s ease-in-out infinite;
+        }
+        @keyframes todayPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+        .today-title {
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.45;
+            margin-bottom: 16px;
+            min-height: 48px;
+        }
+        .today-time-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            opacity: 0.6;
+            font-weight: 500;
+        }
+        .today-empty-card {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: 20px;
+            opacity: 0.6;
+        }
+        .today-empty-card .emoji { font-size: 28px; margin-bottom: 10px; }
+        .today-empty-card p { font-size: 14px; letter-spacing: 0.02em; }
+    </style>
 </head>
 <body id="homeSection">
 
@@ -134,28 +239,12 @@
         </div>
 
         <div class="section-container reveal" id="todayScheduleSection">
-            <div class="section-header center-header" style="margin-bottom: 30px;">
-                <div class="section-title">TODAY'S <span>BROADCAST</span></div>
+            <div class="section-header center-header" style="margin-bottom: 8px;">
+                <div class="section-title">TODAY'S <span>SCHEDULE</span></div>
             </div>
-            <div class="today-broadcast-grid">
-                <div class="broadcast-card">
-                    <div class="bc-img-wrapper">
-                        <img src="images/one.jpg" alt="원 유니버스 페스티벌" class="bc-img" onerror="this.style.display='none'">
-                        <div class="bc-overlay">
-                            <span class="live-badge">12:45</span>
-                            <h3 class="bc-title">2026 원 유니버스 페스티벌</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="broadcast-card">
-                    <div class="bc-img-wrapper">
-                        <img src="images/boryung.jpg" alt="보령 KBS 슈퍼라이브" class="bc-img" onerror="this.style.display='none'">
-                        <div class="bc-overlay">
-                            <span class="live-badge">16:45</span>
-                            <h3 class="bc-title">보령 KBS 슈퍼라이브</h3>
-                        </div>
-                    </div>
-                </div>
+            <div class="today-date-sub" id="todayDateSub"></div>
+            <div class="today-grid" id="todayScheduleGrid">
+                <!-- ⭐️ JS(fetchScheduleData → renderTodaySchedule)가 오늘 날짜 일정을 자동으로 채워줍니다 -->
             </div>
         </div>
 
@@ -850,17 +939,98 @@
                         scheduleDB[dateKey].items.push({
                             time: ev.time || "",
                             title: ev.title,
+                            type: ev.type || "",
                             color: colorMap[ev.type] || "var(--c-accent)",
                             image: ""
                         });
                     });
                 }
                 renderCalendar();
+                renderTodaySchedule();
             } catch (error) {
                 console.error("스케줄 데이터를 불러오는 데 실패했습니다.", error);
                 renderCalendar();
+                renderTodaySchedule();
             }
         }
+
+        // ⭐️ 타입(broadcast 등)을 한글 라벨로 변환
+        const typeLabelMap = {
+            broadcast: "방송",
+            fansign: "팬사인회",
+            event: "행사",
+            concert: "공연",
+            radio: "라디오",
+            notice: "공지"
+        };
+        const weekdayLabels = ["일", "월", "화", "수", "목", "금", "토"];
+
+        function getTodayKey() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        // ⭐️ 시간 문자열(HH:MM) 기준으로 지금 상태(예정/LIVE/종료) 판단
+        function getItemStatus(timeStr) {
+            if (!timeStr || !timeStr.includes(':')) return { key: 'upcoming', label: '예정' };
+            const [h, m] = timeStr.split(':').map(Number);
+            if (isNaN(h) || isNaN(m)) return { key: 'upcoming', label: '예정' };
+            const now = new Date();
+            const eventMin = h * 60 + m;
+            const nowMin = now.getHours() * 60 + now.getMinutes();
+            if (Math.abs(nowMin - eventMin) <= 30) return { key: 'live', label: 'LIVE' };
+            if (nowMin > eventMin) return { key: 'ended', label: '종료' };
+            return { key: 'upcoming', label: '예정' };
+        }
+
+        function renderTodaySchedule() {
+            const grid = document.getElementById('todayScheduleGrid');
+            const sub = document.getElementById('todayDateSub');
+            if (!grid) return;
+
+            const now = new Date();
+            if (sub) {
+                sub.innerText = `${now.getFullYear()}. ${String(now.getMonth() + 1).padStart(2, '0')}. ${String(now.getDate()).padStart(2, '0')} (${weekdayLabels[now.getDay()]})`;
+            }
+
+            const todayKey = getTodayKey();
+            const data = scheduleDB[todayKey];
+            const items = (data && data.items) ? [...data.items].sort((a, b) => (a.time || '').localeCompare(b.time || '')) : [];
+
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="today-empty-card">
+                        <div class="emoji">🌙</div>
+                        <p>오늘은 예정된 일정이 없어요.</p>
+                    </div>`;
+                return;
+            }
+
+            grid.innerHTML = items.map(item => {
+                const status = getItemStatus(item.time);
+                const label = typeLabelMap[item.type] || item.type || '일정';
+                const color = item.color || 'var(--c-accent)';
+                const statusHtml = status.key === 'live'
+                    ? `<span class="today-status is-live"><span class="live-dot"></span>${status.label}</span>`
+                    : `<span class="today-status">${status.label}</span>`;
+
+                return `
+                    <div class="today-card" style="--accent-color: ${color};">
+                        <div class="today-card-top">
+                            <span class="today-badge-type" style="background: ${color}22; color: ${color};">${label}</span>
+                            ${statusHtml}
+                        </div>
+                        <h3 class="today-title">${item.title}</h3>
+                        <div class="today-time-row">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            ${item.time || '시간 미정'}
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        // ⭐️ 1분마다 LIVE/종료 상태만 갱신 (데이터는 그대로, 상태 뱃지만 새로고침)
+        setInterval(renderTodaySchedule, 60000);
 
         function changeMonth(delta) { 
             currentCalMonth += delta; 

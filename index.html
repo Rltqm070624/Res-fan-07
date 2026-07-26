@@ -28,109 +28,202 @@
     <!-- ⭐️ i18n 로직 (window.t / window.setLang 을 미리 정의해 둠) -->
     <script src="js/i18n.js"></script>
 
-    <!-- ⭐️ TODAY'S SCHEDULE 카드 전용 스타일 (기존 css는 건드리지 않고 여기서만 추가) -->
+    <!-- ⭐️ TODAY'S SCHEDULE 카드 전용 스타일 -->
     <style>
-        .today-date-sub {
-            text-align: center;
-            margin-bottom: 36px;
-            font-size: 14px;
-            letter-spacing: 0.06em;
-            opacity: 0.55;
-            font-weight: 500;
+        /* ===== TODAY'S SCHEDULE ===== */
+
+        /* 날짜 라벨 : 양옆 헤어라인 */
+        .today-date-sub{
+            display:flex; align-items:center; justify-content:center; gap:20px;
+            margin-bottom:52px;
+            font-family:var(--font-num, 'Montserrat', sans-serif);
+            font-size:11px; font-weight:500; letter-spacing:.18em;
+            color:var(--text-muted);
         }
-        .today-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
+        .today-date-sub::before,
+        .today-date-sub::after{
+            content:''; width:48px; height:1px; background:var(--border-light);
         }
-        .today-card {
-            position: relative;
-            overflow: hidden;
-            background: rgba(255,255,255,0.035);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            padding: 26px 24px 22px;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+
+        .today-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+            gap:18px;
+            max-width:1120px; margin:0 auto;
         }
-        .today-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 32px rgba(0,0,0,0.35);
-            border-color: rgba(255,255,255,0.16);
+
+        /* ---------- 카드 ---------- */
+        .today-card{
+            position:relative; isolation:isolate; overflow:hidden;
+            display:flex; flex-direction:column;
+            min-height:212px;
+            padding:28px 28px 22px;
+            border-radius:18px;
+            background:var(--bg-surface);
+            border:1px solid var(--border-light);
+            transition:transform .55s cubic-bezier(.16,1,.3,1),
+                       border-color .4s ease,
+                       box-shadow .55s cubic-bezier(.16,1,.3,1);
+            animation:todayCardIn .8s cubic-bezier(.16,1,.3,1) both;
         }
-        .today-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: var(--accent-color, #999);
+        .today-card:nth-child(2){ animation-delay:.09s; }
+        .today-card:nth-child(3){ animation-delay:.18s; }
+        .today-card:nth-child(4){ animation-delay:.27s; }
+        .today-card:nth-child(n+5){ animation-delay:.36s; }
+        @keyframes todayCardIn{
+            from{ opacity:0; transform:translateY(22px); }
+            to  { opacity:1; transform:none; }
         }
-        .today-card-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
+
+        /* 좌상단 컬러 워시 */
+        .today-card::before{
+            content:''; position:absolute; inset:0; z-index:-1;
+            background:radial-gradient(115% 90% at 0% 0%,
+                color-mix(in srgb, var(--accent-color) 16%, transparent) 0%,
+                transparent 58%);
+            opacity:.7; transition:opacity .55s ease;
         }
-        .today-badge-type {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.03em;
+        /* 왼쪽 세로 액센트 — 호버 시 위아래로 자라남 */
+        .today-card::after{
+            content:''; position:absolute; left:0; top:26px; bottom:26px; width:2px;
+            background:var(--accent-color);
+            transform:scaleY(.3); transform-origin:center;
+            transition:transform .55s cubic-bezier(.16,1,.3,1);
         }
-        .today-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-            opacity: 0.75;
+        .today-card:hover{
+            transform:translateY(-6px);
+            border-color:var(--border-highlight);
+            box-shadow:0 24px 50px rgba(0,0,0,.45);
         }
-        .today-status.is-live {
-            color: #ff5470;
-            opacity: 1;
+        .today-card:hover::after{ transform:scaleY(1); }
+        .today-card:hover::before{ opacity:1; }
+
+        /* 라이트 모드 */
+        html[data-theme="light"] .today-card{
+            background:#fff;
+            border-color:rgba(0,0,0,.07);
+            box-shadow:0 1px 2px rgba(0,0,0,.03);
         }
-        .today-status .live-dot {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: #ff5470;
-            animation: todayPulse 1.4s ease-in-out infinite;
+        html[data-theme="light"] .today-card:hover{
+            border-color:rgba(0,0,0,.14);
+            box-shadow:0 20px 44px rgba(0,0,0,.09);
         }
-        @keyframes todayPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.7); }
+
+        /* ---------- 카드 상단 : 시간 + 상태 ---------- */
+        .today-card-top{
+            display:flex; align-items:baseline; justify-content:space-between;
+            gap:12px; margin-bottom:18px;
         }
-        .today-title {
-            font-size: 17px;
-            font-weight: 700;
-            line-height: 1.45;
-            margin-bottom: 16px;
-            min-height: 48px;
+        .today-time{
+            font-family:var(--font-num, 'Montserrat', sans-serif);
+            font-size:32px; font-weight:200; line-height:1;
+            letter-spacing:.02em; color:var(--text-primary);
+            font-variant-numeric:tabular-nums;
         }
-        .today-time-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            opacity: 0.6;
-            font-weight: 500;
+        .today-time .tbd{
+            font-size:15px; font-weight:400; letter-spacing:.04em;
+            color:var(--text-muted);
         }
-        .today-empty-card {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 60px 20px;
-            border: 1px dashed rgba(255,255,255,0.15);
-            border-radius: 20px;
-            opacity: 0.6;
+        .today-status{
+            display:inline-flex; align-items:center; gap:7px;
+            font-family:var(--font-num, 'Montserrat', sans-serif);
+            font-size:10px; font-weight:600; letter-spacing:.16em;
+            color:var(--text-muted); white-space:nowrap;
         }
-        .today-empty-card .emoji { font-size: 28px; margin-bottom: 10px; }
-        .today-empty-card p { font-size: 14px; letter-spacing: 0.02em; }
+        .today-status.is-live{ color:#ff4d6d; }
+        .today-status .live-dot{
+            width:6px; height:6px; border-radius:50%; background:#ff4d6d;
+            animation:todayPulse 1.9s ease-out infinite;
+        }
+        @keyframes todayPulse{
+            0%  { box-shadow:0 0 0 0 rgba(255,77,109,.55); }
+            70% { box-shadow:0 0 0 7px rgba(255,77,109,0); }
+            100%{ box-shadow:0 0 0 0 rgba(255,77,109,0); }
+        }
+
+        /* ---------- 제목 ---------- */
+        .today-title{
+            margin:0 0 24px; flex:1;
+            font-size:18px; font-weight:600; line-height:1.55;
+            letter-spacing:-.01em; color:var(--text-primary);
+            display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+            overflow:hidden;
+        }
+
+        /* ---------- 카드 하단 : 카테고리 ---------- */
+        .today-card-foot{
+            display:flex; align-items:center; justify-content:space-between; gap:10px;
+            padding-top:16px; border-top:1px solid var(--border-light);
+        }
+        .today-type{
+            display:inline-flex; align-items:center; gap:8px;
+            font-size:11px; font-weight:600; letter-spacing:.09em;
+            color:var(--text-secondary);
+        }
+        .today-type-dot{
+            width:5px; height:5px; border-radius:50%;
+            background:var(--accent-color);
+        }
+
+        /* ---------- 상태별 ---------- */
+        .today-card.is-ended::before{ opacity:.2; }
+        .today-card.is-ended .today-card-top,
+        .today-card.is-ended .today-title,
+        .today-card.is-ended .today-card-foot{ opacity:.45; transition:opacity .4s ease; }
+        .today-card.is-ended:hover .today-card-top,
+        .today-card.is-ended:hover .today-title,
+        .today-card.is-ended:hover .today-card-foot{ opacity:.8; }
+
+        .today-card.is-live{
+            border-color:color-mix(in srgb, var(--accent-color) 45%, var(--border-light));
+        }
+        .today-card.is-live::after{ transform:scaleY(1); }
+
+        /* ---------- 일정 없음 ---------- */
+        .today-empty-card{
+            grid-column:1 / -1;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            gap:14px; min-height:212px; padding:48px 24px; text-align:center;
+            border-radius:18px; border:1px solid var(--border-light);
+            background:var(--bg-surface);
+        }
+        html[data-theme="light"] .today-empty-card{
+            background:#fff; border-color:rgba(0,0,0,.07);
+        }
+        .today-empty-card .mark{
+            width:40px; height:40px; border-radius:50%;
+            border:1px solid var(--border-light);
+            display:flex; align-items:center; justify-content:center;
+            color:var(--text-muted);
+        }
+        .today-empty-card p{
+            margin:0; font-size:14px; color:var(--text-secondary); letter-spacing:.01em;
+        }
+        .today-empty-card button{
+            background:transparent; border:none; cursor:pointer;
+            font-family:var(--font-body); font-size:12px; letter-spacing:.06em;
+            color:var(--text-muted); padding:4px 2px;
+            border-bottom:1px solid var(--border-light);
+            transition:color .3s ease, border-color .3s ease;
+        }
+        .today-empty-card button:hover{
+            color:var(--text-primary); border-color:var(--text-primary);
+        }
+
+        @media (max-width:800px){
+            .today-date-sub{ margin-bottom:34px; }
+            .today-date-sub::before,
+            .today-date-sub::after{ width:28px; }
+            .today-grid{ grid-template-columns:1fr; gap:14px; }
+            .today-card{ min-height:0; padding:22px 22px 18px; }
+            .today-time{ font-size:26px; }
+            .today-title{ font-size:16px; margin-bottom:18px; }
+        }
+
+        @media (prefers-reduced-motion:reduce){
+            .today-card, .today-status .live-dot{ animation:none !important; }
+            .today-card{ transition:none; }
+        }
     </style>
 </head>
 <body id="homeSection">
@@ -983,53 +1076,74 @@
             return { key: 'upcoming', label: '예정' };
         }
 
+        // ⭐️ 오늘의 일정 카드 렌더링
+        let __todayHtmlCache = null;
+
         function renderTodaySchedule() {
             const grid = document.getElementById('todayScheduleGrid');
-            const sub = document.getElementById('todayDateSub');
+            const sub  = document.getElementById('todayDateSub');
             if (!grid) return;
 
             const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+
             if (sub) {
-                sub.innerText = `${now.getFullYear()}. ${String(now.getMonth() + 1).padStart(2, '0')}. ${String(now.getDate()).padStart(2, '0')} (${weekdayLabels[now.getDay()]})`;
+                sub.innerText = `${now.getFullYear()}. ${pad(now.getMonth() + 1)}. ${pad(now.getDate())} (${weekdayLabels[now.getDay()]})`;
             }
 
-            const todayKey = getTodayKey();
-            const data = scheduleDB[todayKey];
-            const items = (data && data.items) ? [...data.items].sort((a, b) => (a.time || '').localeCompare(b.time || '')) : [];
+            const data  = scheduleDB[getTodayKey()];
+            const items = (data && data.items)
+                ? [...data.items].sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99'))
+                : [];
+
+            let html;
 
             if (items.length === 0) {
-                grid.innerHTML = `
+                html = `
                     <div class="today-empty-card">
-                        <div class="emoji">🌙</div>
-                        <p>오늘은 예정된 일정이 없어요.</p>
+                        <div class="mark">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                        </div>
+                        <p>오늘은 등록된 일정이 없습니다.</p>
+                        <button type="button" onclick="openCalendarPopup()">다가오는 일정 보기</button>
                     </div>`;
-                return;
+            } else {
+                html = items.map(item => {
+                    const status = getItemStatus(item.time);
+                    const label  = typeLabelMap[item.type] || item.type || '일정';
+                    const color  = item.color || 'var(--c-accent)';
+
+                    const timeHtml = item.time
+                        ? item.time
+                        : `<span class="tbd">시간 미정</span>`;
+
+                    const statusHtml = status.key === 'live'
+                        ? `<span class="today-status is-live"><span class="live-dot"></span>${status.label}</span>`
+                        : `<span class="today-status">${status.label}</span>`;
+
+                    return `
+                        <article class="today-card is-${status.key}" style="--accent-color:${color};">
+                            <div class="today-card-top">
+                                <span class="today-time">${timeHtml}</span>
+                                ${statusHtml}
+                            </div>
+                            <h3 class="today-title">${item.title}</h3>
+                            <div class="today-card-foot">
+                                <span class="today-type"><span class="today-type-dot"></span>${label}</span>
+                            </div>
+                        </article>`;
+                }).join('');
             }
 
-            grid.innerHTML = items.map(item => {
-                const status = getItemStatus(item.time);
-                const label = typeLabelMap[item.type] || item.type || '일정';
-                const color = item.color || 'var(--c-accent)';
-                const statusHtml = status.key === 'live'
-                    ? `<span class="today-status is-live"><span class="live-dot"></span>${status.label}</span>`
-                    : `<span class="today-status">${status.label}</span>`;
-
-                return `
-                    <div class="today-card" style="--accent-color: ${color};">
-                        <div class="today-card-top">
-                            <span class="today-badge-type" style="background: ${color}22; color: ${color};">${label}</span>
-                            ${statusHtml}
-                        </div>
-                        <h3 class="today-title">${item.title}</h3>
-                        <div class="today-time-row">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            ${item.time || '시간 미정'}
-                        </div>
-                    </div>`;
-            }).join('');
+            // 내용이 같으면 다시 그리지 않음 → 1분마다 등장 애니메이션이 반복되는 깜빡임 방지
+            if (html === __todayHtmlCache) return;
+            __todayHtmlCache = html;
+            grid.innerHTML = html;
         }
 
-        // ⭐️ 1분마다 LIVE/종료 상태만 갱신 (데이터는 그대로, 상태 뱃지만 새로고침)
+        // ⭐️ 1분마다 LIVE/종료 상태만 갱신
         setInterval(renderTodaySchedule, 60000);
 
         function changeMonth(delta) { 

@@ -1,0 +1,33 @@
+name: Schedule Updater Auto-Bot
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # 6시간마다 실행
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Scraper
+        # 이 스크립트가 실행되어 schedule_data.json을 생성합니다.
+        run: node js/schedule_scraper.js
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add schedule_data.json
+          git commit -m "Auto update schedule_data.json" || exit 0
+          git push

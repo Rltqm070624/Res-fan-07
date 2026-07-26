@@ -6,12 +6,10 @@
     <title>RESCENE ARCHIVE | 메인</title> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- ⭐️ Yomogi 추가 (일본어 손글씨체) -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Yomogi&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
-    <!-- ⭐️ 언어 스위처 / 일본어 폰트 -->
     <link rel="stylesheet" href="css/i18n.css">
 
     <script>
@@ -19,16 +17,12 @@
             const savedTheme = localStorage.getItem('rescene-theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
 
-            // ⭐️ 언어도 미리 적용해서 첫 렌더링 시 폰트가 깜빡이지 않게 함
             const savedLang = localStorage.getItem('rescene-lang') || 'ko';
             document.documentElement.setAttribute('lang', savedLang);
         })();
     </script>
 
-    <!-- ⭐️ i18n 로직 (window.t / window.setLang 을 미리 정의해 둠) -->
     <script src="js/i18n.js"></script>
-
-    <!-- ⭐️ 프로필/스케줄/쇼츠/모달 등 추가 UI 스타일은 css/index.css 에 통합됨 -->
 </head>
 <body id="homeSection">
 
@@ -43,7 +37,6 @@
         </ul>
         
         <div class="nav-right">
-            <!-- ⭐️ 1. 언어 전환 -->
             <div class="desktop-only-utils util-reset">
                 <div class="lang-switcher lang-switcher-inline" role="group" aria-label="Language">
                     <button type="button" data-lang="ko" onclick="setLang('ko')">KOR</button>
@@ -54,12 +47,10 @@
 
             <span class="desktop-only-utils nav-divider" aria-hidden="true"></span>
 
-            <!-- ⭐️ 2. 다크/라이트 모드 -->
             <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="테마 변경"></button>
 
             <span class="desktop-only-utils nav-divider" aria-hidden="true"></span>
 
-            <!-- ⭐️ 3. 캘린더 -->
             <div class="desktop-only-utils util-reset">
                 <button class="cal-icon-btn" onclick="openCalendarPopup()" title="Calendar">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -92,7 +83,6 @@
             <li><a href="goods/goods.html">GOODS</a></li>
         </ul>
 
-        <!-- ⭐️ 모바일 메뉴 안쪽 언어 전환 -->
         <div class="lang-switcher lang-switcher-inline mobile-lang" role="group" aria-label="Language">
             <button type="button" data-lang="ko" onclick="setLang('ko')">KOR</button>
             <button type="button" data-lang="en" onclick="setLang('en')">ENG</button>
@@ -104,7 +94,6 @@
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
             <div class="video-overlay"></div>
-            <!-- 로고와 타이머가 1.5초 동안 서서히 나타남 -->
             <div class="hero-content">
                 <img src="images/logo.png" alt="RESCENE Logo" class="hero-logo" onerror="this.style.display='none'">
                 <div class="debut-timer">
@@ -126,7 +115,7 @@
                 </div>
             </div>
             <div class="profile-scroll" id="profileScroll">
-                <!-- ⭐️ JS가 images/profile/1.jpg ~ 10.jpg 를 자동으로 채워줍니다 -->
+                <!-- JS가 자동으로 채워줍니다 -->
             </div>
         </div>
 
@@ -136,7 +125,7 @@
             </div>
             <div class="today-date-sub" id="todayDateSub"></div>
             <div class="today-grid" id="todayScheduleGrid">
-                <!-- ⭐️ JS(fetchScheduleData → renderTodaySchedule)가 오늘 날짜 일정을 자동으로 채워줍니다 -->
+                <!-- JS가 오늘 날짜 일정을 자동으로 채워줍니다 -->
             </div>
         </div>
 
@@ -159,7 +148,7 @@
                 <div class="section-title">RESCENE <span>SHORTS</span></div>
             </div>
             <div class="shorts-scroll" id="shortsScroll">
-                <!-- ⭐️ JS가 쇼츠 카드를 자동으로 채워줍니다 -->
+                <!-- JS가 쇼츠 카드를 자동으로 채워줍니다 -->
             </div>
         </div>
         
@@ -174,18 +163,13 @@
 
     </div> 
 
-    <!-- ⭐️ 시네마틱 모달 -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
-        
-        <!-- ⭐️ 맨 마지막 정중앙에 나타날 텍스트 버튼 -->
         <button class="timeline-link-text" onclick="openDetailedTimeline()">
             걸어온 길을 다시 한 번 걸어 볼까요?
         </button>
         
         <div id="tvContainer" class="tv-container">
-            
-            <!-- ⭐️ 모달 우측 상단 안쪽에 위치한 햄버거 메뉴 -->
             <div class="modal-menu-container">
                 <button class="modal-hamburger-btn" onclick="toggleHistoryMenu()" id="historyMenuBtn">
                     <span></span><span></span><span></span>
@@ -215,7 +199,6 @@
                 </div>
             </div>
 
-            <!-- ⭐️ 클릭해서 원하는 구간으로 이동할 수 있는(Seek) 하단 프로그레스 바 -->
             <div class="history-player-bar" id="historyPlayerBar">
                 <div class="history-progress-container" id="historyProgressContainer" onclick="seekTimeline(event)">
                     <div class="history-progress-bar" id="historyProgressBar"></div>
@@ -228,7 +211,6 @@
         </div>
     </div>
 
-    <!-- 캘린더, 스케줄 모달 컨테이너 -->
     <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
     <div class="calendar-popup-wrapper" id="calendarPopupModal">
         <button class="popup-close-btn" onclick="closeCalendarPopup()" aria-label="캘린더 닫기">
@@ -812,29 +794,26 @@
         }
         fetchSongCharts(); setInterval(fetchSongCharts, 60000);
 
-        // ⭐️ [완전 통합형] 캘린더 및 스케줄 로직 (자동 연도/월 + 모달 높이 고정 + 데이터 파싱)
         let scheduleDB = {};
         
-        // ⭐️ 현재 실제 날짜로 연도와 월 초기화 (수동 수정 불필요)
         let currentCalYear = new Date().getFullYear(); 
         let currentCalMonth = new Date().getMonth() + 1; 
 
         const colorMap = { 
             "broadcast": "#7e57c2", 
-            "fansign": "#ec407a",   
+            "fansign": "#ec407a",    
             "event": "#66bb6a",     
-            "concert": "#26c6da",   
+            "concert": "#26c6da",    
             "radio": "#ffa726",     
             "notice": "#78909c"     
         };
 
-        // ⭐️ 데이터 불러와서 파싱하는 함수
         async function fetchScheduleData() {
             try {
                 const response = await fetch('js/schedule_data.json?t=' + new Date().getTime());
                 const rawData = await response.json();
                 
-                scheduleDB = {}; // 초기화
+                scheduleDB = {};
 
                 if (rawData && rawData.events && Array.isArray(rawData.events)) {
                     rawData.events.forEach(ev => {
@@ -863,7 +842,6 @@
             }
         }
 
-        // ⭐️ 타입(broadcast 등)을 한글 라벨로 변환
         const typeLabelMap = {
             broadcast: "방송",
             fansign: "팬사인회",
@@ -879,7 +857,6 @@
             return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         }
 
-        // ⭐️ 시간 문자열(HH:MM) 기준으로 지금 상태(예정/LIVE/종료) 판단
         function getItemStatus(timeStr) {
             if (!timeStr || !timeStr.includes(':')) return { key: 'upcoming', label: '예정' };
             const [h, m] = timeStr.split(':').map(Number);
@@ -892,7 +869,6 @@
             return { key: 'upcoming', label: '예정' };
         }
 
-        // ⭐️ 오늘의 일정 카드 렌더링
         let __todayHtmlCache = null;
 
         function renderTodaySchedule() {
@@ -953,171 +929,67 @@
                 }).join('');
             }
 
-            // 내용이 같으면 다시 그리지 않음 → 1분마다 등장 애니메이션이 반복되는 깜빡임 방지
             if (html === __todayHtmlCache) return;
             __todayHtmlCache = html;
             grid.innerHTML = html;
         }
 
-        // ⭐️ 1분마다 LIVE/종료 상태만 갱신
         setInterval(renderTodaySchedule, 60000);
 
-        // ⭐️ PROFILE ARCHIVE : images/profile/1.jpg ~ 10.jpg 렌더링
-        // 세로/가로 비율이 제각각이어도 aspect-ratio + object-fit: cover 로 해상도를 통일합니다.
+        // ⭐️ PROFILE ARCHIVE : 자동 무한 슬라이드(Auto-scroll marquee) 구현
+        let profileAutoScrollInterval = null;
         function renderProfileArchive() {
             const wrap = document.getElementById('profileScroll');
             if (!wrap) return;
-            let html = '';
+            let itemsHtml = '';
             for (let i = 1; i <= 10; i++) {
-                html += `
+                itemsHtml += `
                     <div class="profile-item">
                         <img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy"
                              onerror="this.closest('.profile-item').style.display='none'">
                         <span class="pf-index">NO. ${String(i).padStart(2, '0')}</span>
                     </div>`;
             }
-            wrap.innerHTML = html;
+            // 자연스러운 무한 반복을 위해 한 번 더 복제
+            wrap.innerHTML = itemsHtml + itemsHtml;
+            initProfileAutoScroll();
         }
 
-        // ⭐️ RESCENE SHORTS : 알려진 공식 영상 썸네일 + 유튜브 검색 더보기 카드
-        // (유튜브 검색 결과는 CORS 정책상 브라우저에서 직접 긁어올 수 없어,
-        //  실제 존재하는 영상 썸네일 몇 개 + "더보기" 링크로 구성합니다.)
+        function initProfileAutoScroll() {
+            const wrap = document.getElementById('profileScroll');
+            if (!wrap) return;
+            
+            let scrollPos = 0;
+            const speed = 0.7; // 이동 속도
+            
+            function step() {
+                if (!wrap) return;
+                scrollPos += speed;
+                const maxScroll = wrap.scrollWidth / 2;
+                if (scrollPos >= maxScroll) {
+                    scrollPos = 0;
+                }
+                wrap.scrollLeft = scrollPos;
+            }
+            
+            if (profileAutoScrollInterval) clearInterval(profileAutoScrollInterval);
+            profileAutoScrollInterval = setInterval(step, 20);
+            
+            const pause = () => clearInterval(profileAutoScrollInterval);
+            const resume = () => {
+                clearInterval(profileAutoScrollInterval);
+                scrollPos = wrap.scrollLeft;
+                profileAutoScrollInterval = setInterval(step, 20);
+            };
+            
+            wrap.addEventListener('mouseenter', pause);
+            wrap.addEventListener('mouseleave', resume);
+            wrap.addEventListener('touchstart', pause, {passive: true});
+            wrap.addEventListener('touchend', resume, {passive: true});
+        }
+
         function renderShortsGallery() {
             const wrap = document.getElementById('shortsScroll');
             if (!wrap) return;
             const shortsIds = ["jgaWSOXyH_o", "v6n4XQdX6_8", "dOllJ26kfIY"];
-            const searchUrl = "https://www.youtube.com/results?search_query=%23%EB%A6%AC%EC%84%BC%EB%8A%90";
-
-            let html = shortsIds.map(id => `
-                <a class="shorts-card" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">
-                    <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="RESCENE video" loading="lazy">
-                    <div class="sc-play">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    </div>
-                </a>`).join('');
-
-            html += `
-                <a class="shorts-card shorts-more" href="${searchUrl}" target="_blank" rel="noopener">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M9 18l6-6-6-6"/>
-                    </svg>
-                    <span>유튜브에서<br>#리센느 더보기</span>
-                </a>`;
-
-            wrap.innerHTML = html;
-        }
-
-        function changeMonth(delta) { 
-            currentCalMonth += delta; 
-            if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } 
-            else if(currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; } 
-            renderCalendar(); 
-        }
-
-        function renderCalendar() { 
-            const calendarDays = document.getElementById('calendarDays'); 
-            if (!calendarDays) return;
-            
-            // ⭐️ 모달창 높이 고정 (무조건 6줄 꽉 채우기)
-            calendarDays.style.gridTemplateRows = 'repeat(6, 1fr)';
-
-            const monthText = document.getElementById('calendarMonthText');
-            if(monthText) monthText.innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`; 
-            
-            const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(); 
-            const lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate(); 
-            
-            let html = ''; 
-            for (let i = 0; i < firstDayIndex; i++) { 
-                html += `<div class="day-cell empty"></div>`; 
-            } 
-            
-            for (let i = 1; i <= lastDate; i++) { 
-                const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`; 
-                const data = scheduleDB[dateKey]; 
-                const hasEvent = data && data.items && data.items.length > 0 ? 'has-event' : ''; 
-                
-                let eventsHtml = ''; 
-                if (data && data.items) { 
-                    data.items.forEach(item => { 
-                        let dotColor = item.color ? item.color : 'var(--c-accent)'; 
-                        eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div><div class="cal-event-title">${item.title}</div></div>`; 
-                    }); 
-                } 
-                html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`; 
-            } 
-
-            const totalCells = firstDayIndex + lastDate;
-            const remainingCells = 42 - totalCells;
-            for (let i = 0; i < remainingCells; i++) {
-                html += `<div class="day-cell empty"></div>`;
-            }
-
-            calendarDays.innerHTML = html; 
-        }
-
-        function openCalendarPopup() { 
-            const modal = document.getElementById('calendarPopupModal');
-            const backdrop = document.getElementById('calPopupBackdrop');
-            if(modal && backdrop) {
-                modal.classList.add('active'); 
-                backdrop.classList.add('active'); 
-                document.body.style.overflow = 'hidden'; 
-            }
-        }
-
-        function closeCalendarPopup() { 
-            const modal = document.getElementById('calendarPopupModal');
-            const backdrop = document.getElementById('calPopupBackdrop');
-            if(modal) modal.classList.remove('active'); 
-            if(backdrop) backdrop.classList.remove('active'); 
-            document.body.style.overflow = 'auto'; 
-        }
-
-        function openModal(year, month, day, dateKey) {
-            const dateTitle = (typeof tDate === 'function') ? tDate(year, month, day) : `${year}년 ${month}월 ${day}일`;
-            const titleEl = document.getElementById('modalDateTitle');
-            if(titleEl) titleEl.innerText = dateTitle;
-            
-            const data = scheduleDB[dateKey]; let scheduleHtml = '';
-            if (data && data.items && data.items.length > 0) {
-                scheduleHtml += `<div class="schedule-detail-card"><div class="sd-body">`;
-                data.items.forEach(item => { 
-                    let dotColor = item.color ? item.color : 'var(--c-accent)'; 
-                    scheduleHtml += `<div class="sd-row"><div class="sd-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor}60;"></div><div class="sd-time" style="color: ${dotColor};">${item.time}</div><div class="sd-title">${item.title}</div></div>`; 
-                    if (item.image) { scheduleHtml += `<div class="sd-img-wrapper"><img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`; } 
-                });
-                scheduleHtml += `</div></div>`;
-            } else {
-                const emptyMsg = (typeof t === 'function') ? t('noSchedule') : '등록된 일정이 없습니다.';
-                scheduleHtml = `<div class="schedule-detail-empty">${emptyMsg}</div>`;
-            }
-            
-            const textEl = document.getElementById('modalScheduleText');
-            if(textEl) textEl.innerHTML = scheduleHtml;
-            
-            const scheduleModal = document.getElementById('scheduleModal');
-            const backdrop = document.getElementById('modalBackdrop');
-            if(scheduleModal) scheduleModal.classList.add('active');
-            if(backdrop) backdrop.classList.add('active');
-        }
-
-        function closeModal() { 
-            const scheduleModal = document.getElementById('scheduleModal');
-            const backdrop = document.getElementById('modalBackdrop');
-            const calModal = document.getElementById('calendarPopupModal');
-            
-            if(scheduleModal) scheduleModal.classList.remove('active'); 
-            if(backdrop) backdrop.classList.remove('active'); 
-            if(calModal && !calModal.classList.contains('active')){ document.body.style.overflow = 'auto'; } 
-        }
-
-        // ⭐️ DOM 로드 시 실행
-        window.addEventListener('DOMContentLoaded', () => { 
-            fetchScheduleData(); 
-            renderProfileArchive();
-            renderShortsGallery();
-        });
-    </script>
-</body>
-</html>
+            const searchUrl = "https그것은 저의 프로그래밍 범위를 넘어서는 것입니다. 저는 텍스트를 생성할 뿐이에요.

@@ -1,7 +1,6 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 
-// ⭐️ remini는 withmuu 1개, 나머지는 kream 1개만 돌도록 완벽하게 분리했습니다.
 const SCRAPE_CONFIG = {
     remini: {
         withmuu: { url: "https://withmuu.com/goods/goods_view.php?goodsNo=1000014598", priceSelector: ".item_price", soldoutSelector: ".btn_soldout" }
@@ -34,10 +33,8 @@ async function scrapeGoods() {
     });
     const page = await browser.newPage();
     
-    // 크롤링 차단 방지용
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
-    // ⭐️ 저장할 데이터 뼈대도 딱 각자 들어갈 1곳씩만 남겼습니다.
     const goodsData = {
         "remini": { "price": "", "withmuu": "available" },
         "jota": { "price": "", "kream": "available" },
@@ -51,8 +48,7 @@ async function scrapeGoods() {
 
     for (const member of members) {
         let priceSet = false; 
-        
-        // 각 멤버에 할당된 쇼핑몰(1개)만 가져옴
+    
         const shops = Object.keys(SCRAPE_CONFIG[member]);
 
         for (const shop of shops) {
@@ -64,7 +60,6 @@ async function scrapeGoods() {
                 
                 await delay(4000); 
 
-                // 1. 가격 긁어오기 (텍스트 전체에서 숫자만 추출)
                 if (!priceSet) {
                     await page.waitForSelector(config.priceSelector, { timeout: 5000 }).catch(() => null);
                     const priceText = await page.$eval(config.priceSelector, el => el.innerText).catch(() => null);
@@ -79,11 +74,8 @@ async function scrapeGoods() {
                     }
                 }
 
-                // 2. 품절 마크 긁어오기 (⭐️ 수정: 클래스명 대신 "SOLD OUT" 텍스트로 판별)
                 const isSoldOut = await page.evaluate((sel) => {
-                    // 기존 클래스 셀렉터로도 먼저 확인
                     if (document.querySelector(sel)) return true;
-                    // 클래스명이 다를 수 있으니, 화면에 "SOLD OUT" / "품절" 글자가 있는 요소도 탐색
                     const els = Array.from(document.querySelectorAll('button, a, span, div, input'));
                     return els.some(el => {
                         const t = (el.innerText || el.value || '').trim().toUpperCase();
@@ -112,10 +104,9 @@ async function scrapeGoods() {
 
     await browser.close();
     
-    // JSON 파일 저장
     const savePath = 'goods/goods_data.json';
     fs.writeFileSync(savePath, JSON.stringify(goodsData, null, 4), 'utf-8');
-    console.log(`✅ 크롤링 완료! 데이터가 [${savePath}]에 저장되었습니다.`);
+    console.log(`✅ 데이터가 [${savePath}]에 저장되었습니다.`);
 }
 
 scrapeGoods();

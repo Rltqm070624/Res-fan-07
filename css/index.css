@@ -586,13 +586,15 @@ html[data-theme="light"] .today-empty-card{
 }
 
 /* ===== PROFILE ARCHIVE (가로 스크롤 프로필 갤러리, 풀블리드) ===== */
+/* ⭐️ 이전 100vw + calc(50% - 50vw) 방식은 세로 스크롤바가 있는 브라우저에서
+   100vw가 실제 보이는 너비보다 커지는 문제 때문에 전체가 오른쪽으로 밀려 보이는
+   버그가 있었음 → #profileSection 자체의 max-width를 없애는 방식으로 교체 (vw 계산 불필요, 항상 정확히 중앙) */
+#profileSection{ max-width:none; padding-left:0; padding-right:0; }
+#profileSection .section-inner{ max-width:1040px; margin:0 auto; padding:0 20px; box-sizing:border-box; }
+
 .profile-scroll{
     display:flex; gap:12px; overflow-x:auto;
-    /* 부모(.section-container)의 max-width에 관계없이 뷰포트 끝까지 확장 */
-    width:100vw;
-    margin-left:calc(50% - 50vw);
-    margin-right:calc(50% - 50vw);
-    padding:6px calc(50vw - 50% + 20px);
+    padding:6px 20px;
     scroll-snap-type:x proximity;
     -webkit-overflow-scrolling:touch; scrollbar-width:none;
 }
@@ -620,7 +622,23 @@ html[data-theme="light"] .today-empty-card{
 }
 @media (max-width:800px){
     .profile-item{ width:120px; }
-    .profile-scroll{ padding:6px calc(50vw - 50% + 20px); }
+}
+
+/* ===== 오늘의 일정 / 프로필 아카이브 / 뮤직 차트 : WITH RESCENE처럼 한 화면 가득 채우기 ===== */
+.full-page-section{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    box-sizing:border-box;
+}
+.full-page-section > .section-inner,
+.full-page-section .section-header{
+    width:100%;
+}
+@media (max-width:800px){
+    .full-page-section{ min-height:auto; padding-top:60px; padding-bottom:60px; }
 }
 
 /* ===== RESCENE SHORTS (가로 스크롤 쇼츠 갤러리) ===== */
@@ -684,10 +702,13 @@ html[data-theme="light"] .shorts-card{
 .plain-link{ color:inherit; text-decoration:none; }
 .util-reset{ margin-left:0; padding-left:0; border-left:none; }
 .lang-switcher-inline{
-    position:static; opacity:1; pointer-events:auto; transform:none;
-    background:transparent; border:none; backdrop-filter:none; -webkit-backdrop-filter:none; padding:0;
+    /* css/i18n.css 가 index.css보다 늦게 로드되어 .lang-switcher 기본(플로팅) 스타일이
+       이걸 덮어쓰는 문제가 있었음 → !important로 로드 순서와 무관하게 항상 이기도록 고정 */
+    position:static !important; opacity:1 !important; pointer-events:auto !important; transform:none !important;
+    background:transparent !important; border:none !important;
+    backdrop-filter:none !important; -webkit-backdrop-filter:none !important; padding:0 !important;
 }
-.lang-switcher-inline.mobile-lang{ margin-top:40px; align-self:flex-start; }
+.lang-switcher-inline.mobile-lang{ margin-top:40px !important; align-self:flex-start !important; }
 .nav-divider{ margin:0; padding:0; width:0; height:18px; align-self:center; border-left:1px solid var(--border-light); }
 .sns-icon-sm{ transform:scale(0.75); }
 .section-header-sm{ margin-bottom:24px; }

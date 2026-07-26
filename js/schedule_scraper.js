@@ -1,4 +1,5 @@
-const fs = require('fs');
+// ⭐️ 이 부분을 require에서 import로 수정했습니다.
+import fs from 'fs';
 
 async function fetchSchedules() {
     let scheduleDB = {};
@@ -18,9 +19,7 @@ async function fetchSchedules() {
 
     // 2026년부터 현재 연도까지만 반복합니다.
     for (let year = START_YEAR; year <= currentYear; year++) {
-        // 시작 연도(2026년)면 7월부터, 그 이후 연도면 1월부터 시작
         let startMonth = (year === START_YEAR) ? START_MONTH : 1;
-        // 현재 연도면 이번 달까지만, 과거 연도면 12월까지 긁어옵니다.
         let endMonth = (year === currentYear) ? currentMonth : 12;
         
         for (let month = startMonth; month <= endMonth; month++) {
@@ -61,7 +60,6 @@ async function fetchSchedules() {
 
                     if (!scheduleDB[dateKey]) scheduleDB[dateKey] = { items: [] };
                     
-                    // 중복 등록 방지
                     const isExist = scheduleDB[dateKey].items.some(i => i.title === title && i.time === timeKey);
                     if (!isExist) {
                         scheduleDB[dateKey].items.push({
@@ -78,7 +76,6 @@ async function fetchSchedules() {
         }
     }
 
-    // 최종 데이터를 JSON 파일로 덮어쓰기
     fs.writeFileSync('schedule_data.json', JSON.stringify(scheduleDB, null, 2), 'utf-8');
     console.log("✅ 스케줄 데이터 업데이트 완료!");
 }

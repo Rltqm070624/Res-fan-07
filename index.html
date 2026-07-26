@@ -851,7 +851,7 @@
         async function fetchScheduleData() {
             try {
                 // 브라우저 캐싱 방지를 위해 URL 끝에 타임스탬프 추가
-                const response = await fetch('schedule_data.json?t=' + new Date().getTime());
+                const response = await fetch('js/schedule_data.json?t=' + new Date().getTime());
                 scheduleDB = await response.json();
                 renderCalendar();
             } catch (error) {

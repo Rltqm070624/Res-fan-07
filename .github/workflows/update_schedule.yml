@@ -21,8 +21,10 @@ jobs:
           node-version: '20'
 
       - name: Run Scraper
-        # 이 스크립트가 실행되어 schedule_data.json을 생성합니다.
         run: node js/schedule_scraper.js
+        # ⭐️ 깃허브 금고(Secrets)에 숨겨둔 주소를 스크립트로 전달합니다.
+        env:
+          SECRET_DATA_URL: ${{ secrets.SECRET_DATA_URL }}
 
       - name: Commit and Push
         run: |

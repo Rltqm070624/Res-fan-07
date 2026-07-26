@@ -28,15 +28,15 @@
     <!-- ⭐️ i18n 로직 (window.t / window.setLang 을 미리 정의해 둠) -->
     <script src="js/i18n.js"></script>
 
-    <!-- ⭐️ TODAY'S SCHEDULE 카드 전용 스타일 (기존 css는 건드리지 않고 여기서만 추가) -->
+    <!-- ⭐️ TODAY'S SCHEDULE / MUSIC CHARTS 전용 스타일 (기존 css는 건드리지 않고 여기서만 추가) -->
     <style>
-        .today-date-sub {
-            text-align: center;
-            margin-bottom: 36px;
-            font-size: 14px;
-            letter-spacing: 0.06em;
-            opacity: 0.55;
-            font-weight: 500;
+        /* WITH RESCENE 처럼 한 화면을 꽉 채우는 섹션 */
+        .full-page-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
         }
         .today-grid {
             display: grid;
@@ -44,6 +44,7 @@
             gap: 20px;
             max-width: 1100px;
             margin: 0 auto;
+            width: 100%;
         }
         .today-card {
             position: relative;
@@ -51,28 +52,24 @@
             background: rgba(255,255,255,0.035);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 20px;
-            padding: 26px 24px 22px;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         }
-        .today-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 32px rgba(0,0,0,0.35);
-            border-color: rgba(255,255,255,0.16);
+        .today-card-visual {
+            height: 88px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            color: rgba(255,255,255,0.45);
         }
-        .today-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: var(--accent-color, #999);
+        .today-card-body {
+            padding: 22px 24px 24px;
         }
         .today-card-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
         .today-badge-type {
             display: inline-flex;
@@ -81,7 +78,9 @@
             border-radius: 999px;
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.03em;
+            letter-spacing: 0.04em;
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.65);
         }
         .today-status {
             display: inline-flex;
@@ -90,16 +89,15 @@
             font-size: 11px;
             font-weight: 600;
             letter-spacing: 0.03em;
-            opacity: 0.75;
+            opacity: 0.5;
         }
         .today-status.is-live {
-            color: #ff5470;
-            opacity: 1;
+            opacity: 0.9;
         }
         .today-status .live-dot {
             width: 6px; height: 6px;
             border-radius: 50%;
-            background: #ff5470;
+            background: currentColor;
             animation: todayPulse 1.4s ease-in-out infinite;
         }
         @keyframes todayPulse {
@@ -110,15 +108,15 @@
             font-size: 17px;
             font-weight: 700;
             line-height: 1.45;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             min-height: 48px;
         }
-        .today-time-row {
+        .today-datetime-row {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
             font-size: 13px;
-            opacity: 0.6;
+            opacity: 0.55;
             font-weight: 500;
         }
         .today-empty-card {
@@ -224,7 +222,16 @@
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
         </div>
 
-        <div class="section-container reveal" id="chartSection">
+        <div class="section-container reveal full-page-section" id="todayScheduleSection">
+            <div class="section-header center-header" style="margin-bottom: 30px;">
+                <div class="section-title">TODAY'S <span>SCHEDULE</span></div>
+            </div>
+            <div class="today-grid" id="todayScheduleGrid">
+                <!-- ⭐️ JS(fetchScheduleData → renderTodaySchedule)가 오늘 날짜 일정을 자동으로 채워줍니다 -->
+            </div>
+        </div>
+
+        <div class="section-container reveal full-page-section" id="chartSection">
             <div class="section-header center-header" style="margin-bottom: 30px;">
                 <div class="section-title">MUSIC <span>CHARTS</span></div>
             </div>
@@ -235,16 +242,6 @@
                         <div class="ticker-item skeleton"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="section-container reveal" id="todayScheduleSection">
-            <div class="section-header center-header" style="margin-bottom: 8px;">
-                <div class="section-title">TODAY'S <span>SCHEDULE</span></div>
-            </div>
-            <div class="today-date-sub" id="todayDateSub"></div>
-            <div class="today-grid" id="todayScheduleGrid">
-                <!-- ⭐️ JS(fetchScheduleData → renderTodaySchedule)가 오늘 날짜 일정을 자동으로 채워줍니다 -->
             </div>
         </div>
 
@@ -965,9 +962,25 @@
         };
         const weekdayLabels = ["일", "월", "화", "수", "목", "금", "토"];
 
+        // ⭐️ 타입별 모노톤 아이콘 (색상 없이 흰색 톤으로만)
+        const typeIconMap = {
+            broadcast: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M17 2 12 7 7 2"></path></svg>',
+            concert: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>',
+            event: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.6 1.7 6.9L12 17l-6.3 3.7 1.7-6.9L2 9.2l7.1-.6z"></path></svg>',
+            fansign: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20.8 4.6c-1.6-1.6-4.2-1.6-5.8 0L12 7.6 9 4.6c-1.6-1.6-4.2-1.6-5.8 0-1.6 1.6-1.6 4.2 0 5.8L12 19l8.8-8.6c1.6-1.6 1.6-4.2 0-5.8z"></path></svg>',
+            radio: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="14" r="3"></circle><path d="M4 14a8 8 0 0 1 16 0"></path><path d="M2 14a10 10 0 0 1 20 0"></path></svg>',
+            notice: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-5v13L3 15v-4z"></path><path d="M7 15v5a2 2 0 0 0 4 0v-3"></path></svg>'
+        };
+        const defaultTypeIcon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>';
+
         function getTodayKey() {
             const now = new Date();
             return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        function getTodayDisplayDate() {
+            const now = new Date();
+            return `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')} (${weekdayLabels[now.getDay()]})`;
         }
 
         // ⭐️ 시간 문자열(HH:MM) 기준으로 지금 상태(예정/LIVE/종료) 판단
@@ -985,15 +998,10 @@
 
         function renderTodaySchedule() {
             const grid = document.getElementById('todayScheduleGrid');
-            const sub = document.getElementById('todayDateSub');
             if (!grid) return;
 
-            const now = new Date();
-            if (sub) {
-                sub.innerText = `${now.getFullYear()}. ${String(now.getMonth() + 1).padStart(2, '0')}. ${String(now.getDate()).padStart(2, '0')} (${weekdayLabels[now.getDay()]})`;
-            }
-
             const todayKey = getTodayKey();
+            const todayDisplay = getTodayDisplayDate();
             const data = scheduleDB[todayKey];
             const items = (data && data.items) ? [...data.items].sort((a, b) => (a.time || '').localeCompare(b.time || '')) : [];
 
@@ -1009,21 +1017,24 @@
             grid.innerHTML = items.map(item => {
                 const status = getItemStatus(item.time);
                 const label = typeLabelMap[item.type] || item.type || '일정';
-                const color = item.color || 'var(--c-accent)';
+                const icon = typeIconMap[item.type] || defaultTypeIcon;
                 const statusHtml = status.key === 'live'
                     ? `<span class="today-status is-live"><span class="live-dot"></span>${status.label}</span>`
                     : `<span class="today-status">${status.label}</span>`;
 
                 return `
-                    <div class="today-card" style="--accent-color: ${color};">
-                        <div class="today-card-top">
-                            <span class="today-badge-type" style="background: ${color}22; color: ${color};">${label}</span>
-                            ${statusHtml}
-                        </div>
-                        <h3 class="today-title">${item.title}</h3>
-                        <div class="today-time-row">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            ${item.time || '시간 미정'}
+                    <div class="today-card">
+                        <div class="today-card-visual">${icon}</div>
+                        <div class="today-card-body">
+                            <div class="today-card-top">
+                                <span class="today-badge-type">${label}</span>
+                                ${statusHtml}
+                            </div>
+                            <h3 class="today-title">${item.title}</h3>
+                            <div class="today-datetime-row">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                ${todayDisplay} ${item.time || ''}
+                            </div>
                         </div>
                     </div>`;
             }).join('');

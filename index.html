@@ -129,6 +129,36 @@
         }
         .today-empty-card .emoji { font-size: 28px; margin-bottom: 10px; }
         .today-empty-card p { font-size: 14px; letter-spacing: 0.02em; }
+
+        /* ⭐️ WITH RESCENE 섹션 - 스크롤 시 천천히 그려지는 배경 넝쿨 라인 */
+        #historySection {
+            position: relative;
+            overflow: hidden;
+        }
+        #historySection .section-title,
+        #historySection .history-text-link {
+            position: relative;
+            z-index: 1;
+        }
+        .vine-bg {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 100%;
+            width: auto;
+            max-width: 90%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .vine-path {
+            fill: none;
+            stroke: currentColor;
+            opacity: 0.16;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .vine-path.vine-path-2 { opacity: 0.09; }
     </style>
 </head>
 <body id="homeSection">
@@ -218,6 +248,12 @@
         </div>
 
         <div id="historySection" class="slow-reveal">
+            <svg class="vine-bg" viewBox="0 0 300 900" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <path class="vine-path" id="vinePath1" stroke-width="2"
+                    d="M150,0 C210,70 90,150 150,220 C210,290 90,370 150,440 C210,510 90,590 150,660 C210,730 90,810 150,900" />
+                <path class="vine-path vine-path-2" id="vinePath2" stroke-width="1.4"
+                    d="M170,20 C110,90 200,160 140,230 C80,300 190,380 130,450 C70,520 180,600 120,670 C60,740 170,820 110,900" />
+            </svg>
             <div class="section-title">WITH <span>RESCENE</span></div>
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
         </div>
@@ -378,10 +414,34 @@
         }
         updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
 
+        // ⭐️ 넝쿨(vine) 라인이 스크롤 진입 시 천천히 그려지도록 준비
+        function initVineAnimation() {
+            ['vinePath1', 'vinePath2'].forEach(id => {
+                const path = document.getElementById(id);
+                if (!path) return;
+                const length = path.getTotalLength();
+                path.style.strokeDasharray = length;
+                path.style.strokeDashoffset = length;
+                path.style.transition = 'stroke-dashoffset 3.2s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+        }
+        function playVineAnimation() {
+            ['vinePath1', 'vinePath2'].forEach((id, idx) => {
+                const path = document.getElementById(id);
+                if (!path) return;
+                // 두 번째 라인은 살짝 늦게 시작해서 자연스럽게 겹쳐 보이도록
+                setTimeout(() => { path.style.strokeDashoffset = '0'; }, idx * 300);
+            });
+        }
+        initVineAnimation();
+
         const observer = new IntersectionObserver((entries) => { 
             entries.forEach(e => { 
                 if(e.isIntersecting) {
                     e.target.classList.add('active'); 
+                    if (e.target.id === 'historySection') {
+                        playVineAnimation();
+                    }
                 }
             }); 
         }, { threshold: 0.15 });

@@ -30,19 +30,28 @@
 
     <!-- ⭐️ TODAY'S SCHEDULE 카드 전용 스타일 -->
     <style>
+        /* ===== 라이트 모드 배경 순백색으로 고정 ===== */
+        html[data-theme="light"]{
+            --bg-base:#ffffff;
+        }
+        html[data-theme="light"] body{
+            background:#ffffff;
+        }
+
         /* ===== TODAY'S SCHEDULE ===== */
 
-        /* 날짜 라벨 : 양옆 헤어라인 */
+        /* 날짜 라벨 : 양옆 헤어라인 (텍스트/라인 수직 중앙 정렬) */
         .today-date-sub{
             display:flex; align-items:center; justify-content:center; gap:20px;
-            margin-bottom:52px;
+            margin:14px auto 52px; max-width:400px;
             font-family:var(--font-num, 'Montserrat', sans-serif);
             font-size:11px; font-weight:500; letter-spacing:.18em;
-            color:var(--text-muted);
+            line-height:1; color:var(--text-muted);
         }
         .today-date-sub::before,
         .today-date-sub::after{
-            content:''; width:48px; height:1px; background:var(--border-light);
+            content:''; flex:1 1 auto; height:1px; background:var(--border-light);
+            align-self:center;
         }
 
         .today-grid{
@@ -224,6 +233,90 @@
             .today-card, .today-status .live-dot{ animation:none !important; }
             .today-card{ transition:none; }
         }
+
+        /* ===== PROFILE ARCHIVE (가로 스크롤 프로필 갤러리) ===== */
+        .profile-container{
+            background:var(--bg-surface);
+            border:1px solid var(--border-light);
+            border-radius:20px;
+            padding:20px 20px 16px;
+        }
+        html[data-theme="light"] .profile-container{
+            background:#fff; border-color:rgba(0,0,0,.07);
+        }
+        .profile-scroll{
+            display:flex; gap:12px; overflow-x:auto;
+            padding-bottom:6px; scroll-snap-type:x proximity;
+            -webkit-overflow-scrolling:touch; scrollbar-width:none;
+        }
+        .profile-scroll::-webkit-scrollbar{ display:none; }
+        .profile-item{
+            position:relative; flex:0 0 auto; width:150px; aspect-ratio:3/4;
+            border-radius:14px; overflow:hidden; scroll-snap-align:start;
+            border:1px solid var(--border-light); background:var(--bg-base);
+        }
+        .profile-item img{
+            width:100%; height:100%; object-fit:cover; display:block;
+            transition:transform .5s cubic-bezier(.16,1,.3,1);
+        }
+        .profile-item:hover img{ transform:scale(1.06); }
+        .profile-item .pf-index{
+            position:absolute; left:10px; bottom:9px;
+            font-family:var(--font-num, 'Montserrat', sans-serif);
+            font-size:11px; font-weight:600; letter-spacing:.06em; color:#fff;
+            text-shadow:0 2px 8px rgba(0,0,0,.7);
+        }
+        .profile-item::after{
+            content:''; position:absolute; inset:0;
+            background:linear-gradient(to top, rgba(0,0,0,.45) 0%, transparent 40%);
+            pointer-events:none;
+        }
+        @media (max-width:800px){
+            .profile-item{ width:120px; }
+        }
+
+        /* ===== RESCENE SHORTS (가로 스크롤 쇼츠 갤러리) ===== */
+        .shorts-scroll{
+            display:flex; gap:14px; overflow-x:auto;
+            padding-bottom:8px; scroll-snap-type:x proximity;
+            -webkit-overflow-scrolling:touch; scrollbar-width:none;
+        }
+        .shorts-scroll::-webkit-scrollbar{ display:none; }
+        .shorts-card{
+            position:relative; flex:0 0 auto; width:160px; aspect-ratio:9/16;
+            border-radius:16px; overflow:hidden; scroll-snap-align:start;
+            border:1px solid var(--border-light); background:var(--bg-surface);
+            display:block; text-decoration:none;
+            transition:transform .45s cubic-bezier(.16,1,.3,1), border-color .3s ease;
+        }
+        html[data-theme="light"] .shorts-card{
+            background:#fff; border-color:rgba(0,0,0,.07);
+        }
+        .shorts-card:hover{ transform:translateY(-5px); border-color:var(--border-highlight); }
+        .shorts-card img{
+            width:100%; height:100%; object-fit:cover; display:block;
+            transition:transform .5s cubic-bezier(.16,1,.3,1);
+        }
+        .shorts-card:hover img{ transform:scale(1.06); }
+        .shorts-card .sc-play{
+            position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+            background:rgba(0,0,0,0); transition:background .3s ease;
+        }
+        .shorts-card:hover .sc-play{ background:rgba(0,0,0,.18); }
+        .shorts-card .sc-play svg{
+            width:32px; height:32px; color:#fff; opacity:.92;
+            filter:drop-shadow(0 2px 8px rgba(0,0,0,.7));
+        }
+        .shorts-more{
+            flex-direction:column; align-items:center; justify-content:center; gap:10px;
+            color:var(--text-secondary); font-size:12.5px; text-align:center;
+            line-height:1.5; padding:16px;
+        }
+        .shorts-more svg{ color:var(--text-muted); }
+        .shorts-more:hover{ color:var(--text-primary); }
+        @media (max-width:800px){
+            .shorts-card{ width:128px; }
+        }
     </style>
 </head>
 <body id="homeSection">
@@ -317,6 +410,27 @@
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
         </div>
 
+        <div class="section-container reveal" id="profileSection">
+            <div class="section-header center-header" style="margin-bottom: 30px;">
+                <div class="section-title">PROFILE <span>ARCHIVE</span></div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-scroll" id="profileScroll">
+                    <!-- ⭐️ JS가 images/profile/1.jpg ~ 10.jpg 를 자동으로 채워줍니다 -->
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container reveal" id="todayScheduleSection">
+            <div class="section-header center-header" style="margin-bottom: 24px;">
+                <div class="section-title">TODAY'S <span>SCHEDULE</span></div>
+            </div>
+            <div class="today-date-sub" id="todayDateSub"></div>
+            <div class="today-grid" id="todayScheduleGrid">
+                <!-- ⭐️ JS(fetchScheduleData → renderTodaySchedule)가 오늘 날짜 일정을 자동으로 채워줍니다 -->
+            </div>
+        </div>
+
         <div class="section-container reveal" id="chartSection">
             <div class="section-header center-header" style="margin-bottom: 30px;">
                 <div class="section-title">MUSIC <span>CHARTS</span></div>
@@ -331,25 +445,12 @@
             </div>
         </div>
 
-        <div class="section-container reveal" id="todayScheduleSection">
-            <div class="section-header center-header" style="margin-bottom: 8px;">
-                <div class="section-title">TODAY'S <span>SCHEDULE</span></div>
+        <div class="section-container reveal" id="shortsSection" style="padding-bottom: 120px;">
+            <div class="section-header center-header" style="margin-bottom: 30px;">
+                <div class="section-title">RESCENE <span>SHORTS</span></div>
             </div>
-            <div class="today-date-sub" id="todayDateSub"></div>
-            <div class="today-grid" id="todayScheduleGrid">
-                <!-- ⭐️ JS(fetchScheduleData → renderTodaySchedule)가 오늘 날짜 일정을 자동으로 채워줍니다 -->
-            </div>
-        </div>
-
-        <div class="section-container reveal" style="padding-bottom: 120px;">
-            <div class="goods-banner" onclick="location.href='goods/goods.html'">
-                <div class="gb-left">
-                    <h2>OFFICIAL MERCH</h2>
-                    <p>리센느의 공식 굿즈 실시간 재고 및 품절 유무를 확인하세요.</p>
-                </div>
-                <div class="gb-right">
-                    <span class="gb-btn">굿즈 스토어 바로가기 ➔</span>
-                </div>
+            <div class="shorts-scroll" id="shortsScroll">
+                <!-- ⭐️ JS가 쇼츠 카드를 자동으로 채워줍니다 -->
             </div>
         </div>
         
@@ -1146,6 +1247,51 @@
         // ⭐️ 1분마다 LIVE/종료 상태만 갱신
         setInterval(renderTodaySchedule, 60000);
 
+        // ⭐️ PROFILE ARCHIVE : images/profile/1.jpg ~ 10.jpg 렌더링
+        // 세로/가로 비율이 제각각이어도 aspect-ratio + object-fit: cover 로 해상도를 통일합니다.
+        function renderProfileArchive() {
+            const wrap = document.getElementById('profileScroll');
+            if (!wrap) return;
+            let html = '';
+            for (let i = 1; i <= 10; i++) {
+                html += `
+                    <div class="profile-item">
+                        <img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy"
+                             onerror="this.closest('.profile-item').style.display='none'">
+                        <span class="pf-index">NO. ${String(i).padStart(2, '0')}</span>
+                    </div>`;
+            }
+            wrap.innerHTML = html;
+        }
+
+        // ⭐️ RESCENE SHORTS : 알려진 공식 영상 썸네일 + 유튜브 검색 더보기 카드
+        // (유튜브 검색 결과는 CORS 정책상 브라우저에서 직접 긁어올 수 없어,
+        //  실제 존재하는 영상 썸네일 몇 개 + "더보기" 링크로 구성합니다.)
+        function renderShortsGallery() {
+            const wrap = document.getElementById('shortsScroll');
+            if (!wrap) return;
+            const shortsIds = ["jgaWSOXyH_o", "v6n4XQdX6_8", "dOllJ26kfIY"];
+            const searchUrl = "https://www.youtube.com/results?search_query=%23%EB%A6%AC%EC%84%BC%EB%8A%90";
+
+            let html = shortsIds.map(id => `
+                <a class="shorts-card" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">
+                    <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="RESCENE video" loading="lazy">
+                    <div class="sc-play">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </a>`).join('');
+
+            html += `
+                <a class="shorts-card shorts-more" href="${searchUrl}" target="_blank" rel="noopener">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                    <span>유튜브에서<br>#리센느 더보기</span>
+                </a>`;
+
+            wrap.innerHTML = html;
+        }
+
         function changeMonth(delta) { 
             currentCalMonth += delta; 
             if(currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } 
@@ -1254,6 +1400,8 @@
         // ⭐️ DOM 로드 시 실행
         window.addEventListener('DOMContentLoaded', () => { 
             fetchScheduleData(); 
+            renderProfileArchive();
+            renderShortsGallery();
         });
     </script>
 </body>

@@ -63,7 +63,7 @@
     function buildSwitcher() {
         if (document.querySelector('.lang-switcher')) return;
         var box = document.createElement('div');
-        box.className = 'lang-switcher'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Language');
+        box.className = 'lang-switcher notranslate'; box.setAttribute('translate', 'no'); box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Language');
         LANGS.forEach(function (lang) {
             var b = document.createElement('button'); b.type = 'button'; b.setAttribute('data-lang', lang); b.textContent = LABELS[lang];
             b.addEventListener('click', function () { window.setLang(lang); });

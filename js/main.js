@@ -592,7 +592,8 @@ function renderProfileArchive() {
         for (let i = 1; i <= 10; i++) {
             phtml += `<div class="profile-item" onclick="openImageModal('images/profile/${i}.jpg')"><img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"><span class="pf-index">NO. ${String(i).padStart(2, '0')}</span></div>`;
         }
-        profileWrap.innerHTML = `<div class="profile-track">${phtml}${phtml}</div>`;
+        profileWrap.innerHTML = `<div class="profile-track">${phtml}</div>`;
+        enableDragScroll(profileWrap);
     }
 
     const albumWrap = document.getElementById('albumScroll');
@@ -602,8 +603,39 @@ function renderProfileArchive() {
         albumImages.forEach(function(imgName) {
             ahtml += `<div class="profile-item" onclick="openImageModal('images/${imgName}')"><img src="images/${imgName}" alt="${imgName}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"></div>`;
         });
-        albumWrap.innerHTML = `<div class="profile-track album-track">${ahtml}${ahtml}</div>`;
+        albumWrap.innerHTML = `<div class="profile-track album-track">${ahtml}</div>`;
+        enableDragScroll(albumWrap);
     }
+}
+
+// ⭐️ 마우스로 좌우 드래그해서 넘겨볼 수 있게 (터치는 브라우저가 기본으로 지원)
+function enableDragScroll(el) {
+    if (!el) return;
+    let isDown = false, startX = 0, startScrollLeft = 0, moved = false;
+    el.addEventListener('mousedown', (e) => {
+        isDown = true; moved = false;
+        el.classList.add('dragging');
+        startX = e.pageX; startScrollLeft = el.scrollLeft;
+    });
+    window.addEventListener('mouseup', () => { isDown = false; el.classList.remove('dragging'); });
+    el.addEventListener('mouseleave', () => { isDown = false; el.classList.remove('dragging'); });
+    el.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const delta = e.pageX - startX;
+        if (Math.abs(delta) > 5) moved = true;
+        el.scrollLeft = startScrollLeft - delta;
+    });
+    // 드래그 후 클릭(이미지 확대)이 오작동하지 않도록, 실제로 움직였을 때만 클릭 막기
+    el.addEventListener('click', (e) => { if (moved) { e.stopPropagation(); e.preventDefault(); } }, true);
+
+    // ⭐️ 마우스 휠(위/아래)로도 좌우로 넘어가게 — 휠을 올리고 내리는 힘을 가로 스크롤로 변환
+    el.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+            e.preventDefault();
+            el.scrollLeft += e.deltaY;
+        }
+    }, { passive: false });
 }
 
 function renderShortsGallery() {

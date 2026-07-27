@@ -155,13 +155,25 @@ html[data-theme="light"] .footer-sns a img { filter: invert(0); }
    ⭐️ 6. 공통 모바일 반응형 (화면 좁을 때)
    ========================================================================== */
 @media (max-width: 800px) {
-    .top-nav { padding: 15px 20px; }
+    .top-nav { 
+        padding: 15px 20px; 
+        display: flex; /* grid 대신 flex 사용 */
+        justify-content: space-between; /* 양 끝으로 밀어내기 */
+        align-items: center;
+    }
     .desktop-menu { display: none; }
     
     .desktop-only-utils { display: none !important; }
     
     .hamburger-btn { display: flex; }
-    .nav-right { gap: 4px; }
+    
+    /* 🚨 헤더 우측 아이콘들을 오른쪽 끝으로 정렬 🚨 */
+    .nav-right { 
+        display: flex; 
+        gap: 4px; 
+        margin-left: auto; /* 핵심: 왼쪽 여백을 다 밀어버려서 우측 끝에 붙임 */
+        justify-content: flex-end; 
+    }
     
     .mobile-menu-panel { display: flex; flex-direction: column; padding: 50px 30px; }
     

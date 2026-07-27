@@ -37,25 +37,15 @@ setInterval(() => {
     if (timeFlowText) timeFlowText.innerText = `${String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0')}:${String(Math.floor((diff / 1000 / 60) % 60)).padStart(2, '0')}:${String(Math.floor((diff / 1000) % 60)).padStart(2, '0')}`;
 }, 1000);
 
-
 /* =========================================
    이미지 모달
 ========================================= */
-function openImageModal(src) { 
-    document.getElementById('fullSizeImage').src = src; 
-    document.getElementById('imageModal').classList.add('active'); 
-    document.getElementById('imageModalBackdrop').classList.add('active'); 
-    document.body.style.overflow = 'hidden'; 
-}
-function closeImageModal() { 
-    document.getElementById('imageModal').classList.remove('active'); 
-    document.getElementById('imageModalBackdrop').classList.remove('active'); 
-    document.body.style.overflow = 'auto'; 
-}
+function openImageModal(src) { document.getElementById('fullSizeImage').src = src; document.getElementById('imageModal').classList.add('active'); document.getElementById('imageModalBackdrop').classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeImageModal() { document.getElementById('imageModal').classList.remove('active'); document.getElementById('imageModalBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
 
 
 /* =========================================
-   ⭐️ 1. 발자취 시네마틱 모달 (100% 원본 복구)
+   ⭐️ 발자취 모달 (기획자님 코드 100% 복사본)
 ========================================= */
 const historyData = [
     { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o", timeIndex: 0 }, 
@@ -478,10 +468,8 @@ function jumpToTime(ms) {
 
 function skipHistorySequence() {
     clearHistorySequence();
-    
     const progressBar = document.getElementById('historyProgressBar');
     if (progressBar) progressBar.style.width = '100%';
-
     const dropdown = document.getElementById('historyDropdown');
     const menuBtn = document.getElementById('historyMenuBtn');
     if(dropdown) dropdown.classList.remove('active');
@@ -524,7 +512,7 @@ document.addEventListener('click', function(event) {
 
 
 /* =========================================
-   ⭐️ 2. 스케줄 캘린더 및 오늘의 일정
+   스케줄 캘린더 및 오늘의 일정
 ========================================= */
 let scheduleDB = {};
 let currentCalYear = new Date().getFullYear(); 
@@ -553,24 +541,35 @@ async function fetchScheduleData() {
 
 function getTodayKey() { const now = new Date(); return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`; }
 function getItemStatus(timeStr) {
-    if (!timeStr || !timeStr.includes(':')) return { key: 'upcoming', label: '예정' };
+    const statusDict = window.t ? window.t('status') : { upcoming: '예정', live: 'LIVE', ended: '종료' };
+    if (!timeStr || !timeStr.includes(':')) return { key: 'upcoming', label: statusDict.upcoming || '예정' };
     const [h, m] = timeStr.split(':').map(Number);
     const now = new Date(); const eventMin = h * 60 + m; const nowMin = now.getHours() * 60 + now.getMinutes();
-    if (Math.abs(nowMin - eventMin) <= 30) return { key: 'live', label: 'LIVE' };
-    if (nowMin > eventMin) return { key: 'ended', label: '종료' };
-    return { key: 'upcoming', label: '예정' };
+    if (Math.abs(nowMin - eventMin) <= 30) return { key: 'live', label: statusDict.live || 'LIVE' };
+    if (nowMin > eventMin) return { key: 'ended', label: statusDict.ended || '종료' };
+    return { key: 'upcoming', label: statusDict.upcoming || '예정' };
 }
 
 let __todayHtmlCache = null;
 function renderTodaySchedule() {
     const grid = document.getElementById('todayScheduleGrid');
+    const sub  = document.getElementById('todayDateSub');
     if (!grid) return;
+    const now = new Date();
+    const weekdays = window.t ? window.t('weekdays') : ["일", "월", "화", "수", "목", "금", "토"];
+    if (sub) sub.innerText = `${now.getFullYear()}. ${String(now.getMonth()+1).padStart(2,'0')}. ${String(now.getDate()).padStart(2,'0')} (${weekdays[now.getDay()]})`;
+
     const items = scheduleDB[getTodayKey()]?.items || [];
+    const typeLabelMap = window.t ? window.t('scheduleTypes') : {};
+    const emptyMsg = window.t ? window.t('noSchedule') : '등록된 일정이 없습니다.';
+    const viewMsg = window.t ? window.t('upcomingView') : '다가오는 일정 보기';
+
     let html = items.length === 0 
-        ? `<div class="today-empty-card"><div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div><p>오늘은 등록된 일정이 없습니다.</p><button type="button" onclick="openCalendarPopup()">다가오는 일정 보기</button></div>`
+        ? `<div class="today-empty-card"><div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div><p>${emptyMsg}</p><button type="button" onclick="openCalendarPopup()">${viewMsg}</button></div>`
         : items.map(item => {
-            const status = getItemStatus(item.time), label = item.type || '일정';
-            const timeHtml = item.time ? item.time : `<span class="tbd">시간 미정</span>`;
+            const status = getItemStatus(item.time), label = typeLabelMap[item.type] || item.type || '일정';
+            const timeTbd = window.t ? window.t('timeTbd') : '시간 미정';
+            const timeHtml = item.time ? item.time : `<span class="tbd">${timeTbd}</span>`;
             const statusHtml = status.key === 'live' ? `<span class="today-status is-live"><span class="live-dot"></span>${status.label}</span>` : `<span class="today-status">${status.label}</span>`;
             return `<article class="today-card is-${status.key}" style="--accent-color:${item.color};"><div class="today-card-top"><span class="today-time">${timeHtml}</span>${statusHtml}</div><h3 class="today-title">${item.title}</h3><div class="today-card-foot"><span class="today-type"><span class="today-type-dot"></span>${label}</span></div></article>`;
         }).join('');
@@ -622,21 +621,29 @@ function closeCalendarPopup() {
 
 function openModal(year, month, day, dateKey) {
     const calWrapper = document.getElementById('calendarPopupModal');
-    if (calWrapper && window.innerWidth >= 1100) calWrapper.classList.add('split-active'); 
+    if (calWrapper && window.innerWidth >= 1050) calWrapper.classList.add('split-active'); 
 
-    const dateTitle = `${year}년 ${month}월 ${day}일`; const data = scheduleDB[dateKey]; 
-    const typeLabelMap = { broadcast: "방송", fansign: "팬사인회", event: "행사", concert: "공연", radio: "라디오", notice: "공지" };
+    const dateTitle = window.tDate ? window.tDate(year, String(month).padStart(2, '0'), String(day).padStart(2, '0')) : `${year}년 ${month}월 ${day}일`; 
+    const data = scheduleDB[dateKey]; 
+    const typeLabelMap = window.t ? window.t('scheduleTypes') : { broadcast: "방송", fansign: "팬사인회", event: "행사", concert: "공연", radio: "라디오", notice: "공지" };
+    const timeLabel = window.t ? window.t('timeLabel') : '시간';
+    const timeTbd = window.t ? window.t('timeTbd') : '시간 미정';
 
     let scheduleHtml = `<div class="elegant-date-header">${dateTitle}</div>`;
     
     if (data && data.items && data.items.length > 0) {
         data.items.forEach(item => { 
-            let dotColor = item.color ? item.color : 'var(--c-accent)'; let label = typeLabelMap[item.type] || item.type || '일정'; let time = item.time ? item.time : '시간 미정';
-            scheduleHtml += `<div class="ec-card"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">${label}</span><h2 class="ec-title">${item.title}</h2><div class="ec-meta"><div class="ec-meta-row"><span class="ec-meta-label">시간</span><span class="ec-meta-val">${time}</span></div></div>`;
+            let dotColor = item.color ? item.color : 'var(--c-accent)'; 
+            let label = typeLabelMap[item.type] || item.type || '일정'; 
+            let time = item.time ? item.time : timeTbd;
+            scheduleHtml += `<div class="ec-card"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">${label}</span><h2 class="ec-title">${item.title}</h2><div class="ec-meta"><div class="ec-meta-row"><span class="ec-meta-label">${timeLabel}</span><span class="ec-meta-val">${time}</span></div></div>`;
             if (item.image) scheduleHtml += `<div class="ec-img-wrapper"><img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`; 
             scheduleHtml += `</div>`;
         });
-    } else { scheduleHtml += `<div class="schedule-detail-empty">등록된 일정이 없습니다.</div>`; }
+    } else { 
+        const emptyMsg = window.t ? window.t('noSchedule') : '등록된 일정이 없습니다.';
+        scheduleHtml += `<div class="schedule-detail-empty">${emptyMsg}</div>`; 
+    }
     
     const textEl = document.getElementById('modalScheduleText'); if(textEl) textEl.innerHTML = scheduleHtml;
     const scheduleModal = document.getElementById('scheduleModal'), backdrop = document.getElementById('modalBackdrop');
@@ -650,7 +657,7 @@ function closeModal() {
 
 
 /* =========================================
-   ⭐️ 3. 실시간 음원 차트 
+   실시간 음원 차트 로직
 ========================================= */
 let tickerInterval;
 async function fetchSongCharts() {
@@ -686,9 +693,10 @@ async function fetchSongCharts() {
             }
         });
         
+        const waitingMsg = (typeof window.t === 'function') ? window.t('chartWaiting') : '데이터 수집 중입니다.';
         const wrapper = document.getElementById('tickerWrapper');
         if(wrapper) {
-            wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">데이터를 수집 중입니다.</div></div>`;
+            wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">${waitingMsg}</div></div>`;
             clearInterval(tickerInterval);
             if (validCount > 1) {
                 let cIdx = 0;
@@ -703,7 +711,7 @@ async function fetchSongCharts() {
 }
 
 /* =========================================
-   ⭐️ 4. 아카이브(사진/앨범) 및 쇼츠 렌더링
+   콘텐츠(아카이브 & 앨범, 쇼츠) 그리기
 ========================================= */
 function renderProfileArchive() {
     const profileWrap = document.getElementById('profileScroll'); 
@@ -731,11 +739,11 @@ function renderShortsGallery() {
     const shortsIds = ["jgaWSOXyH_o", "v6n4XQdX6_8", "dOllJ26kfIY"];
     let html = shortsIds.map(id => `<a class="shorts-card" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="RESCENE video" loading="lazy"><div class="sc-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></a>`).join('');
     
-    html += `<a class="shorts-card shorts-more" href="https://www.youtube.com/results?search_query=%23%EB%A6%AC%EC%84%BC%EB%8A%90" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>유튜브에서<br>#리센느 더보기</span></a>`;
+    const moreText = window.t ? window.t('shortsMore') : '유튜브에서<br>#리센느 더보기';
+    html += `<a class="shorts-card shorts-more" href="https://www.youtube.com/results?search_query=%23%EB%A6%AC%EC%84%BC%EB%8A%90" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>${moreText}</span></a>`;
     wrap.innerHTML = html;
 }
 
-// ⭐️ 모든 초기화 실행
 window.addEventListener('DOMContentLoaded', () => { 
     fetchScheduleData(); 
     renderProfileArchive();

@@ -78,12 +78,21 @@
         return y + '년 ' + m + '월 ' + d + '일';
     };
 
+    function updateWeekdayHeaders() {
+        var wds = window.t('weekdays');
+        document.querySelectorAll('[data-wd]').forEach(function (el) {
+            var i = parseInt(el.getAttribute('data-wd'), 10);
+            if (wds && wds[i] !== undefined) el.textContent = wds[i];
+        });
+    }
+
     function applyStaticTexts() {
         document.querySelectorAll('[data-i18n]').forEach(function (el) {
             var key = el.getAttribute('data-i18n');
             var val = window.t(key);
             if (val !== undefined) el.innerHTML = val;
         });
+        updateWeekdayHeaders();
     }
 
     function refreshDynamicSections() {

@@ -127,7 +127,7 @@ html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
 .album-modal-media { flex: 1.3; background: #000; position: relative; min-width: 0; }
 .album-modal-media iframe { width: 100%; height: 100%; border: 0; display: block; }
 .album-cover-fallback { width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
-.album-cover-fallback::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(2px); }
+.album-cover-fallback::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
 .album-audio-btn { position: relative; z-index: 2; background: #fff; color: #111; padding: 14px 26px; border-radius: 999px; font-family: var(--font-head); font-weight: 700; font-size: 13px; text-decoration: none; letter-spacing: 0.5px; transition: 0.25s; white-space: nowrap; }
 .album-audio-btn:hover { transform: scale(1.05); }
 .album-audio-btn-disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); cursor: default; }

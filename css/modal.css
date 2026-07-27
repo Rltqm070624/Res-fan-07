@@ -124,7 +124,7 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
     .modal-wrapper.active { transform: translate(calc(-50% + 270px), -50%); }
 }
 
-#modalScheduleText { padding: 40px 30px; overflow-y: auto; flex: 1; height: 100%; box-sizing: border-box; }
+#modalScheduleText { padding: 40px 38px; overflow-y: auto; flex: 1; height: 100%; box-sizing: border-box; }
 #modalScheduleText::-webkit-scrollbar { width: 6px; }
 #modalScheduleText::-webkit-scrollbar-thumb { background: rgba(150,150,150,0.3); border-radius: 10px; }
 

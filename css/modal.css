@@ -103,6 +103,7 @@ html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05
 .cal-event-row { display: flex; align-items: center; gap: 6px; width: 100%; overflow: hidden; }
 .cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 .cal-event-time { font-size: 10px; font-weight: 600; font-family: var(--font-num); flex-shrink: 0; }
+.cal-event-more { font-size: 10px; font-weight: 600; font-family: var(--font-num); color: var(--text-muted); }
 .cal-event-title { color: var(--text-primary); font-size: 10px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
 
 #modalBackdrop { background: transparent; backdrop-filter: none; z-index: 9905; }

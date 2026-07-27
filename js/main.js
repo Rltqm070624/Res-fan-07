@@ -150,7 +150,7 @@ function closeCalendarPopup() {
 
 function openModal(year, month, day, dateKey) {
     const calWrapper = document.getElementById('calendarPopupModal');
-    if (calWrapper && window.innerWidth > 1000) calWrapper.classList.add('split-active'); 
+    if (calWrapper && window.innerWidth >= 1100) calWrapper.classList.add('split-active'); 
 
     const dateTitle = `${year}년 ${month}월 ${day}일`; const data = scheduleDB[dateKey]; 
     let scheduleHtml = `<div class="elegant-date-header">${dateTitle}</div>`;
@@ -174,9 +174,8 @@ function closeModal() {
     if(scheduleModal) scheduleModal.classList.remove('active'); if(backdrop) backdrop.classList.remove('active'); if(calModal) calModal.classList.remove('split-active'); 
 }
 
-
 /* =========================================
-   실시간 음원 차트 로직
+   ⭐️ 실시간 음원 차트 (데이터 에러 방지 처리 완벽 대응)
 ========================================= */
 let tickerInterval;
 async function fetchSongCharts() {
@@ -214,21 +213,24 @@ async function fetchSongCharts() {
         
         const wrapper = document.getElementById('tickerWrapper');
         if(wrapper) {
-            wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">데이터 수집 중입니다.</div></div>`;
+            wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">데이터를 수집 중입니다.</div></div>`;
             clearInterval(tickerInterval);
             if (validCount > 1) {
                 let cIdx = 0;
                 tickerInterval = setInterval(() => { cIdx = (cIdx + 1) % validCount; wrapper.style.transform = `translateY(-${cIdx * 56}px)`; }, 4000); 
             }
         }
-    } catch (e) { console.log("차트 대기 중"); }
+    } catch (e) { 
+        console.log("차트 대기 중"); 
+        const wrapper = document.getElementById('tickerWrapper');
+        if(wrapper) wrapper.innerHTML = `<div class="ticker-item"><div style="color:#666; font-size:13px;">차트 업데이트를 대기 중입니다.</div></div>`;
+    }
 }
 
 /* =========================================
-   ⭐️ 콘텐츠(아카이브 & 앨범, 쇼츠) 그리기
+   콘텐츠(아카이브 & 앨범, 쇼츠) 그리기
 ========================================= */
 function renderProfileArchive() {
-    // 1. PROFILE PHOTO 영역 렌더링 (1번~10번 이미지)
     const profileWrap = document.getElementById('profileScroll'); 
     if (profileWrap) {
         let phtml = '';
@@ -238,15 +240,9 @@ function renderProfileArchive() {
         profileWrap.innerHTML = `<div class="profile-track">${phtml}${phtml}</div>`;
     }
 
-    // 2. ALBUM 영역 렌더링 (요청하신 20개 이미지 배열 순회)
     const albumWrap = document.getElementById('albumScroll');
     if (albumWrap) {
-        const albumImages = [
-            "Counting Start.jpg", "Glowup eng.jpg", "Glowup.jpg", "SCENEDROME.jpg", 
-            "boryung.jpg", "bugs.jpg", "busy.jpg", "busy_2.jpg", "dejavu.jpg", 
-            "go.jpg", "lip bomb.jpg", "namju.jpg", "namju2.jpg", "pinball japan.jpg", 
-            "pretty.jpg", "run.jpg", "uhuh japan.jpg", "uhuh.jpg", "yoyo japan.jpg", "yoyo.jpg"
-        ];
+        const albumImages = ["Counting Start.jpg", "Glowup eng.jpg", "Glowup.jpg", "SCENEDROME.jpg", "boryung.jpg", "bugs.jpg", "busy.jpg", "busy_2.jpg", "dejavu.jpg", "go.jpg", "lip bomb.jpg", "namju.jpg", "namju2.jpg", "pinball japan.jpg", "pretty.jpg", "run.jpg", "uhuh japan.jpg", "uhuh.jpg", "yoyo japan.jpg", "yoyo.jpg"];
         let ahtml = '';
         albumImages.forEach(function(imgName) {
             ahtml += `<div class="profile-item" onclick="openImageModal('images/${imgName}')"><img src="images/${imgName}" alt="${imgName}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"></div>`;
@@ -263,12 +259,12 @@ function renderShortsGallery() {
     wrap.innerHTML = html;
 }
 
-// 발자취 데이터는 기존과 동일
 const historyData = [
     { date: "2024. 03. 26", title: "DEBUT SHOWCASE LIVE", vid: "jgaWSOXyH_o", timeIndex: 0 }, 
     { date: "2024. 03. 26", title: "싱글 1집 《Re:Scene》 발매 (데뷔)", timeIndex: 5 }, 
     { date: "2024. 05", title: "코스모폴리탄 코리아 5월호 화보", timeIndex: 7 }
 ];
+
 let slotTimer; let seqTimeouts = []; let progressInterval;
 const TOTAL_DURATION_MS = 38000; let currentElapsedMs = 0;
 

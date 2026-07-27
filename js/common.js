@@ -148,4 +148,4 @@ function closeModal() {
     if (scheduleModal) scheduleModal.classList.remove('active'); if (backdrop) backdrop.classList.remove('active'); if (calModal) calModal.classList.remove('split-active');
 }
 
-window.addEventListener('DOMContentLoaded', () => { fetchScheduleData(); });
+window.addEventListener('DOMContentLoaded', () => { fetchScheduleData(); }); 

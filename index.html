@@ -36,6 +36,7 @@
         </ul>
         
         <div class="nav-right">
+            <!-- ⭐️ 클래스 원상 복구 완료 -->
             <div class="desktop-only-utils util-reset">
                 <div class="lang-switcher lang-switcher-inline" role="group" aria-label="Language">
                     <button type="button" data-lang="ko" onclick="setLang('ko')">KOR</button>
@@ -101,16 +102,13 @@
             <button class="history-text-link" onclick="openHistoryModal()">발자취 따라가기 ➔</button>
         </div>
 
-        <!-- ⭐️ 아카이브 영역 구조 수정 -->
         <div class="section-container reveal full-page-section" id="profileSection">
             <div class="section-inner">
                 <div class="section-header center-header section-header-md">
                     <div class="section-title">RESCENE <span>ARCHIVE</span></div>
                 </div>
-                
                 <div class="archive-sub-header">PROFILE PHOTO</div>
                 <div class="profile-scroll-wrapper" id="profileScroll"></div>
-
                 <div class="archive-sub-header mt-40">ALBUM</div>
                 <div class="profile-scroll-wrapper" id="albumScroll"></div>
             </div>
@@ -155,7 +153,6 @@
         </footer>
     </div> 
 
-    <!-- 모달 요소들 -->
     <div class="modal-backdrop image-modal-backdrop" id="imageModalBackdrop" onclick="closeImageModal()"></div>
     <div class="image-modal-wrapper" id="imageModal" onclick="closeImageModal()">
         <img src="" id="fullSizeImage" alt="Full Size View">
@@ -166,9 +163,7 @@
         <button class="timeline-link-text" onclick="openDetailedTimeline()">걸어온 길을 다시 한 번 걸어 볼까요?</button>
         <div id="tvContainer" class="tv-container">
             <div class="modal-menu-container">
-                <button class="modal-hamburger-btn" onclick="toggleHistoryMenu()" id="historyMenuBtn">
-                    <span></span><span></span><span></span>
-                </button>
+                <button class="modal-hamburger-btn" onclick="toggleHistoryMenu()" id="historyMenuBtn"><span></span><span></span><span></span></button>
                 <div class="history-dropdown" id="historyDropdown">
                     <button onclick="closeHistoryModal()">창 닫기</button>
                     <button onclick="skipHistorySequence()">영상 스킵하기</button>
@@ -186,13 +181,8 @@
                 </div>
             </div>
             <div class="history-player-bar" id="historyPlayerBar">
-                <div class="history-progress-container" id="historyProgressContainer" onclick="seekTimeline(event)">
-                    <div class="history-progress-bar" id="historyProgressBar"></div>
-                </div>
-                <div class="history-player-info">
-                    <span id="historyCurrentChapter">RESCENE ARCHIVE</span>
-                    <span id="historyTimeIndicator">00:00 / 00:30</span>
-                </div>
+                <div class="history-progress-container" id="historyProgressContainer" onclick="seekTimeline(event)"><div class="history-progress-bar" id="historyProgressBar"></div></div>
+                <div class="history-player-info"><span id="historyCurrentChapter">RESCENE ARCHIVE</span><span id="historyTimeIndicator">00:00 / 00:30</span></div>
             </div>
         </div>
     </div>

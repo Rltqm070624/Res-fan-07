@@ -11,11 +11,12 @@
 .modal-backdrop.cal-backdrop { z-index: 8900; } 
 
 /* =========================================
-   ⭐️ 캘린더 스플릿 & 고급 디테일 팝업 (간격/폰트 최적화)
+   ⭐️ 캘린더 스플릿 팝업 (좌측)
 ========================================= */
 .calendar-popup-wrapper { 
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%); 
-    width: 90%; max-width: 720px; height: 85vh; max-height: 750px; 
+    width: 90%; max-width: 720px; 
+    height: 85vh; max-height: 750px; /* ⭐️ 세로 길이 고정 기준점 */
     display: flex; flex-direction: column; background: var(--bg-base); 
     border: 1px solid var(--border-light); border-radius: 20px; z-index: 8910; 
     padding: 30px; box-sizing: border-box; box-shadow: 0 20px 80px rgba(0,0,0,0.9); 
@@ -25,9 +26,9 @@
 html[data-theme="light"] .calendar-popup-wrapper { box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
 .calendar-popup-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, -50%); }
 
-/* ⭐️ 스플릿 간격 더 넓게 벌림 (서로 닿지 않도록) */
+/* 스플릿 간격: 캘린더를 왼쪽으로 밀어줌 */
 @media (min-width: 1050px) {
-    .calendar-popup-wrapper.active.split-active { transform: translate(calc(-50% - 300px), -50%); }
+    .calendar-popup-wrapper.active.split-active { transform: translate(calc(-50% - 260px), -50%); }
 }
 
 .calendar-header-controls { display: flex; justify-content: center; align-items: center; gap: 20px; margin: 0 0 20px 0; flex-shrink: 0; }
@@ -56,11 +57,14 @@ html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05
 
 #modalBackdrop { background: transparent; backdrop-filter: none; z-index: 8905; }
 
-/* 우측 디테일 창 */
+/* =========================================
+   ⭐️ 우측 디테일 창 (높이 똑같이 맞춤 & 너비 확장)
+========================================= */
 .modal-wrapper { 
     position: fixed; z-index: 9910; top: 50%; left: 50%; 
-    width: 440px; 
-    height: auto; max-height: 85vh; min-height: 200px; background: var(--bg-base); border: 1px solid var(--border-light); 
+    width: 100%; max-width: 480px; /* ⭐️ 너비를 480px로 확 늘려서 우측 여백을 꽉 채움! */
+    height: 85vh; max-height: 750px; /* ⭐️ 세로 길이 개판 나는 문제 해결: 캘린더랑 높이 완전 똑같이 강제 고정! */
+    background: var(--bg-base); border: 1px solid var(--border-light); 
     border-radius: 20px; box-sizing: border-box; box-shadow: 0 30px 80px rgba(0,0,0,0.6); 
     transform: translate(150%, -50%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s; 
     opacity: 0; visibility: hidden; pointer-events: none; overflow: hidden; display: flex; flex-direction: column;
@@ -68,64 +72,56 @@ html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05
 html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
 .modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; }
 
-/* ⭐️ 우측 모달 위치 조정 (폭이 넓어진 만큼 자리 조정) */
+/* 늘어난 폭에 맞춰서 서로 완벽하게 정중앙에 위치하도록 이동 거리 세팅 */
 @media (min-width: 1050px) {
-    .modal-wrapper.active { transform: translate(calc(-50% + 300px), -50%); }
+    .modal-wrapper.active { transform: translate(calc(-50% + 360px), -50%); }
 }
 
-#modalScheduleText { padding: 40px 38px; overflow-y: auto; box-sizing: border-box; }
+#modalScheduleText { padding: 40px 38px; overflow-y: auto; flex: 1; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; }
 #modalScheduleText::-webkit-scrollbar { width: 6px; }
 #modalScheduleText::-webkit-scrollbar-thumb { background: rgba(150,150,150,0.3); border-radius: 10px; }
 
-/* ⭐️ 글씨 크기 대폭 축소 및 여백 다이어트 (가운데 정렬 및 여백 채우기 완벽 해결) */
+/* 가운데 정렬 및 여백 채우기 */
 .elegant-date-header { 
     font-family: var(--font-num); font-size: 19px; font-weight: 700; 
     color: var(--text-primary); margin-bottom: 24px; padding-bottom: 16px; 
-    border-bottom: 1px solid var(--border-light); letter-spacing: 0.3px; 
-    text-align: center; width: 100%; display: block; 
+    border-bottom: 1px solid var(--border-light); letter-spacing: 0.3px; text-align: center; 
+    flex-shrink: 0;
 }
 
-/* 개별 스케줄 박스: 배경색을 주고 가운데 정렬하여 휑한 여백을 꽉 채움 */
 .ec-card { 
     margin-bottom: 20px; 
     padding: 24px 20px; 
-    background: rgba(0,0,0,0.02); /* 아주 연한 배경색으로 시각적 빈 공간 채움 */
+    background: rgba(255,255,255,0.03); /* 배경색을 주어 시각적으로 빈 공간을 꽉 채움 */
+    border: 1px solid var(--border-light);
     border-radius: 16px;
     display: flex; 
     flex-direction: column; 
-    align-items: center; /* 전체 요소를 가운데로 정렬 */
+    align-items: center; /* 카드 안의 내용(방송, 제목, 시간) 모두 가운데 정렬 */
     width: 100%;
     box-sizing: border-box;
 }
-html[data-theme="light"] .ec-card { background: #fdfdfd; border: 1px solid rgba(0,0,0,0.04); }
+html[data-theme="light"] .ec-card { background: #fdfdfd; border-color: rgba(0,0,0,0.05); }
 
-.ec-badge { 
-    display: inline-block; padding: 5px 12px; border-radius: 15px; color: #000; 
-    font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-bottom: 14px; 
-    font-family: var(--font-body); 
-}
-
-/* 제목 가운데 정렬 */
+.ec-badge { display: inline-block; padding: 5px 12px; border-radius: 15px; color: #000; font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-bottom: 12px; font-family: var(--font-body); }
 .ec-title { 
     font-family: var(--font-head); font-size: 20px; font-weight: 600; 
-    color: var(--text-primary); margin: 0 0 16px 0; line-height: 1.4; 
-    word-break: keep-all; text-align: center; /* 왼쪽 정렬을 가운데 정렬로 변경 */
+    color: var(--text-primary); margin: 0 0 16px 0; line-height: 1.4; word-break: keep-all; text-align: center; 
 }
-
-/* 시간 정보 가운데 정렬 */
-.ec-meta { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 0; width: 100%; }
+.ec-meta { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 0; width: 100%; }
 .ec-meta-row { display: flex; justify-content: center; align-items: center; gap: 12px; font-family: var(--font-body); font-size: 14px; width: 100%; }
 .ec-meta-label { color: var(--text-primary); font-weight: 700; opacity: 0.9; }
 .ec-meta-val { color: var(--text-secondary); font-weight: 400; line-height: 1.5; }
-
 .ec-img-wrapper img { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); object-fit: contain; }
-.schedule-detail-empty { text-align: center; color: var(--text-muted); font-size: 13px; padding: 30px 0; font-weight: 300; }
+
+/* 일정이 없을 때 세로 정렬 중앙으로 완벽하게 */
+.schedule-detail-empty { text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 300; margin: auto 0; padding: 0; flex: 1; display: flex; align-items: center; justify-content: center; }
 
 /* 모바일 모달 바텀시트 유지 */
 @media (max-width: 1049px) {
     .calendar-popup-wrapper.active.split-active { transform: translate(-50%, -50%); }
     .calendar-popup-wrapper { width: 95%; height: 90vh; max-height: none; padding: 45px 12px 20px !important; }
-    .modal-wrapper { top: auto; bottom: 0; left: 0; right: 0; transform: translateY(100%); width: 100%; height: 80vh; border-radius: 20px 20px 0 0; }
+    .modal-wrapper { top: auto; bottom: 0; left: 0; right: 0; transform: translateY(100%); width: 100%; height: 80vh; border-radius: 20px 20px 0 0; max-width: 100%; }
     .modal-wrapper.active { transform: translateY(0); z-index: 9999; }
     #calendarPopupModal .close-btn { top: 8px !important; right: 8px !important; padding: 5px !important; }
     .calendar-header-controls { margin-bottom: 15px !important; }
@@ -137,13 +133,13 @@ html[data-theme="light"] .ec-card { background: #fdfdfd; border: 1px solid rgba(
 }
 
 /* =========================================
-   ⭐️ 앨범 상세 모달 (MV + 트랙리스트, 가로형)
+   앨범 상세 모달 (MV + 트랙리스트, 가로형)
 ========================================= */
 .album-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
     width: 92%; max-width: 1080px; height: 82vh; max-height: 720px;
     background: var(--bg-base); border: 1px solid var(--border-light); border-radius: 20px;
-    display: flex; flex-direction: row; overflow: hidden; z-index: 9999;
+    display: flex; flex-direction: row; overflow: hidden; z-index: 9950;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 30px 100px rgba(0,0,0,0.6); box-sizing: border-box;
@@ -154,11 +150,7 @@ html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
 .album-modal-media { flex: 1.3; background: #000; position: relative; min-width: 0; }
 .album-modal-media iframe { width: 100%; height: 100%; border: 0; display: block; }
 .album-cover-fallback { width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
-
-/* ⭐️ 앨범 커버 원본 화질 유지를 위해 렌더링 옵션 최적화 및 필터 강제 해제 */
-.album-cover-fallback img { width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2; filter: none !important; image-rendering: auto; }
 .album-cover-fallback::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(2px); }
-
 .album-audio-btn { position: relative; z-index: 2; background: #fff; color: #111; padding: 14px 26px; border-radius: 999px; font-family: var(--font-head); font-weight: 700; font-size: 13px; text-decoration: none; letter-spacing: 0.5px; transition: 0.25s; white-space: nowrap; }
 .album-audio-btn:hover { transform: scale(1.05); }
 .album-audio-btn-disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); cursor: default; }

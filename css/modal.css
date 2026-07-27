@@ -54,7 +54,7 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
 
 
 /* =========================================
-   ⭐️ 캘린더 스플릿 모달 & 고급 디테일 팝업
+   캘린더 스플릿 모달 & 고급 디테일 팝업
 ========================================= */
 .calendar-popup-wrapper { 
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%); 
@@ -69,7 +69,7 @@ html[data-theme="light"] .history-modal-wrapper { box-shadow: 0 20px 60px rgba(0
 html[data-theme="light"] .calendar-popup-wrapper { box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
 .calendar-popup-wrapper.active { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
 
-/* ⭐️ 화면이 넓을 때(1000px 이상) 서로 밀어내며 겹치지 않는 스플릿 좌표 계산 */
+/* 화면이 넓을 때(1000px 이상) 서로 밀어내며 겹치지 않는 스플릿 좌표 계산 */
 @media (min-width: 1000px) {
     .calendar-popup-wrapper.active.split-active { 
         transform: translate(calc(-50% - 210px), -50%); 
@@ -104,7 +104,7 @@ html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05
 /* 투명 백드롭 (디테일 모달용) */
 #modalBackdrop { background: transparent; backdrop-filter: none; z-index: 9905; }
 
-/* ⭐️ 고급 디테일 창 (오른쪽 팝업) */
+/* 고급 디테일 창 */
 .modal-wrapper { 
     position: fixed; z-index: 9910; top: 50%; left: 50%; 
     width: 420px; height: 85vh; max-height: 750px; 
@@ -112,31 +112,33 @@ html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05
     border-radius: 20px; box-sizing: border-box; 
     box-shadow: 0 30px 80px rgba(0,0,0,0.6); 
     transform: translate(100vw, -50%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s; 
-    opacity: 0; pointer-events: none; 
-    overflow: hidden; /* 스크롤바가 테두리 모서리를 침범하지 못하게 막음 */
-    display: flex; flex-direction: column;
+    /* ⭐️ 모바일 환경을 포함하여 전역으로 보이도록 속성 분리 */
+    opacity: 0; visibility: hidden; pointer-events: none; 
+    overflow: hidden; display: flex; flex-direction: column;
 }
 html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
 
-@media (min-width: 1000px) {
-    .modal-wrapper.active { 
-        opacity: 1; pointer-events: auto; 
-        transform: translate(calc(-50% + 330px), -50%); 
-    }
+/* ⭐️ 모달 활성화 시 무조건 나타나게 설정 (오류 완벽 해결) */
+.modal-wrapper.active { 
+    opacity: 1; visibility: visible; pointer-events: auto; 
 }
 
-/* ⭐️ 모달 내부 텍스트 영역 (스크롤 생성 구간) */
+@media (min-width: 1000px) {
+    .modal-wrapper.active { transform: translate(calc(-50% + 330px), -50%); }
+}
+
+/* 모달 내부 텍스트 영역 (스크롤 생성 구간) */
 #modalScheduleText {
     padding: 50px 40px;
     overflow-y: auto;
     flex: 1; height: 100%; box-sizing: border-box;
 }
 
-/* ⭐️ 커스텀 스크롤바 (깔끔하게 벽에 붙어서 나옴) */
+/* 커스텀 스크롤바 (깔끔하게 벽에 붙어서 나옴) */
 #modalScheduleText::-webkit-scrollbar { width: 6px; }
 #modalScheduleText::-webkit-scrollbar-thumb { background: rgba(150,150,150,0.3); border-radius: 10px; }
 
-/* ⭐️ 4번 이미지를 모티브로 한 고급 타이포그래피 카드 레이아웃 */
+/* 고급 타이포그래피 카드 레이아웃 */
 .elegant-date-header { 
     font-family: var(--font-head); font-size: 26px; font-weight: 200; 
     color: var(--text-primary); margin-bottom: 30px; padding-bottom: 20px; 

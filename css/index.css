@@ -11,7 +11,9 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
 .debut-timer .d-day { font-family: var(--font-head); font-size: 28px; font-weight: 200; color: var(--text-on-media); letter-spacing: 4px; margin-bottom: 8px; }
 .debut-timer .time-flow { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: rgba(244,244,245,0.7); letter-spacing: 3px; }
 
-html, body { scroll-snap-type: y mandatory; overflow-x: hidden; }
+/* ⭐️ 전체 가로 스크롤 완전 차단 (Full Size View 튀어나오는 문제 완벽 해결) */
+html, body { scroll-snap-type: y mandatory; overflow-x: hidden; width: 100%; position: relative; }
+
 .section-container { padding: 0 20px; max-width: 1040px; margin: 0 auto; position: relative; z-index: 2; }
 .full-page-section { height: 100vh; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; scroll-snap-align: start; }
 .full-page-section > .section-inner, .full-page-section .section-header { width: 100%; }
@@ -23,11 +25,7 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; }
 .slow-reveal { opacity: 0; transform: translateY(60px); transition: opacity 3s cubic-bezier(0.22, 1, 0.36, 1), transform 3s cubic-bezier(0.22, 1, 0.36, 1); }
 .slow-reveal.active { opacity: 1; transform: translateY(0); }
 
-.header-lang-container { display: flex; gap: 4px; align-items: center; background: var(--bg-surface); border: 1px solid var(--border-light); padding: 3px; border-radius: 20px; margin-left: 5px; }
-.lang-btn { background: transparent; border: none; color: var(--text-secondary); font-family: var(--font-head); font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 14px; cursor: pointer; transition: 0.3s ease; letter-spacing: 0.5px; }
-.lang-btn:hover { color: var(--text-primary); }
-.lang-btn.active { background: var(--text-primary); color: var(--bg-base); font-weight: 700; }
-
+/* 전체화면 이미지 모달 */
 .image-modal-backdrop { z-index: 99990; }
 .image-modal-wrapper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); z-index: 99995; opacity: 0; visibility: hidden; pointer-events: none; transition: 0.3s ease; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; padding: 20px; box-sizing: border-box; }
 .image-modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
@@ -43,7 +41,6 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; }
 .ticker-platform { width: 70px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .p-logo { font-family: var(--font-head); font-size: 12px; font-weight: 800; color: var(--text-secondary); letter-spacing: 1px; }
 .p-logo-img { max-height: 20px !important; max-width: 60px !important; width: auto !important; height: auto !important; object-fit: contain; display: block; }
-
 .ticker-songs { display: flex; gap: 40px; overflow: hidden; white-space: nowrap; flex: 1; align-items: center; min-width: 0; }
 .ticker-song-info { display: flex; align-items: center; gap: 10px; font-size: 14px; font-family: var(--font-num); flex-shrink: 0; white-space: nowrap; }
 .ticker-song-info .title { color: var(--text-primary); font-weight: 400; font-family: var(--font-body); }
@@ -51,11 +48,10 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; }
 .rank-diff { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); }
 html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
 
-/* ⭐️ 새로 추가된 서브 헤더 (PROFILE PHOTO / ALBUM) */
+/* 서브 헤더 (PROFILE PHOTO / ALBUM) */
 .archive-sub-header { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--text-secondary); width: 100%; text-align: left; letter-spacing: 1px; margin-bottom: 10px; }
 .mt-40 { margin-top: 40px; }
 
-/* 프로필 아카이브 영역 */
 .profile-scroll-wrapper { position: relative; width: 100%; overflow: hidden; padding: 10px 0; }
 .profile-scroll-wrapper::before, .profile-scroll-wrapper::after { content: ''; position: absolute; top: 0; width: 50px; height: 100%; z-index: 5; pointer-events: none; }
 .profile-scroll-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg-base), transparent); }
@@ -129,8 +125,11 @@ html[data-theme="light"] .shorts-card{ background:var(--bg-surface); }
 .shorts-more svg{ color:var(--text-muted); }
 .shorts-more:hover{ color:var(--text-primary); }
 
+/* ⭐️ 헤더 버튼 위치 정상화를 위한 강제 고정 CSS (오류 해결) */
 .plain-link{ color:inherit; text-decoration:none; }
 .util-reset{ margin-left:0; padding-left:0; border-left:none; }
+.lang-switcher-inline{ position:static !important; opacity:1 !important; pointer-events:auto !important; transform:none !important; background:transparent !important; border:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; padding:0 !important; display: flex; align-items: center; }
+.lang-switcher-inline.mobile-lang{ margin-top:40px !important; align-self:flex-start !important; }
 .nav-divider{ margin:0; padding:0; width:0; height:18px; align-self:center; border-left:1px solid var(--border-light); }
 .sns-icon-sm{ transform:scale(0.75); }
 .section-header-sm{ margin-bottom:24px; }
@@ -151,7 +150,13 @@ html[data-theme="light"] .shorts-card{ background:var(--bg-surface); }
     .update-time { position: static; margin-top: 10px; }
     .section-header.center-header { align-items: center; flex-direction: column; }
     
-    .profile-scroll-wrapper { padding: 0 calc(50vw - 120px); overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+    /* ⭐️ 모바일 프로필 스와이프 기능 복구 */
+    .profile-scroll-wrapper { 
+        padding: 0 calc(50vw - 120px); 
+        overflow-x: auto; 
+        scroll-snap-type: x mandatory; 
+        -webkit-overflow-scrolling: touch; 
+    }
     .profile-scroll-wrapper::-webkit-scrollbar { display: none; }
     .profile-track { animation: none; width: max-content; }
     .profile-item { scroll-snap-align: center; }

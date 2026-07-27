@@ -4,7 +4,6 @@
 .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(18,19,24,0.2) 0%, rgba(18,19,24,0.6) 60%, var(--bg-base) 100%); z-index: 2; }
 html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 60%, var(--bg-base) 100%); }
 
-/* 히어로 영역 등장 애니메이션 */
 .hero-content { position: relative; z-index: 5; text-align: center; margin-top: 60px; opacity: 0; animation: heroFadeIn 1.5s ease-out forwards; }
 @keyframes heroFadeIn { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
 .hero-logo { max-width: 220px; width: 50%; filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5)); }
@@ -12,7 +11,6 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
 .debut-timer .d-day { font-family: var(--font-head); font-size: 28px; font-weight: 200; color: var(--text-on-media); letter-spacing: 4px; margin-bottom: 8px; }
 .debut-timer .time-flow { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: rgba(244,244,245,0.7); letter-spacing: 3px; }
 
-/* ⭐️ 100vh 섹션 스냅 및 전체 가로 스크롤 방지(오류 해결) */
 html, body { scroll-snap-type: y mandatory; overflow-x: hidden; }
 .section-container { padding: 0 20px; max-width: 1040px; margin: 0 auto; position: relative; z-index: 2; }
 .full-page-section { height: 100vh; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; scroll-snap-align: start; }
@@ -25,29 +23,20 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; }
 .slow-reveal { opacity: 0; transform: translateY(60px); transition: opacity 3s cubic-bezier(0.22, 1, 0.36, 1), transform 3s cubic-bezier(0.22, 1, 0.36, 1); }
 .slow-reveal.active { opacity: 1; transform: translateY(0); }
 
-/* 상단 언어 유틸 */
 .header-lang-container { display: flex; gap: 4px; align-items: center; background: var(--bg-surface); border: 1px solid var(--border-light); padding: 3px; border-radius: 20px; margin-left: 5px; }
 .lang-btn { background: transparent; border: none; color: var(--text-secondary); font-family: var(--font-head); font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 14px; cursor: pointer; transition: 0.3s ease; letter-spacing: 0.5px; }
 .lang-btn:hover { color: var(--text-primary); }
 .lang-btn.active { background: var(--text-primary); color: var(--bg-base); font-weight: 700; }
 
-/* ⭐️ 전체화면 이미지 모달 (Full Size View 텍스트 노출 오류 완벽 해결) */
 .image-modal-backdrop { z-index: 99990; }
-.image-modal-wrapper {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
-    z-index: 99995; opacity: 0; visibility: hidden; pointer-events: none; transition: 0.3s ease;
-    display: flex; justify-content: center; align-items: center;
-    width: 100%; height: 100%; padding: 20px; box-sizing: border-box;
-}
+.image-modal-wrapper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); z-index: 99995; opacity: 0; visibility: hidden; pointer-events: none; transition: 0.3s ease; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; padding: 20px; box-sizing: border-box; }
 .image-modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
 .image-modal-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
 
-/* 공통 헤더 및 업데이트 */
 .section-header { position: relative; margin-bottom: 20px; display: flex; align-items: flex-end; }
 .section-header.center-header { justify-content: center; text-align: center; }
 .update-time { position: absolute; right: 10px; top: -30px; font-family: var(--font-num); font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
-/* 차트 Ticker */
 .ticker-container { height: 56px; overflow: hidden; background: var(--bg-surface); border-radius: 14px; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }
 .ticker-wrapper { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
 .ticker-item { height: 56px; display: flex; align-items: center; padding: 0 25px; gap: 30px; width: 100%; box-sizing: border-box; }
@@ -55,7 +44,6 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; }
 .p-logo { font-family: var(--font-head); font-size: 12px; font-weight: 800; color: var(--text-secondary); letter-spacing: 1px; }
 .p-logo-img { max-height: 20px !important; max-width: 60px !important; width: auto !important; height: auto !important; object-fit: contain; display: block; }
 
-/* ⭐️ 차트 영역 모바일 가로 넘어감 방지 (min-width: 0 추가) */
 .ticker-songs { display: flex; gap: 40px; overflow: hidden; white-space: nowrap; flex: 1; align-items: center; min-width: 0; }
 .ticker-song-info { display: flex; align-items: center; gap: 10px; font-size: 14px; font-family: var(--font-num); flex-shrink: 0; white-space: nowrap; }
 .ticker-song-info .title { color: var(--text-primary); font-weight: 400; font-family: var(--font-body); }
@@ -63,7 +51,11 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; }
 .rank-diff { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); }
 html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
 
-/* 프로필 아카이브 - 자동 마키(Marquee) 애니메이션 */
+/* ⭐️ 새로 추가된 서브 헤더 (PROFILE PHOTO / ALBUM) */
+.archive-sub-header { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--text-secondary); width: 100%; text-align: left; letter-spacing: 1px; margin-bottom: 10px; }
+.mt-40 { margin-top: 40px; }
+
+/* 프로필 아카이브 영역 */
 .profile-scroll-wrapper { position: relative; width: 100%; overflow: hidden; padding: 10px 0; }
 .profile-scroll-wrapper::before, .profile-scroll-wrapper::after { content: ''; position: absolute; top: 0; width: 50px; height: 100%; z-index: 5; pointer-events: none; }
 .profile-scroll-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg-base), transparent); }
@@ -137,11 +129,8 @@ html[data-theme="light"] .shorts-card{ background:var(--bg-surface); }
 .shorts-more svg{ color:var(--text-muted); }
 .shorts-more:hover{ color:var(--text-primary); }
 
-/* 유틸리티 클래스 */
 .plain-link{ color:inherit; text-decoration:none; }
 .util-reset{ margin-left:0; padding-left:0; border-left:none; }
-.lang-switcher-inline{ position:static !important; opacity:1 !important; pointer-events:auto !important; transform:none !important; background:transparent !important; border:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; padding:0 !important; }
-.lang-switcher-inline.mobile-lang{ margin-top:40px !important; align-self:flex-start !important; }
 .nav-divider{ margin:0; padding:0; width:0; height:18px; align-self:center; border-left:1px solid var(--border-light); }
 .sns-icon-sm{ transform:scale(0.75); }
 .section-header-sm{ margin-bottom:24px; }
@@ -162,13 +151,7 @@ html[data-theme="light"] .shorts-card{ background:var(--bg-surface); }
     .update-time { position: static; margin-top: 10px; }
     .section-header.center-header { align-items: center; flex-direction: column; }
     
-    /* ⭐️ 모바일 프로필 스와이프 기능 복구 */
-    .profile-scroll-wrapper { 
-        padding: 0 calc(50vw - 120px); 
-        overflow-x: auto; 
-        scroll-snap-type: x mandatory; 
-        -webkit-overflow-scrolling: touch; 
-    }
+    .profile-scroll-wrapper { padding: 0 calc(50vw - 120px); overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
     .profile-scroll-wrapper::-webkit-scrollbar { display: none; }
     .profile-track { animation: none; width: max-content; }
     .profile-item { scroll-snap-align: center; }

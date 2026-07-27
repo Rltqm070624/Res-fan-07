@@ -133,7 +133,7 @@ function openModal(year, month, day, dateKey) {
             let dotColor = item.color ? item.color : 'var(--c-accent)';
             let label = typeLabelMap[item.type] || item.type || '일정';
             let time = item.time ? item.time : timeTbd;
-            scheduleHtml += `<div class="ec-card" style="--ec-accent: ${dotColor};"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">${label}</span><h2 class="ec-title">${item.title}</h2><div class="ec-meta"><div class="ec-meta-row"><span class="ec-meta-label">${timeLabel}</span><span class="ec-meta-val">${time}</span></div></div>`;
+            scheduleHtml += `<div class="ec-card"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">${label}</span><h2 class="ec-title">${item.title}</h2><div class="ec-meta"><div class="ec-meta-row"><span class="ec-meta-label">${timeLabel}</span><span class="ec-meta-val">${time}</span></div></div>`;
             if (item.image) scheduleHtml += `<div class="ec-img-wrapper"><img src="${SITE_ROOT}${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`;
             scheduleHtml += `</div>`;
         });

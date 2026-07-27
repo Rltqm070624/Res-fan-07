@@ -19,25 +19,10 @@ html[data-theme="light"] .lang-switcher { background: rgba(247, 247, 245, 0.8); 
 .lang-switcher button.active { background: var(--text-primary); color: var(--bg-base); }
 .lang-switcher button[data-lang="ja"] { font-family: var(--font-body); font-size: 11px; letter-spacing: 0; }
 
-body:has(#historyModal.active) .lang-switcher, body:has(#calendarPopupModal.active) .lang-switcher,
+body:has(#calendarPopupModal.active) .lang-switcher,
 body:has(#scheduleModal.active) .lang-switcher, body:has(#mobileMenuPanel.active) .lang-switcher { opacity: 0; pointer-events: none; transform: translateY(10px); }
-
-html[lang="ja"] .h-date, html[lang="ja"] .h-title, html[lang="ja"] .timeline-link-text { font-family: 'Yomogi', 'Nanum Pen Script', cursive; }
-html[lang="ja"] .h-date { font-size: 82px; letter-spacing: 4px; } html[lang="ja"] .h-title { font-size: 42px; letter-spacing: 1px; } html[lang="ja"] .timeline-link-text { font-size: 40px; }
-html[lang="en"] .h-title { font-size: 46px; } html[lang="en"] .timeline-link-text { font-size: 44px; }
 
 @media (max-width: 800px) {
     .lang-switcher { left: 14px; bottom: 14px; padding: 3px; }
     .lang-switcher button { padding: 6px 10px; font-size: 10px; }
-    .h-date { font-size: 40px; letter-spacing: 3px; }
-    .h-title { font-size: 24px; }
-    .timeline-link-text { font-size: 22px; }
-    html[lang="ja"] .h-date { font-size: 48px; letter-spacing: 2px; } html[lang="ja"] .h-title { font-size: 26px; } html[lang="ja"] .timeline-link-text { font-size: 24px; }
-    html[lang="en"] .h-title { font-size: 28px; } html[lang="en"] .timeline-link-text { font-size: 26px; }
 }
-
-/* ⭐️ 구글 자동 번역 시 뜨는 상단 회색 툴바 완벽하게 숨김 처리 */
-.skiptranslate { display: none !important; }
-body { top: 0 !important; }
-#goog-gt-tt { display: none !important; }
-font { background: transparent !important; }

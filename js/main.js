@@ -1,8 +1,3 @@
-/* =========================================
-   공통 유틸리티
-   ⭐️ 다크모드 / 햄버거메뉴 / reveal 애니메이션 / 캘린더-스케줄은
-      js/common.js 로 옮겨졌습니다. (모든 페이지 공용, 여기서 중복 정의 금지)
-========================================= */
 const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
 setInterval(() => {
     const diff = new Date() - debutDate;
@@ -130,7 +125,11 @@ function renderProfileArchive() {
     }
 
     // ⭐️ 앨범 커버/순서/트랙 정보는 js/albums.js (앨범 모음.txt 기준) 참고
-    renderAlbumGrid();
+    if (typeof renderAlbumGrid === 'function') {
+        try { renderAlbumGrid(); } catch (e) { console.error('renderAlbumGrid 실패:', e); }
+    } else {
+        console.warn('js/albums.js 가 로드되지 않았습니다. index.html의 <script src="js/albums.js"> 및 파일 존재 여부를 확인하세요.');
+    }
 }
 
 // ⭐️ 마우스로 좌우 드래그해서 넘겨볼 수 있게 (터치는 브라우저가 기본으로 지원)
@@ -188,8 +187,8 @@ function renderShortsGallery() {
 }
 
 window.addEventListener('DOMContentLoaded', () => { 
-    renderProfileArchive();
-    renderShortsGallery();
-    fetchSongCharts();
+    try { renderProfileArchive(); } catch (e) { console.error('renderProfileArchive 실패:', e); }
+    try { renderShortsGallery(); } catch (e) { console.error('renderShortsGallery 실패:', e); }
+    try { fetchSongCharts(); } catch (e) { console.error('fetchSongCharts 실패:', e); }
     setInterval(fetchSongCharts, 60000);
 });

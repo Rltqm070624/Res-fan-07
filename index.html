@@ -21,6 +21,7 @@
             document.documentElement.setAttribute('lang', savedLang);
         })();
     </script>
+    <!-- ⭐️ 기획자님이 원래 가지고 계시던 자체 번역 스크립트 연결 -->
     <script src="js/i18n.js"></script>
 </head>
 <body id="homeSection">
@@ -36,12 +37,11 @@
         </ul>
         
         <div class="nav-right">
-            <!-- ⭐️ 클래스 원상 복구 완료 -->
             <div class="desktop-only-utils util-reset">
                 <div class="lang-switcher lang-switcher-inline" role="group" aria-label="Language">
-                    <button type="button" data-lang="ko" onclick="setLang('ko')">KOR</button>
-                    <button type="button" data-lang="en" onclick="setLang('en')">ENG</button>
-                    <button type="button" data-lang="ja" onclick="setLang('ja')">日本語</button>
+                    <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko')">KOR</button>
+                    <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">ENG</button>
+                    <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>
                 </div>
             </div>
             <span class="desktop-only-utils nav-divider" aria-hidden="true"></span>
@@ -77,10 +77,10 @@
             <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection'); toggleMobileMenu();">SCHEDULE</a></li>
             <li><a href="goods/goods.html">GOODS</a></li>
         </ul>
-        <div class="lang-switcher lang-switcher-inline mobile-lang" role="group" aria-label="Language">
-            <button type="button" data-lang="ko" onclick="setLang('ko')">KOR</button>
-            <button type="button" data-lang="en" onclick="setLang('en')">ENG</button>
-            <button type="button" data-lang="ja" onclick="setLang('ja')">日本語</button>
+        <div class="header-lang-container mobile-lang" role="group" aria-label="Language">
+            <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko')">KOR</button>
+            <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">ENG</button>
+            <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>
         </div>
     </div>
 
@@ -107,8 +107,10 @@
                 <div class="section-header center-header section-header-md">
                     <div class="section-title">RESCENE <span>ARCHIVE</span></div>
                 </div>
+                
                 <div class="archive-sub-header">PROFILE PHOTO</div>
                 <div class="profile-scroll-wrapper" id="profileScroll"></div>
+
                 <div class="archive-sub-header mt-40">ALBUM</div>
                 <div class="profile-scroll-wrapper" id="albumScroll"></div>
             </div>
@@ -153,17 +155,21 @@
         </footer>
     </div> 
 
+    <!-- 이미지 확대 모달 -->
     <div class="modal-backdrop image-modal-backdrop" id="imageModalBackdrop" onclick="closeImageModal()"></div>
     <div class="image-modal-wrapper" id="imageModal" onclick="closeImageModal()">
         <img src="" id="fullSizeImage" alt="Full Size View">
     </div>
 
+    <!-- ⭐️ 발자취 시네마틱 모달 (정상 작동 구조) -->
     <div class="modal-backdrop" id="historyBackdrop" onclick="closeHistoryModal()"></div>
     <div class="history-modal-wrapper" id="historyModal">
         <button class="timeline-link-text" onclick="openDetailedTimeline()">걸어온 길을 다시 한 번 걸어 볼까요?</button>
         <div id="tvContainer" class="tv-container">
             <div class="modal-menu-container">
-                <button class="modal-hamburger-btn" onclick="toggleHistoryMenu()" id="historyMenuBtn"><span></span><span></span><span></span></button>
+                <button class="modal-hamburger-btn" onclick="toggleHistoryMenu()" id="historyMenuBtn">
+                    <span></span><span></span><span></span>
+                </button>
                 <div class="history-dropdown" id="historyDropdown">
                     <button onclick="closeHistoryModal()">창 닫기</button>
                     <button onclick="skipHistorySequence()">영상 스킵하기</button>
@@ -181,12 +187,18 @@
                 </div>
             </div>
             <div class="history-player-bar" id="historyPlayerBar">
-                <div class="history-progress-container" id="historyProgressContainer" onclick="seekTimeline(event)"><div class="history-progress-bar" id="historyProgressBar"></div></div>
-                <div class="history-player-info"><span id="historyCurrentChapter">RESCENE ARCHIVE</span><span id="historyTimeIndicator">00:00 / 00:30</span></div>
+                <div class="history-progress-container" id="historyProgressContainer" onclick="seekTimeline(event)">
+                    <div class="history-progress-bar" id="historyProgressBar"></div>
+                </div>
+                <div class="history-player-info">
+                    <span id="historyCurrentChapter">RESCENE ARCHIVE</span>
+                    <span id="historyTimeIndicator">00:00 / 00:30</span>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- 캘린더 모달 -->
     <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
     <div class="calendar-popup-wrapper" id="calendarPopupModal">
         <button class="popup-close-btn" onclick="closeCalendarPopup()" aria-label="캘린더 닫기">
@@ -201,6 +213,7 @@
         <div class="calendar-grid" id="calendarDays"></div>
     </div>
 
+    <!-- 세부 일정 모달 -->
     <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
     <div class="modal-wrapper" id="scheduleModal">
         <button class="popup-close-btn" onclick="closeModal()" aria-label="일정 닫기">

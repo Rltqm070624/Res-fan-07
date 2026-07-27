@@ -83,10 +83,14 @@ function renderCalendar() {
         const data = scheduleDB[dateKey]; const hasEvent = data && data.items && data.items.length > 0 ? 'has-event' : '';
         let eventsHtml = '';
         if (data && data.items) {
-            data.items.forEach(item => {
+            const MAX_VISIBLE = 3;
+            data.items.slice(0, MAX_VISIBLE).forEach(item => {
                 let dotColor = item.color ? item.color : 'var(--c-accent)';
-                eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div><div class="cal-event-title">${item.title}</div></div>`;
+                eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div></div>`;
             });
+            if (data.items.length > MAX_VISIBLE) {
+                eventsHtml += `<div class="cal-event-more">+${data.items.length - MAX_VISIBLE}</div>`;
+            }
         }
         html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`;
     }
@@ -148,4 +152,4 @@ function closeModal() {
     if (scheduleModal) scheduleModal.classList.remove('active'); if (backdrop) backdrop.classList.remove('active'); if (calModal) calModal.classList.remove('split-active');
 }
 
-window.addEventListener('DOMContentLoaded', () => { fetchScheduleData(); }); 
+window.addEventListener('DOMContentLoaded', () => { fetchScheduleData(); });

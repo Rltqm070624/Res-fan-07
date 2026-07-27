@@ -52,17 +52,13 @@ html[data-theme="light"] .rank-diff { background: rgba(0,0,0,0.05); }
 .archive-sub-header { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--text-secondary); width: 100%; text-align: left; letter-spacing: 1px; margin-bottom: 10px; }
 .mt-40 { margin-top: 40px; }
 
-.profile-scroll-wrapper { position: relative; width: 100%; overflow: hidden; padding: 10px 0; }
+.profile-scroll-wrapper { position: relative; width: 100%; padding: 10px 0; overflow-x: auto; overflow-y: hidden; cursor: grab; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; }
+.profile-scroll-wrapper::-webkit-scrollbar { display: none; }
+.profile-scroll-wrapper.dragging { cursor: grabbing; scroll-behavior: auto; user-select: none; }
 .profile-scroll-wrapper::before, .profile-scroll-wrapper::after { content: ''; position: absolute; top: 0; width: 50px; height: 100%; z-index: 5; pointer-events: none; }
 .profile-scroll-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg-base), transparent); }
 .profile-scroll-wrapper::after { right: 0; background: linear-gradient(to left, var(--bg-base), transparent); }
-.profile-track { display: flex; gap: 16px; width: max-content; animation: marquee 35s linear infinite; }
-.profile-track:hover { animation-play-state: paused; }
-@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-50% - 8px)); } }
-
-/* ⭐️ 앨범은 프로필(10장)의 2배(20장)라 같은 체감 속도를 내려면 시간도 2배로, 방향은 반대로 */
-.album-track { animation: marqueeReverse 70s linear infinite; }
-@keyframes marqueeReverse { 0% { transform: translateX(calc(-50% - 8px)); } 100% { transform: translateX(0); } }
+.profile-track { display: flex; gap: 16px; width: max-content; }
 
 .profile-item { position: relative; flex: 0 0 auto; width: 150px; aspect-ratio: 3/4; border-radius: 14px; overflow: hidden; background: var(--bg-surface); cursor: pointer; }
 .profile-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }

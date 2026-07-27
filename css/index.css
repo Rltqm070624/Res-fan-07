@@ -19,8 +19,6 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; width: 100%; pos
 .full-page-section > .section-inner, .full-page-section .section-header { width: 100%; }
 #historySection { position: relative; width: 100%; height: 100vh; height: 100dvh; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; overflow: hidden; }
 #historySection .section-title { position: relative; z-index: 5; margin-bottom: 15px; font-size: 54px; letter-spacing: 2px; }
-#historySection .history-text-link { position: relative; z-index: 5; background: transparent; border: none; color: var(--text-secondary); font-size: 15px; font-weight: 500; font-family: var(--font-body); cursor: pointer; padding: 10px 15px; transition: 0.4s ease; letter-spacing: 0.5px; }
-#historySection .history-text-link:hover { color: var(--text-primary); transform: translateY(-2px); }
 
 .slow-reveal { opacity: 0; transform: translateY(60px); transition: opacity 3s cubic-bezier(0.22, 1, 0.36, 1), transform 3s cubic-bezier(0.22, 1, 0.36, 1); }
 .slow-reveal.active { opacity: 1; transform: translateY(0); }
@@ -132,6 +130,7 @@ html[data-theme="light"] .shorts-card{ background:var(--bg-surface); }
 .lang-switcher-inline.mobile-lang{ margin-top:40px !important; align-self:flex-start !important; }
 .nav-divider{ margin:0; padding:0; width:0; height:18px; align-self:center; border-left:1px solid var(--border-light); }
 .sns-icon-sm{ transform:scale(0.75); }
+.footer-sns .sns-icon-sm{ transform:scale(0.66); }
 .section-header-sm{ margin-bottom:24px; }
 .section-header-md{ margin-bottom:30px; }
 .chart-wrap{ position:relative; width:100%; }

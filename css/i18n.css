@@ -6,10 +6,14 @@
     opacity: 0.5; transition: opacity 0.35s ease, transform 0.35s ease;
 }
 html[data-theme="light"] .lang-switcher { background: rgba(247, 247, 245, 0.8); }
+
 .lang-switcher:hover { opacity: 1; }
+
 .lang-switcher button {
-    background: transparent; border: none; cursor: pointer; padding: 7px 13px; border-radius: 999px;
-    font-family: var(--font-head); font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--text-secondary); white-space: nowrap; transition: 0.25s ease;
+    background: transparent; border: none; cursor: pointer;
+    padding: 7px 13px; border-radius: 999px;
+    font-family: var(--font-head); font-size: 11px; font-weight: 600;
+    letter-spacing: 1px; color: var(--text-secondary); white-space: nowrap; transition: 0.25s ease;
 }
 .lang-switcher button:hover { color: var(--text-primary); }
 .lang-switcher button.active { background: var(--text-primary); color: var(--bg-base); }
@@ -29,9 +33,7 @@ html[lang="en"] .h-title { font-size: 46px; } html[lang="en"] .timeline-link-tex
     html[lang="en"] .h-title { font-size: 28px; } html[lang="en"] .timeline-link-text { font-size: 26px; }
 }
 
-/* ==========================================================
-   ⭐️ 자동 번역 시 강제로 뜨는 구글 번역 상단 툴바 완벽 숨김 처리 
-   ========================================================== */
+/* ⭐️ 구글 자동 번역 시 뜨는 상단 회색 툴바 완벽하게 숨김 처리 */
 .skiptranslate { display: none !important; }
 body { top: 0 !important; }
 #goog-gt-tt { display: none !important; }

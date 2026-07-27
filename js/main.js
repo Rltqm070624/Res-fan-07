@@ -15,13 +15,11 @@ function toggleTheme() {
     localStorage.setItem('rescene-theme', next);
 }
 
-// 스크롤 시 섹션 나타나기 효과
 const observer = new IntersectionObserver((entries) => { 
     entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('active'); } }); 
 }, { threshold: 0.15 });
 document.querySelectorAll('.reveal, .slow-reveal').forEach(el => observer.observe(el));
 
-// 데뷔 타이머
 const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
 setInterval(() => {
     const diff = new Date() - debutDate;
@@ -81,41 +79,29 @@ const historyData = [
 ];
 window.historyData = historyData;
 
-let slotTimer;
-let seqTimeouts = [];
-let progressInterval;
-const TOTAL_DURATION_MS = 38000; 
-let currentElapsedMs = 0;
+let slotTimer; let seqTimeouts = []; let progressInterval;
+const TOTAL_DURATION_MS = 38000; let currentElapsedMs = 0;
 
 function clearHistorySequence() {
     clearInterval(slotTimer); clearInterval(progressInterval);
     seqTimeouts.forEach(clearTimeout); seqTimeouts = []; currentElapsedMs = 0;
     
-    const yt = document.getElementById('historyYoutubeBg');
-    const bg = document.getElementById('historyModalBg');
-    const dateEl = document.getElementById('seqDate');
-    const titleEl = document.getElementById('seqTitle');
-    const btnEl = document.querySelector('.timeline-link-text');
-    const progressBar = document.getElementById('historyProgressBar');
+    const yt = document.getElementById('historyYoutubeBg'), bg = document.getElementById('historyModalBg');
+    const dateEl = document.getElementById('seqDate'), titleEl = document.getElementById('seqTitle');
+    const btnEl = document.querySelector('.timeline-link-text'), progressBar = document.getElementById('historyProgressBar');
 
-    if(yt) yt.src = "";
-    if(bg) { bg.style.transition = "none"; bg.classList.remove('show'); }
+    if(yt) yt.src = ""; if(bg) { bg.style.transition = "none"; bg.classList.remove('show'); }
     if(dateEl) { dateEl.style.transition = "none"; dateEl.style.opacity = 1; dateEl.classList.remove('counting'); dateEl.innerText = ""; }
     if(titleEl) { titleEl.style.transition = ""; titleEl.style.transform = ""; titleEl.style.opacity = ""; titleEl.classList.remove('show'); }
-    if(btnEl) btnEl.classList.remove('show');
-    if(progressBar) progressBar.style.width = '0%';
+    if(btnEl) btnEl.classList.remove('show'); if(progressBar) progressBar.style.width = '0%';
     
-    const dropdown = document.getElementById('historyDropdown');
-    const menuBtn = document.getElementById('historyMenuBtn');
-    if(dropdown) dropdown.classList.remove('active');
-    if(menuBtn) menuBtn.classList.remove('active');
+    const dropdown = document.getElementById('historyDropdown'), menuBtn = document.getElementById('historyMenuBtn');
+    if(dropdown) dropdown.classList.remove('active'); if(menuBtn) menuBtn.classList.remove('active');
 }
 
 function startProgressTracker(startFromMs = 0) {
-    const progressBar = document.getElementById('historyProgressBar');
-    const timeIndicator = document.getElementById('historyTimeIndicator');
-    const startTime = Date.now() - startFromMs;
-    currentElapsedMs = startFromMs;
+    const progressBar = document.getElementById('historyProgressBar'), timeIndicator = document.getElementById('historyTimeIndicator');
+    const startTime = Date.now() - startFromMs; currentElapsedMs = startFromMs;
     
     if (!progressBar) return;
     progressInterval = setInterval(() => {
@@ -124,11 +110,8 @@ function startProgressTracker(startFromMs = 0) {
         if (percent > 100) percent = 100;
         progressBar.style.width = percent + '%';
         
-        const currentSec = Math.floor(currentElapsedMs / 1000);
-        const totalSec = Math.floor(TOTAL_DURATION_MS / 1000);
-        if (timeIndicator) {
-            timeIndicator.innerText = `${String(Math.floor(currentSec / 60)).padStart(2, '0')}:${String(currentSec % 60).padStart(2, '0')} / ${String(Math.floor(totalSec / 60)).padStart(2, '0')}:${String(totalSec % 60).padStart(2, '0')}`;
-        }
+        const currentSec = Math.floor(currentElapsedMs / 1000), totalSec = Math.floor(TOTAL_DURATION_MS / 1000);
+        if (timeIndicator) timeIndicator.innerText = `${String(Math.floor(currentSec / 60)).padStart(2, '0')}:${String(currentSec % 60).padStart(2, '0')} / ${String(Math.floor(totalSec / 60)).padStart(2, '0')}:${String(totalSec % 60).padStart(2, '0')}`;
     }, 100);
 }
 
@@ -136,16 +119,14 @@ function startHistorySequence(skipToMs = 0) {
     clearHistorySequence(); startProgressTracker(skipToMs);
     if (skipToMs > 0) { jumpToTime(skipToMs); return; }
 
-    const dateEl = document.getElementById('seqDate');
-    const titleEl = document.getElementById('seqTitle');
-    const bg = document.getElementById('historyModalBg');
-    const yt = document.getElementById('historyYoutubeBg');
+    const dateEl = document.getElementById('seqDate'), titleEl = document.getElementById('seqTitle');
+    const bg = document.getElementById('historyModalBg'), yt = document.getElementById('historyYoutubeBg');
     const chapterEl = document.getElementById('historyCurrentChapter');
     
     if (chapterEl) chapterEl.innerText = "DEBUT ARCHIVE";
     dateEl.classList.add('counting'); dateEl.style.transition = "none"; dateEl.innerText = "0000. 01. 01";
     
-    const startTime = Date.now(); const duration = 3000; const targetDays = (2024 * 365) + (3 * 30) + 26; 
+    const startTime = Date.now(), duration = 3000, targetDays = (2024 * 365) + (3 * 30) + 26; 
     
     seqTimeouts.push(setTimeout(() => {
         slotTimer = setInterval(() => {
@@ -170,9 +151,7 @@ function startHistorySequence(skipToMs = 0) {
                         
                         seqTimeouts.push(setTimeout(() => {
                             bg.classList.remove('show'); titleEl.style.transform = "translateY(0)"; titleEl.style.transition = "opacity 1.5s ease"; titleEl.style.opacity = 0;
-                            seqTimeouts.push(setTimeout(() => {
-                                titleEl.classList.remove('show'); titleEl.style.transform = ""; playSequenceIdx(1);
-                            }, 1500)); 
+                            seqTimeouts.push(setTimeout(() => { titleEl.classList.remove('show'); titleEl.style.transform = ""; playSequenceIdx(1); }, 1500)); 
                         }, 5000));
                     }, 1000)); 
                 }, 2000));
@@ -411,7 +390,7 @@ function closeCalendarPopup() {
 
 function openModal(year, month, day, dateKey) {
     const calWrapper = document.getElementById('calendarPopupModal');
-    if (calWrapper && window.innerWidth > 800) calWrapper.classList.add('split-active');
+    if (calWrapper && window.innerWidth > 1000) calWrapper.classList.add('split-active'); // PC 환경일 때만 스플릿
 
     const dateTitle = `${year}년 ${month}월 ${day}일`; const data = scheduleDB[dateKey]; 
     let scheduleHtml = `<div class="elegant-date-header">${dateTitle}</div>`;
@@ -437,6 +416,56 @@ function closeModal() {
 
 
 /* =========================================
+   ⭐️ 삭제되었던 실시간 음원 차트 로직 복구
+========================================= */
+let tickerInterval;
+async function fetchSongCharts() {
+    try {
+        const response = await fetch('chart_data.json?t=' + new Date().getTime());
+        const data = await response.json();
+        const timeEl = document.getElementById('currentTime');
+        if(timeEl) timeEl.innerText = (data.update_time || new Date().toLocaleTimeString('ko-KR'));
+        
+        let tickerHtml = ''; let validCount = 0;
+        ["Melon", "Bugs", "Genie", "FLO", "VIBE"].forEach(platform => {
+            let songsHtml = '';
+            if (data.songs) {
+                for (const songTitle in data.songs) {
+                    const pd = data.songs[songTitle][platform];
+                    if (pd) {
+                        let rec = pd["실시간 (HOT100)"] || pd["실시간"] || pd["24시간"];
+                        if (rec) {
+                            let diffClass = 'diff-none'; let diffText = rec.diff;
+                            if (diffText === 'NEW' || diffText === '0' || diffText === '유지' || diffText === '') diffText = '-';
+                            if (diffText.includes('▲')) diffClass = 'diff-up'; else if (diffText.includes('▼')) diffClass = 'diff-down'; else if (diffText === 'NEW') diffClass = 'diff-new'; else if (diffText === '-') diffClass = 'diff-none';
+                            songsHtml += `<div class="ticker-song-info"><span class="title">${songTitle}</span><span class="rank">${rec.rank}</span><span class="rank-diff ${diffClass}">${diffText}</span></div>`;
+                        }
+                    }
+                }
+            }
+            if (songsHtml !== '') {
+                validCount++;
+                let logoHtml = `<span class="p-logo">${platform}</span>`;
+                if (platform === 'Melon') logoHtml = `<img src="images/melon.jpeg" alt="Melon" class="p-logo-img" onerror="this.style.display='none'">`;
+                if (platform === 'Bugs') logoHtml = `<img src="images/bugs.jpg" alt="Bugs" class="p-logo-img" onerror="this.style.display='none'">`;
+                tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${logoHtml}</div><div class="ticker-songs">${songsHtml}</div></div>`;
+            }
+        });
+        
+        const waitingMsg = (typeof t === 'function') ? t('chartWaiting') : '데이터 수집 중입니다.';
+        const wrapper = document.getElementById('tickerWrapper');
+        if(wrapper) {
+            wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">${waitingMsg}</div></div>`;
+            clearInterval(tickerInterval);
+            if (validCount > 1) {
+                let cIdx = 0;
+                tickerInterval = setInterval(() => { cIdx = (cIdx + 1) % validCount; wrapper.style.transform = `translateY(-${cIdx * 56}px)`; }, 4000); 
+            }
+        }
+    } catch (e) { console.log("차트 대기 중"); }
+}
+
+/* =========================================
    콘텐츠(아카이브, 쇼츠) 그리기
 ========================================= */
 function renderProfileArchive() {
@@ -456,9 +485,11 @@ function renderShortsGallery() {
     wrap.innerHTML = html;
 }
 
-// ⭐️ 초기화 실행
+// ⭐️ 모든 초기화 함수 실행 (차트 함수 포함됨)
 window.addEventListener('DOMContentLoaded', () => { 
     fetchScheduleData(); 
     renderProfileArchive();
     renderShortsGallery();
+    fetchSongCharts();
+    setInterval(fetchSongCharts, 60000);
 });

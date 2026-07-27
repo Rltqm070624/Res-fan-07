@@ -602,7 +602,7 @@ function renderProfileArchive() {
         albumImages.forEach(function(imgName) {
             ahtml += `<div class="profile-item" onclick="openImageModal('images/${imgName}')"><img src="images/${imgName}" alt="${imgName}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"></div>`;
         });
-        albumWrap.innerHTML = `<div class="profile-track">${ahtml}${ahtml}</div>`;
+        albumWrap.innerHTML = `<div class="profile-track album-track">${ahtml}${ahtml}</div>`;
     }
 }
 

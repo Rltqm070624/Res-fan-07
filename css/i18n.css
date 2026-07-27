@@ -29,6 +29,9 @@ html[lang="en"] .h-title { font-size: 46px; } html[lang="en"] .timeline-link-tex
 @media (max-width: 800px) {
     .lang-switcher { left: 14px; bottom: 14px; padding: 3px; }
     .lang-switcher button { padding: 6px 10px; font-size: 10px; }
+    .h-date { font-size: 40px; letter-spacing: 3px; }
+    .h-title { font-size: 24px; }
+    .timeline-link-text { font-size: 22px; }
     html[lang="ja"] .h-date { font-size: 48px; letter-spacing: 2px; } html[lang="ja"] .h-title { font-size: 26px; } html[lang="ja"] .timeline-link-text { font-size: 24px; }
     html[lang="en"] .h-title { font-size: 28px; } html[lang="en"] .timeline-link-text { font-size: 26px; }
 }

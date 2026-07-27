@@ -145,6 +145,17 @@ function openModal(year, month, day, dateKey) {
     const textEl = document.getElementById('modalScheduleText'); if (textEl) textEl.innerHTML = scheduleHtml;
     const scheduleModal = document.getElementById('scheduleModal'), backdrop = document.getElementById('modalBackdrop');
     if (scheduleModal) scheduleModal.classList.add('active'); if (backdrop) backdrop.classList.add('active');
+
+    // ⭐️ CSS만으로 안 먹히는 경우를 대비해 JS로 직접 높이를 계산해서 강제 지정 (데스크탑 분할 뷰에서만)
+    if (scheduleModal && textEl && window.innerWidth >= 1050) {
+        requestAnimationFrame(() => {
+            const contentHeight = textEl.scrollHeight;
+            const finalHeight = Math.min(Math.max(contentHeight, 200), window.innerHeight * 0.85);
+            scheduleModal.style.setProperty('height', finalHeight + 'px', 'important');
+        });
+    } else if (scheduleModal) {
+        scheduleModal.style.removeProperty('height');
+    }
 }
 
 function closeModal() {

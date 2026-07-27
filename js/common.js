@@ -83,7 +83,7 @@ function renderCalendar() {
         const data = scheduleDB[dateKey]; const hasEvent = data && data.items && data.items.length > 0 ? 'has-event' : '';
         let eventsHtml = '';
         if (data && data.items) {
-            const MAX_VISIBLE = 3;
+            const MAX_VISIBLE = 2;
             data.items.slice(0, MAX_VISIBLE).forEach(item => {
                 let dotColor = item.color ? item.color : 'var(--c-accent)';
                 eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div></div>`;

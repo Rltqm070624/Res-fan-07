@@ -75,18 +75,59 @@
                     <div class="section-title">RESCENE <span>ARCHIVE</span></div>
                 </div>
                 
-                <div class="archive-sub-header">PROFILE PHOTO</div>
-                <div class="profile-scroll-wrapper" id="profileScroll"></div>
-
-                <div class="archive-sub-header mt-40">ALBUM</div>
-                <div class="profile-scroll-wrapper" id="albumScroll"></div>
+                <div class="archive-split">
+                    <div class="archive-col">
+                        <div class="archive-sub-header">PROFILE PHOTO</div>
+                        <div class="profile-scroll-wrapper" id="profileScroll"></div>
+                    </div>
+                    <div class="archive-col">
+                        <div class="archive-sub-header">ALBUM</div>
+                        <div class="profile-scroll-wrapper" id="albumScroll"></div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <div class="section-container reveal" id="honorsSection">
+            <div class="section-header center-header section-header-md">
+                <div class="section-title">AWARDS & <span>AMBASSADOR</span></div>
+            </div>
+            <div class="honors-grid">
+                <div class="honors-card">
+                    <div class="honors-card-head">
+                        <div class="honors-card-title">음악방송 <span>1위</span></div>
+                        <div class="honors-count">3<span>회</span></div>
+                    </div>
+                    <ul class="honors-list" id="awardsPreviewList"></ul>
+                    <button type="button" class="honors-more-btn" onclick="openAwardsHistoryModal()">전체 히스토리 보기 →</button>
+                </div>
+                <div class="honors-card">
+                    <div class="honors-card-head">
+                        <div class="honors-card-title">광고 · <span>홍보대사</span></div>
+                        <div class="honors-count">29<span>건</span></div>
+                    </div>
+                    <div class="honors-chip-list" id="adsPreviewChips"></div>
+                    <button type="button" class="honors-more-btn" onclick="openAdsHistoryModal()">전체 히스토리 보기 →</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container reveal" id="latestMediaSection">
+            <div class="section-header center-header section-header-md">
+                <div class="section-title">YOUTUBE <span>모아보기</span></div>
+            </div>
+            <div class="latest-media-grid" id="latestMediaGrid"></div>
         </div>
 
         <div class="section-container reveal full-page-section" id="todayScheduleSection">
             <div class="section-header center-header section-header-sm">
                 <div class="section-title">TODAY'S <span>SCHEDULE</span></div>
             </div>
+
+            <div class="upcoming-strip-wrap">
+                <div class="upcoming-strip" id="upcomingStrip"></div>
+            </div>
+
             <div class="today-split">
                 <div class="today-cal-col">
                     <div class="calendar-header-controls">
@@ -112,47 +153,7 @@
             </div>
         </div>
 
-        <div class="section-container reveal" id="honorsSection">
-            <div class="section-header center-header section-header-md">
-                <div class="section-title">AWARDS & <span>AMBASSADOR</span></div>
-            </div>
-            <div class="honors-grid">
-                <div class="honors-card">
-                    <div class="honors-card-head">
-                        <div class="honors-card-title">음악방송 <span>1위</span></div>
-                        <div class="honors-count">3<span>회</span></div>
-                    </div>
-                    <ul class="honors-list">
-                        <li><span class="h-date">26.07.14</span><span class="h-name">더 쇼 · Pretty Girl</span><span class="h-tag">데뷔 첫 1위</span></li>
-                        <li><span class="h-date">26.07.25</span><span class="h-name">쇼! 음악중심 · Pretty Girl</span><span class="h-tag">지상파 첫 1위</span></li>
-                        <li><span class="h-date">26.07.26</span><span class="h-name">SBS 인기가요 · LOVE ATTACK</span><span class="h-tag">SBS 첫 1위</span></li>
-                    </ul>
-                </div>
-                <div class="honors-card">
-                    <div class="honors-card-head">
-                        <div class="honors-card-title">홍보<span>대사</span></div>
-                        <div class="honors-count">8<span>건</span></div>
-                    </div>
-                    <div class="honors-chip-list">
-                        <span class="h-chip">경상남도 거제시 <em>원이의 고향</em></span>
-                        <span class="h-chip">경기도 수원시 <em>리브의 고향</em></span>
-                        <span class="h-chip">경상북도 경주시 <em>제나의 고향</em></span>
-                        <span class="h-chip">경기도 고양시 <em>메이의 고향</em></span>
-                        <span class="h-chip">전남광주통합특별시 섬의 날</span>
-                        <span class="h-chip">캐릭터 라이선싱 페어 2026</span>
-                        <span class="h-chip">저스트 메이크업 IN TOKYO 2027</span>
-                        <span class="h-chip">MBC 아이치·나고야 아시안게임</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-container reveal" id="latestMediaSection">
-            <div class="section-header center-header section-header-md">
-                <div class="section-title">YOUTUBE <span>모아보기</span></div>
-            </div>
-            <div class="latest-media-grid" id="latestMediaGrid"></div>
-        </div>
+        <div style="height: 60px;"></div>
 
         <div id="siteFooterSlot"></div>
         <script>renderSiteFooter('');</script>
@@ -172,6 +173,7 @@
         </button>
         <div class="album-modal-media" id="albumMediaWrap"></div>
         <div class="album-modal-info">
+            <img class="album-modal-cover" id="albumModalCover" alt="" onerror="this.style.display='none'">
             <div class="album-modal-title" id="albumModalTitle"></div>
             <div class="album-tracklist-label">TRACK LIST</div>
             <div class="album-track-list" id="albumTrackList"></div>
@@ -180,6 +182,15 @@
 
 
     <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
+    <!-- 수상/광고 히스토리 모달 -->
+    <div class="modal-backdrop" id="honorsHistoryBackdrop" onclick="closeHonorsHistoryModal()"></div>
+    <div class="honors-history-modal" id="honorsHistoryModal">
+        <button class="popup-close-btn" onclick="closeHonorsHistoryModal()" aria-label="닫기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="honors-history-body" id="awardsHistoryBody"></div>
+    </div>
+
     <div id="siteCalendarSlot"></div>
     <script>renderCalendarWidgets();</script>
 
@@ -188,6 +199,9 @@
     <script src="js/album_content_data.js"></script>
     <script src="js/music_show_data.js"></script>
     <script src="js/live_data.js"></script>
+    <script src="js/event_data.js"></script>
+    <script src="js/honors_data.js"></script>
+    <script src="js/honors.js"></script>
     <script src="js/contents.js"></script>
     <script src="js/main.js"></script>
 </body>

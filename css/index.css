@@ -19,8 +19,38 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; width: 100%; pos
 .section-container { padding: 0 20px; max-width: 1040px; margin: 0 auto; position: relative; z-index: 2; }
 .full-page-section { height: 100vh; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; scroll-snap-align: start; }
 .full-page-section > .section-inner, .full-page-section .section-header { width: 100%; }
-#historySection { position: relative; width: 100%; height: 100vh; height: 100dvh; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; overflow: hidden; }
-#historySection .section-title { position: relative; z-index: 5; margin-bottom: 15px; font-size: 54px; letter-spacing: 2px; }
+#historySection { position: relative; width: 100%; height: 100vh; height: 100dvh; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; overflow: hidden; cursor: pointer; }
+#historySection .section-title { position: relative; z-index: 5; margin-bottom: 15px; font-size: 54px; letter-spacing: 2px; transition: letter-spacing 0.5s ease; }
+#historySection:hover .section-title { letter-spacing: 5px; }
+.history-subtitle { position: relative; z-index: 5; font-family: var(--font-body); font-size: 15px; font-weight: 400; color: var(--text-muted); letter-spacing: 0.5px; margin: 0; transition: color 0.4s ease; }
+#historySection:hover .history-subtitle { color: var(--c-accent); }
+
+/* ⭐️ 위드 리센스: 클릭하면 같은 자리에서 문구 → 벚꽃 → 발자취(추후 추가) 순으로 전환 */
+#historySection.wr-playing .section-title,
+#historySection.wr-playing .history-subtitle { pointer-events: none; }
+#historySection.wr-playing { cursor: default; }
+
+.wr-layer-stack { position: relative; z-index: 5; display: grid; }
+.wr-layer-stack > * { grid-area: 1 / 1; }
+
+.wr-text { text-align: center; opacity: 1; transform: translateY(0); transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1), transform 1.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.wr-text.wr-hide { opacity: 0; transform: translateY(-10px); transition: opacity 2.2s ease, transform 2.2s ease; }
+
+.petal-layer { position: absolute; inset: 0; pointer-events: none; z-index: 2; opacity: 0; transition: opacity 2.5s ease; }
+.petal-layer.show { opacity: 1; }
+.petal-layer.hide { opacity: 0; }
+.petal { position: absolute; top: 0; left: 0; animation-name: petal-fall; animation-timing-function: ease-in; animation-fill-mode: forwards; }
+@keyframes petal-fall {
+    0%   { transform: translate(0, -12vh) rotate(0deg); opacity: 0; }
+    8%   { opacity: 0.9; }
+    50%  { transform: translate(calc(var(--drift) * 0.5), 52vh) rotate(calc(var(--rot) * 0.5)); }
+    85%  { opacity: 0.9; }
+    100% { transform: translate(var(--drift), 118vh) rotate(var(--rot)); opacity: 0; }
+}
+
+.wr-next { text-align: center; opacity: 0; transition: opacity 2s ease; }
+.wr-next.show { opacity: 1; }
+.wr-next-text { font-family: var(--font-body); font-size: 14.5px; color: var(--text-secondary); letter-spacing: 0.3px; line-height: 1.9; margin: 0; }
 
 .slow-reveal { opacity: 0; transform: translateY(60px); transition: opacity 3s cubic-bezier(0.22, 1, 0.36, 1), transform 3s cubic-bezier(0.22, 1, 0.36, 1); }
 .slow-reveal.active { opacity: 1; transform: translateY(0); }

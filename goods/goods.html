@@ -16,7 +16,7 @@
 <body>
     <div id="siteNavSlot"></div>
     <script src="../js/layout.js"></script>
-    <script>renderSiteNav('goods', '../', { calendar: false, lang: false });</script>
+    <script>renderSiteNav('goods', '../', { calendar: true, lang: false });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
         <div class="section-container reveal active" style="flex: 1;">
@@ -95,6 +95,13 @@
                 });
             } catch (e) { console.log("굿즈 데이터 JSON 대기중..."); }
         }
+    </script>
+
+    <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
+    <div id="siteCalendarSlot"></div>
+    <script>renderCalendarWidgets();</script>
+
+    <script>
         fetchGoodsInventory();
     </script>
 </body>

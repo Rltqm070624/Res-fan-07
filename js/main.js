@@ -35,6 +35,29 @@ function getItemStatus(timeStr) {
 }
 
 let __todayHtmlCache = null;
+function renderUpcomingStrip() {
+    const wrap = document.getElementById('upcomingStrip');
+    if (!wrap) return;
+    const weekdays = window.t ? window.t('weekdays') : ["일", "월", "화", "수", "목", "금", "토"];
+    let html = '';
+    const today = new Date();
+    for (let i = 0; i < 14; i++) {
+        const d = new Date(today); d.setDate(today.getDate() + i);
+        const y = d.getFullYear(), m = d.getMonth() + 1, day = d.getDate();
+        const dateKey = `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const data = scheduleDB[dateKey];
+        const items = (data && data.items) || [];
+        let chips = items.slice(0, 2).map(it => `<div class="ud-chip" style="color:${it.color};">${it.title}</div>`).join('');
+        if (!items.length) chips = `<div class="ud-empty">일정 없음</div>`;
+        html += `<div class="upcoming-day-card${i === 0 ? ' is-today' : ''}" onclick="openModal('${y}', '${m}', '${day}', '${dateKey}')">
+            <div class="ud-date">${m}.${String(day).padStart(2,'0')} (${weekdays[d.getDay()]})</div>
+            ${chips}
+        </div>`;
+    }
+    wrap.innerHTML = html;
+    if (typeof enableDragScroll === 'function') enableDragScroll(wrap);
+}
+
 function renderTodaySchedule() {
     const grid = document.getElementById('todayScheduleGrid');
     const sub  = document.getElementById('todayDateSub');
@@ -174,6 +197,8 @@ function openAlbumModal(idx) {
     const album = ALBUMS[idx];
     if (!album) return;
     const titleEl = document.getElementById('albumModalTitle');
+    const coverEl = document.getElementById('albumModalCover');
+    if (coverEl) { coverEl.style.display = ''; coverEl.src = `images/${album.image}`; coverEl.alt = album.title; }
     const listEl = document.getElementById('albumTrackList');
     if (titleEl) titleEl.textContent = album.title;
     const labelEl = document.querySelector('.album-tracklist-label');

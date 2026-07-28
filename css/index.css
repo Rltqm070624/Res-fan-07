@@ -65,6 +65,9 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; width: 100%; pos
 .profile-scroll-wrapper::-webkit-scrollbar { display: none; }
 .profile-scroll-wrapper.dragging { cursor: grabbing; scroll-behavior: auto; user-select: none; }
 .profile-track { display: flex; gap: 14px; width: max-content; }
+.archive-split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; }
+.archive-col { min-width: 0; }
+@media (max-width: 800px) { .archive-split { grid-template-columns: 1fr; gap: 32px; } }
 
 .profile-item { position: relative; flex: 0 0 auto; width: 210px; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; background: transparent; cursor: pointer; border: 1px solid var(--border-light); box-shadow: 0 6px 18px rgba(0,0,0,0.25); transition: box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 .profile-item:hover { border-color: var(--c-accent); box-shadow: 0 14px 34px rgba(0,0,0,0.4), 0 0 0 1px var(--c-accent-glow); transform: translateY(-3px); }
@@ -75,8 +78,28 @@ html, body { scroll-snap-type: y mandatory; overflow-x: hidden; width: 100%; pos
 .profile-item:hover img { transform: scale(1.08); }
 .profile-item .pf-index { position: absolute; left: 10px; bottom: 9px; font-family: var(--font-num); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7); }
 .profile-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 40%); pointer-events: none; }
-#profileSection.section-container { max-width: 100%; padding-left: 24px; padding-right: 24px; }
-@media (max-width: 700px) { #profileSection.section-container { padding-left: 14px; padding-right: 14px; } }
+#profileSection.section-container { max-width: 100%; padding-left: 48px; padding-right: 48px; }
+#todayScheduleSection.section-container,
+#honorsSection.section-container,
+#latestMediaSection.section-container { max-width: 1400px; padding-left: 48px; padding-right: 48px; }
+@media (max-width: 700px) {
+    #profileSection.section-container,
+    #todayScheduleSection.section-container,
+    #honorsSection.section-container,
+    #latestMediaSection.section-container { padding-left: 20px; padding-right: 20px; }
+}
+
+/* ⭐️ 다가오는 일정 드래그 스트립 */
+.upcoming-strip-wrap { margin-bottom: 28px; }
+.upcoming-strip { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; cursor: grab; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
+.upcoming-strip::-webkit-scrollbar { display: none; }
+.upcoming-strip.dragging { cursor: grabbing; user-select: none; }
+.upcoming-day-card { flex: 0 0 auto; width: 108px; padding: 14px 12px; border-radius: 14px; background: var(--bg-surface); border: 1px solid var(--border-light); cursor: pointer; transition: 0.3s ease; }
+.upcoming-day-card:hover, .upcoming-day-card.is-today { border-color: var(--c-accent); }
+.upcoming-day-card .ud-date { font-family: var(--font-num); font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+.upcoming-day-card.is-today .ud-date { color: var(--c-accent); font-weight: 700; }
+.upcoming-day-card .ud-chip { font-size: 10.5px; font-weight: 600; padding: 3px 7px; border-radius: 5px; background: var(--bg-surface-hover); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.upcoming-day-card .ud-empty { font-size: 11px; color: var(--text-muted); opacity: 0.5; }
 
 html[data-theme="light"]{ --bg-base:#ffffff; }
 html[data-theme="light"] body{ background:#ffffff; }
@@ -153,6 +176,9 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 .honors-chip-list { display: flex; flex-wrap: wrap; gap: 8px; }
 .h-chip { font-family: var(--font-body); font-size: 12.5px; font-weight: 600; color: var(--text-secondary); background: var(--bg-surface-hover); border: 1px solid var(--border-light); padding: 8px 14px; border-radius: 999px; line-height: 1.4; }
 .h-chip em { font-style: normal; font-size: 11px; color: var(--text-muted); margin-left: 5px; }
+.honors-more-btn { margin-top: 20px; padding: 10px 22px; border-radius: 999px; border: 1px solid var(--border-light); background: transparent; color: var(--text-secondary); font-family: var(--font-head); font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.25s ease; align-self: flex-start; }
+.honors-more-btn:hover { border-color: var(--c-accent); color: var(--c-accent); }
+.honors-card { display: flex; flex-direction: column; }
 
 @media (max-width: 800px) {
     .honors-grid { grid-template-columns: 1fr; }

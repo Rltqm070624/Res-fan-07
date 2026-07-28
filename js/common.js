@@ -76,7 +76,7 @@ async function fetchScheduleData() {
     renderCalendar();
     // ⭐️ index.html에만 있는 '오늘의 일정' 위젯 — 있으면 같이 갱신
     if (typeof renderTodaySchedule === 'function') renderTodaySchedule();
-    if (typeof renderUpcomingStrip === 'function') renderUpcomingStrip();
+    if (typeof renderAgendaList === 'function') renderAgendaList();
 }
 
 function renderCalendar() {
@@ -116,6 +116,7 @@ function changeMonth(delta) {
     currentCalMonth += delta;
     if (currentCalMonth > 12) { currentCalMonth = 1; currentCalYear++; } else if (currentCalMonth < 1) { currentCalMonth = 12; currentCalYear--; }
     renderCalendar();
+    if (typeof renderAgendaList === 'function') renderAgendaList();
 }
 
 function openCalendarPopup() {

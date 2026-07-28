@@ -82,6 +82,7 @@ function renderProfileArchive() {
 // ⭐️ 마우스로 좌우 드래그해서 넘겨볼 수 있게 (터치는 브라우저가 기본으로 지원)
 function enableDragScroll(el) {
     if (!el) return;
+    el.style.scrollBehavior = 'auto'; // CSS의 scroll-behavior:smooth가 JS 애니메이션과 충돌해서 안 움직이던 문제 수정
     let isDown = false, startX = 0, startScrollLeft = 0, moved = false;
     el.addEventListener('mousedown', (e) => {
         isDown = true; moved = false;
@@ -135,19 +136,8 @@ function enableDragScroll(el) {
     }, { passive: false });
 }
 
-function renderShortsGallery() {
-    const wrap = document.getElementById('shortsScroll'); if (!wrap) return;
-    const shortsIds = ["jgaWSOXyH_o", "v6n4XQdX6_8", "dOllJ26kfIY"];
-    let html = shortsIds.map(id => `<a class="shorts-card" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="RESCENE video" loading="lazy"><div class="sc-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></a>`).join('');
-    
-    const moreText = window.t ? window.t('shortsMore') : '유튜브에서<br>#리센느 더보기';
-    html += `<a class="shorts-card shorts-more" href="https://www.youtube.com/results?search_query=%23%EB%A6%AC%EC%84%BC%EB%8A%90" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>${moreText}</span></a>`;
-    wrap.innerHTML = html;
-}
-
 window.addEventListener('DOMContentLoaded', () => { 
     try { renderProfileArchive(); } catch (e) { console.error('renderProfileArchive 실패:', e); }
-    try { renderShortsGallery(); } catch (e) { console.error('renderShortsGallery 실패:', e); }
 });
 
 /* =========================================
@@ -253,44 +243,14 @@ function playWithRescene() {
 
     const section = document.getElementById('historySection');
     const text = document.getElementById('wrText');
-    const petals = document.getElementById('petalLayer');
     const next = document.getElementById('wrNext');
-    if (!section || !text || !petals || !next) return;
+    if (!section || !text || !next) return;
 
     section.classList.add('wr-playing');
-
-    function spawnPetals(count) {
-        for (let i = 0; i < count; i++) {
-            const p = document.createElement('div');
-            p.className = 'petal';
-            const size = 12 + Math.random() * 14;
-            const xStart = Math.random() * 100;
-            const drift = (Math.random() * 22 - 11).toFixed(1);
-            const duration = (6 + Math.random() * 5).toFixed(2);
-            const delay = (Math.random() * 4).toFixed(2);
-            const rot = (200 + Math.random() * 420).toFixed(0);
-            p.style.left = xStart + 'vw';
-            p.style.setProperty('--drift', drift + 'vw');
-            p.style.setProperty('--rot', rot + 'deg');
-            p.style.animationDuration = duration + 's';
-            p.style.animationDelay = delay + 's';
-            p.innerHTML = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24">' +
-                '<path fill="#f6c9d6" d="M12 2c1.6 2.1 1.6 4.2 0 6.3-1.6-2.1-1.6-4.2 0-6.3zm0 13.7c1.6 2.1 1.6 4.2 0 6.3-1.6-2.1-1.6-4.2 0-6.3zM2 12c2.1-1.6 4.2-1.6 6.3 0-2.1 1.6-4.2 1.6-6.3 0zm13.7 0c2.1-1.6 4.2-1.6 6.3 0-2.1 1.6-4.2 1.6-6.3 0zM6.9 6.9c1.9-.8 3.7 0 4.7 1.9-1.9.8-3.7 0-4.7-1.9zm5.5 5.5c1.9-.8 3.7 0 4.7 1.9-1.9.8-3.7 0-4.7-1.9zm0-5.5c.8 1.9 0 3.7-1.9 4.7-.8-1.9 0-3.7 1.9-4.7zM6.9 12.4c.8 1.9 0 3.7-1.9 4.7-.8-1.9 0-3.7 1.9-4.7z"/>' +
-                '<circle cx="12" cy="12" r="1.6" fill="#e78aa3"/></svg>';
-            petals.appendChild(p);
-            setTimeout(() => p.remove(), (parseFloat(duration) + parseFloat(delay)) * 1000 + 600);
-        }
-    }
 
     // 1. WITH RESCENE 문구가 천천히 사라짐
     text.classList.add('wr-hide');
 
-    // 2. 벚꽃이 흩날리기 시작
-    setTimeout(() => { petals.classList.add('show'); spawnPetals(28); }, 700);
-
-    // 3. 벚꽃이 서서히 사라짐
-    setTimeout(() => { petals.classList.add('hide'); }, 7900);
-
-    // 4. (임시) 발자취 준비중 안내 — 추후 마일스톤 타임라인으로 교체 예정
-    setTimeout(() => { next.classList.add('show'); }, 10200);
+    // 2. (임시) 발자취 준비중 안내 — 추후 마일스톤 타임라인으로 교체 예정
+    setTimeout(() => { next.classList.add('show'); }, 2200);
 }

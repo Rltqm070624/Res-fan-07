@@ -1,13 +1,30 @@
 /* ==========================================================================
-   ⭐️ MEDIA ARCHIVE 페이지 — 검색 + 태그 필터 + 정렬 + 더보기(페이지네이션) + 재생
+   ⭐️ MEDIA ARCHIVE 페이지 — 검색 + 태그(대분류) + 서브탭(소분류) + 정렬 + 더보기 + 재생
    - MEDIA_CATEGORIES, ytThumb, escapeHtml, escapeAttr 는 js/contents.js 에 정의됨
    ========================================================================== */
 
 let mediaActiveTag = '전체';
+let mediaActiveSub = '전체';
 let mediaSort = 'new';
 let mediaSearchTerm = '';
 let mediaVisibleCount = 24;
 const MEDIA_PAGE_SIZE = 24;
+
+// 대분류별 소분류(서브탭) 정의 — item(평탄화된 데이터)을 기준으로 옵션/매칭 판단
+const MEDIA_SUBFILTERS = {
+    '음악 방송': {
+        getOptions: (items) => [...new Set(items.map(i => i.program).filter(Boolean))],
+        match: (item, sub) => item.program === sub
+    },
+    '라이브 방송': {
+        getOptions: () => ['원이', '리브', '미나미', '메이', '제나'],
+        match: (item, sub) => item.sub === '전원' || (item.sub || '').includes(sub)
+    },
+    '공연 및 행사': {
+        getOptions: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
+        match: (item, sub) => item.date.slice(0, 4) === sub
+    }
+};
 
 function mediaGetAllItems() {
     let all = [];
@@ -27,27 +44,43 @@ function mediaInitTagFromQuery() {
 }
 
 function mediaRenderTagRow() {
-    const list = document.getElementById('mediaFilterList');
-    if (!list) return;
-    const all = mediaGetAllItems();
-    const counts = {};
-    all.forEach(i => { counts[i.tagLabel] = (counts[i.tagLabel] || 0) + 1; });
-
-    const entries = [{ label: '전체', color: null, count: all.length }].concat(
-        MEDIA_CATEGORIES.map(c => ({ label: c.label, color: c.color, count: counts[c.label] || 0 }))
-    );
-
-    list.innerHTML = entries.map(t => {
+    const row = document.getElementById('mediaTagRow');
+    if (!row) return;
+    const all = [{ label: '전체', color: null }].concat(MEDIA_CATEGORIES.map(c => ({ label: c.label, color: c.color })));
+    row.innerHTML = all.map(t => {
         const active = t.label === mediaActiveTag;
-        const dot = t.color ? `<span class="mf-dot" style="background:${t.color};"></span>` : `<span class="mf-dot mf-dot-all"></span>`;
-        return `<li><button type="button" class="mf-item${active ? ' active' : ''}" onclick="mediaSetTag('${t.label}')">${dot}<span class="mf-label">${t.label}</span><span class="mf-count">${t.count}</span></button></li>`;
+        const style = t.color ? `style="--chip-color:${t.color};"` : '';
+        return `<button type="button" class="mt-chip${active ? ' active' : ''}" ${style} onclick="mediaSetTag('${t.label}')">${t.label}</button>`;
     }).join('');
+}
+
+function mediaRenderSubtagRow() {
+    const row = document.getElementById('mediaSubtagRow');
+    if (!row) return;
+    const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
+    if (!cfg) { row.innerHTML = ''; row.style.display = 'none'; return; }
+
+    const itemsInTag = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
+    const options = ['전체'].concat(cfg.getOptions(itemsInTag));
+    row.style.display = 'flex';
+    row.innerHTML = options.map(opt =>
+        `<button type="button" class="mst-chip${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${opt}')">${opt}</button>`
+    ).join('');
 }
 
 function mediaSetTag(label) {
     mediaActiveTag = label;
+    mediaActiveSub = '전체';
     mediaVisibleCount = MEDIA_PAGE_SIZE;
     mediaRenderTagRow();
+    mediaRenderSubtagRow();
+    mediaApplyFilters();
+}
+
+function mediaSetSub(sub) {
+    mediaActiveSub = sub;
+    mediaVisibleCount = MEDIA_PAGE_SIZE;
+    mediaRenderSubtagRow();
     mediaApplyFilters();
 }
 
@@ -66,6 +99,10 @@ function mediaApplyFilters() {
 function mediaGetFiltered() {
     let list = mediaGetAllItems();
     if (mediaActiveTag !== '전체') list = list.filter(i => i.tagLabel === mediaActiveTag);
+
+    const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
+    if (cfg && mediaActiveSub !== '전체') list = list.filter(i => cfg.match(i, mediaActiveSub));
+
     if (mediaSearchTerm) {
         list = list.filter(i => ((i.title || '') + ' ' + (i.sub || '')).toLowerCase().includes(mediaSearchTerm));
     }
@@ -136,6 +173,7 @@ function mediaClosePlayer() {
 window.addEventListener('DOMContentLoaded', () => {
     mediaInitTagFromQuery();
     mediaRenderTagRow();
+    mediaRenderSubtagRow();
     mediaRenderGrid();
     const badge = document.getElementById('mediaCountBadge');
     if (badge) badge.innerHTML = `총 <b>${mediaGetAllItems().length}</b>개`;

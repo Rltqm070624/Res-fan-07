@@ -23,7 +23,7 @@
 
     <div id="siteNavSlot"></div>
     <script src="../js/layout.js"></script>
-    <script>renderSiteNav('', '../', { calendar: false, lang: false });</script>
+    <script>renderSiteNav('', '../', { calendar: true, lang: false });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
         <div class="section-container" style="flex: 1;">
@@ -60,6 +60,10 @@
         <div id="siteFooterSlot"></div>
         <script>renderSiteFooter('../');</script>
     </div>
+
+    <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
+    <div id="siteCalendarSlot"></div>
+    <script>renderCalendarWidgets();</script>
 
     <script src="../js/i18n.js"></script>
     <script src="../js/common.js"></script>

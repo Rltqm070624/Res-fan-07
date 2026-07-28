@@ -85,6 +85,11 @@ function renderSiteNav(activeKey, root, opts) {
                 <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="${root}images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
             </div>
         </div>
+        ${opts.lang ? `<div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language">
+            <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko')">KOR</button>
+            <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">ENG</button>
+            <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>
+        </div>` : ''}
         <ul class="mobile-menu-list">${mobileLinks}</ul>
     </div>`;
 

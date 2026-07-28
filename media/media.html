@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESCENE ARCHIVE | MEDIA</title>
+    <meta name="description" content="RESCENE(리센느) 영상 모음 — 컨텐츠, 음반 활동 컨텐츠, 음악방송 전체 아카이브.">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/i18n.css">
+    <link rel="stylesheet" href="media.css">
+
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('rescene-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+</head>
+<body>
+
+    <div id="siteNavSlot"></div>
+    <script src="../js/layout.js"></script>
+    <script>renderSiteNav('', '../', { calendar: false, lang: false });</script>
+
+    <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
+        <div class="section-container" style="flex: 1;">
+            <div class="section-header">
+                <div class="section-title">MEDIA <span>ARCHIVE</span></div>
+            </div>
+
+            <div class="media-controls">
+                <input type="text" class="media-search" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()">
+                <div class="media-controls-row">
+                    <div class="media-tag-row" id="mediaTagRow"></div>
+                    <div class="media-sort-row" id="mediaSortRow">
+                        <button type="button" class="ms-btn active" data-sort="new" onclick="mediaSetSort('new')">최신순</button>
+                        <button type="button" class="ms-btn" data-sort="old" onclick="mediaSetSort('old')">오래된순</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="media-now-playing" id="mediaNowPlaying">
+                <button type="button" class="media-np-close" onclick="mediaClosePlayer()" aria-label="닫기">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+                <div class="media-np-media" id="mediaNpMedia"></div>
+                <div class="media-np-title" id="mediaNpTitle"></div>
+                <div class="media-np-sub" id="mediaNpSub"></div>
+            </div>
+
+            <div class="media-grid" id="mediaGrid"></div>
+            <div class="media-loadmore-wrap">
+                <button type="button" class="media-loadmore-btn" id="mediaLoadMoreBtn" onclick="mediaLoadMore()">더 불러오기</button>
+            </div>
+        </div>
+
+        <div id="siteFooterSlot"></div>
+        <script>renderSiteFooter('../');</script>
+    </div>
+
+    <script src="../js/common.js"></script>
+    <script src="../js/contents_data.js"></script>
+    <script src="../js/album_content_data.js"></script>
+    <script src="../js/music_show_data.js"></script>
+    <script src="../js/contents.js"></script>
+    <script src="media.js"></script>
+</body>
+</html>

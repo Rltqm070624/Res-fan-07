@@ -76,6 +76,7 @@ async function fetchScheduleData() {
     renderCalendar();
     // ⭐️ index.html에만 있는 '오늘의 일정' 위젯 — 있으면 같이 갱신
     if (typeof renderTodaySchedule === 'function') renderTodaySchedule();
+    if (typeof renderUpcomingStrip === 'function') renderUpcomingStrip();
 }
 
 function renderCalendar() {

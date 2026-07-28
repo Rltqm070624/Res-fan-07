@@ -1,134 +1,74 @@
 /* ==========================================================================
-   ⭐️ RESCENE CONTENTS — 홈 미리보기 가로 스크롤 + 전체보기 모달 (검색/멤버 필터/그리드/인라인 재생)
-   - 데이터는 js/contents_data.js 의 CONTENTS_DATA 배열 사용 (날짜 최신순 정렬됨)
-   - 여기서는 화면에 그리는 로직만 담당
+   ⭐️ 홈 "LATEST UPDATES" — 카테고리별 최신 영상 1개 + 더보기 (모달 없음, 클릭 시 그 자리에서 재생)
+   - 데이터 소스: js/contents_data.js(CONTENTS_DATA), js/album_content_data.js(ALBUM_CONTENT_DATA),
+     js/music_show_data.js(MUSIC_SHOW_DATA)
+   - "더보기" → media/media.html?tag=카테고리 로 이동 (전체 목록 페이지)
    ========================================================================== */
-const CONTENTS_MEMBERS = ["원이", "리브", "미나미", "메이", "제나"];
-let contentsActiveMember = "전체";
-let contentsSearchTerm = "";
 
 function ytThumb(vid) { return `https://img.youtube.com/vi/${vid}/hqdefault.jpg`; }
 
 function escapeHtml(str) {
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
-
-function contentsCardHtml(item) {
-    return `<div class="contents-card" onclick="openContentsPlayerByVid('${item.vid}')">
-        <div class="contents-thumb">
-            <img src="${ytThumb(item.vid)}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.closest('.contents-card').style.display='none'">
-            <div class="cc-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
-        </div>
-        <div class="contents-meta">
-            <div class="cc-title">${escapeHtml(item.title)}</div>
-            <div class="cc-sub">${escapeHtml(item.channel)} · ${item.date}</div>
-        </div>
-    </div>`;
+function escapeAttr(str) {
+    return escapeHtml(str).replace(/"/g, '&quot;');
 }
 
-/* ---- 홈 화면 미리보기 (가로 스크롤, 최신 12개) ---- */
-function renderContentsPreview() {
-    const wrap = document.getElementById('contentsScroll');
-    if (!wrap || typeof CONTENTS_DATA === 'undefined') return;
-    let html = CONTENTS_DATA.slice(0, 12).map(contentsCardHtml).join('');
-    html += `<a class="contents-card contents-more" href="javascript:void(0)" onclick="openContentsModal()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
-        <span>콘텐츠<br>전체보기</span>
-    </a>`;
-    wrap.innerHTML = html;
-    if (typeof enableDragScroll === 'function') enableDragScroll(wrap);
-}
+/* 카테고리 정의: 다른 페이지(media.html)에서도 그대로 재사용 */
+const MEDIA_CATEGORIES = [
+    {
+        key: 'contents', label: '컨텐츠',
+        getItems: () => (typeof CONTENTS_DATA !== 'undefined' ? CONTENTS_DATA : [])
+            .map(i => ({ date: i.date, title: i.title, sub: i.channel, vid: i.vid }))
+    },
+    {
+        key: 'album', label: '음반 활동 컨텐츠',
+        getItems: () => (typeof ALBUM_CONTENT_DATA !== 'undefined' ? ALBUM_CONTENT_DATA : [])
+            .map(i => ({ date: i.date, title: i.title, sub: '', vid: i.vid }))
+    },
+    {
+        key: 'musicshow', label: '음악 방송',
+        getItems: () => (typeof MUSIC_SHOW_DATA !== 'undefined' ? MUSIC_SHOW_DATA : [])
+            .map(i => ({ date: i.date, title: `${i.program} · ${i.song}`, sub: i.broadcaster, vid: i.vid }))
+    }
+];
 
-/* ---- 전체보기 모달: 검색 + 멤버 필터 + 그리드 ---- */
-function renderContentsFilters() {
-    const row = document.getElementById('contentsFilterRow');
-    if (!row) return;
-    const all = ["전체"].concat(CONTENTS_MEMBERS);
-    row.innerHTML = all.map(m =>
-        `<button type="button" class="cf-chip${m === contentsActiveMember ? ' active' : ''}" onclick="setContentsMemberFilter('${m}')">${m}</button>`
-    ).join('');
-}
-
-function setContentsMemberFilter(member) {
-    contentsActiveMember = member;
-    renderContentsFilters();
-    renderContentsGrid();
-}
-
-function filterContents() {
-    const input = document.getElementById('contentsSearch');
-    contentsSearchTerm = (input ? input.value : '').trim().toLowerCase();
-    renderContentsGrid();
-}
-
-function getFilteredContents() {
-    if (typeof CONTENTS_DATA === 'undefined') return [];
-    return CONTENTS_DATA.filter(item => {
-        const matchesMember = contentsActiveMember === '전체' || item.cast === '전원' || item.cast.includes(contentsActiveMember);
-        if (!matchesMember) return false;
-        if (!contentsSearchTerm) return true;
-        const hay = (item.title + ' ' + item.channel).toLowerCase();
-        return hay.includes(contentsSearchTerm);
-    });
-}
-
-function renderContentsGrid() {
-    const grid = document.getElementById('contentsGrid');
+function renderLatestMedia() {
+    const grid = document.getElementById('latestMediaGrid');
     if (!grid) return;
-    const list = getFilteredContents();
-    grid.innerHTML = list.length
-        ? list.map(contentsCardHtml).join('')
-        : `<div class="contents-empty">검색 결과가 없어요.</div>`;
+
+    let html = '';
+    MEDIA_CATEGORIES.forEach(cat => {
+        const items = cat.getItems();
+        if (!items.length) return;
+        const latest = items.slice().sort((a, b) => b.date.localeCompare(a.date))[0];
+
+        html += `
+        <div class="media-cat-block">
+            <div class="media-cat-tag">${cat.label}</div>
+            <div class="media-cat-thumb" data-vid="${latest.vid}" data-title="${escapeAttr(latest.title)}" onclick="playMediaCardEl(this)">
+                <img src="${ytThumb(latest.vid)}" alt="${escapeAttr(latest.title)}" loading="lazy">
+                <button type="button" class="mc-play" aria-label="재생"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+            </div>
+            <div class="media-cat-info">
+                <div class="mc-title">${escapeHtml(latest.title)}</div>
+                <div class="mc-sub">${latest.sub ? escapeHtml(latest.sub) + ' · ' : ''}${latest.date}</div>
+            </div>
+            <a class="media-cat-more" href="media/media.html?tag=${cat.key}">더보기 →</a>
+        </div>`;
+    });
+
+    grid.innerHTML = html || '<div class="media-empty">등록된 영상이 없어요.</div>';
 }
 
-function openContentsModal() {
-    const modal = document.getElementById('contentsModal');
-    const backdrop = document.getElementById('contentsModalBackdrop');
-    if (!modal || !backdrop) return;
-    renderContentsFilters();
-    renderContentsGrid();
-    modal.classList.add('active');
-    backdrop.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeContentsModal() {
-    const modal = document.getElementById('contentsModal');
-    const backdrop = document.getElementById('contentsModalBackdrop');
-    if (modal) modal.classList.remove('active');
-    if (backdrop) backdrop.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    closeContentsPlayer();
-}
-
-/* ---- 인라인 플레이어 (그리드 위에 겹쳐서 재생, 뒤로가기로 그리드 복귀) ---- */
-function openContentsPlayerByVid(vid) {
-    if (typeof CONTENTS_DATA === 'undefined') return;
-    const item = CONTENTS_DATA.find(i => i.vid === vid);
-    if (!item) return;
-
-    // 홈 미리보기에서 바로 클릭한 경우 모달을 먼저 열어줌
-    const modal = document.getElementById('contentsModal');
-    if (modal && !modal.classList.contains('active')) openContentsModal();
-
-    const media = document.getElementById('contentsPlayerMedia');
-    const title = document.getElementById('contentsPlayerTitle');
-    const meta = document.getElementById('contentsPlayerMeta');
-    if (media) media.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1" title="${escapeHtml(item.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-    if (title) title.textContent = item.title;
-    if (meta) meta.textContent = `${item.channel} · ${item.date} · 출연: ${item.cast}`;
-
-    const player = document.getElementById('contentsPlayer');
-    if (player) player.classList.add('show');
-}
-
-function closeContentsPlayer() {
-    const player = document.getElementById('contentsPlayer');
-    const media = document.getElementById('contentsPlayerMedia');
-    if (player) player.classList.remove('show');
-    if (media) media.innerHTML = ''; // iframe 제거 = 재생 정지
+function playMediaCardEl(el) {
+    if (el.classList.contains('is-playing')) return;
+    const vid = el.dataset.vid;
+    const title = el.dataset.title || '';
+    el.classList.add('is-playing');
+    el.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1" title="${escapeAttr(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    try { renderContentsPreview(); } catch (e) { console.error('renderContentsPreview 실패:', e); }
+    try { renderLatestMedia(); } catch (e) { console.error('renderLatestMedia 실패:', e); }
 });

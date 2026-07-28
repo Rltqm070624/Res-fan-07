@@ -1,5 +1,5 @@
 {
-    "update_time": "2026. 07. 29 00:55 기준",
+    "update_time": "2026. 07. 29 05:37 기준",
     "songs": {
         "LOVE ATTACK": {
             "Melon": {
@@ -26,7 +26,7 @@
         "Pretty Girl": {
             "Melon": {
                 "실시간 (HOT100)": {
-                    "rank": 4,
+                    "rank": 6,
                     "diff": "NEW"
                 },
                 "일간": null,
@@ -35,8 +35,8 @@
             },
             "Bugs": {
                 "실시간": {
-                    "rank": 8,
-                    "diff": "▼ 2"
+                    "rank": 9,
+                    "diff": "▼ 1"
                 },
                 "일간": null
             },
@@ -48,7 +48,7 @@
         "Deja Vu": {
             "Melon": {
                 "실시간 (HOT100)": {
-                    "rank": 7,
+                    "rank": 13,
                     "diff": "NEW"
                 },
                 "일간": null,
@@ -57,8 +57,8 @@
             },
             "Bugs": {
                 "실시간": {
-                    "rank": 12,
-                    "diff": "▼ 1"
+                    "rank": 10,
+                    "diff": "▲ 2"
                 },
                 "일간": null
             },
@@ -70,7 +70,7 @@
         "Runaway": {
             "Melon": {
                 "실시간 (HOT100)": {
-                    "rank": 43,
+                    "rank": 65,
                     "diff": "NEW"
                 },
                 "일간": null,
@@ -79,8 +79,8 @@
             },
             "Bugs": {
                 "실시간": {
-                    "rank": 46,
-                    "diff": "▼ 18"
+                    "rank": 33,
+                    "diff": "▲ 13"
                 },
                 "일간": null
             },

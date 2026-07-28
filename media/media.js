@@ -12,7 +12,7 @@ const MEDIA_PAGE_SIZE = 24;
 function mediaGetAllItems() {
     let all = [];
     MEDIA_CATEGORIES.forEach(cat => {
-        cat.getItems().forEach(item => all.push(Object.assign({ tagKey: cat.key, tagLabel: cat.label }, item)));
+        cat.getItems().forEach(item => all.push(Object.assign({ tagKey: cat.key, tagLabel: cat.label, tagColor: cat.color }, item)));
     });
     return all;
 }
@@ -29,10 +29,12 @@ function mediaInitTagFromQuery() {
 function mediaRenderTagRow() {
     const row = document.getElementById('mediaTagRow');
     if (!row) return;
-    const all = ['전체'].concat(MEDIA_CATEGORIES.map(c => c.label));
-    row.innerHTML = all.map(label =>
-        `<button type="button" class="mt-chip${label === mediaActiveTag ? ' active' : ''}" onclick="mediaSetTag('${label}')">${label}</button>`
-    ).join('');
+    const all = [{ label: '전체', color: null }].concat(MEDIA_CATEGORIES.map(c => ({ label: c.label, color: c.color })));
+    row.innerHTML = all.map(t => {
+        const active = t.label === mediaActiveTag;
+        const style = t.color ? `style="--chip-color:${t.color};"` : '';
+        return `<button type="button" class="mt-chip${active ? ' active' : ''}" ${style} onclick="mediaSetTag('${t.label}')">${t.label}</button>`;
+    }).join('');
 }
 
 function mediaSetTag(label) {
@@ -69,7 +71,7 @@ function mediaCardHtml(item) {
         <div class="media-card-thumb" data-vid="${item.vid}" data-title="${escapeAttr(item.title)}" onclick="mediaPlayCard(this)">
             <img src="${ytThumb(item.vid)}" alt="${escapeAttr(item.title)}" loading="lazy" onerror="this.closest('.media-card').style.display='none'">
             <button type="button" class="mc-play" aria-label="재생"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-            <span class="media-card-tag">${escapeHtml(item.tagLabel)}</span>
+            <span class="media-card-tag" style="background:${item.tagColor}e6;">${escapeHtml(item.tagLabel)}</span>
         </div>
         <div class="media-card-info">
             <div class="mc-title">${escapeHtml(item.title)}</div>
@@ -128,4 +130,6 @@ window.addEventListener('DOMContentLoaded', () => {
     mediaInitTagFromQuery();
     mediaRenderTagRow();
     mediaRenderGrid();
+    const badge = document.getElementById('mediaCountBadge');
+    if (badge) badge.innerHTML = `총 <b>${mediaGetAllItems().length}</b>개`;
 });

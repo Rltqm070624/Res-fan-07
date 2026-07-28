@@ -27,13 +27,20 @@ function mediaInitTagFromQuery() {
 }
 
 function mediaRenderTagRow() {
-    const row = document.getElementById('mediaTagRow');
-    if (!row) return;
-    const all = [{ label: '전체', color: null }].concat(MEDIA_CATEGORIES.map(c => ({ label: c.label, color: c.color })));
-    row.innerHTML = all.map(t => {
+    const list = document.getElementById('mediaFilterList');
+    if (!list) return;
+    const all = mediaGetAllItems();
+    const counts = {};
+    all.forEach(i => { counts[i.tagLabel] = (counts[i.tagLabel] || 0) + 1; });
+
+    const entries = [{ label: '전체', color: null, count: all.length }].concat(
+        MEDIA_CATEGORIES.map(c => ({ label: c.label, color: c.color, count: counts[c.label] || 0 }))
+    );
+
+    list.innerHTML = entries.map(t => {
         const active = t.label === mediaActiveTag;
-        const style = t.color ? `style="--chip-color:${t.color};"` : '';
-        return `<button type="button" class="mt-chip${active ? ' active' : ''}" ${style} onclick="mediaSetTag('${t.label}')">${t.label}</button>`;
+        const dot = t.color ? `<span class="mf-dot" style="background:${t.color};"></span>` : `<span class="mf-dot mf-dot-all"></span>`;
+        return `<li><button type="button" class="mf-item${active ? ' active' : ''}" onclick="mediaSetTag('${t.label}')">${dot}<span class="mf-label">${t.label}</span><span class="mf-count">${t.count}</span></button></li>`;
     }).join('');
 }
 

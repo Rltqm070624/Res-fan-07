@@ -43,6 +43,15 @@ function scrollToSection(id) {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
+/* ---- 루트 주소 웰컴 스플래시 닫기 ---- */
+function closeLandingSplash() {
+    const el = document.getElementById('landingSplash');
+    if (!el) return;
+    el.classList.add('landing-closing');
+    setTimeout(() => { document.documentElement.classList.remove('show-landing'); }, 650);
+    try { sessionStorage.setItem('rescene-landing-seen', '1'); } catch (e) {}
+}
+
 /* ---- 스케줄 데이터 로드 & 캘린더 팝업 ---- */
 let scheduleDB = {};
 let currentCalYear = new Date().getFullYear();

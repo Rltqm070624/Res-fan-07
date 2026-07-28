@@ -15,8 +15,65 @@ setInterval(() => {
 /* =========================================
    이미지 모달
 ========================================= */
-function openImageModal(src) { document.getElementById('fullSizeImage').src = src; document.getElementById('imageModal').classList.add('active'); document.getElementById('imageModalBackdrop').classList.add('active'); document.body.style.overflow = 'hidden'; }
-function closeImageModal() { document.getElementById('imageModal').classList.remove('active'); document.getElementById('imageModalBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
+let currentProfileIdx = 1;
+const PROFILE_TOTAL = 10;
+function openImageModal(src, idx) {
+    if (typeof idx === 'number') currentProfileIdx = idx;
+    document.getElementById('fullSizeImage').src = src; document.getElementById('imageModal').classList.add('active'); document.getElementById('imageModalBackdrop').classList.add('active'); document.body.style.overflow = 'hidden';
+}
+function closeImageModal() { if (suppressModalTap) return; document.getElementById('imageModal').classList.remove('active'); document.getElementById('imageModalBackdrop').classList.remove('active'); document.body.style.overflow = 'auto'; }
+function navigateImageModal(delta) {
+    currentProfileIdx += delta;
+    if (currentProfileIdx < 1) currentProfileIdx = PROFILE_TOTAL;
+    if (currentProfileIdx > PROFILE_TOTAL) currentProfileIdx = 1;
+    const img = document.getElementById('fullSizeImage');
+    if (img) img.src = `images/profile/${currentProfileIdx}.jpg`;
+}
+function navigateAlbumModal(delta) {
+    let idx = currentAlbumIdx + delta;
+    if (idx < 0) idx = ALBUMS.length - 1;
+    if (idx >= ALBUMS.length) idx = 0;
+    openAlbumModal(idx);
+}
+// ⭐️ 모달 안에서 좌우로 드래그(스와이프)하면 다음/이전 항목으로 이동
+let suppressModalTap = false;
+function enableModalSwipe(modalId, onSwipeLeft, onSwipeRight) {
+    const el = document.getElementById(modalId);
+    if (!el) return;
+    let startX = 0, startY = 0, tracking = false;
+
+    function finish(dx, dy) {
+        tracking = false;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+            suppressModalTap = true;
+            setTimeout(() => { suppressModalTap = false; }, 60);
+            if (dx < 0) onSwipeLeft(); else onSwipeRight();
+        }
+    }
+
+    // 터치(모바일)
+    el.addEventListener('touchstart', (e) => {
+        if (e.touches.length !== 1) return;
+        startX = e.touches[0].clientX; startY = e.touches[0].clientY; tracking = true;
+    }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+        if (!tracking) return;
+        finish(e.changedTouches[0].clientX - startX, e.changedTouches[0].clientY - startY);
+    }, { passive: true });
+
+    // 마우스(데스크탑) — 이미지/닫기 버튼 클릭은 그대로 동작하도록 살짝만 움직였을 땐 클릭으로 취급
+    el.addEventListener('mousedown', (e) => {
+        startX = e.clientX; startY = e.clientY; tracking = true;
+    });
+    window.addEventListener('mouseup', (e) => {
+        if (!tracking) return;
+        finish(e.clientX - startX, e.clientY - startY);
+    });
+}
+window.addEventListener('DOMContentLoaded', () => {
+    enableModalSwipe('imageModal', () => navigateImageModal(1), () => navigateImageModal(-1));
+    enableModalSwipe('albumModal', () => navigateAlbumModal(1), () => navigateAlbumModal(-1));
+});
 
 
 /* =========================================
@@ -68,7 +125,7 @@ function renderAgendaList() {
                 </div>
             </div>`;
         data.items.forEach(item => {
-            html += `<div class="agenda-item" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${d.getDate()}', '${dateKey}')">
+            html += `<div class="agenda-item" onclick="openCalendarPopup(); openModal('${currentCalYear}', '${currentCalMonth}', '${d.getDate()}', '${dateKey}')">
                 <div class="agenda-item-bar" style="background:${item.color};"></div>
                 <div class="agenda-item-body">
                     <div class="agenda-item-title">${item.title}</div>
@@ -120,7 +177,7 @@ function renderProfileArchive() {
         let phtml = '';
         const PREVIEW_COUNT = 7;
         for (let i = 1; i <= PREVIEW_COUNT; i++) {
-            phtml += `<div class="profile-item" onclick="openImageModal('images/profile/${i}.jpg')"><img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"><span class="pf-index">NO. ${String(i).padStart(2, '0')}</span></div>`;
+            phtml += `<div class="profile-item" onclick="openImageModal('images/profile/${i}.jpg', ${i})"><img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"><span class="pf-index">NO. ${String(i).padStart(2, '0')}</span></div>`;
         }
         phtml += `<a class="profile-item archive-more-tile" href="archive.html#profile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>전체보기</span></a>`;
         profileWrap.innerHTML = `<div class="profile-track">${phtml}</div>`;
@@ -131,7 +188,7 @@ function renderProfileArchive() {
     if (fullProfileGrid) {
         let fhtml = '';
         for (let i = 1; i <= 10; i++) {
-            fhtml += `<div class="profile-item" onclick="openImageModal('images/profile/${i}.jpg')"><img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"><span class="pf-index">NO. ${String(i).padStart(2, '0')}</span></div>`;
+            fhtml += `<div class="profile-item" onclick="openImageModal('images/profile/${i}.jpg', ${i})"><img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"><span class="pf-index">NO. ${String(i).padStart(2, '0')}</span></div>`;
         }
         fullProfileGrid.innerHTML = fhtml;
     }

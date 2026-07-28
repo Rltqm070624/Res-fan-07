@@ -286,3 +286,55 @@ function playAlbumTrack(trackIdx) {
             </div>`;
     }
 }
+
+/* ==========================================================================
+   ⭐️ WITH RESCENE — 같은 자리에서 문구 → 벚꽃 → 발자취(추후 타임라인) 전환
+   ========================================================================== */
+let wrPlayed = false;
+function playWithRescene() {
+    if (wrPlayed) return;
+    wrPlayed = true;
+
+    const section = document.getElementById('historySection');
+    const text = document.getElementById('wrText');
+    const petals = document.getElementById('petalLayer');
+    const next = document.getElementById('wrNext');
+    if (!section || !text || !petals || !next) return;
+
+    section.classList.add('wr-playing');
+
+    function spawnPetals(count) {
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.className = 'petal';
+            const size = 12 + Math.random() * 14;
+            const xStart = Math.random() * 100;
+            const drift = (Math.random() * 22 - 11).toFixed(1);
+            const duration = (6 + Math.random() * 5).toFixed(2);
+            const delay = (Math.random() * 4).toFixed(2);
+            const rot = (200 + Math.random() * 420).toFixed(0);
+            p.style.left = xStart + 'vw';
+            p.style.setProperty('--drift', drift + 'vw');
+            p.style.setProperty('--rot', rot + 'deg');
+            p.style.animationDuration = duration + 's';
+            p.style.animationDelay = delay + 's';
+            p.innerHTML = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24">' +
+                '<path fill="#f6c9d6" d="M12 2c1.6 2.1 1.6 4.2 0 6.3-1.6-2.1-1.6-4.2 0-6.3zm0 13.7c1.6 2.1 1.6 4.2 0 6.3-1.6-2.1-1.6-4.2 0-6.3zM2 12c2.1-1.6 4.2-1.6 6.3 0-2.1 1.6-4.2 1.6-6.3 0zm13.7 0c2.1-1.6 4.2-1.6 6.3 0-2.1 1.6-4.2 1.6-6.3 0zM6.9 6.9c1.9-.8 3.7 0 4.7 1.9-1.9.8-3.7 0-4.7-1.9zm5.5 5.5c1.9-.8 3.7 0 4.7 1.9-1.9.8-3.7 0-4.7-1.9zm0-5.5c.8 1.9 0 3.7-1.9 4.7-.8-1.9 0-3.7 1.9-4.7zM6.9 12.4c.8 1.9 0 3.7-1.9 4.7-.8-1.9 0-3.7 1.9-4.7z"/>' +
+                '<circle cx="12" cy="12" r="1.6" fill="#e78aa3"/></svg>';
+            petals.appendChild(p);
+            setTimeout(() => p.remove(), (parseFloat(duration) + parseFloat(delay)) * 1000 + 600);
+        }
+    }
+
+    // 1. WITH RESCENE 문구가 천천히 사라짐
+    text.classList.add('wr-hide');
+
+    // 2. 벚꽃이 흩날리기 시작
+    setTimeout(() => { petals.classList.add('show'); spawnPetals(28); }, 700);
+
+    // 3. 벚꽃이 서서히 사라짐
+    setTimeout(() => { petals.classList.add('hide'); }, 7900);
+
+    // 4. (임시) 발자취 준비중 안내 — 추후 마일스톤 타임라인으로 교체 예정
+    setTimeout(() => { next.classList.add('show'); }, 10200);
+}

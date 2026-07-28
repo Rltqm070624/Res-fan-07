@@ -109,8 +109,19 @@
             </div>
         </div>
 
-        <div id="historySection" class="slow-reveal">
-            <div class="section-title">WITH <span>RESCENE</span></div>
+        <div id="historySection" class="slow-reveal history-link" role="button" tabindex="0" onclick="playWithRescene()" onkeydown="if(event.key==='Enter')playWithRescene()" aria-label="위드 리센스 — 함께 걸어온 길 보기">
+            <div class="petal-layer" id="petalLayer"></div>
+
+            <div class="wr-layer-stack">
+                <div class="wr-text" id="wrText">
+                    <div class="section-title">WITH <span>RESCENE</span></div>
+                    <p class="history-subtitle">지금까지 걸어 온 길을 같이 걸어 볼까요?</p>
+                </div>
+
+                <div class="wr-next" id="wrNext">
+                    <p class="wr-next-text">발자취를 하나씩 채워가는 중이에요.<br>곧 이 자리에서 리센느와 함께 걸어온 순간들을 만나요.</p>
+                </div>
+            </div>
         </div>
 
         <div class="section-container reveal full-page-section" id="profileSection">

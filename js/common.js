@@ -48,7 +48,7 @@ function closeLandingSplash() {
     const el = document.getElementById('landingSplash');
     if (!el) return;
     el.classList.add('landing-closing');
-    setTimeout(() => { document.documentElement.classList.remove('show-landing'); }, 650);
+    setTimeout(() => { window.location.href = 'index.html'; }, 500);
 }
 
 /* ---- 스케줄 데이터 로드 & 캘린더 팝업 ---- */

@@ -17,7 +17,7 @@ html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom,
 html, body { scroll-snap-type: y proximity; overflow-x: hidden; width: 100%; position: relative; }
 
 .section-container { padding: 0 20px; max-width: 1040px; margin: 0 auto; position: relative; z-index: 2; }
-.full-page-section { height: 100vh; height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; scroll-snap-align: start; }
+.full-page-section { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; scroll-snap-align: start; padding-top: 60px; padding-bottom: 60px; }
 .full-page-section > .section-inner, .full-page-section .section-header { width: 100%; }
 #historySection { position: relative; width: 100%; height: 100vh; height: 100dvh; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; overflow: hidden; cursor: pointer; }
 #historySection .section-title { position: relative; z-index: 5; margin-bottom: 15px; font-size: 54px; letter-spacing: 2px; transition: letter-spacing 0.5s ease; }
@@ -207,6 +207,7 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 .media-empty{ color:var(--text-muted); font-size:13px; text-align:center; width:100%; padding:40px 0; }
 @media (max-width:900px){ .latest-media-grid{ grid-template-columns:1fr; gap:36px; } }
 
+/* 🚨 제가 실수로 날려먹었던 헤더 복구 코드 (모바일 아이콘 우측 정렬 완벽 보장) 🚨 */
 .plain-link{ color:inherit; text-decoration:none; }
 .util-reset{ margin-left:0; padding-left:0; border-left:none; }
 .lang-switcher-inline{ position:static !important; opacity:1 !important; pointer-events:auto !important; transform:none !important; background:transparent !important; border:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; padding:0 !important; display: flex; align-items: center; }
@@ -219,6 +220,7 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 
 /* 모바일 반응형 공통 */
 @media (max-width:800px){
+    /* 🚨 헤더 우측 쏠림 방지 및 우측 끝 정렬 강제 🚨 */
     .header-right, .nav-right, .header-utils { margin-left: auto !important; justify-content: flex-end !important; }
 
     .today-date-sub{ margin-bottom:34px; }
@@ -231,4 +233,3 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
     
     .profile-track { grid-template-columns: repeat(2, 1fr); }
 }
-

@@ -1,6 +1,16 @@
 /* ⭐️ 전역 리셋 — width/padding 계산 꼬임으로 인한 가로 스크롤 방지 */
 *, *::before, *::after { box-sizing: border-box; }
 
+/* ⭐️ 전역 스크롤바 — 다크모드에서 브라우저 기본(밝은) 스크롤바가 튀어보이는 문제 방지 */
+html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.22) transparent; color-scheme: dark; }
+html[data-theme="light"] { scrollbar-color: rgba(0,0,0,0.22) transparent; color-scheme: light; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 999px; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.32); }
+html[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); }
+html[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.32); }
+
 /* ==========================================================================
    ⭐️ 1. 컬러 및 폰트 변수 (다크/라이트 테마)
    ========================================================================== */
@@ -55,7 +65,7 @@ body, html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.4s ease, color 0.4s ease;
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
 }
 
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s var(--transition-smooth), transform 1s var(--transition-smooth); }

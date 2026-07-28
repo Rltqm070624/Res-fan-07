@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESCENE ARCHIVE | 메인</title>
-    <meta name="description" content="RESCENE(리센느) 공식 팬 아카이브 — 발자취, 멤버, 실시간 음원차트, 스케줄, 굿즈 정보를 한눈에.">
+    <meta name="description" content="RESCENE 비공식 팬 아카이브">
     <link rel="icon" type="image/png" href="images/logo.png">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="RESCENE ARCHIVE">
-    <meta property="og:description" content="RESCENE(리센느) 공식 팬 아카이브 — 발자취, 멤버, 실시간 음원차트, 스케줄, 굿즈 정보를 한눈에.">
+    <meta property="og:description" content="RESCENE 비공식 팬 아카이브">
     <meta property="og:image" content="images/logo.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="RESCENE ARCHIVE">
-    <meta name="twitter:description" content="RESCENE(리센느) 공식 팬 아카이브 — 발자취, 멤버, 실시간 음원차트, 스케줄, 굿즈 정보를 한눈에.">
+    <meta name="twitter:description" content="RESCENE 비공식 팬 아카이브">
     <meta name="twitter:image" content="images/logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,12 +31,29 @@
             document.documentElement.setAttribute('data-theme', savedTheme);
             const savedLang = localStorage.getItem('rescene-lang') || 'ko';
             document.documentElement.setAttribute('lang', savedLang);
+
+            // ⭐️ 루트 주소(index.html 명시 안 함)로 접속했을 때만 웰컴 스플래시 노출
+            try {
+                const isIndexExplicit = /index\.html?$/i.test(window.location.pathname);
+                const alreadySeen = sessionStorage.getItem('rescene-landing-seen') === '1';
+                if (!isIndexExplicit && !alreadySeen) {
+                    document.documentElement.classList.add('show-landing');
+                }
+            } catch (e) {}
         })();
     </script>
 
     <script src="js/i18n.js"></script>
 </head>
 <body id="homeSection">
+
+    <div class="landing-splash" id="landingSplash">
+        <div class="landing-inner">
+            <img src="images/logo.png" alt="RESCENE" class="landing-logo" onerror="this.style.display='none'">
+            <p class="landing-welcome">리센느 팬 아카이브에 오신 걸 환영합니다</p>
+            <a href="javascript:void(0)" class="landing-enter" onclick="closeLandingSplash()">바로가기 →</a>
+        </div>
+    </div>
 
     <nav class="top-nav">
         <div class="nav-brand notranslate" translate="no"><a href="index.html" class="plain-link">RESCENE</a></div>

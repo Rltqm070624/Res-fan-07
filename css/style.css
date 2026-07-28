@@ -196,6 +196,8 @@ html[data-theme="light"] .footer-sns a img { filter: invert(0); }
    ⭐️ 루트 주소 접속 시에만 보이는 웰컴 스플래시 (index.html 명시 접속 시엔 안 뜸)
    ========================================================================== */
 .landing-splash { display: none; }
+html.show-landing { overflow: hidden; height: 100%; }
+html.show-landing body { overflow: hidden; height: 100%; }
 html.show-landing .landing-splash {
     display: flex; align-items: center; justify-content: center;
     position: fixed; inset: 0; z-index: 99999;

@@ -29,7 +29,7 @@ const MEDIA_CATEGORIES = [
     {
         key: 'musicshow', label: '음악 방송', color: '#7e57c2',
         getItems: () => (typeof MUSIC_SHOW_DATA !== 'undefined' ? MUSIC_SHOW_DATA : [])
-            .map(i => ({ date: i.date, title: `${i.program} · ${i.song}`, sub: i.broadcaster, vid: i.vid }))
+            .map(i => ({ date: i.date, title: `${i.program} · ${i.song}`, sub: i.broadcaster, program: i.program, vid: i.vid }))
     },
     {
         key: 'live', label: '라이브 방송', color: '#ec407a',

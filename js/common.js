@@ -165,33 +165,57 @@ function closeModal() {
 
 window.addEventListener('DOMContentLoaded', () => { fetchScheduleData(); initSheetDrag(); });
 
-/* ---- 모바일 바텀시트: 핸들 드래그해서 아래로 내리면 닫힘 ---- */
+/* ---- 모바일 바텀시트: 핸들 드래그해서 아래로 내리면 닫힘 (rAF + CSS 변수로 부드럽게) ---- */
 function initSheetDrag() {
     const sheet = document.getElementById('scheduleModal');
     const handle = document.getElementById('scheduleSheetHandle');
     if (!sheet || !handle) return;
 
-    let startY = 0, deltaY = 0, dragging = false;
+    let startY = 0, deltaY = 0, dragging = false, rafId = null;
     const DISMISS_THRESHOLD = 110;
+
+    function applyDrag() {
+        rafId = null;
+        sheet.style.setProperty('--drag-y', deltaY + 'px');
+    }
 
     handle.addEventListener('touchstart', (e) => {
         if (window.innerWidth >= 1050) return;
         dragging = true; startY = e.touches[0].clientY; deltaY = 0;
+        sheet.classList.remove('sheet-snap');
         sheet.classList.add('dragging');
+        sheet.style.willChange = 'transform';
+        sheet.style.setProperty('--drag-y', '0px');
     }, { passive: true });
 
     handle.addEventListener('touchmove', (e) => {
         if (!dragging) return;
         deltaY = Math.max(0, e.touches[0].clientY - startY);
-        sheet.style.transform = `translateY(${deltaY}px)`;
+        if (rafId === null) rafId = requestAnimationFrame(applyDrag);
     }, { passive: true });
 
     const endDrag = () => {
         if (!dragging) return;
         dragging = false;
+        if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+        sheet.style.willChange = '';
         sheet.classList.remove('dragging');
-        sheet.style.transform = '';
-        if (deltaY > DISMISS_THRESHOLD) closeModal();
+        sheet.classList.add('sheet-snap');
+
+        if (deltaY > DISMISS_THRESHOLD) {
+            sheet.style.setProperty('--drag-y', '100%');
+            setTimeout(() => {
+                closeModal();
+                sheet.classList.remove('sheet-snap');
+                sheet.style.removeProperty('--drag-y');
+            }, 320);
+        } else {
+            sheet.style.setProperty('--drag-y', '0px');
+            setTimeout(() => {
+                sheet.classList.remove('sheet-snap');
+                sheet.style.removeProperty('--drag-y');
+            }, 320);
+        }
         deltaY = 0;
     };
     handle.addEventListener('touchend', endDrag);

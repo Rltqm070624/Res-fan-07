@@ -23,38 +23,48 @@
 
     <div id="siteNavSlot"></div>
     <script src="../js/layout.js"></script>
-    <script>renderSiteNav('', '../', { calendar: true, lang: false });</script>
+    <script>renderSiteNav('media', '../', { calendar: true, lang: false });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
-        <div class="section-container" style="flex: 1;">
+        <div class="section-container media-page-container" style="flex: 1;">
             <div class="section-header media-hero">
                 <div class="section-title">MEDIA <span>ARCHIVE</span></div>
             </div>
-            <p class="media-hero-sub">컨텐츠 · 음반 활동 컨텐츠 · 음악방송 · 라이브 방송 — 리센느 영상을 한곳에서. <span class="media-count-badge" id="mediaCountBadge"></span></p>
+            <p class="media-hero-sub">컨텐츠 · 음반 활동 컨텐츠 · 음악방송 · 라이브 방송 · 공연 및 행사 — 리센느 영상을 한곳에서. <span class="media-count-badge" id="mediaCountBadge"></span></p>
 
-            <div class="media-controls">
-                <input type="text" class="media-search" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()">
-                <div class="media-controls-row">
-                    <div class="media-tag-row" id="mediaTagRow"></div>
-                    <div class="media-sort-row" id="mediaSortRow">
-                        <button type="button" class="ms-btn active" data-sort="new" onclick="mediaSetSort('new')">최신순</button>
-                        <button type="button" class="ms-btn" data-sort="old" onclick="mediaSetSort('old')">오래된순</button>
+            <div class="media-layout">
+                <div class="media-main">
+                    <div class="media-controls">
+                        <input type="text" class="media-search" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()">
+                        <div class="media-controls-row">
+                            <div class="media-sort-row" id="mediaSortRow">
+                                <button type="button" class="ms-btn active" data-sort="new" onclick="mediaSetSort('new')">최신순</button>
+                                <button type="button" class="ms-btn" data-sort="old" onclick="mediaSetSort('old')">오래된순</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media-now-playing" id="mediaNowPlaying">
+                        <button type="button" class="media-np-close" onclick="mediaClosePlayer()" aria-label="닫기">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                        </button>
+                        <div class="media-np-media" id="mediaNpMedia"></div>
+                        <div class="media-np-title" id="mediaNpTitle"></div>
+                        <div class="media-np-sub" id="mediaNpSub"></div>
+                    </div>
+
+                    <div class="media-grid-viewport">
+                        <div class="media-grid" id="mediaGrid"></div>
+                    </div>
+                    <div class="media-loadmore-wrap">
+                        <button type="button" class="media-loadmore-btn" id="mediaLoadMoreBtn" onclick="mediaLoadMore()">더 불러오기</button>
                     </div>
                 </div>
-            </div>
 
-            <div class="media-now-playing" id="mediaNowPlaying">
-                <button type="button" class="media-np-close" onclick="mediaClosePlayer()" aria-label="닫기">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                </button>
-                <div class="media-np-media" id="mediaNpMedia"></div>
-                <div class="media-np-title" id="mediaNpTitle"></div>
-                <div class="media-np-sub" id="mediaNpSub"></div>
-            </div>
-
-            <div class="media-grid" id="mediaGrid"></div>
-            <div class="media-loadmore-wrap">
-                <button type="button" class="media-loadmore-btn" id="mediaLoadMoreBtn" onclick="mediaLoadMore()">더 불러오기</button>
+                <aside class="media-filter-panel">
+                    <div class="mf-title">카테고리</div>
+                    <ul class="mf-list" id="mediaFilterList"></ul>
+                </aside>
             </div>
         </div>
 
@@ -72,6 +82,7 @@
     <script src="../js/album_content_data.js"></script>
     <script src="../js/music_show_data.js"></script>
     <script src="../js/live_data.js"></script>
+    <script src="../js/event_data.js"></script>
     <script src="../js/contents.js"></script>
     <script src="media.js"></script>
 </body>

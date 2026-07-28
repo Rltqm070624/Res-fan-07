@@ -9,8 +9,8 @@
     --bg-surface: rgba(255, 255, 255, 0.04); 
     --bg-surface-hover: rgba(255, 255, 255, 0.08);
     
-    --c-accent: #E5C07B; 
-    --c-accent-glow: rgba(229, 192, 123, 0.3);
+    --c-accent: #9AA6FF; 
+    --c-accent-glow: rgba(154, 166, 255, 0.28);
     
     --text-primary: #F4F4F5; 
     --text-secondary: #9FA0A7; 
@@ -24,6 +24,9 @@
     --font-head: 'Montserrat', sans-serif; 
     --font-num: 'Plus Jakarta Sans', sans-serif; 
     --font-body: 'Noto Sans KR', sans-serif;
+    --font-display: 'Cormorant Garamond', serif;
+
+    --accent-gradient: linear-gradient(135deg, #C7CDFF 0%, #9AA6FF 45%, #6B78E0 100%);
 
     --transition-smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }

@@ -95,7 +95,6 @@ function renderProfileArchive() {
             phtml += `<div class="profile-item" onclick="openImageModal('images/profile/${i}.jpg')"><img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"><span class="pf-index">NO. ${String(i).padStart(2, '0')}</span></div>`;
         }
         profileWrap.innerHTML = `<div class="profile-track">${phtml}</div>`;
-        enableDragScroll(profileWrap);
     }
 
     // ⭐️ 앨범 커버/순서/트랙 정보 (아래 renderAlbumGrid 참고)
@@ -181,7 +180,6 @@ function renderAlbumGrid() {
         ahtml += `<div class="profile-item album-cover-item" onclick="openAlbumModal(${idx})"><img src="images/${album.image}" alt="${album.title}" loading="lazy" onerror="console.error('앨범 이미지 로드 실패:', this.src); this.closest('.profile-item').classList.add('img-broken'); this.style.display='none';"><span class="album-broken-label">이미지 없음<br>${album.image}</span></div>`;
     });
     albumWrap.innerHTML = `<div class="profile-track album-track">${ahtml}</div>`;
-    if (typeof enableDragScroll === 'function') enableDragScroll(albumWrap);
 }
 
 function pickTrack(album) {

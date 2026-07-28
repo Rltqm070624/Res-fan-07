@@ -55,35 +55,9 @@
         <script>renderSiteFooter('../');</script>
     </div>
 
-    <!-- 캘린더 중앙 팝업 모달 -->
-    <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
-    <div class="calendar-popup-wrapper" id="calendarPopupModal">
-        <button class="close-btn" onclick="closeCalendarPopup()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-        <div class="calendar-header-controls">
-            <button class="cal-btn" onclick="changeMonth(-1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-            <div class="calendar-title" id="calendarMonthText">2026. 07</div>
-            <button class="cal-btn" onclick="changeMonth(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
-        </div>
-        <div class="calendar-grid"><div class="weekday" data-wd="0">SUN</div><div class="weekday" data-wd="1">MON</div><div class="weekday" data-wd="2">TUE</div><div class="weekday" data-wd="3">WED</div><div class="weekday" data-wd="4">THU</div><div class="weekday" data-wd="5">FRI</div><div class="weekday" data-wd="6">SAT</div></div>
-        <div class="calendar-grid" id="calendarDays"></div>
-        <div class="calendar-legend">
-            <span class="legend-item"><span class="legend-dot" style="background:#7e57c2"></span>방송</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#ffa726"></span>라디오</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#66bb6a"></span>행사</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#ec407a"></span>팬사인회</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#26c6da"></span>공연</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#78909c"></span>공지</span>
-        </div>
-    </div>
-
-    <!-- 스케줄 상세 정보 모달 -->
-    <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
-    <div class="modal-wrapper" id="scheduleModal">
-        <div class="sheet-drag-handle" id="scheduleSheetHandle"></div>
-        <button class="close-btn" onclick="closeModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-        <div class="modal-header-flex"><div class="modal-date" id="modalDateTitle"></div></div>
-        <div id="modalScheduleText"></div>
-    </div>
+    <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
+    <div id="siteCalendarSlot"></div>
+    <script>renderCalendarWidgets();</script>
 
     <script>
         // 하위 폴더(member/)에서 실행되므로 이미지 경로 앞에 ../ 를 붙여야 함

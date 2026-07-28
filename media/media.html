@@ -17,12 +17,7 @@
     <link rel="stylesheet" href="../css/i18n.css">
     <link rel="stylesheet" href="media.css">
 
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem('rescene-theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        })();
-    </script>
+    <script src="../js/theme-init.js"></script>
 </head>
 <body>
 
@@ -66,6 +61,7 @@
         <script>renderSiteFooter('../');</script>
     </div>
 
+    <script src="../js/i18n.js"></script>
     <script src="../js/common.js"></script>
     <script src="../js/contents_data.js"></script>
     <script src="../js/album_content_data.js"></script>

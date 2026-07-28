@@ -15,11 +15,12 @@
     // 루트 주소 웰컴 스플래시 (index.html 전용 — 다른 페이지에는 해당 요소가 없어 조용히 무시됨)
     // 주의: "index.html이 아니면 전부 켠다"가 아니라 "루트 경로(/)일 때만" 켜야 함.
     // 안 그러면 chart.html, goods.html 등 다른 페이지에서도 스크롤이 잠겨버림.
+    // ⭐️ 예전엔 세션당 한 번만 뜨게 sessionStorage로 막아놨었는데, 그것 때문에
+    // "캐시 문제인가?" 헷갈리는 상황이 계속 생겨서 제거함 — 이제 루트로 올 때마다 항상 뜸.
     try {
         var path = window.location.pathname;
         var isRootPath = /\/$/.test(path);
-        var alreadySeen = sessionStorage.getItem('rescene-landing-seen') === '1';
-        if (isRootPath && !alreadySeen) {
+        if (isRootPath) {
             document.documentElement.classList.add('show-landing');
         }
     } catch (e) {}

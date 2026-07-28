@@ -109,11 +109,11 @@
             <div class="today-grid" id="todayScheduleGrid"></div>
         </div>
 
-        <div class="section-container reveal full-page-section" id="contentsSection">
+        <div class="section-container reveal" id="latestMediaSection">
             <div class="section-header center-header section-header-md">
-                <div class="section-title">RESCENE <span>CONTENTS</span></div>
+                <div class="section-title">LATEST <span>UPDATES</span></div>
             </div>
-            <div class="contents-scroll" id="contentsScroll"></div>
+            <div class="latest-media-grid" id="latestMediaGrid"></div>
         </div>
 
         <div class="section-container reveal full-page-section" id="shortsSection">
@@ -147,28 +147,6 @@
         </div>
     </div>
 
-
-    <!-- 콘텐츠 아카이브 모달 (검색 + 멤버 필터 + 전체 그리드 + 인라인 재생) -->
-    <div class="modal-backdrop" id="contentsModalBackdrop" onclick="closeContentsModal()"></div>
-    <div class="contents-modal-wrapper" id="contentsModal">
-        <button class="popup-close-btn" onclick="closeContentsModal()" aria-label="콘텐츠 닫기">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-        <div class="contents-modal-head">
-            <div class="contents-modal-title">RESCENE <span>CONTENTS</span></div>
-            <input type="text" class="contents-search" id="contentsSearch" placeholder="제목 · 채널 검색" oninput="filterContents()">
-            <div class="contents-filter-row" id="contentsFilterRow"></div>
-        </div>
-        <div class="contents-modal-body">
-            <div class="contents-grid" id="contentsGrid"></div>
-            <div class="contents-player" id="contentsPlayer">
-                <button type="button" class="contents-back-btn" onclick="closeContentsPlayer()">← 목록으로</button>
-                <div class="contents-player-media" id="contentsPlayerMedia"></div>
-                <div class="contents-player-title" id="contentsPlayerTitle"></div>
-                <div class="contents-player-meta" id="contentsPlayerMeta"></div>
-            </div>
-        </div>
-    </div>
 
     <!-- 캘린더 모달 -->
     <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
@@ -205,6 +183,8 @@
 
     <script src="js/common.js"></script>
     <script src="js/contents_data.js"></script>
+    <script src="js/album_content_data.js"></script>
+    <script src="js/music_show_data.js"></script>
     <script src="js/contents.js"></script>
     <script src="js/main.js"></script>
 </body>

@@ -1,16 +1,17 @@
 /* ==========================================================================
-   ⭐️ MEDIA ARCHIVE 페이지 — 검색 + 태그(대분류) + 서브탭(소분류) + 정렬 + 더보기 + 재생
+   ⭐️ MEDIA ARCHIVE 페이지 — 검색 + 태그(대분류) + 서브탭(소분류) + 서브서브탭(세분류) + 정렬 + 더보기 + 재생
    - MEDIA_CATEGORIES, ytThumb, escapeHtml, escapeAttr 는 js/contents.js 에 정의됨
    ========================================================================== */
 
 let mediaActiveTag = '전체';
 let mediaActiveSub = '전체';
+let mediaActiveSub2 = '전체';
 let mediaSort = 'new';
 let mediaSearchTerm = '';
 let mediaVisibleCount = 24;
 const MEDIA_PAGE_SIZE = 24;
 
-// 대분류별 소분류(서브탭) 정의 — item(평탄화된 데이터)을 기준으로 옵션/매칭 판단
+// 대분류별 소분류(서브탭) 정의. 라이브 방송은 멤버(소분류) > 연도(세분류) 2단계까지 있음
 const MEDIA_SUBFILTERS = {
     '음악 방송': {
         getOptions: (items) => [...new Set(items.map(i => i.program).filter(Boolean))],
@@ -18,7 +19,11 @@ const MEDIA_SUBFILTERS = {
     },
     '라이브 방송': {
         getOptions: () => ['원이', '리브', '미나미', '메이', '제나'],
-        match: (item, sub) => item.sub === '전원' || (item.sub || '').includes(sub)
+        match: (item, sub) => item.sub === '전원' || (item.sub || '').includes(sub),
+        third: {
+            getOptions: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
+            match: (item, sub2) => item.date.slice(0, 4) === sub2
+        }
     },
     '공연 및 행사': {
         getOptions: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
@@ -58,7 +63,7 @@ function mediaRenderSubtagRow() {
     const row = document.getElementById('mediaSubtagRow');
     if (!row) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    if (!cfg) { row.innerHTML = ''; row.style.display = 'none'; return; }
+    if (!cfg) { row.innerHTML = ''; row.style.display = 'none'; mediaRenderSubtag2Row(); return; }
 
     const itemsInTag = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
     const options = ['전체'].concat(cfg.getOptions(itemsInTag));
@@ -66,11 +71,30 @@ function mediaRenderSubtagRow() {
     row.innerHTML = options.map(opt =>
         `<button type="button" class="mst-chip${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${opt}')">${opt}</button>`
     ).join('');
+    mediaRenderSubtag2Row();
+}
+
+function mediaRenderSubtag2Row() {
+    const row = document.getElementById('mediaSubtag2Row');
+    if (!row) return;
+    const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
+    if (!cfg || !cfg.third) { row.innerHTML = ''; row.style.display = 'none'; return; }
+
+    // 소분류까지 적용된 상태에서 세분류(연도) 옵션 추출
+    let itemsInSub = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
+    if (mediaActiveSub !== '전체') itemsInSub = itemsInSub.filter(i => cfg.match(i, mediaActiveSub));
+
+    const options = ['전체'].concat(cfg.third.getOptions(itemsInSub));
+    row.style.display = 'flex';
+    row.innerHTML = options.map(opt =>
+        `<button type="button" class="mst2-chip${opt === mediaActiveSub2 ? ' active' : ''}" onclick="mediaSetSub2('${opt}')">${opt}</button>`
+    ).join('');
 }
 
 function mediaSetTag(label) {
     mediaActiveTag = label;
     mediaActiveSub = '전체';
+    mediaActiveSub2 = '전체';
     mediaVisibleCount = MEDIA_PAGE_SIZE;
     mediaRenderTagRow();
     mediaRenderSubtagRow();
@@ -79,8 +103,16 @@ function mediaSetTag(label) {
 
 function mediaSetSub(sub) {
     mediaActiveSub = sub;
+    mediaActiveSub2 = '전체';
     mediaVisibleCount = MEDIA_PAGE_SIZE;
     mediaRenderSubtagRow();
+    mediaApplyFilters();
+}
+
+function mediaSetSub2(sub2) {
+    mediaActiveSub2 = sub2;
+    mediaVisibleCount = MEDIA_PAGE_SIZE;
+    mediaRenderSubtag2Row();
     mediaApplyFilters();
 }
 
@@ -102,6 +134,7 @@ function mediaGetFiltered() {
 
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     if (cfg && mediaActiveSub !== '전체') list = list.filter(i => cfg.match(i, mediaActiveSub));
+    if (cfg && cfg.third && mediaActiveSub2 !== '전체') list = list.filter(i => cfg.third.match(i, mediaActiveSub2));
 
     if (mediaSearchTerm) {
         list = list.filter(i => ((i.title || '') + ' ' + (i.sub || '')).toLowerCase().includes(mediaSearchTerm));
@@ -110,15 +143,24 @@ function mediaGetFiltered() {
     return list;
 }
 
+function mediaCardTitle(item) {
+    // ⭐️ 음악방송에서 프로그램을 특정해서 골랐으면, 카드 제목엔 이미 아는 프로그램명 대신 곡명만
+    if (item.tagLabel === '음악 방송' && mediaActiveSub !== '전체' && item.program) {
+        return item.title.replace(`${item.program} · `, '');
+    }
+    return item.title;
+}
+
 function mediaCardHtml(item) {
+    const title = mediaCardTitle(item);
     return `<div class="media-card">
         <div class="media-card-thumb" data-vid="${item.vid}" data-title="${escapeAttr(item.title)}" onclick="mediaPlayCard(this)">
-            <img src="${ytThumb(item.vid)}" alt="${escapeAttr(item.title)}" loading="lazy" onerror="this.closest('.media-card').style.display='none'">
+            <img src="${ytThumb(item.vid)}" alt="${escapeAttr(title)}" loading="lazy" onerror="this.closest('.media-card').style.display='none'">
             <button type="button" class="mc-play" aria-label="재생"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
             <span class="media-card-tag" style="background:${item.tagColor}e6;">${escapeHtml(item.tagLabel)}</span>
         </div>
         <div class="media-card-info">
-            <div class="mc-title">${escapeHtml(item.title)}</div>
+            <div class="mc-title">${escapeHtml(title)}</div>
             <div class="mc-sub">${item.sub ? escapeHtml(item.sub) + ' · ' : ''}${item.date}</div>
         </div>
     </div>`;

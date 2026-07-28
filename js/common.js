@@ -133,7 +133,7 @@ function openModal(year, month, day, dateKey) {
             let dotColor = item.color ? item.color : 'var(--c-accent)';
             let label = typeLabelMap[item.type] || item.type || '일정';
             let time = item.time ? item.time : timeTbd;
-            scheduleHtml += `<div class="ec-card"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">${label}</span><div class="ec-body"><h2 class="ec-title">${item.title}</h2><div class="ec-meta"><div class="ec-meta-row"><span class="ec-meta-label">${timeLabel}</span><span class="ec-meta-val">${time}</span></div></div>`;
+            scheduleHtml += `<div class="ec-card"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">${label}</span><div class="ec-body"><div class="ec-meta"><div class="ec-meta-row"><span class="ec-meta-label">${timeLabel}</span><span class="ec-meta-val">${time}</span></div></div><h2 class="ec-title">${item.title}</h2>`;
             if (item.image) scheduleHtml += `<div class="ec-img-wrapper"><img src="${SITE_ROOT}${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`;
             scheduleHtml += `</div></div>`;
         });
@@ -163,4 +163,37 @@ function closeModal() {
     if (scheduleModal) scheduleModal.classList.remove('active'); if (backdrop) backdrop.classList.remove('active'); if (calModal) calModal.classList.remove('split-active');
 }
 
-window.addEventListener('DOMContentLoaded', () => { fetchScheduleData(); });
+window.addEventListener('DOMContentLoaded', () => { fetchScheduleData(); initSheetDrag(); });
+
+/* ---- 모바일 바텀시트: 핸들 드래그해서 아래로 내리면 닫힘 ---- */
+function initSheetDrag() {
+    const sheet = document.getElementById('scheduleModal');
+    const handle = document.getElementById('scheduleSheetHandle');
+    if (!sheet || !handle) return;
+
+    let startY = 0, deltaY = 0, dragging = false;
+    const DISMISS_THRESHOLD = 110;
+
+    handle.addEventListener('touchstart', (e) => {
+        if (window.innerWidth >= 1050) return;
+        dragging = true; startY = e.touches[0].clientY; deltaY = 0;
+        sheet.classList.add('dragging');
+    }, { passive: true });
+
+    handle.addEventListener('touchmove', (e) => {
+        if (!dragging) return;
+        deltaY = Math.max(0, e.touches[0].clientY - startY);
+        sheet.style.transform = `translateY(${deltaY}px)`;
+    }, { passive: true });
+
+    const endDrag = () => {
+        if (!dragging) return;
+        dragging = false;
+        sheet.classList.remove('dragging');
+        sheet.style.transform = '';
+        if (deltaY > DISMISS_THRESHOLD) closeModal();
+        deltaY = 0;
+    };
+    handle.addEventListener('touchend', endDrag);
+    handle.addEventListener('touchcancel', endDrag);
+}

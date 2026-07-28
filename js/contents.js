@@ -35,6 +35,11 @@ const MEDIA_CATEGORIES = [
         key: 'live', label: '라이브 방송', color: '#ec407a',
         getItems: () => (typeof LIVE_DATA !== 'undefined' ? LIVE_DATA : [])
             .map(i => ({ date: i.date, title: i.title, sub: i.cast, vid: i.vid }))
+    },
+    {
+        key: 'event', label: '공연 및 행사', color: '#66bb6a',
+        getItems: () => (typeof EVENT_DATA !== 'undefined' ? EVENT_DATA : [])
+            .map(i => ({ date: i.date, title: i.title, sub: '', vid: i.vid }))
     }
 ];
 

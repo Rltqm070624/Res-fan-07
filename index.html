@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESCENE ARCHIVE | 메인</title>
-    <meta name="description" content="RESCENE 비공식 팬 아카이브">
+    <meta name="description" content="RESCENE(리센느) 공식 팬 아카이브 — 발자취, 멤버, 실시간 음원차트, 스케줄, 굿즈 정보를 한눈에.">
     <link rel="icon" type="image/png" href="images/logo.png">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="RESCENE ARCHIVE">
-    <meta property="og:description" content="RESCENE 비공식 팬 아카이브">
+    <meta property="og:description" content="RESCENE(리센느) 공식 팬 아카이브 — 발자취, 멤버, 실시간 음원차트, 스케줄, 굿즈 정보를 한눈에.">
     <meta property="og:image" content="images/logo.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="RESCENE ARCHIVE">
-    <meta name="twitter:description" content="RESCENE 비공식 팬 아카이브">
+    <meta name="twitter:description" content="RESCENE(리센느) 공식 팬 아카이브 — 발자취, 멤버, 실시간 음원차트, 스케줄, 굿즈 정보를 한눈에.">
     <meta name="twitter:image" content="images/logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,7 +60,7 @@
         <ul class="desktop-menu">
             <li><a href="index.html">HOME</a></li>
             <li><a href="member/member.html">MEMBERS</a></li>
-            <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection')">CHARTS</a></li>
+            <li><a href="melon-chart.html">CHARTS</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection')">SCHEDULE</a></li>
             <li><a href="goods/goods.html">GOODS</a></li>
         </ul>
@@ -102,7 +102,7 @@
         <ul class="mobile-menu-list">
             <li><a href="index.html">HOME</a></li>
             <li><a href="member/member.html">MEMBERS</a></li>
-            <li><a href="javascript:void(0)" onclick="scrollToSection('chartSection'); toggleMobileMenu();">CHARTS</a></li>
+            <li><a href="melon-chart.html">CHARTS</a></li>
             <li><a href="javascript:void(0)" onclick="scrollToSection('todayScheduleSection'); toggleMobileMenu();">SCHEDULE</a></li>
             <li><a href="goods/goods.html">GOODS</a></li>
         </ul>
@@ -163,18 +163,11 @@
             <div class="today-grid" id="todayScheduleGrid"></div>
         </div>
 
-        <div class="section-container reveal full-page-section" id="chartSection">
+        <div class="section-container reveal full-page-section" id="contentsSection">
             <div class="section-header center-header section-header-md">
-                <div class="section-title">MUSIC <span>CHARTS</span></div>
+                <div class="section-title">RESCENE <span>CONTENTS</span></div>
             </div>
-            <div class="chart-wrap">
-                <div class="update-time chart-update-time" id="currentTime">데이터 로딩중...</div>
-                <div class="ticker-container">
-                    <div class="ticker-wrapper" id="tickerWrapper">
-                        <div class="ticker-item skeleton"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="contents-scroll" id="contentsScroll"></div>
         </div>
 
         <div class="section-container reveal full-page-section" id="shortsSection">
@@ -216,6 +209,28 @@
     </div>
 
 
+    <!-- 콘텐츠 아카이브 모달 (검색 + 멤버 필터 + 전체 그리드 + 인라인 재생) -->
+    <div class="modal-backdrop" id="contentsModalBackdrop" onclick="closeContentsModal()"></div>
+    <div class="contents-modal-wrapper" id="contentsModal">
+        <button class="popup-close-btn" onclick="closeContentsModal()" aria-label="콘텐츠 닫기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="contents-modal-head">
+            <div class="contents-modal-title">RESCENE <span>CONTENTS</span></div>
+            <input type="text" class="contents-search" id="contentsSearch" placeholder="제목 · 채널 검색" oninput="filterContents()">
+            <div class="contents-filter-row" id="contentsFilterRow"></div>
+        </div>
+        <div class="contents-modal-body">
+            <div class="contents-grid" id="contentsGrid"></div>
+            <div class="contents-player" id="contentsPlayer">
+                <button type="button" class="contents-back-btn" onclick="closeContentsPlayer()">← 목록으로</button>
+                <div class="contents-player-media" id="contentsPlayerMedia"></div>
+                <div class="contents-player-title" id="contentsPlayerTitle"></div>
+                <div class="contents-player-meta" id="contentsPlayerMeta"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- 캘린더 모달 -->
     <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
     <div class="calendar-popup-wrapper" id="calendarPopupModal">
@@ -250,6 +265,8 @@
     </div>
 
     <script src="js/common.js"></script>
+    <script src="js/contents_data.js"></script>
+    <script src="js/contents.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

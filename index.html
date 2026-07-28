@@ -18,30 +18,14 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Yomogi&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/i18n.css">
 
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem('rescene-theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            const savedLang = localStorage.getItem('rescene-lang') || 'ko';
-            document.documentElement.setAttribute('lang', savedLang);
-
-            // ⭐️ 루트 주소(index.html 명시 안 함)로 접속했을 때만 웰컴 스플래시 노출
-            try {
-                const isIndexExplicit = /index\.html?$/i.test(window.location.pathname);
-                const alreadySeen = sessionStorage.getItem('rescene-landing-seen') === '1';
-                if (!isIndexExplicit && !alreadySeen) {
-                    document.documentElement.classList.add('show-landing');
-                }
-            } catch (e) {}
-        })();
-    </script>
+    <script src="js/theme-init.js"></script>
 
     <script src="js/i18n.js"></script>
 </head>

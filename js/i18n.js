@@ -1,12 +1,3 @@
-/* ==========================================================================
-   RESCENE ARCHIVE - 자체 번역 엔진 (Google Translate 미사용)
-   - 크롬/구글 번역기에 의존하지 않고, 미리 준비된 한/영/일 사전으로
-     텍스트를 그 자리에서 즉시 교체합니다. 새로고침 없음, 실시간 API 호출 없음.
-   - 새 문구를 번역에 포함시키고 싶으면:
-     1) 고정 문구(HTML에 항상 있는 텍스트) → 해당 요소에 data-i18n="키" 추가 후
-        아래 TRANSLATIONS.ko/en/ja 에 같은 키로 문구 등록
-     2) JS가 동적으로 만드는 텍스트 → window.t('키') 로 불러와 쓰기
-   ========================================================================== */
 (function () {
     'use strict';
 
@@ -117,21 +108,12 @@
         refreshDynamicSections();
     };
 
-    function buildSwitcher() {
-        if (document.querySelector('.lang-switcher')) return;
-        var box = document.createElement('div');
-        box.className = 'lang-switcher notranslate'; box.setAttribute('translate', 'no');
-        box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Language');
-        LANGS.forEach(function (lang) {
-            var b = document.createElement('button'); b.type = 'button'; b.setAttribute('data-lang', lang); b.textContent = LABELS[lang];
-            b.addEventListener('click', function () { window.setLang(lang); });
-            box.appendChild(b);
-        });
-        document.body.appendChild(box);
-    }
+    // ⭐️ 예전엔 여기서 언어 스위처가 없는 페이지에 자동으로 하나 만들어 붙였는데,
+    // js/layout.js의 renderSiteNav(..., { lang: true/false }) 옵션과 충돌해서
+    // lang:false로 꺼둔 페이지(goods/chart/member/media)에도 계속 떠 있었음.
+    // → 자동 생성 없애고, nav 안에 있는 스위처(lang:true인 페이지)만 사용하도록 정리.
 
     window.addEventListener('DOMContentLoaded', function () {
-        buildSwitcher();
         updateButtons();
         applyStaticTexts();
         // 최초 로드시 동적 영역은 각 페이지 스크립트가 로드된 뒤 알아서 window.t를 읽어가므로 별도 호출 불필요

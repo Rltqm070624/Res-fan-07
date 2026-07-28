@@ -11,6 +11,9 @@ html[data-theme="light"] { scrollbar-color: rgba(0,0,0,0.22) transparent; color-
 html[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); }
 html[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.32); }
 
+/* ⭐️ 어느 페이지든 본문과 하단 배너 사이 여백 확보 */
+#siteFooterSlot { display: block; margin-top: 60px; }
+
 /* ==========================================================================
    ⭐️ 1. 컬러 및 폰트 변수 (다크/라이트 테마)
    ========================================================================== */

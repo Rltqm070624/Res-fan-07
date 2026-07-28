@@ -112,14 +112,26 @@ function enableDragScroll(el) {
             requestAnimationFrame(step);
         })();
     }
+    // 트랙패드는 deltaX/deltaY 비율이 매 이벤트마다 미세하게 흔들려서, 매번 다시 판단하면
+    // "세로 스크롤 → 가로 스크롤 → 세로 스크롤..."로 뒤집히며 끊기는(드드득) 느낌이 남.
+    // → 한 번의 연속 제스처 동안은 처음 판단한 방향을 그대로 유지(락)하고,
+    //   잠깐(120ms) 멈추면 다음 제스처에서 다시 판단하도록 함.
+    let wheelLockDirection = null;
+    let wheelLockTimer = null;
     el.addEventListener('wheel', (e) => {
-        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-            e.preventDefault();
-            const maxScroll = el.scrollWidth - el.clientWidth;
-            if (wheelTarget === null) wheelTarget = el.scrollLeft;
-            wheelTarget = Math.max(0, Math.min(maxScroll, wheelTarget + e.deltaY));
-            animateWheel();
+        clearTimeout(wheelLockTimer);
+        wheelLockTimer = setTimeout(() => { wheelLockDirection = null; wheelTarget = null; }, 120);
+
+        if (wheelLockDirection === null) {
+            wheelLockDirection = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? 'vertical' : 'horizontal';
         }
+        if (wheelLockDirection !== 'vertical') return; // 이미 가로 스크롤 제스처면 네이티브 동작에 맡김
+
+        e.preventDefault();
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        if (wheelTarget === null) wheelTarget = el.scrollLeft;
+        wheelTarget = Math.max(0, Math.min(maxScroll, wheelTarget + e.deltaY));
+        animateWheel();
     }, { passive: false });
 }
 

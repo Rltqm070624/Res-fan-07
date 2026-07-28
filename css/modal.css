@@ -132,12 +132,18 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 /* 일정이 없을 때 세로 정렬 중앙 고정 */
 .schedule-detail-empty { text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 300; margin: auto 0; padding: 0; flex: 1; display: flex; align-items: center; justify-content: center; }
 
+/* 모바일 바텀시트 드래그 핸들 (모바일에서만 노출) */
+.sheet-drag-handle { display: none; width: 100%; padding: 10px 0 4px; flex-shrink: 0; cursor: grab; touch-action: none; }
+.sheet-drag-handle::before { content: ''; display: block; width: 40px; height: 4px; border-radius: 3px; background: var(--border-highlight); margin: 0 auto; }
+.modal-wrapper.dragging { transition: none !important; }
+
 /* 모바일 모달 바텀시트 유지 (모바일에서는 높이 고정 해제) */
 @media (max-width: 1049px) {
     .calendar-popup-wrapper.active.split-active { transform: translate(-50%, -50%); }
     .calendar-popup-wrapper { width: 95% !important; height: 90vh !important; max-height: none !important; min-height: 0 !important; padding: 45px 12px 20px !important; }
-    .modal-wrapper { top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important; transform: translateY(100%) !important; width: 100% !important; height: 80vh !important; min-height: 0 !important; border-radius: 20px 20px 0 0 !important; max-width: 100% !important; }
+    .modal-wrapper { top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important; transform: translateY(100%) !important; width: 100% !important; height: 100vh !important; height: 100dvh !important; min-height: 0 !important; border-radius: 20px 20px 0 0 !important; max-width: 100% !important; padding-top: env(safe-area-inset-top, 0px); }
     .modal-wrapper.active { transform: translateY(0) !important; z-index: 9999 !important; }
+    .sheet-drag-handle { display: block; }
     #calendarPopupModal .close-btn { top: 8px !important; right: 8px !important; padding: 5px !important; }
     .calendar-header-controls { margin-bottom: 15px !important; }
     .calendar-grid { gap: 4px; }

@@ -271,16 +271,18 @@ function playAlbumTrack(trackIdx) {
     const mediaWrap = document.getElementById('albumMediaWrap');
     if (!mediaWrap) return;
 
-    if (track.mv) {
-        mediaWrap.innerHTML = `<iframe id="albumMvFrame" src="https://www.youtube.com/embed/${track.mv}" title="${track.name}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    // MV가 없어도 음원/방송분 등 링크가 있으면 그 영상을 그대로 재생 (음원 버튼 박스 제거)
+    const firstLink = track.links && track.links[0];
+    const videoId = track.mv || (firstLink && firstLink.vid);
+
+    if (videoId) {
+        mediaWrap.innerHTML = `<iframe id="albumMvFrame" src="https://www.youtube.com/embed/${videoId}" title="${track.name}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     } else {
-        const firstLink = track.links && track.links[0];
         const album2 = ALBUMS[currentAlbumIdx];
-        const audioLabel = window.t ? window.t('audioLink') : '음원';
         const noLinkLabel = window.t ? window.t('noLink') : '등록된 링크가 없습니다';
         mediaWrap.innerHTML = `
             <div class="album-cover-fallback" style="background-image:url('images/${album2.image}')">
-                ${firstLink ? `<a class="album-audio-btn" href="https://www.youtube.com/watch?v=${firstLink.vid}" target="_blank" rel="noopener">▶ ${audioLabel} (${firstLink.label})</a>` : `<span class="album-audio-btn album-audio-btn-disabled">${noLinkLabel}</span>`}
+                <span class="album-audio-btn album-audio-btn-disabled">${noLinkLabel}</span>
             </div>`;
     }
 }

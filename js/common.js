@@ -49,7 +49,6 @@ function closeLandingSplash() {
     if (!el) return;
     el.classList.add('landing-closing');
     setTimeout(() => { document.documentElement.classList.remove('show-landing'); }, 650);
-    try { sessionStorage.setItem('rescene-landing-seen', '1'); } catch (e) {}
 }
 
 /* ---- 스케줄 데이터 로드 & 캘린더 팝업 ---- */
@@ -80,9 +79,14 @@ async function fetchScheduleData() {
 }
 
 function renderCalendar() {
-    const calendarDays = document.getElementById('calendarDays');
+    renderCalendarInto('calendarDays', 'calendarMonthText');
+    renderCalendarInto('homeCalendarDays', 'homeCalendarMonthText');
+}
+
+function renderCalendarInto(daysElId, monthTextElId) {
+    const calendarDays = document.getElementById(daysElId);
     if (!calendarDays) return;
-    const monthText = document.getElementById('calendarMonthText');
+    const monthText = document.getElementById(monthTextElId);
     if (monthText) monthText.innerText = `${currentCalYear}. ${String(currentCalMonth).padStart(2, '0')}`;
     const firstDayIndex = new Date(currentCalYear, currentCalMonth - 1, 1).getDay(), lastDate = new Date(currentCalYear, currentCalMonth, 0).getDate();
     let html = '';

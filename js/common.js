@@ -86,10 +86,10 @@ function renderCalendar() {
             const MAX_VISIBLE = 2;
             data.items.slice(0, MAX_VISIBLE).forEach(item => {
                 let dotColor = item.color ? item.color : 'var(--c-accent)';
-                eventsHtml += `<div class="cal-event-row"><div class="cal-dot" style="background: ${dotColor}; box-shadow: 0 0 6px ${dotColor}60;"></div><div class="cal-event-time" style="color: ${dotColor};">${item.time}</div></div>`;
+                eventsHtml += `<div class="cal-chip" style="color: ${dotColor};">${item.title}</div>`;
             });
             if (data.items.length > MAX_VISIBLE) {
-                eventsHtml += `<div class="cal-event-more">+${data.items.length - MAX_VISIBLE}</div>`;
+                eventsHtml += `<div class="cal-event-more">+${data.items.length - MAX_VISIBLE}개 더</div>`;
             }
         }
         html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`;
@@ -133,9 +133,9 @@ function openModal(year, month, day, dateKey) {
             let dotColor = item.color ? item.color : 'var(--c-accent)';
             let label = typeLabelMap[item.type] || item.type || '일정';
             let time = item.time ? item.time : timeTbd;
-            scheduleHtml += `<div class="ec-card"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">${label}</span><h2 class="ec-title">${item.title}</h2><div class="ec-meta"><div class="ec-meta-row"><span class="ec-meta-label">${timeLabel}</span><span class="ec-meta-val">${time}</span></div></div>`;
+            scheduleHtml += `<div class="ec-card"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">${label}</span><div class="ec-body"><h2 class="ec-title">${item.title}</h2><div class="ec-meta"><div class="ec-meta-row"><span class="ec-meta-label">${timeLabel}</span><span class="ec-meta-val">${time}</span></div></div>`;
             if (item.image) scheduleHtml += `<div class="ec-img-wrapper"><img src="${SITE_ROOT}${item.image}" alt="${item.title}" onerror="this.style.display='none'"></div>`;
-            scheduleHtml += `</div>`;
+            scheduleHtml += `</div></div>`;
         });
     } else {
         const emptyMsg = window.t ? window.t('noSchedule') : '등록된 일정이 없습니다.';

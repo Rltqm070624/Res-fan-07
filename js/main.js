@@ -35,27 +35,54 @@ function getItemStatus(timeStr) {
 }
 
 let __todayHtmlCache = null;
-function renderUpcomingStrip() {
-    const wrap = document.getElementById('upcomingStrip');
-    if (!wrap) return;
+function renderAgendaList() {
+    const list = document.getElementById('agendaList');
+    if (!list) return;
+    const titleEl = document.getElementById('agendaListTitle');
+    const countEl = document.getElementById('agendaListCount');
     const weekdays = window.t ? window.t('weekdays') : ["일", "월", "화", "수", "목", "금", "토"];
+
+    if (titleEl) titleEl.textContent = `${currentCalYear}년 ${currentCalMonth}월`;
+
+    const keys = Object.keys(scheduleDB)
+        .filter(k => k.startsWith(`${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}`))
+        .sort();
+
+    let totalCount = 0;
     let html = '';
-    const today = new Date();
-    for (let i = 0; i < 14; i++) {
-        const d = new Date(today); d.setDate(today.getDate() + i);
-        const y = d.getFullYear(), m = d.getMonth() + 1, day = d.getDate();
-        const dateKey = `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    keys.forEach(dateKey => {
         const data = scheduleDB[dateKey];
-        const items = (data && data.items) || [];
-        let chips = items.slice(0, 2).map(it => `<div class="ud-chip" style="color:${it.color};">${it.title}</div>`).join('');
-        if (!items.length) chips = `<div class="ud-empty">일정 없음</div>`;
-        html += `<div class="upcoming-day-card${i === 0 ? ' is-today' : ''}" onclick="openModal('${y}', '${m}', '${day}', '${dateKey}')">
-            <div class="ud-date">${m}.${String(day).padStart(2,'0')} (${weekdays[d.getDay()]})</div>
-            ${chips}
-        </div>`;
-    }
-    wrap.innerHTML = html;
-    if (typeof enableDragScroll === 'function') enableDragScroll(wrap);
+        if (!data || !data.items || !data.items.length) return;
+        const d = new Date(dateKey);
+        const dow = d.getDay();
+        const groupClass = dow === 0 ? ' sun-group' : (dow === 6 ? ' sat-group' : '');
+        const isToday = dateKey === getTodayKey() ? ' today-group' : '';
+        totalCount += data.items.length;
+
+        html += `<div class="agenda-group">
+            <div class="agenda-group-date${groupClass}${isToday}">
+                <div class="agenda-group-day-num">${d.getDate()}</div>
+                <div class="agenda-group-day-info">
+                    <span class="agenda-group-dow">${weekdays[dow]}</span>
+                    <span class="agenda-group-month">${currentCalMonth}월</span>
+                </div>
+            </div>`;
+        data.items.forEach(item => {
+            html += `<div class="agenda-item" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${d.getDate()}', '${dateKey}')">
+                <div class="agenda-item-bar" style="background:${item.color};"></div>
+                <div class="agenda-item-body">
+                    <div class="agenda-item-title">${item.title}</div>
+                    <div class="agenda-item-meta">
+                        <span class="agenda-item-time" style="color:${item.color};">${item.time || ''}</span>
+                    </div>
+                </div>
+            </div>`;
+        });
+        html += `</div>`;
+    });
+
+    if (countEl) countEl.textContent = `${totalCount}개`;
+    list.innerHTML = html || `<div class="agenda-list-empty">이번 달 등록된 일정이 없습니다.</div>`;
 }
 
 function renderTodaySchedule() {
@@ -91,10 +118,22 @@ function renderProfileArchive() {
     const profileWrap = document.getElementById('profileScroll'); 
     if (profileWrap) {
         let phtml = '';
-        for (let i = 1; i <= 10; i++) {
+        const PREVIEW_COUNT = 7;
+        for (let i = 1; i <= PREVIEW_COUNT; i++) {
             phtml += `<div class="profile-item" onclick="openImageModal('images/profile/${i}.jpg')"><img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"><span class="pf-index">NO. ${String(i).padStart(2, '0')}</span></div>`;
         }
+        phtml += `<a class="profile-item archive-more-tile" href="archive.html#profile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>전체보기</span></a>`;
         profileWrap.innerHTML = `<div class="profile-track">${phtml}</div>`;
+    }
+
+    // ⭐️ archive.html 전용 — 전체 프로필 사진 그리드 (있으면 채움)
+    const fullProfileGrid = document.getElementById('fullProfileGrid');
+    if (fullProfileGrid) {
+        let fhtml = '';
+        for (let i = 1; i <= 10; i++) {
+            fhtml += `<div class="profile-item" onclick="openImageModal('images/profile/${i}.jpg')"><img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"><span class="pf-index">NO. ${String(i).padStart(2, '0')}</span></div>`;
+        }
+        fullProfileGrid.innerHTML = fhtml;
     }
 
     // ⭐️ 앨범 커버/순서/트랙 정보 (아래 renderAlbumGrid 참고)
@@ -173,13 +212,26 @@ let currentAlbumIdx = 0;
 
 function renderAlbumGrid() {
     const albumWrap = document.getElementById('albumScroll');
-    if (!albumWrap) return;
-    let ahtml = '';
-    ALBUMS.forEach(function (album, idx) {
-        // ⭐️ 이미지가 안 뜰 경우 조용히 숨기지 않고 눈에 보이게 표시 (원인 파악 쉽게)
-        ahtml += `<div class="profile-item album-cover-item" onclick="openAlbumModal(${idx})"><img src="images/${album.image}" alt="${album.title}" loading="lazy" onerror="console.error('앨범 이미지 로드 실패:', this.src); this.closest('.profile-item').classList.add('img-broken'); this.style.display='none';"><span class="album-broken-label">이미지 없음<br>${album.image}</span></div>`;
-    });
-    albumWrap.innerHTML = `<div class="profile-track album-track">${ahtml}</div>`;
+    if (albumWrap) {
+        let ahtml = '';
+        const PREVIEW_COUNT = 7;
+        ALBUMS.slice(0, PREVIEW_COUNT).forEach(function (album, idx) {
+            // ⭐️ 이미지가 안 뜰 경우 조용히 숨기지 않고 눈에 보이게 표시 (원인 파악 쉽게)
+            ahtml += `<div class="profile-item album-cover-item" onclick="openAlbumModal(${idx})"><img src="images/${album.image}" alt="${album.title}" loading="lazy" onerror="console.error('앨범 이미지 로드 실패:', this.src); this.closest('.profile-item').classList.add('img-broken'); this.style.display='none';"><span class="album-broken-label">이미지 없음<br>${album.image}</span></div>`;
+        });
+        ahtml += `<a class="profile-item archive-more-tile" href="archive.html#album"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>전체보기</span></a>`;
+        albumWrap.innerHTML = `<div class="profile-track album-track">${ahtml}</div>`;
+    }
+
+    // ⭐️ archive.html 전용 — 전체 앨범 그리드 (있으면 채움)
+    const fullAlbumGrid = document.getElementById('fullAlbumGrid');
+    if (fullAlbumGrid) {
+        let fahtml = '';
+        ALBUMS.forEach(function (album, idx) {
+            fahtml += `<div class="profile-item album-cover-item" onclick="openAlbumModal(${idx})"><img src="images/${album.image}" alt="${album.title}" loading="lazy" onerror="this.closest('.profile-item').classList.add('img-broken'); this.style.display='none';"><span class="album-broken-label">이미지 없음<br>${album.image}</span></div>`;
+        });
+        fullAlbumGrid.innerHTML = fahtml;
+    }
 }
 
 function pickTrack(album) {

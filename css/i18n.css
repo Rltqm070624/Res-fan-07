@@ -20,7 +20,16 @@ html[data-theme="light"] .lang-switcher { background: rgba(247, 247, 245, 0.8); 
 .lang-switcher button[data-lang="ja"] { font-family: var(--font-body); font-size: 11px; letter-spacing: 0; }
 
 body:has(#calendarPopupModal.active) .lang-switcher,
-body:has(#scheduleModal.active) .lang-switcher, body:has(#mobileMenuPanel.active) .lang-switcher { opacity: 0; pointer-events: none; transform: translateY(10px); }
+body:has(#scheduleModal.active) .lang-switcher { opacity: 0; pointer-events: none; transform: translateY(10px); }
+body:has(#mobileMenuPanel.active) .lang-switcher:not(.lang-switcher-mobile) { opacity: 0; pointer-events: none; transform: translateY(10px); }
+
+/* ⭐️ 모바일 메뉴 안에 들어가는 버전은 fixed 안 쓰고 메뉴 흐름에 자연스럽게 */
+.lang-switcher.lang-switcher-mobile {
+    position: static !important; left: auto; bottom: auto;
+    display: flex !important; width: fit-content; margin: 4px 0 8px;
+    background: var(--bg-surface); backdrop-filter: none; -webkit-backdrop-filter: none;
+    opacity: 1 !important; pointer-events: auto !important; transform: none !important;
+}
 
 @media (max-width: 800px) {
     .lang-switcher { left: 14px; bottom: 14px; padding: 3px; }

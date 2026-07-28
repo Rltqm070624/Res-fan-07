@@ -23,7 +23,7 @@
 
     <div id="siteNavSlot"></div>
     <script src="../js/layout.js"></script>
-    <script>renderSiteNav('media', '../', { calendar: true, lang: false });</script>
+    <script>renderSiteNav('media', '../', { calendar: true, lang: true });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
         <div class="section-container media-page-container" style="flex: 1;">
@@ -77,6 +77,10 @@
     <script>renderCalendarWidgets();</script>
 
     <script src="../js/i18n.js"></script>
+    <script>
+        // 하위 폴더(media/)에서 실행되므로 이미지/데이터 경로 앞에 ../ 를 붙여야 함
+        var SITE_ROOT = '../';
+    </script>
     <script src="../js/common.js"></script>
     <script src="../js/contents_data.js"></script>
     <script src="../js/album_content_data.js"></script>

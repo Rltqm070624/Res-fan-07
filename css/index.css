@@ -100,8 +100,8 @@ html[data-theme="light"] body{ background:#ffffff; }
 
 /* ===== TODAY'S SCHEDULE — 왼쪽: 오늘 일정 카드 / 오른쪽: 이번 달 일정 스크롤 ===== */
 .today-double { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; width: 100%; }
-.today-list-col { min-width: 0; }
-.today-list-col .today-grid { grid-template-columns: 1fr; max-width: none; margin: 0; }
+.today-list-col { min-width: 0; display: flex; align-items: center; justify-content: center; min-height: 560px; }
+.today-list-col .today-grid { grid-template-columns: 1fr; max-width: none; margin: 0; width: 100%; }
 .today-month-col { min-width: 0; }
 @media (max-width: 900px) {
     .today-double { grid-template-columns: 1fr; gap: 24px; }

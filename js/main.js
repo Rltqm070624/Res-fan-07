@@ -142,12 +142,33 @@ function renderAgendaList() {
     list.innerHTML = html || `<div class="agenda-list-empty">이번 달 등록된 일정이 없습니다.</div>`;
 }
 
+function renderTodaySchedule() {
+    const grid = document.getElementById('todayScheduleGrid');
+    if (!grid) return;
+
+    const items = scheduleDB[getTodayKey()]?.items || [];
+    const typeLabelMap = window.t ? window.t('scheduleTypes') : {};
+    const emptyMsg = window.t ? window.t('noSchedule') : '등록된 일정이 없습니다.';
+    const viewMsg = window.t ? window.t('upcomingView') : '다가오는 일정 보기';
+
+    let html = items.length === 0 
+        ? `<div class="today-empty-card"><div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div><p>${emptyMsg}</p><button type="button" onclick="openCalendarPopup()">${viewMsg}</button></div>`
+        : items.map(item => {
+            const status = getItemStatus(item.time), label = typeLabelMap[item.type] || item.type || '일정';
+            const timeTbd = window.t ? window.t('timeTbd') : '시간 미정';
+            const timeHtml = item.time ? item.time : `<span class="tbd">${timeTbd}</span>`;
+            const statusHtml = status.key === 'live' ? `<span class="today-status is-live"><span class="live-dot"></span>${status.label}</span>` : `<span class="today-status">${status.label}</span>`;
+            return `<article class="today-card is-${status.key}" style="--accent-color:${item.color};"><div class="today-card-top"><span class="today-time">${timeHtml}</span>${statusHtml}</div><h3 class="today-title">${item.title}</h3><div class="today-card-foot"><span class="today-type"><span class="today-type-dot"></span>${label}</span></div></article>`;
+        }).join('');
+    if (html !== __todayHtmlCache) { grid.innerHTML = html; __todayHtmlCache = html; }
+}
+setInterval(renderTodaySchedule, 60000);
+
 function renderTodayMonthSchedule() {
     const colA = document.getElementById('todayScrollColA');
-    const colB = document.getElementById('todayScrollColB');
     const titleEl = document.getElementById('todayMonthTitle');
     const countEl = document.getElementById('todayMonthCount');
-    if (!colA || !colB) return;
+    if (!colA) return;
 
     const now = new Date();
     const year = now.getFullYear(), month = now.getMonth() + 1;
@@ -159,7 +180,7 @@ function renderTodayMonthSchedule() {
     const keys = Object.keys(scheduleDB).filter(k => k.startsWith(monthKey)).sort();
 
     let totalCount = 0;
-    const groups = [];
+    let html = '';
     keys.forEach(dateKey => {
         const data = scheduleDB[dateKey];
         if (!data || !data.items || !data.items.length) return;
@@ -175,34 +196,22 @@ function renderTodayMonthSchedule() {
                 <span class="tm-item-title">${item.title}</span>
             </div>`;
         }).join('');
-        groups.push({
-            count: data.items.length,
-            html: `<div class="tm-group${isToday ? ' is-today' : ''}">
-                <div class="tm-group-date${dow === 0 ? ' sun' : (dow === 6 ? ' sat' : '')}">
-                    <span class="tm-day">${d.getDate()}</span><span class="tm-dow">${weekdays[dow]}</span>
-                </div>
-                <div class="tm-group-items">${itemsHtml}</div>
-            </div>`
-        });
+        html += `<div class="tm-group${isToday ? ' is-today' : ''}">
+            <div class="tm-group-date${dow === 0 ? ' sun' : (dow === 6 ? ' sat' : '')}">
+                <span class="tm-day">${d.getDate()}</span><span class="tm-dow">${weekdays[dow]}</span>
+            </div>
+            <div class="tm-group-items">${itemsHtml}</div>
+        </div>`;
     });
 
     if (countEl) countEl.textContent = totalCount ? `${totalCount}개` : '';
 
-    if (!groups.length) {
+    if (!html) {
         const emptyMsg = window.t ? window.t('noSchedule') : '등록된 일정이 없습니다.';
         colA.innerHTML = `<div class="tm-empty">${emptyMsg}</div>`;
-        colB.innerHTML = '';
         return;
     }
-
-    // ⭐️ 일정 개수 기준으로 좌/우 컬럼에 균형있게 분배 (그룹 단위 유지)
-    let sumA = 0, sumB = 0, htmlA = '', htmlB = '';
-    groups.forEach(g => {
-        if (sumA <= sumB) { htmlA += g.html; sumA += g.count; }
-        else { htmlB += g.html; sumB += g.count; }
-    });
-    colA.innerHTML = htmlA;
-    colB.innerHTML = htmlB;
+    colA.innerHTML = html;
 }
 setInterval(renderTodayMonthSchedule, 60000);
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESCENE ARCHIVE | MEDIA</title>
-    <meta name="description" content="RESCENE 영상 모아보기">
+    <meta name="description" content="RESCENE(리센느) 영상 모음 — 컨텐츠, 음반 활동 컨텐츠, 음악방송 전체 아카이브.">
     <link rel="icon" type="image/png" href="../images/logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,13 +35,6 @@
             <div class="media-toolbar">
                 <div class="media-toolbar-top">
                     <div class="media-cat-row" id="mediaTagRow"></div>
-                    <div class="media-search-wrap">
-                        <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()" autocomplete="off">
-                        <button type="button" class="media-search-clear" id="mediaSearchClear" onclick="mediaClearSearch()" aria-label="검색어 지우기">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
-                    </div>
                 </div>
 
                 <div class="media-subcat-panel" id="mediaSubPanel">
@@ -50,6 +43,13 @@
                 </div>
 
                 <div class="media-sort-row-wrap">
+                    <div class="media-search-wrap">
+                        <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()" autocomplete="off">
+                        <button type="button" class="media-search-clear" id="mediaSearchClear" onclick="mediaClearSearch()" aria-label="검색어 지우기">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
                     <div class="media-sort-group" role="group" aria-label="정렬">
                         <button type="button" class="msort-btn active" id="sortDateNew" onclick="mediaSetSort('date','desc')">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>

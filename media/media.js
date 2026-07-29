@@ -1,12 +1,8 @@
-/* ==========================================================================
-   ⭐️ MEDIA ARCHIVE 페이지 — 검색 + 태그(대분류) + 서브탭(소분류) + 서브서브탭(세분류) + 정렬 + 더보기 + 재생
-   - MEDIA_CATEGORIES, ytThumb, escapeHtml, escapeAttr 는 js/contents.js 에 정의됨
-   ========================================================================== */
-
 let mediaActiveTag = '전체';
 let mediaActiveSub = '전체';
 let mediaActiveSub2 = '전체';
-let mediaSort = 'new';
+let mediaSortField = 'date'; // 'date' | 'name'
+let mediaSortDir = 'desc';   // 'desc' | 'asc'
 let mediaSearchTerm = '';
 let mediaVisibleCount = 24;
 const MEDIA_PAGE_SIZE = 24;
@@ -55,7 +51,9 @@ function mediaRenderTagRow() {
     row.innerHTML = all.map(t => {
         const active = t.label === mediaActiveTag;
         const style = t.color ? `style="--chip-color:${t.color};"` : '';
-        return `<button type="button" class="mt-chip${active ? ' active' : ''}" ${style} onclick="mediaSetTag('${t.label}')">${t.label}</button>`;
+        const hasSub = !!MEDIA_SUBFILTERS[t.label];
+        const arrow = hasSub ? `<svg class="mt-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>` : '';
+        return `<button type="button" class="mt-chip${active ? ' active' : ''}" ${style} onclick="mediaSetTag('${t.label}')">${t.label}${arrow}</button>`;
     }).join('');
 }
 
@@ -63,22 +61,27 @@ function mediaRenderSubtagRow() {
     const row = document.getElementById('mediaSubtagRow');
     if (!row) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    if (!cfg) { row.innerHTML = ''; row.style.display = 'none'; mediaRenderSubtag2Row(); return; }
+    if (!cfg) {
+        row.innerHTML = '';
+        mediaSetSubPanelOpen(false);
+        mediaRenderSubtag2Row();
+        return;
+    }
 
     const itemsInTag = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
     const options = ['전체'].concat(cfg.getOptions(itemsInTag));
-    row.style.display = 'flex';
     row.innerHTML = options.map(opt =>
         `<button type="button" class="mst-chip${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${opt}')">${opt}</button>`
     ).join('');
     mediaRenderSubtag2Row();
+    mediaSetSubPanelOpen(true);
 }
 
 function mediaRenderSubtag2Row() {
     const row = document.getElementById('mediaSubtag2Row');
     if (!row) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    if (!cfg || !cfg.third) { row.innerHTML = ''; row.style.display = 'none'; return; }
+    if (!cfg || !cfg.third) { row.innerHTML = ''; row.style.display = 'none'; mediaRefreshSubPanelHeight(); return; }
 
     // 소분류까지 적용된 상태에서 세분류(연도) 옵션 추출
     let itemsInSub = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
@@ -89,13 +92,32 @@ function mediaRenderSubtag2Row() {
     row.innerHTML = options.map(opt =>
         `<button type="button" class="mst2-chip${opt === mediaActiveSub2 ? ' active' : ''}" onclick="mediaSetSub2('${opt}')">${opt}</button>`
     ).join('');
+    mediaRefreshSubPanelHeight();
 }
+
+/* ⭐️ 하위 분류 트리 아코디언 — 대분류 클릭 시 아래로 펼쳐짐/접힘 */
+function mediaSetSubPanelOpen(open) {
+    const panel = document.getElementById('mediaSubPanel');
+    if (!panel) return;
+    if (open) {
+        panel.classList.add('open');
+        requestAnimationFrame(() => { panel.style.maxHeight = panel.scrollHeight + 'px'; });
+    } else {
+        panel.style.maxHeight = '0px';
+        panel.classList.remove('open');
+    }
+}
+function mediaRefreshSubPanelHeight() {
+    const panel = document.getElementById('mediaSubPanel');
+    if (!panel || !panel.classList.contains('open')) return;
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+}
+window.addEventListener('resize', () => mediaRefreshSubPanelHeight());
 
 function mediaSetTag(label) {
     mediaActiveTag = label;
     mediaActiveSub = '전체';
     mediaActiveSub2 = '전체';
-    mediaVisibleCount = MEDIA_PAGE_SIZE;
     mediaRenderTagRow();
     mediaRenderSubtagRow();
     mediaApplyFilters();
@@ -104,28 +126,39 @@ function mediaSetTag(label) {
 function mediaSetSub(sub) {
     mediaActiveSub = sub;
     mediaActiveSub2 = '전체';
-    mediaVisibleCount = MEDIA_PAGE_SIZE;
     mediaRenderSubtagRow();
     mediaApplyFilters();
 }
 
 function mediaSetSub2(sub2) {
     mediaActiveSub2 = sub2;
-    mediaVisibleCount = MEDIA_PAGE_SIZE;
     mediaRenderSubtag2Row();
     mediaApplyFilters();
 }
 
-function mediaSetSort(sort) {
-    mediaSort = sort;
-    document.querySelectorAll('#mediaSortRow .ms-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === sort));
+function mediaSetSort(field, dir) {
+    mediaSortField = field;
+    mediaSortDir = dir;
+    document.querySelectorAll('.msort-btn').forEach(b => b.classList.remove('active'));
+    const id = field === 'date' ? (dir === 'desc' ? 'sortDateNew' : 'sortDateOld') : (dir === 'asc' ? 'sortNameAsc' : 'sortNameDesc');
+    const btn = document.getElementById(id);
+    if (btn) btn.classList.add('active');
+    mediaApplyFilters();
+}
+
+function mediaClearSearch() {
+    const input = document.getElementById('mediaSearch');
+    if (input) input.value = '';
     mediaApplyFilters();
 }
 
 function mediaApplyFilters() {
-    mediaSearchTerm = (document.getElementById('mediaSearch').value || '').trim().toLowerCase();
+    const input = document.getElementById('mediaSearch');
+    mediaSearchTerm = (input && input.value || '').trim().toLowerCase();
+    const clearBtn = document.getElementById('mediaSearchClear');
+    if (clearBtn) clearBtn.classList.toggle('show', !!mediaSearchTerm);
     mediaVisibleCount = MEDIA_PAGE_SIZE;
-    mediaRenderGrid();
+    mediaRenderGrid(true);
 }
 
 function mediaGetFiltered() {
@@ -139,7 +172,17 @@ function mediaGetFiltered() {
     if (mediaSearchTerm) {
         list = list.filter(i => ((i.title || '') + ' ' + (i.sub || '')).toLowerCase().includes(mediaSearchTerm));
     }
-    list.sort((a, b) => mediaSort === 'new' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
+
+    if (mediaSortField === 'name') {
+        list.sort((a, b) => {
+            const an = mediaCardTitle(a) || '';
+            const bn = mediaCardTitle(b) || '';
+            const cmp = an.localeCompare(bn, 'ko');
+            return mediaSortDir === 'asc' ? cmp : -cmp;
+        });
+    } else {
+        list.sort((a, b) => mediaSortDir === 'desc' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
+    }
     return list;
 }
 
@@ -166,27 +209,52 @@ function mediaCardHtml(item, idx) {
     </div>`;
 }
 
-function mediaRenderGrid() {
+function mediaUpdateResultCount(shown, total) {
+    const el = document.getElementById('mediaResultCount');
+    if (el) el.innerHTML = total ? `<b>${shown}</b> / ${total}개` : '';
+}
+
+function mediaRenderGrid(reset) {
     const grid = document.getElementById('mediaGrid');
-    const loadMoreWrap = document.querySelector('.media-loadmore-wrap');
+    const endMsg = document.getElementById('mediaEndMessage');
     if (!grid) return;
 
     const filtered = mediaGetFiltered();
+
     if (!filtered.length) {
         grid.innerHTML = '<div class="media-empty">검색 결과가 없어요.</div>';
-        if (loadMoreWrap) loadMoreWrap.style.display = 'none';
+        if (endMsg) endMsg.style.display = 'none';
+        mediaUpdateResultCount(0, 0);
         return;
     }
 
-    const visible = filtered.slice(0, mediaVisibleCount);
-    grid.innerHTML = visible.map((item, idx) => mediaCardHtml(item, idx)).join('');
+    if (reset) grid.innerHTML = '';
+    const start = reset ? 0 : grid.querySelectorAll('.media-card').length;
+    const end = Math.min(mediaVisibleCount, filtered.length);
+    if (start < end) {
+        const slice = filtered.slice(start, end);
+        grid.insertAdjacentHTML('beforeend', slice.map((item, i) => mediaCardHtml(item, start + i)).join(''));
+    }
 
-    if (loadMoreWrap) loadMoreWrap.style.display = (filtered.length > mediaVisibleCount) ? 'flex' : 'none';
+    mediaUpdateResultCount(Math.min(mediaVisibleCount, filtered.length), filtered.length);
+    if (endMsg) endMsg.style.display = (mediaVisibleCount >= filtered.length) ? 'block' : 'none';
 }
 
-function mediaLoadMore() {
-    mediaVisibleCount += MEDIA_PAGE_SIZE;
-    mediaRenderGrid();
+/* ⭐️ 무한 스크롤 — 하단 감지 지점이 보이면 자동으로 다음 페이지 로드 (더 불러오기 버튼 없음) */
+let mediaInfiniteObserver = null;
+function mediaSetupInfiniteScroll() {
+    const sentinel = document.getElementById('mediaSentinel');
+    if (!sentinel || !('IntersectionObserver' in window)) return;
+    mediaInfiniteObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const filtered = mediaGetFiltered();
+            if (mediaVisibleCount >= filtered.length) return;
+            mediaVisibleCount += MEDIA_PAGE_SIZE;
+            mediaRenderGrid(false);
+        });
+    }, { rootMargin: '600px 0px' });
+    mediaInfiniteObserver.observe(sentinel);
 }
 
 /* ==========================================================================
@@ -318,7 +386,8 @@ window.addEventListener('DOMContentLoaded', () => {
     mediaInitTagFromQuery();
     mediaRenderTagRow();
     mediaRenderSubtagRow();
-    mediaRenderGrid();
+    mediaRenderGrid(true);
+    mediaSetupInfiniteScroll();
     const badge = document.getElementById('mediaCountBadge');
     if (badge) badge.innerHTML = `총 <b>${mediaGetAllItems().length}</b>개`;
 });

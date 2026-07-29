@@ -176,7 +176,6 @@ function renderProfileArchive() {
         }
         phtml += `<a class="profile-item archive-more-tile" href="archive.html#profile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>전체보기</span></a>`;
         profileWrap.innerHTML = `<div class="profile-track">${phtml}</div>`;
-        if (typeof enableDragScroll === 'function') enableDragScroll(profileWrap.querySelector('.profile-track'));
     }
 
     // ⭐️ archive.html 전용 — 전체 프로필 사진 그리드 (있으면 채움)
@@ -274,7 +273,6 @@ function renderAlbumGrid() {
         });
         ahtml += `<a class="profile-item archive-more-tile" href="archive.html#album"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>전체보기</span></a>`;
         albumWrap.innerHTML = `<div class="profile-track album-track">${ahtml}</div>`;
-        if (typeof enableDragScroll === 'function') enableDragScroll(albumWrap.querySelector('.profile-track'));
     }
 
     // ⭐️ archive.html 전용 — 전체 앨범 그리드 (있으면 채움)

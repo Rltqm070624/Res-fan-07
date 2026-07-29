@@ -8,11 +8,13 @@ function logoImg(key, size) {
 function renderHonorsPreview() {
     const list = document.getElementById('awardsPreviewList');
     if (list) {
-        list.innerHTML = MUSIC_SHOW_WINS.slice(-3).reverse().map(w => `
+        list.innerHTML = MUSIC_SHOW_WINS.slice(-3).reverse().map((w, i) => `
             <li>
+                <span class="h-rank">0${i + 1}</span>
                 <div class="h-info">
                     ${logoImg(w.logo, 20)}
-                    <span class="h-name">${w.program} · ${w.song} <span style="font-weight: 500; color: var(--c-accent); margin-left: 6px; font-size: 13px;">- 🏆 ${w.notes[0].split(' (')[0]}</span></span>
+                    <span class="h-name">${w.program} · ${w.song}</span>
+                    <span class="h-badge">🏆 ${w.notes[0].split(' (')[0]}</span>
                 </div>
                 <span class="h-date">${w.date}</span>
             </li>`).join('');
@@ -21,10 +23,12 @@ function renderHonorsPreview() {
     const adsWrap = document.getElementById('adsPreviewChips');
     if (adsWrap) {
         const latestAds = AD_TIMELINE.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
-        adsWrap.innerHTML = latestAds.map(a => `
+        adsWrap.innerHTML = latestAds.map((a, i) => `
             <li>
+                <span class="h-rank">0${i + 1}</span>
                 <div class="h-info">
-                    <span class="h-name">[${a.type}] ${a.title} ${a.note ? `<span style="font-weight: 400; color: var(--text-muted); margin-left: 6px; font-size: 13px;">- ${a.note.split(' (')[0]}</span>` : ''}</span>
+                    <span class="h-name">[${a.type}] ${a.title}</span>
+                    ${a.note ? `<span class="h-note">- ${a.note.split(' (')[0]}</span>` : ''}
                 </div>
                 <span class="h-date">${a.date}</span>
             </li>`).join('');

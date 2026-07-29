@@ -1,3 +1,7 @@
+/* ==========================================================================
+   ⭐️ MEMBERS 페이지 — 멤버 선택 + 프로필 히어로 + 정보 카드 + 포토 아카이브(연도별 화보)
+   - MEMBER_DATA / MEMBER_ERAS 는 js/member_data.js 에 정의됨
+   ========================================================================== */
 let memberActiveKey = 'woni';
 let memberActiveEra = 'prettygirl';
 
@@ -25,7 +29,7 @@ function renderMemberDetail() {
 
     const heroImg = document.getElementById('memberHeroImg');
     if (heroImg) {
-        heroImg.src = `../images/profile/${m.key}/${memberActiveEra}.webp`;
+        heroImg.src = `../images/profile/${m.key}/prettygirl.webp`;
         heroImg.onerror = function () { this.onerror = null; this.src = `../images/profile/${m.key}/debut.webp`; };
     }
     const signImg = document.getElementById('memberSign');
@@ -51,23 +55,29 @@ function renderMemberDetail() {
                 <span class="mem-era-label">${e.label}</span>
             </div>`).join('');
     }
+
+    updateEraPreview();
+}
+
+function updateEraPreview() {
+    const m = MEMBER_DATA.find(x => x.key === memberActiveKey);
+    const era = MEMBER_ERAS.find(x => x.key === memberActiveEra);
+    if (!m || !era) return;
+    const previewImg = document.getElementById('memberEraPreviewImg');
+    const previewLabel = document.getElementById('memberEraPreviewLabel');
+    if (previewImg) {
+        previewImg.onerror = function () { this.onerror = null; this.src = `../images/profile/${m.key}/debut.webp`; };
+        previewImg.src = `../images/profile/${m.key}/${era.key}.webp`;
+    }
+    if (previewLabel) previewLabel.textContent = era.label;
 }
 
 function setActiveEra(eraKey) {
     memberActiveEra = eraKey;
-    const m = MEMBER_DATA.find(x => x.key === memberActiveKey);
-    const heroImg = document.getElementById('memberHeroImg');
-    if (heroImg && m) {
-        heroImg.style.opacity = '0';
-        setTimeout(() => {
-            heroImg.onerror = function () { this.onerror = null; this.src = `../images/profile/${m.key}/debut.webp`; };
-            heroImg.src = `../images/profile/${m.key}/${eraKey}.webp`;
-            heroImg.style.opacity = '1';
-        }, 200);
-    }
     document.querySelectorAll('.mem-era-item').forEach(el => {
         el.classList.toggle('active', el.dataset.era === eraKey);
     });
+    updateEraPreview();
 }
 
 window.addEventListener('DOMContentLoaded', () => {

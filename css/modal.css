@@ -103,16 +103,16 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
     border-bottom: 1px solid var(--border-light);
     border-radius: 0;
     display: flex; 
-    flex-direction: row; 
-    align-items: flex-start; 
-    gap: 14px;
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 8px;
     width: 100%;
     box-sizing: border-box;
     flex-shrink: 0; 
 }
 .ec-card:last-child { border-bottom: none; }
 
-.ec-badge { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 3px 10px; border-radius: 6px; color: #000; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; margin-top: 3px; font-family: var(--font-body); }
+.ec-badge { flex-shrink: 0; align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; padding: 3px 10px; border-radius: 6px; color: #000; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; margin-top: 0; font-family: var(--font-body); }
 .tag-broadcast { background: #f0ebf8; color: #7b52ab; } 
 .tag-radio { background: #fff3e0; color: #e65100; } 
 
@@ -172,6 +172,25 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 /* 모달 배경(.modal-backdrop, z-index 9998)의 blur 레이어보다 항상 위에 오도록 active 시 z-index를 끌어올림 */
 .album-modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; z-index: 9999; transform: translate(-50%, -50%) scale(1); }
 html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
+
+.album-nav-btn {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--bg-surface); border: 1px solid var(--border-light);
+    color: var(--text-primary); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 10000; opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity 0.4s ease, background 0.25s ease, color 0.25s ease;
+}
+.album-nav-btn svg { width: 20px; height: 20px; }
+.album-nav-btn:hover { background: var(--bg-surface-hover); color: var(--c-accent); }
+#albumModal.active ~ .album-nav-btn { opacity: 1; visibility: visible; pointer-events: auto; }
+.album-nav-prev { left: 24px; }
+.album-nav-next { right: 24px; }
+@media (max-width: 700px) {
+    .album-nav-btn { width: 38px; height: 38px; }
+    .album-nav-prev { left: 8px; }
+    .album-nav-next { right: 8px; }
+}
 
 .album-modal-media { flex: 1.3; background: #000; position: relative; min-width: 0; z-index: 1; }
 

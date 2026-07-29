@@ -61,10 +61,26 @@
         <button class="popup-close-btn" onclick="mediaClosePlayer()" aria-label="닫기">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
-        <div class="media-modal-media" id="mediaModalMedia"></div>
-        <div class="media-modal-info">
+        <div class="media-modal-head">
             <div class="media-modal-title" id="mediaModalTitle"></div>
             <div class="media-modal-date" id="mediaModalDate"></div>
+        </div>
+        <div class="media-modal-media" id="mediaModalMedia"></div>
+        <div class="media-modal-nav">
+            <button type="button" class="mm-nav-btn" id="mediaPrevBtn" onclick="mediaPrev()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                이전 영상
+            </button>
+            <button type="button" class="mm-nav-btn mm-nav-next" id="mediaNextBtn" onclick="mediaNext()">
+                다음 영상
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+        <div class="media-modal-playlist" id="mediaModalPlaylist">
+            <div class="mm-drag-handle" id="mmDragHandle">
+                <span class="mm-drag-label">재생목록 <b id="mmPlaylistCount">0</b></span>
+            </div>
+            <ul class="mm-playlist-list" id="mmPlaylistList"></ul>
         </div>
     </div>
 

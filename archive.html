@@ -25,7 +25,7 @@
     <script>renderSiteNav('', '', { calendar: true, lang: true });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
-        <div class="section-container" style="flex: 1; max-width: 100%; padding-left: 48px; padding-right: 48px; box-sizing: border-box;">
+        <div class="section-container" style="flex: 1; max-width: 100%; padding-left: 48px; padding-right: 48px; padding-bottom: 80px; box-sizing: border-box;">
             <div class="section-header">
                 <div class="section-title">ALL <span>PHOTOS & ALBUMS</span></div>
             </div>
@@ -41,13 +41,11 @@
         <script>renderSiteFooter('');</script>
     </div>
 
-    <!-- 이미지 확대 모달 -->
     <div class="modal-backdrop image-modal-backdrop" id="imageModalBackdrop" onclick="closeImageModal()"></div>
     <div class="image-modal-wrapper" id="imageModal" onclick="closeImageModal()">
         <img src="" id="fullSizeImage" alt="Full Size View">
     </div>
 
-    <!-- 앨범 상세 모달 (MV + 트랙리스트) -->
     <div class="modal-backdrop" id="albumModalBackdrop" onclick="closeAlbumModal()"></div>
     <div class="album-modal-wrapper" id="albumModal">
         <button class="popup-close-btn" onclick="closeAlbumModal()" aria-label="앨범 닫기">
@@ -62,7 +60,6 @@
         </div>
     </div>
 
-    <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
     <div id="siteCalendarSlot"></div>
     <script>renderCalendarWidgets();</script>
 

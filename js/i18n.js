@@ -18,6 +18,7 @@
             chartWaiting: "데이터 수집 중입니다.",
             shortsMore: "유튜브에서<br>#리센느 더보기",
             footerDisclaimer: "해당 홈페이지는 팬이 자발적으로 운영하는 비공식 팬 페이지입니다.<br>모든 저작권은 아티스트 RESCENE, 소속사 THE MUZE Entertainment에게 있으며 공식 관계가 없음을 알려드립니다.",
+            officialSites: "공식 사이트",
             trackList: "TRACK LIST",
             audioLink: "음원",
             noLink: "등록된 링크가 없습니다"
@@ -33,6 +34,7 @@
             chartWaiting: "Fetching chart data…",
             shortsMore: "See more #RESCENE<br>on YouTube",
             footerDisclaimer: "This site is an unofficial fan page run voluntarily by a fan.<br>All rights belong to RESCENE and THE MUZE Entertainment. This site has no official affiliation with either.",
+            officialSites: "Official",
             trackList: "TRACK LIST",
             audioLink: "Audio",
             noLink: "No link available"
@@ -48,6 +50,7 @@
             chartWaiting: "データ収集中です。",
             shortsMore: "YouTubeで<br>#RESCENE をもっと見る",
             footerDisclaimer: "当サイトはファンが自発的に運営する非公式ファンページです。<br>すべての著作権はアーティストRESCENE、所属事務所THE MUZE Entertainmentに帰属し、公式な関係はないことをお知らせします。",
+            officialSites: "公式サイト",
             trackList: "TRACK LIST",
             audioLink: "音源",
             noLink: "登録されたリンクがありません"

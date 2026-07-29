@@ -1,16 +1,58 @@
-/* 멤버 카드 그리드 */
-.member-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 20px; }
-.member-card-v2 { position: relative; background: var(--bg-surface); border-radius: 20px; overflow: hidden; border: 1px solid var(--border-light); transition: var(--transition-smooth); }
-.member-card-v2:hover { transform: translateY(-8px); border-color: var(--border-highlight); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
-.member-photo-v2 { width: 100%; aspect-ratio: 3/4; overflow: hidden; position: relative; }
-.member-photo-v2 img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-.member-card-v2:hover .member-photo-v2 img { transform: scale(1.08); }
+/* ⭐️ MEMBERS 페이지 — 멤버 선택 탭 + 프로필 히어로 + 정보 카드 + 포토 아카이브 */
 
-.member-info { 
-    position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 20px; 
-    background: linear-gradient(to top, rgba(18,19,24,0.95) 0%, rgba(18,19,24,0) 100%); 
-    display: flex; flex-direction: column; align-items: center; 
-    box-sizing: border-box; text-align: center;
+#mainWrapper .member-page-container { max-width: 100%; padding-left: 48px; padding-right: 48px; margin-left: 0; margin-right: 0; box-sizing: border-box; }
+@media (max-width: 700px) { #mainWrapper .member-page-container { padding-left: 20px; padding-right: 20px; } }
+
+/* 멤버 선택 탭 */
+.mem-selector-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 8px 0 40px; }
+.mem-chip {
+    display: flex; align-items: center; gap: 10px; padding: 6px 20px 6px 6px; border-radius: 999px;
+    background: var(--bg-surface); border: 1px solid var(--border-light); cursor: pointer;
+    transition: 0.3s cubic-bezier(0.16,1,0.3,1);
 }
-.name-bar { color: var(--text-on-media); font-size: 18px; font-family: var(--font-head); font-weight: 600; letter-spacing: 1px; width: 100%; text-align: center; display: block; }
-.bday { color: rgba(244,244,245,0.7); font-family: var(--font-num); font-size: 11px; letter-spacing: 1px; margin-top: 4px; width: 100%; text-align: center; display: block; }
+.mem-chip:hover { border-color: var(--mem-color, var(--border-highlight)); }
+.mem-chip.active { background: color-mix(in srgb, var(--mem-color, var(--c-accent)) 14%, var(--bg-surface)); border-color: var(--mem-color, var(--c-accent)); }
+.mem-chip-photo { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: #000; border: 1px solid var(--border-light); }
+.mem-chip-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mem-chip-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text-secondary); transition: color 0.3s ease; }
+.mem-chip.active .mem-chip-name { color: var(--mem-color, var(--c-accent)); }
+
+/* 상세 패널 */
+.mem-detail-panel { max-width: 880px; margin: 0 auto; animation: memberFadeIn 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+@keyframes memberFadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.mem-hero { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 24px; overflow: hidden; background: #000; border: 1px solid var(--border-light); }
+.mem-hero-img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: opacity 0.25s ease; }
+.mem-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,14,0.88) 0%, rgba(10,10,14,0.15) 45%, transparent 70%); }
+.mem-sign { position: absolute; right: 24px; bottom: 20px; width: 84px; height: auto; opacity: 0.92; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+.mem-hero-name { position: absolute; left: 28px; bottom: 24px; display: flex; flex-direction: column; gap: 2px; }
+.mem-name-en { font-family: var(--font-num); font-size: 12px; font-weight: 700; letter-spacing: 0.25em; color: rgba(255,255,255,0.75); }
+.mem-name-ko { font-family: var(--font-head); font-size: 34px; font-weight: 900; color: #fff; letter-spacing: -0.5px; line-height: 1.15; }
+
+/* 정보 카드 */
+.mem-info-card { margin-top: 24px; padding: 28px 30px; border-radius: 20px; background: var(--bg-surface); border: 1px solid var(--border-light); }
+.mem-intro { margin: 0 0 22px; font-family: var(--font-body); font-size: 14.5px; line-height: 1.7; color: var(--text-secondary); }
+.mem-info-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; padding-top: 20px; border-top: 1px solid var(--border-light); }
+.mem-info-item { display: flex; flex-direction: column; gap: 6px; }
+.mem-info-label { font-family: var(--font-head); font-size: 10px; font-weight: 800; letter-spacing: 0.12em; color: var(--text-muted); }
+.mem-info-val { font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--text-primary); }
+@media (max-width: 700px) {
+    .mem-info-grid { grid-template-columns: repeat(2, 1fr); }
+    .mem-name-ko { font-size: 26px; }
+    .mem-sign { width: 62px; }
+}
+
+/* 포토 아카이브 (연도/앨범별 화보) */
+.mem-era-section { margin-top: 36px; }
+.mem-era-label-row { font-family: var(--font-head); font-size: 15px; font-weight: 300; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 16px; }
+.mem-era-label-row span { color: var(--text-primary); font-weight: 800; }
+.mem-era-row { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
+.mem-era-row::-webkit-scrollbar { height: 6px; }
+.mem-era-row::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
+.mem-era-item { flex: 0 0 110px; cursor: pointer; display: flex; flex-direction: column; gap: 8px; }
+.mem-era-thumb { width: 110px; aspect-ratio: 4/5; border-radius: 14px; overflow: hidden; border: 2px solid transparent; background: var(--bg-surface); transition: border-color 0.3s ease, transform 0.3s ease; }
+.mem-era-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mem-era-item:hover .mem-era-thumb { transform: translateY(-4px); }
+.mem-era-item.active .mem-era-thumb { border-color: var(--mem-active-color, var(--c-accent)); }
+.mem-era-label { text-align: center; font-family: var(--font-num); font-size: 11px; font-weight: 600; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mem-era-item.active .mem-era-label { color: var(--mem-active-color, var(--c-accent)); font-weight: 700; }

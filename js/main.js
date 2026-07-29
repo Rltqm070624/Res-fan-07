@@ -1,3 +1,8 @@
+/* =========================================
+   공통 유틸리티
+   ⭐️ 다크모드 / 햄버거메뉴 / reveal 애니메이션 / 캘린더-스케줄은
+      js/common.js 로 옮겨졌습니다. (모든 페이지 공용, 여기서 중복 정의 금지)
+========================================= */
 const debutDate = new Date("2024-03-26T18:00:00+09:00"); 
 setInterval(() => {
     const diff = new Date() - debutDate;
@@ -137,31 +142,69 @@ function renderAgendaList() {
     list.innerHTML = html || `<div class="agenda-list-empty">이번 달 등록된 일정이 없습니다.</div>`;
 }
 
-function renderTodaySchedule() {
-    const grid = document.getElementById('todayScheduleGrid');
-    const sub  = document.getElementById('todayDateSub');
-    if (!grid) return;
+function renderTodayMonthSchedule() {
+    const colA = document.getElementById('todayScrollColA');
+    const colB = document.getElementById('todayScrollColB');
+    const titleEl = document.getElementById('todayMonthTitle');
+    const countEl = document.getElementById('todayMonthCount');
+    if (!colA || !colB) return;
+
     const now = new Date();
+    const year = now.getFullYear(), month = now.getMonth() + 1;
     const weekdays = window.t ? window.t('weekdays') : ["일", "월", "화", "수", "목", "금", "토"];
-    if (sub) sub.innerText = `${now.getFullYear()}. ${String(now.getMonth()+1).padStart(2,'0')}. ${String(now.getDate()).padStart(2,'0')} (${weekdays[now.getDay()]})`;
-
-    const items = scheduleDB[getTodayKey()]?.items || [];
     const typeLabelMap = window.t ? window.t('scheduleTypes') : {};
-    const emptyMsg = window.t ? window.t('noSchedule') : '등록된 일정이 없습니다.';
-    const viewMsg = window.t ? window.t('upcomingView') : '다가오는 일정 보기';
+    if (titleEl) titleEl.textContent = `${year}년 ${month}월`;
 
-    let html = items.length === 0 
-        ? `<div class="today-empty-card"><div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div><p>${emptyMsg}</p><button type="button" onclick="openCalendarPopup()">${viewMsg}</button></div>`
-        : items.map(item => {
-            const status = getItemStatus(item.time), label = typeLabelMap[item.type] || item.type || '일정';
-            const timeTbd = window.t ? window.t('timeTbd') : '시간 미정';
-            const timeHtml = item.time ? item.time : `<span class="tbd">${timeTbd}</span>`;
-            const statusHtml = status.key === 'live' ? `<span class="today-status is-live"><span class="live-dot"></span>${status.label}</span>` : `<span class="today-status">${status.label}</span>`;
-            return `<article class="today-card is-${status.key}" style="--accent-color:${item.color};"><div class="today-card-top"><span class="today-time">${timeHtml}</span>${statusHtml}</div><h3 class="today-title">${item.title}</h3><div class="today-card-foot"><span class="today-type"><span class="today-type-dot"></span>${label}</span></div></article>`;
+    const monthKey = `${year}-${String(month).padStart(2, '0')}`;
+    const keys = Object.keys(scheduleDB).filter(k => k.startsWith(monthKey)).sort();
+
+    let totalCount = 0;
+    const groups = [];
+    keys.forEach(dateKey => {
+        const data = scheduleDB[dateKey];
+        if (!data || !data.items || !data.items.length) return;
+        const d = new Date(dateKey);
+        const dow = d.getDay();
+        totalCount += data.items.length;
+        const isToday = dateKey === getTodayKey();
+        const itemsHtml = data.items.map(item => {
+            const label = typeLabelMap[item.type] || item.type || '일정';
+            return `<div class="tm-item" onclick="openCalendarPopup(); openModal('${year}', '${month}', '${d.getDate()}', '${dateKey}')">
+                <span class="tm-item-tag" style="background:${item.color};">${label}</span>
+                <span class="tm-item-time">${item.time || ''}</span>
+                <span class="tm-item-title">${item.title}</span>
+            </div>`;
         }).join('');
-    if (html !== __todayHtmlCache) { grid.innerHTML = html; __todayHtmlCache = html; }
+        groups.push({
+            count: data.items.length,
+            html: `<div class="tm-group${isToday ? ' is-today' : ''}">
+                <div class="tm-group-date${dow === 0 ? ' sun' : (dow === 6 ? ' sat' : '')}">
+                    <span class="tm-day">${d.getDate()}</span><span class="tm-dow">${weekdays[dow]}</span>
+                </div>
+                <div class="tm-group-items">${itemsHtml}</div>
+            </div>`
+        });
+    });
+
+    if (countEl) countEl.textContent = totalCount ? `${totalCount}개` : '';
+
+    if (!groups.length) {
+        const emptyMsg = window.t ? window.t('noSchedule') : '등록된 일정이 없습니다.';
+        colA.innerHTML = `<div class="tm-empty">${emptyMsg}</div>`;
+        colB.innerHTML = '';
+        return;
+    }
+
+    // ⭐️ 일정 개수 기준으로 좌/우 컬럼에 균형있게 분배 (그룹 단위 유지)
+    let sumA = 0, sumB = 0, htmlA = '', htmlB = '';
+    groups.forEach(g => {
+        if (sumA <= sumB) { htmlA += g.html; sumA += g.count; }
+        else { htmlB += g.html; sumB += g.count; }
+    });
+    colA.innerHTML = htmlA;
+    colB.innerHTML = htmlB;
 }
-setInterval(renderTodaySchedule, 60000);
+setInterval(renderTodayMonthSchedule, 60000);
 
 /* =========================================
    콘텐츠(아카이브 & 앨범, 쇼츠) 그리기

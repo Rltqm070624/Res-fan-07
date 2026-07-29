@@ -21,32 +21,38 @@
     <script>renderSiteNav('members', '../', { calendar: true, lang: true });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
-        <div class="section-container reveal active" style="flex: 1;">
+        <div class="section-container member-page-container" style="flex: 1;">
             <div class="section-header">
                 <div class="section-title">THE <span>MEMBERS</span></div>
             </div>
 
-            <div class="member-wrapper">
-                <!-- ⭐️ 이미지는 상위 폴더의 images 폴더 참조 -->
-                <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="../images/원이.webp" alt="원이" onerror="this.style.display='none'"></div>
-                    <div class="member-info"><div class="name-bar">원이 WONI</div><div class="bday">2004. 05. 25. · 리더 / 보컬</div></div>
+            <div class="mem-selector-row" id="memberSelectorRow"></div>
+
+            <div class="mem-detail-panel">
+                <div class="mem-hero">
+                    <img id="memberHeroImg" class="mem-hero-img" src="" alt="">
+                    <div class="mem-hero-overlay"></div>
+                    <img id="memberSign" class="mem-sign" src="" alt="signature">
+                    <div class="mem-hero-name">
+                        <span class="mem-name-en" id="memberNameEn"></span>
+                        <span class="mem-name-ko" id="memberNameKo"></span>
+                    </div>
                 </div>
-                <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="../images/리브.webp" alt="리브" onerror="this.style.display='none'"></div>
-                    <div class="member-info"><div class="name-bar">리브 LIV</div><div class="bday">2006. 10. 11. · 보컬</div></div>
+
+                <div class="mem-info-card">
+                    <p class="mem-intro" id="memberIntro"></p>
+                    <div class="mem-info-grid">
+                        <div class="mem-info-item"><span class="mem-info-label">BIRTHDAY</span><span class="mem-info-val" id="memberBday"></span></div>
+                        <div class="mem-info-item"><span class="mem-info-label">POSITION</span><span class="mem-info-val" id="memberPosition"></span></div>
+                        <div class="mem-info-item"><span class="mem-info-label">MBTI</span><span class="mem-info-val" id="memberMbti"></span></div>
+                        <div class="mem-info-item"><span class="mem-info-label">SPECIALTY</span><span class="mem-info-val" id="memberSpecialty"></span></div>
+                        <div class="mem-info-item"><span class="mem-info-label">HOBBY</span><span class="mem-info-val" id="memberHobby"></span></div>
+                    </div>
                 </div>
-                <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="../images/미나미.webp" alt="미나미" onerror="this.style.display='none'"></div>
-                    <div class="member-info"><div class="name-bar">미나미 MINAMI</div><div class="bday">2006. 11. 29. · 보컬 / 댄스 / 랩</div></div>
-                </div>
-                <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="../images/메이.webp" alt="메이" onerror="this.style.display='none'"></div>
-                    <div class="member-info"><div class="name-bar">메이 MAY</div><div class="bday">2008. 08. 19. · 보컬</div></div>
-                </div>
-                <div class="member-card-v2">
-                    <div class="member-photo-v2"><img src="../images/제나.webp" alt="제나" onerror="this.style.display='none'"></div>
-                    <div class="member-info"><div class="name-bar">제나 ZENA</div><div class="bday">2008. 11. 27. · 보컬 / 댄스</div></div>
+
+                <div class="mem-era-section">
+                    <div class="mem-era-label-row">PHOTO <span>ARCHIVE</span></div>
+                    <div class="mem-era-row" id="memberEraRow"></div>
                 </div>
             </div>
         </div>
@@ -65,5 +71,7 @@
     </script>
     <script src="../js/i18n.js"></script>
     <script src="../js/common.js"></script>
+    <script src="../js/member_data.js"></script>
+    <script src="member.js"></script>
 </body>
 </html>

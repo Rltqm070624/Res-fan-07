@@ -6,7 +6,9 @@
 .media-count-badge { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); }
 .media-count-badge b { color: var(--text-primary); font-weight: 700; }
 
-
+/* ==========================================================================
+   ⭐️ 툴바 — 카테고리(트리) + 검색 + 정렬
+   ========================================================================== */
 .media-toolbar { margin-bottom: 30px; }
 
 .media-toolbar-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
@@ -26,7 +28,7 @@
     color: var(--chip-color, var(--c-accent));
 }
 .mt-chip .mt-chip-arrow { width: 10px; height: 10px; transition: transform 0.3s ease; opacity: 0.6; }
-.mt-chip.active .mt-chip-arrow { transform: rotate(180deg); opacity: 1; }
+.mt-chip.panel-open .mt-chip-arrow { transform: rotate(180deg); opacity: 1; }
 
 .media-search-wrap {
     display: flex; align-items: center; gap: 8px;

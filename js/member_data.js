@@ -1,4 +1,9 @@
-
+/* ==========================================================================
+   ⭐️ 멤버 프로필 데이터
+   - birthday / position 은 기존 member.html에 있던 값을 그대로 유지
+   - mbti / hobby / specialty / intro 는 팬 페이지용 소개 문구 (자유롭게 수정 가능)
+   - 사진 경로: images/profile/{key}/{era}.webp, 서명: images/profile/{key}/sign.svg
+   ========================================================================== */
 const MEMBER_DATA = [
     {
         key: 'woni', nameKo: '원이', nameEn: 'WONI', color: '#f4c95d',

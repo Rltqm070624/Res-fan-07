@@ -1,3 +1,10 @@
+/* ==========================================================================
+   ⭐️ 전 페이지 공용 스크립트 (다크모드 / 모바일 메뉴 / 캘린더-스케줄)
+   - index.html / member/member.html / goods/goods.html 에서 공통으로 불러와요.
+   - 하위 폴더(member/goods)에서 쓸 때는 이 스크립트를 불러오기 전에
+     `var SITE_ROOT = "../";` 를 선언해주세요. (루트 index.html은 안 적어도 됨)
+   - 이 파일 하나만 고치면 모든 페이지에 반영됩니다. (다른 곳에 복붙 금지!)
+   ========================================================================== */
 if (typeof SITE_ROOT === 'undefined') { var SITE_ROOT = ''; }
 
 /* ---- 모바일 햄버거 메뉴 ---- */
@@ -68,6 +75,7 @@ async function fetchScheduleData() {
     } catch (error) { console.warn("스케줄 데이터 로드 실패", error); }
     renderCalendar();
     // ⭐️ index.html에만 있는 '오늘의 일정' 위젯 — 있으면 같이 갱신
+    if (typeof renderTodaySchedule === 'function') renderTodaySchedule();
     if (typeof renderTodayMonthSchedule === 'function') renderTodayMonthSchedule();
     if (typeof renderAgendaList === 'function') renderAgendaList();
 }

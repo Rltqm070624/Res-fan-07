@@ -29,30 +29,38 @@
             <div class="mem-selector-row" id="memberSelectorRow"></div>
 
             <div class="mem-detail-panel">
-                <div class="mem-hero">
-                    <img id="memberHeroImg" class="mem-hero-img" src="" alt="">
-                    <div class="mem-hero-overlay"></div>
-                    <img id="memberSign" class="mem-sign" src="" alt="signature">
-                    <div class="mem-hero-name">
-                        <span class="mem-name-en" id="memberNameEn"></span>
-                        <span class="mem-name-ko" id="memberNameKo"></span>
+                <div class="mem-main-col">
+                    <div class="mem-hero">
+                        <img id="memberHeroImg" class="mem-hero-img" src="" alt="">
+                        <div class="mem-hero-overlay"></div>
+                        <img id="memberSign" class="mem-sign" src="" alt="signature">
+                        <div class="mem-hero-name">
+                            <span class="mem-name-en" id="memberNameEn"></span>
+                            <span class="mem-name-ko" id="memberNameKo"></span>
+                        </div>
+                    </div>
+
+                    <div class="mem-info-card">
+                        <p class="mem-intro" id="memberIntro"></p>
+                        <div class="mem-info-grid">
+                            <div class="mem-info-item"><span class="mem-info-label">BIRTHDAY</span><span class="mem-info-val" id="memberBday"></span></div>
+                            <div class="mem-info-item"><span class="mem-info-label">POSITION</span><span class="mem-info-val" id="memberPosition"></span></div>
+                            <div class="mem-info-item"><span class="mem-info-label">MBTI</span><span class="mem-info-val" id="memberMbti"></span></div>
+                            <div class="mem-info-item"><span class="mem-info-label">SPECIALTY</span><span class="mem-info-val" id="memberSpecialty"></span></div>
+                            <div class="mem-info-item"><span class="mem-info-label">HOBBY</span><span class="mem-info-val" id="memberHobby"></span></div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mem-info-card">
-                    <p class="mem-intro" id="memberIntro"></p>
-                    <div class="mem-info-grid">
-                        <div class="mem-info-item"><span class="mem-info-label">BIRTHDAY</span><span class="mem-info-val" id="memberBday"></span></div>
-                        <div class="mem-info-item"><span class="mem-info-label">POSITION</span><span class="mem-info-val" id="memberPosition"></span></div>
-                        <div class="mem-info-item"><span class="mem-info-label">MBTI</span><span class="mem-info-val" id="memberMbti"></span></div>
-                        <div class="mem-info-item"><span class="mem-info-label">SPECIALTY</span><span class="mem-info-val" id="memberSpecialty"></span></div>
-                        <div class="mem-info-item"><span class="mem-info-label">HOBBY</span><span class="mem-info-val" id="memberHobby"></span></div>
-                    </div>
-                </div>
-
-                <div class="mem-era-section">
+                <div class="mem-photo-col">
                     <div class="mem-era-label-row">PHOTO <span>ARCHIVE</span></div>
-                    <div class="mem-era-row" id="memberEraRow"></div>
+                    <div class="mem-photo-archive">
+                        <div class="mem-era-rail" id="memberEraRow"></div>
+                        <div class="mem-era-preview">
+                            <img id="memberEraPreviewImg" src="" alt="">
+                            <span class="mem-era-preview-label" id="memberEraPreviewLabel"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

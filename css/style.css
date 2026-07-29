@@ -1,5 +1,24 @@
 @charset "UTF-8";
 
+/* ⭐️ 전역 리셋 — width/padding 계산 꼬임으로 인한 가로 스크롤/레이아웃 깨짐 방지 */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ⭐️ 전역 스크롤바 — 다크모드에서 브라우저 기본(밝은) 스크롤바가 튀어보이는 문제 방지 */
+html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.22) transparent; color-scheme: dark; }
+html[data-theme="light"] { scrollbar-color: rgba(0,0,0,0.22) transparent; color-scheme: light; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 999px; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.32); }
+html[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); }
+html[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.32); }
+
+html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
+}
+
 :root {
     --font-head: 'Montserrat', 'Noto Sans KR', sans-serif;
     --font-body: 'Noto Sans KR', sans-serif;
@@ -48,6 +67,11 @@ body {
     box-sizing: border-box;
     transition: background-color 0.4s ease, color 0.4s ease;
 }
+
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s var(--transition-smooth), transform 1s var(--transition-smooth); }
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+#mainWrapper { width: 100%; box-sizing: border-box; }
 
 .top-nav {
     position: fixed; top: 0; left: 0; width: 100%; height: 72px;
@@ -108,10 +132,11 @@ html[data-theme="light"] .icon-sun { display: block; }
 .mobile-menu-backdrop.active { opacity: 1; pointer-events: auto; }
 
 .mobile-menu-panel {
-    position: fixed; top: 0; right: -280px; width: 260px; height: 100vh;
+    position: fixed; top: 0; right: -280px; width: 260px; height: 100vh; height: 100dvh;
     background: var(--bg-surface); border-left: 1px solid var(--border-light);
     z-index: 8600; transition: right var(--transition-smooth);
     box-sizing: border-box; display: flex; flex-direction: column; padding: 40px 30px;
+    overflow-y: auto;
 }
 .mobile-menu-panel.active { right: 0; }
 
@@ -140,6 +165,8 @@ html[data-theme="light"] .lang-btn.active { background: #18181b; color: #ffffff;
 
 /* 모든 페이지 공통 컨테이너 하단 여백 통일 (index.html과 동일하게) */
 .section-container { padding: 80px 20px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; box-sizing: border-box; }
+.section-title { font-family: var(--font-head); font-size: 28px; font-weight: 300; color: var(--text-secondary); letter-spacing: 2px; }
+.section-title span { color: var(--text-primary); font-weight: 800; }
 
 .global-footer {
     width: 100%; border-top: 1px solid var(--border-light);
@@ -158,3 +185,22 @@ html[data-theme="light"] .lang-btn.active { background: #18181b; color: #ffffff;
     .nav-right { margin-left: auto; justify-content: flex-end; }
     .global-footer { padding: 30px 20px; }
 }
+
+/* ==========================================================================
+   ⭐️ 루트 주소 접속 시에만 보이는 웰컴 스플래시 (index.html 명시 접속 시엔 안 뜸)
+   ========================================================================== */
+.landing-splash { display: none; }
+html.show-landing { overflow: hidden; height: 100%; }
+html.show-landing body { overflow: hidden; height: 100%; }
+html.show-landing .landing-splash {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; inset: 0; z-index: 99999;
+    background: var(--bg-base); text-align: center;
+    opacity: 1; transition: opacity 0.6s ease;
+}
+.landing-splash.landing-closing { opacity: 0; pointer-events: none; }
+.landing-inner { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 0 24px; }
+.landing-logo { width: 56px; height: 56px; object-fit: contain; opacity: 0.9; }
+.landing-welcome { font-family: var(--font-body); font-size: 16px; font-weight: 500; color: var(--text-primary); letter-spacing: 0.3px; margin: 0; }
+.landing-enter { font-family: var(--font-head); font-size: 13px; font-weight: 600; letter-spacing: 1px; color: var(--text-secondary); text-decoration: underline; text-underline-offset: 4px; transition: color 0.3s ease; }
+.landing-enter:hover { color: var(--c-accent); }

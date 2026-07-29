@@ -45,15 +45,6 @@
                 </div>
             </div>
 
-            <div class="media-now-playing" id="mediaNowPlaying">
-                <button type="button" class="media-np-close" onclick="mediaClosePlayer()" aria-label="닫기">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                </button>
-                <div class="media-np-media" id="mediaNpMedia"></div>
-                <div class="media-np-title" id="mediaNpTitle"></div>
-                <div class="media-np-sub" id="mediaNpSub"></div>
-            </div>
-
             <div class="media-grid" id="mediaGrid"></div>
             <div class="media-loadmore-wrap">
                 <button type="button" class="media-loadmore-btn" id="mediaLoadMoreBtn" onclick="mediaLoadMore()">더 불러오기</button>
@@ -62,6 +53,19 @@
 
         <div id="siteFooterSlot"></div>
         <script>renderSiteFooter('../');</script>
+    </div>
+
+    <!-- 영상 재생 모달 -->
+    <div class="modal-backdrop" id="mediaModalBackdrop" onclick="mediaClosePlayer()"></div>
+    <div class="media-modal-wrapper" id="mediaModal">
+        <button class="popup-close-btn" onclick="mediaClosePlayer()" aria-label="닫기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="media-modal-media" id="mediaModalMedia"></div>
+        <div class="media-modal-info">
+            <div class="media-modal-title" id="mediaModalTitle"></div>
+            <div class="media-modal-date" id="mediaModalDate"></div>
+        </div>
     </div>
 
     <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->

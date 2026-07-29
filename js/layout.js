@@ -58,7 +58,7 @@ function renderSiteNav(activeKey, root, opts) {
     </nav>
 
     <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="toggleMobileMenu()"></div>
-    <div class="mobile-menu-panel" id="mobileMenuPanel" style="display: flex; flex-direction: column;">
+    <div class="mobile-menu-panel" id="mobileMenuPanel">
         <div class="mobile-top-utils">${mobileCalBtnHtml}
             <div class="mobile-sns-box">
                 <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="${root}images/x.png" alt="X" onerror="this.style.display='none'"></a>
@@ -67,7 +67,7 @@ function renderSiteNav(activeKey, root, opts) {
             </div>
         </div>
         <ul class="mobile-menu-list">${mobileLinks}</ul>
-        ${opts.lang ? `<div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" style="margin-top: auto; margin-bottom: 20px; display: flex; justify-content: center;">
+        ${opts.lang ? `<div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" style="margin-top: auto; display: flex; justify-content: center;">
             <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko')">KOR</button>
             <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">ENG</button>
             <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>

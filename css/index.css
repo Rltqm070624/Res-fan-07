@@ -178,26 +178,52 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 .today-empty-card button:hover{ color:var(--text-primary); border-color:var(--text-primary); }
 @media (prefers-reduced-motion:reduce){ .today-card, .today-status .live-dot{ animation:none !important; } .today-card{ transition:none; } }
 
-/* ⭐️ AWARDS & AMBASSADOR 홈 섹션 (리스트 뷰) */
-.honors-linear-layout { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 50px; width: 100%; }
-.honors-linear-group { display: flex; flex-direction: column; }
-.honors-linear-header { display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 2px solid var(--text-primary); padding-bottom: 12px; margin-bottom: 10px; }
-.honors-linear-header h3 { font-family: var(--font-head); font-size: 20px; font-weight: 700; color: var(--text-primary); margin: 0; letter-spacing: -0.2px; }
-.honors-more-text { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--text-secondary); text-decoration: none; transition: 0.2s ease; cursor: pointer; margin-bottom: 2px; }
+/* ⭐️ AWARDS & AMBASSADOR 홈 섹션 (2026 프리미엄 에디토리얼 리스트) */
+.honors-linear-layout { max-width: 100%; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: 100%; align-items: start; }
+
+.honors-linear-group {
+    position: relative; isolation: isolate; overflow: hidden;
+    background: var(--bg-surface); border-radius: 22px; padding: 34px 32px 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    animation: todayCardIn 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+.honors-linear-group:nth-child(2) { animation-delay: 0.1s; }
+.honors-linear-group::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--c-accent) 12%, transparent) 0%, transparent 60%);
+    opacity: 0.8;
+}
+
+.honors-linear-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 18px; margin-bottom: 6px; }
+.honors-linear-header h3 { font-family: var(--font-head); font-size: 18px; font-weight: 800; color: var(--text-primary); margin: 0; letter-spacing: -0.1px; display: flex; align-items: center; gap: 10px; }
+.honors-linear-header h3::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--c-accent); box-shadow: 0 0 10px var(--c-accent-glow); flex-shrink: 0; }
+.honors-more-text { font-family: var(--font-num); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-decoration: none; transition: color 0.25s ease; }
 .honors-more-text:hover { color: var(--c-accent); }
 
-.honors-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-.honors-list li { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--border-light); gap: 16px; }
+.honors-list { list-style: none; margin: 0; padding: 0; }
+.honors-list li {
+    display: flex; align-items: center; gap: 14px; padding: 18px 6px; border-bottom: 1px solid var(--border-light);
+    border-radius: 12px; transition: background 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+}
 .honors-list li:last-child { border-bottom: none; }
+.honors-list li:hover { background: var(--bg-surface-hover); padding-left: 12px; padding-right: 12px; margin: 0 -6px; }
+.honors-list .h-rank { font-family: var(--font-num); font-size: 12px; font-weight: 700; color: var(--text-muted); width: 20px; flex-shrink: 0; letter-spacing: 0.02em; }
 .honors-list .h-info { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
-.honors-list .h-name { font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.honors-list .h-name { font-family: var(--font-body); font-size: 14.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+.honors-list .h-badge { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-head); font-size: 10.5px; font-weight: 700; color: var(--c-accent); background: var(--c-accent-glow); padding: 4px 10px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; margin-left: 4px; }
+.honors-list .h-note { font-family: var(--font-body); font-size: 12.5px; font-weight: 400; color: var(--text-muted); margin-left: 4px; white-space: nowrap; }
 .honors-list .h-tag { font-family: var(--font-head); font-size: 11px; font-weight: 700; color: var(--c-accent); background: var(--c-accent-glow); padding: 4px 10px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
-.honors-list .h-date { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: var(--text-muted); flex-shrink: 0; text-align: right; }
+.honors-list .h-date { font-family: var(--font-num); font-size: 12.5px; font-weight: 500; color: var(--text-muted); flex-shrink: 0; text-align: right; letter-spacing: 0.02em; }
 
 /* 모바일 대응 */
+@media (max-width: 900px) {
+    .honors-linear-layout { grid-template-columns: 1fr; gap: 20px; }
+}
 @media (max-width: 600px) {
-    .honors-list li { flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px 0; }
-    .honors-list .h-date { text-align: left; font-size: 13px; color: var(--text-secondary); }
+    .honors-linear-group { padding: 26px 20px 6px; border-radius: 18px; }
+    .honors-list li { flex-wrap: wrap; align-items: flex-start; gap: 4px 10px; padding: 16px 6px; }
+    .honors-list .h-info { width: calc(100% - 34px); }
+    .honors-list .h-date { width: 100%; text-align: left; padding-left: 34px; font-size: 12px; color: var(--text-secondary); }
 }
 
 /* ⭐️ YOUTUBE 모아보기 홈 섹션 — 카테고리별 최신 영상 1개 (모달 없음, 위아래로 자유롭게) */

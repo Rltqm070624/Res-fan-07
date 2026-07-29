@@ -9,6 +9,14 @@ const MEDIA_PAGE_SIZE = 24;
 
 // 대분류별 소분류(서브탭) 정의. 라이브 방송은 멤버(소분류) > 연도(세분류) 2단계까지 있음
 const MEDIA_SUBFILTERS = {
+    '컨텐츠': {
+        getOptions: () => ['원이', '리브', '미나미', '메이', '제나'],
+        match: (item, sub) => (item.cast || '') === '전원' || (item.cast || '').includes(sub)
+    },
+    '음반 활동 컨텐츠': {
+        getOptions: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
+        match: (item, sub) => item.date.slice(0, 4) === sub
+    },
     '음악 방송': {
         getOptions: (items) => [...new Set(items.map(i => i.program).filter(Boolean))],
         match: (item, sub) => item.program === sub
@@ -115,12 +123,29 @@ function mediaRefreshSubPanelHeight() {
 window.addEventListener('resize', () => mediaRefreshSubPanelHeight());
 
 function mediaSetTag(label) {
+    if (label === mediaActiveTag) {
+        // ⭐️ 이미 선택된 탭을 다시 클릭하면 하위 분류 트리만 열고 닫기
+        const panel = document.getElementById('mediaSubPanel');
+        const isOpen = !!(panel && panel.classList.contains('open'));
+        if (MEDIA_SUBFILTERS[label]) mediaSetSubPanelOpen(!isOpen);
+        mediaSyncTagArrow();
+        return;
+    }
     mediaActiveTag = label;
     mediaActiveSub = '전체';
     mediaActiveSub2 = '전체';
     mediaRenderTagRow();
     mediaRenderSubtagRow();
+    mediaSyncTagArrow();
     mediaApplyFilters();
+}
+
+function mediaSyncTagArrow() {
+    const panel = document.getElementById('mediaSubPanel');
+    const isOpen = !!(panel && panel.classList.contains('open'));
+    document.querySelectorAll('.mt-chip').forEach(btn => {
+        btn.classList.toggle('panel-open', isOpen && btn.classList.contains('active'));
+    });
 }
 
 function mediaSetSub(sub) {
@@ -379,6 +404,7 @@ window.addEventListener('DOMContentLoaded', () => {
     mediaInitTagFromQuery();
     mediaRenderTagRow();
     mediaRenderSubtagRow();
+    mediaSyncTagArrow();
     mediaRenderGrid(true);
     mediaSetupInfiniteScroll();
     const badge = document.getElementById('mediaCountBadge');

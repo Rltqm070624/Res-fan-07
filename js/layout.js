@@ -48,7 +48,7 @@ function renderSiteNav(activeKey, root, opts) {
 
     const navHtml = `
     <nav class="top-nav">
-        <div class="nav-brand notranslate" translate="no"><a href="${root}index.html" class="plain-link">RESCENE</a></div>
+        <div class="nav-left"></div>
         <ul class="desktop-menu">${desktopLinks}</ul>
         <div class="nav-right">${langSwitcherHtml}
             <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="테마 변경"></button>

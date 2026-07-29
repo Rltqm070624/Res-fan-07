@@ -118,20 +118,13 @@
             <div class="section-header center-header section-header-sm">
                 <div class="section-title">TODAY'S <span>SCHEDULE</span></div>
             </div>
-            <div class="today-double">
-                <div class="today-live-col">
-                    <div class="today-live-embed" id="todayLiveEmbed">
-                        <div class="live-status-badge" id="liveStatusBadge" style="display:none;"><span class="live-dot"></span>ON-AIR</div>
-                        <div class="live-offline-box" id="liveOfflineBox">
-                            <p>현재 방송 진행 중이 아닙니다.</p>
-                        </div>
-                        <iframe id="todayLiveIframe" src="https://www.youtube.com/embed/live_stream?channel=UCtKtCiaWRz-d3EZn2xd1mdA&enablejsapi=1" title="RESCENE LIVE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" style="display:none;"></iframe>
-                    </div>
-                </div>
-                <div class="today-list-col">
-                    <div class="today-date-sub" id="todayDateSub"></div>
-                    <div class="today-grid" id="todayScheduleGrid"></div>
-                </div>
+            <div class="today-month-head">
+                <div class="today-month-title" id="todayMonthTitle"></div>
+                <div class="today-month-count" id="todayMonthCount"></div>
+            </div>
+            <div class="today-scroll-double">
+                <div class="tm-col" id="todayScrollColA"></div>
+                <div class="tm-col" id="todayScrollColB"></div>
             </div>
         </div>
 
@@ -166,9 +159,12 @@
             <div class="album-track-list" id="albumTrackList"></div>
         </div>
     </div>
-
-
-    <!-- 수상/광고 히스토리 모달 -->
+    <button type="button" class="album-nav-btn album-nav-prev" onclick="navigateAlbumModal(-1)" aria-label="이전 앨범">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button type="button" class="album-nav-btn album-nav-next" onclick="navigateAlbumModal(1)" aria-label="다음 앨범">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
     <div class="modal-backdrop" id="honorsHistoryBackdrop" onclick="closeHonorsHistoryModal()"></div>
     <div class="honors-history-modal" id="honorsHistoryModal">
         <button class="popup-close-btn" onclick="closeHonorsHistoryModal()" aria-label="닫기">
@@ -189,7 +185,6 @@
     <script src="js/honors_data.js"></script>
     <script src="js/honors.js"></script>
     <script src="js/contents.js"></script>
-    <script src="js/live-status.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

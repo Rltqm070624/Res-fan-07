@@ -30,25 +30,52 @@
             <div class="section-header media-hero">
                 <div class="section-title">MEDIA <span>ARCHIVE</span></div>
             </div>
-            <p class="media-hero-sub">컨텐츠 · 음반 활동 컨텐츠 · 음악방송 · 라이브 방송 · 공연 및 행사 — 리센느 영상을 한곳에서. <span class="media-count-badge" id="mediaCountBadge"></span></p>
+            <p class="media-hero-sub">RESCENE 영상 모아보기<span class="media-count-badge" id="mediaCountBadge"></span></p>
 
-            <div class="media-controls">
-                <input type="text" class="media-search" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()">
-                <div class="media-tag-row" id="mediaTagRow"></div>
-                <div class="media-subtag-row" id="mediaSubtagRow"></div>
-                <div class="media-subtag2-row" id="mediaSubtag2Row"></div>
-                <div class="media-controls-row">
-                    <div class="media-sort-row" id="mediaSortRow">
-                        <button type="button" class="ms-btn active" data-sort="new" onclick="mediaSetSort('new')">최신순</button>
-                        <button type="button" class="ms-btn" data-sort="old" onclick="mediaSetSort('old')">오래된순</button>
+            <div class="media-toolbar">
+                <div class="media-toolbar-top">
+                    <div class="media-cat-row" id="mediaTagRow"></div>
+                    <div class="media-search-wrap">
+                        <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()" autocomplete="off">
+                        <button type="button" class="media-search-clear" id="mediaSearchClear" onclick="mediaClearSearch()" aria-label="검색어 지우기">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
                     </div>
+                </div>
+
+                <div class="media-subcat-panel" id="mediaSubPanel">
+                    <div class="media-subtag-row" id="mediaSubtagRow"></div>
+                    <div class="media-subtag2-row" id="mediaSubtag2Row"></div>
+                </div>
+
+                <div class="media-sort-row-wrap">
+                    <div class="media-sort-group" role="group" aria-label="정렬">
+                        <button type="button" class="msort-btn active" id="sortDateNew" onclick="mediaSetSort('date','desc')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                            최신순
+                        </button>
+                        <button type="button" class="msort-btn" id="sortDateOld" onclick="mediaSetSort('date','asc')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            오래된순
+                        </button>
+                        <span class="msort-divider"></span>
+                        <button type="button" class="msort-btn" id="sortNameAsc" onclick="mediaSetSort('name','asc')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                            가나다순
+                        </button>
+                        <button type="button" class="msort-btn" id="sortNameDesc" onclick="mediaSetSort('name','desc')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            역순
+                        </button>
+                    </div>
+                    <div class="media-result-count" id="mediaResultCount"></div>
                 </div>
             </div>
 
             <div class="media-grid" id="mediaGrid"></div>
-            <div class="media-loadmore-wrap">
-                <button type="button" class="media-loadmore-btn" id="mediaLoadMoreBtn" onclick="mediaLoadMore()">더 불러오기</button>
-            </div>
+            <div class="media-scroll-sentinel" id="mediaSentinel"></div>
+            <div class="media-end-message" id="mediaEndMessage" style="display:none;">모든 영상을 다 봤어요.</div>
         </div>
 
         <div id="siteFooterSlot"></div>

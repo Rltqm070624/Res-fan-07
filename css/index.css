@@ -62,20 +62,12 @@ html, body { scroll-snap-type: y proximity; overflow-x: hidden; width: 100%; pos
 .mt-40 { margin-top: 40px; }
 
 .profile-scroll-wrapper { position: relative; width: 100%; }
-.profile-track {
-    display: flex; gap: 14px; width: 100%;
-    overflow-x: auto; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain; scroll-behavior: smooth;
-    padding-bottom: 4px; cursor: grab;
-    scrollbar-width: none; -ms-overflow-style: none;
-}
-.profile-track::-webkit-scrollbar { display: none; }
-.profile-track.dragging { cursor: grabbing; user-select: none; scroll-snap-type: none; }
+.profile-track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; }
 .archive-split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; }
 .archive-col { min-width: 0; }
 @media (max-width: 800px) { .archive-split { grid-template-columns: 1fr; gap: 32px; } }
 
-.profile-item { position: relative; flex: 0 0 calc((100% - 14px * 3) / 4); scroll-snap-align: start; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; background: transparent; cursor: pointer; border: 1px solid var(--border-light); box-shadow: 0 6px 18px rgba(0,0,0,0.25); transition: box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.profile-item { position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; background: transparent; cursor: pointer; border: 1px solid var(--border-light); box-shadow: 0 6px 18px rgba(0,0,0,0.25); transition: box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 .profile-item:hover { border-color: var(--c-accent); box-shadow: 0 14px 34px rgba(0,0,0,0.4), 0 0 0 1px var(--c-accent-glow); transform: translateY(-3px); }
 .album-broken-label { display: none; }
 .profile-item.img-broken { display: flex; align-items: center; justify-content: center; text-align: center; border: 1px dashed var(--border-highlight); }
@@ -280,5 +272,5 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
     #historySection .section-title { font-size: 40px; }
     .section-header.center-header { align-items: center; flex-direction: column; }
     
-    .profile-item { flex-basis: calc((100% - 14px * 2) / 2.15); }
+    .profile-track { grid-template-columns: repeat(2, 1fr); }
 }

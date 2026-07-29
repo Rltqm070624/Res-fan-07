@@ -1,3 +1,8 @@
+/* ==========================================================================
+   ⭐️ MEDIA ARCHIVE 페이지 — 검색 + 태그(대분류) + 서브탭(소분류) + 서브서브탭(세분류) + 정렬 + 더보기 + 재생
+   - MEDIA_CATEGORIES, ytThumb, escapeHtml, escapeAttr 는 js/contents.js 에 정의됨
+   ========================================================================== */
+
 let mediaActiveTag = '전체';
 let mediaActiveSub = '전체';
 let mediaActiveSub2 = '전체';
@@ -146,10 +151,10 @@ function mediaCardTitle(item) {
     return item.title;
 }
 
-function mediaCardHtml(item) {
+function mediaCardHtml(item, idx) {
     const title = mediaCardTitle(item);
     return `<div class="media-card">
-        <div class="media-card-thumb" data-vid="${item.vid}" data-title="${escapeAttr(title)}" data-date="${escapeAttr(item.date || '')}" onclick="mediaPlayCard(this)">
+        <div class="media-card-thumb" data-index="${idx}" onclick="mediaPlayCard(this)">
             <img src="${ytThumb(item.vid)}" alt="${escapeAttr(title)}" loading="lazy" onerror="this.closest('.media-card').style.display='none'">
             <button type="button" class="mc-play" aria-label="재생"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
             <span class="media-card-tag" style="background:${item.tagColor}e6;">${escapeHtml(item.tagLabel)}</span>
@@ -174,7 +179,7 @@ function mediaRenderGrid() {
     }
 
     const visible = filtered.slice(0, mediaVisibleCount);
-    grid.innerHTML = visible.map(mediaCardHtml).join('');
+    grid.innerHTML = visible.map((item, idx) => mediaCardHtml(item, idx)).join('');
 
     if (loadMoreWrap) loadMoreWrap.style.display = (filtered.length > mediaVisibleCount) ? 'flex' : 'none';
 }
@@ -184,24 +189,90 @@ function mediaLoadMore() {
     mediaRenderGrid();
 }
 
+/* ==========================================================================
+   ⭐️ 영상 재생 모달 — 제목/날짜 + 이전/다음 + 드래그 가능한 재생목록 시트
+   ========================================================================== */
+let mmPlaylist = [];
+let mmIndex = -1;
+let mmExpanded = false;
+
 function mediaPlayCard(el) {
-    const vid = el.dataset.vid;
-    const title = el.dataset.title || '';
-    const date = el.dataset.date || '';
+    const idx = parseInt(el.dataset.index, 10);
+    mmPlaylist = mediaGetFiltered();
+    mediaOpenModalAt(idx);
+}
+
+function mediaOpenModalAt(idx) {
     const modal = document.getElementById('mediaModal');
     const backdrop = document.getElementById('mediaModalBackdrop');
-    const modalMedia = document.getElementById('mediaModalMedia');
-    const modalTitle = document.getElementById('mediaModalTitle');
-    const modalDate = document.getElementById('mediaModalDate');
-    if (!modal || !modalMedia) return;
-
-    modalMedia.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1" title="${escapeAttr(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-    if (modalTitle) modalTitle.textContent = title;
-    if (modalDate) modalDate.textContent = date;
+    if (!modal) return;
     modal.classList.add('active');
     if (backdrop) backdrop.classList.add('active');
     document.body.style.overflow = 'hidden';
+    mmSetExpanded(false);
+    renderMmPlaylist();
+    loadMmVideo(idx);
 }
+
+function loadMmVideo(index) {
+    const item = mmPlaylist[index];
+    if (!item) return;
+    mmIndex = index;
+    const modalMedia = document.getElementById('mediaModalMedia');
+    const modalTitle = document.getElementById('mediaModalTitle');
+    const modalDate = document.getElementById('mediaModalDate');
+    const title = mediaCardTitle(item);
+    if (modalMedia) modalMedia.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1" title="${escapeAttr(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    if (modalTitle) modalTitle.textContent = title;
+    if (modalDate) modalDate.textContent = item.sub ? `${item.sub} · ${item.date}` : (item.date || '');
+    updateMmNavButtons();
+    highlightMmPlaylistActive();
+}
+
+function updateMmNavButtons() {
+    const prevBtn = document.getElementById('mediaPrevBtn');
+    const nextBtn = document.getElementById('mediaNextBtn');
+    if (prevBtn) prevBtn.disabled = mmIndex <= 0;
+    if (nextBtn) nextBtn.disabled = mmIndex >= mmPlaylist.length - 1;
+}
+
+function mediaPrev() { if (mmIndex > 0) loadMmVideo(mmIndex - 1); }
+function mediaNext() { if (mmIndex < mmPlaylist.length - 1) loadMmVideo(mmIndex + 1); }
+
+function renderMmPlaylist() {
+    const listEl = document.getElementById('mmPlaylistList');
+    const countEl = document.getElementById('mmPlaylistCount');
+    if (countEl) countEl.textContent = mmPlaylist.length;
+    if (!listEl) return;
+    listEl.innerHTML = mmPlaylist.map((item, i) => {
+        const title = mediaCardTitle(item);
+        return `<li class="mm-playlist-item" data-idx="${i}" onclick="loadMmVideo(${i})">
+            <span class="mm-playlist-index">${i + 1}</span>
+            <div class="mm-playlist-thumb"><img src="${ytThumb(item.vid)}" alt="" loading="lazy"></div>
+            <div class="mm-playlist-info">
+                <div class="mm-playlist-title">${escapeHtml(title)}</div>
+                <div class="mm-playlist-date">${item.sub ? escapeHtml(item.sub) + ' · ' : ''}${item.date}</div>
+            </div>
+        </li>`;
+    }).join('');
+}
+
+function highlightMmPlaylistActive() {
+    const listEl = document.getElementById('mmPlaylistList');
+    if (!listEl) return;
+    listEl.querySelectorAll('.mm-playlist-item').forEach(el => {
+        el.classList.toggle('active', parseInt(el.dataset.idx, 10) === mmIndex);
+    });
+    const activeEl = listEl.querySelector('.mm-playlist-item.active');
+    if (activeEl) activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function mmSetExpanded(state) {
+    mmExpanded = state;
+    const panel = document.getElementById('mediaModalPlaylist');
+    if (panel) panel.classList.toggle('expanded', state);
+}
+function mmToggleExpanded() { mmSetExpanded(!mmExpanded); }
 
 function mediaClosePlayer() {
     const modal = document.getElementById('mediaModal');
@@ -212,6 +283,36 @@ function mediaClosePlayer() {
     if (modalMedia) modalMedia.innerHTML = '';
     document.body.style.overflow = '';
 }
+
+/* 재생목록 시트 드래그 (마우스/터치 공용) — 위로 끌면 펼쳐지고, 아래로 끌면 접힘 */
+(function initMmDrag() {
+    let startY = 0, dragging = false, moved = false;
+    function pointY(e) { return e.touches ? e.touches[0].clientY : e.clientY; }
+    function onDown(e) { dragging = true; moved = false; startY = pointY(e); }
+    function onMove(e) {
+        if (!dragging) return;
+        if (Math.abs(pointY(e) - startY) > 6) moved = true;
+    }
+    function onUp(e) {
+        if (!dragging) return;
+        dragging = false;
+        const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+        const delta = startY - endY; // 양수 = 위로 드래그
+        if (!moved) { mmToggleExpanded(); return; }
+        if (delta > 20) mmSetExpanded(true);
+        else if (delta < -20) mmSetExpanded(false);
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const handle = document.getElementById('mmDragHandle');
+        if (!handle) return;
+        handle.addEventListener('mousedown', onDown);
+        handle.addEventListener('touchstart', onDown, { passive: true });
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('touchmove', onMove, { passive: true });
+        window.addEventListener('mouseup', onUp);
+        window.addEventListener('touchend', onUp);
+    });
+})();
 
 window.addEventListener('DOMContentLoaded', () => {
     mediaInitTagFromQuery();

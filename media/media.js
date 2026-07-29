@@ -1,8 +1,3 @@
-/* ==========================================================================
-   ⭐️ MEDIA ARCHIVE 페이지 — 검색 + 태그(대분류) + 서브탭(소분류) + 서브서브탭(세분류) + 정렬 + 더보기 + 재생
-   - MEDIA_CATEGORIES, ytThumb, escapeHtml, escapeAttr 는 js/contents.js 에 정의됨
-   ========================================================================== */
-
 let mediaActiveTag = '전체';
 let mediaActiveSub = '전체';
 let mediaActiveSub2 = '전체';
@@ -154,7 +149,7 @@ function mediaCardTitle(item) {
 function mediaCardHtml(item) {
     const title = mediaCardTitle(item);
     return `<div class="media-card">
-        <div class="media-card-thumb" data-vid="${item.vid}" data-title="${escapeAttr(item.title)}" onclick="mediaPlayCard(this)">
+        <div class="media-card-thumb" data-vid="${item.vid}" data-title="${escapeAttr(title)}" data-date="${escapeAttr(item.date || '')}" onclick="mediaPlayCard(this)">
             <img src="${ytThumb(item.vid)}" alt="${escapeAttr(title)}" loading="lazy" onerror="this.closest('.media-card').style.display='none'">
             <button type="button" class="mc-play" aria-label="재생"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
             <span class="media-card-tag" style="background:${item.tagColor}e6;">${escapeHtml(item.tagLabel)}</span>
@@ -192,24 +187,30 @@ function mediaLoadMore() {
 function mediaPlayCard(el) {
     const vid = el.dataset.vid;
     const title = el.dataset.title || '';
-    const np = document.getElementById('mediaNowPlaying');
-    const npMedia = document.getElementById('mediaNpMedia');
-    const npTitle = document.getElementById('mediaNpTitle');
-    const npSub = document.getElementById('mediaNpSub');
-    if (!np || !npMedia) return;
+    const date = el.dataset.date || '';
+    const modal = document.getElementById('mediaModal');
+    const backdrop = document.getElementById('mediaModalBackdrop');
+    const modalMedia = document.getElementById('mediaModalMedia');
+    const modalTitle = document.getElementById('mediaModalTitle');
+    const modalDate = document.getElementById('mediaModalDate');
+    if (!modal || !modalMedia) return;
 
-    npMedia.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1" title="${escapeAttr(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-    if (npTitle) npTitle.textContent = title;
-    if (npSub) npSub.textContent = '';
-    np.classList.add('show');
-    np.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    modalMedia.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1" title="${escapeAttr(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    if (modalTitle) modalTitle.textContent = title;
+    if (modalDate) modalDate.textContent = date;
+    modal.classList.add('active');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
 }
 
 function mediaClosePlayer() {
-    const np = document.getElementById('mediaNowPlaying');
-    const npMedia = document.getElementById('mediaNpMedia');
-    if (np) np.classList.remove('show');
-    if (npMedia) npMedia.innerHTML = '';
+    const modal = document.getElementById('mediaModal');
+    const backdrop = document.getElementById('mediaModalBackdrop');
+    const modalMedia = document.getElementById('mediaModalMedia');
+    if (modal) modal.classList.remove('active');
+    if (backdrop) backdrop.classList.remove('active');
+    if (modalMedia) modalMedia.innerHTML = '';
+    document.body.style.overflow = '';
 }
 
 window.addEventListener('DOMContentLoaded', () => {

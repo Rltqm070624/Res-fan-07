@@ -1,22 +1,3 @@
-/* ==========================================================================
-   ⭐️ 공통 헤더(nav) / 푸터 렌더러 — 모든 .html에서 이 파일 하나로 통일
-   -------------------------------------------------------------------------
-   사용법:
-   1) <head>에 이 파일보다 먼저 다른 스크립트는 필요 없음 (common.js보다 먼저 불러도 OK)
-   2) 헤더를 넣고 싶은 자리에:
-        <div id="siteNavSlot"></div>
-        <script src="js/layout.js"></script>
-        <script>renderSiteNav('home', '');</script>
-      (하위 폴더 페이지는 root를 '../' 로)
-   3) 푸터를 넣고 싶은 자리에:
-        <div id="siteFooterSlot"></div>
-        <script>renderSiteFooter('');</script>
-
-   activeKey: 'home' | 'members' | 'charts' | 'goods' (SCHEDULE은 별도 탭이 없어서 생략)
-   opts: { calendar: true/false, lang: true/false } — 페이지에 캘린더 모달/번역 마크업이
-         실제로 있는 경우에만 true로 켜주세요. (마크업 없이 켜도 에러는 안 나지만 버튼이 동작 안 함)
-   ========================================================================== */
-
 function renderSiteNav(activeKey, root, opts) {
     root = root || '';
     opts = opts || {};
@@ -77,7 +58,7 @@ function renderSiteNav(activeKey, root, opts) {
     </nav>
 
     <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="toggleMobileMenu()"></div>
-    <div class="mobile-menu-panel" id="mobileMenuPanel">
+    <div class="mobile-menu-panel" id="mobileMenuPanel" style="display: flex; flex-direction: column;">
         <div class="mobile-top-utils">${mobileCalBtnHtml}
             <div class="mobile-sns-box">
                 <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="${root}images/x.png" alt="X" onerror="this.style.display='none'"></a>
@@ -85,12 +66,12 @@ function renderSiteNav(activeKey, root, opts) {
                 <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="${root}images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
             </div>
         </div>
-        ${opts.lang ? `<div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language">
+        <ul class="mobile-menu-list">${mobileLinks}</ul>
+        ${opts.lang ? `<div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" style="margin-top: auto; margin-bottom: 20px; display: flex; justify-content: center;">
             <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko')">KOR</button>
             <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">ENG</button>
             <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>
         </div>` : ''}
-        <ul class="mobile-menu-list">${mobileLinks}</ul>
     </div>`;
 
     const slot = document.getElementById('siteNavSlot');
@@ -106,6 +87,7 @@ function renderSiteFooter(root) {
             <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="${root}images/x.png" alt="X" class="sns-icon-sm" onerror="this.style.display='none'"></a>
             <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="${root}images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
             <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="${root}images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
+            <a href="https://www.tiktok.com/@rescene_official" target="_blank"><img src="${root}images/tiktok.png" alt="TT" onerror="this.style.display='none'"></a>
         </div>
         <p class="footer-disclaimer" data-i18n="footerDisclaimer">해당 홈페이지는 팬이 자발적으로 운영하는 비공식 팬 페이지입니다.<br>모든 저작권은 아티스트 RESCENE, 소속사 THE MUZE Entertainment에게 있으며 공식 관계가 없음을 알려드립니다.</p>
         <p>&copy; 2024 RESCENE ARCHIVE. All Rights Reserved.</p>
@@ -115,24 +97,16 @@ function renderSiteFooter(root) {
     if (slot) slot.outerHTML = footerHtml;
 }
 
-/* ==========================================================================
-   ⭐️ 캘린더 팝업 + 세부 일정 모달 — 공용 마크업 (common.js의 openCalendarPopup 등과 짝)
-   -------------------------------------------------------------------------
-   사용법: <div id="siteCalendarSlot"></div> 를 body 안 아무데나 두고
-           <script>renderCalendarWidgets();</script> 호출 (root 인자 불필요 —
-           common.js가 SITE_ROOT를 기준으로 이미지를 불러오기 때문)
-   ========================================================================== */
 function renderCalendarWidgets() {
     const html = `
-    <!-- 캘린더 팝업 모달 -->
     <div class="modal-backdrop cal-backdrop" id="calPopupBackdrop" onclick="closeCalendarPopup()"></div>
     <div class="calendar-popup-wrapper" id="calendarPopupModal">
-        <button class="popup-close-btn" onclick="closeCalendarPopup()" aria-label="캘린더 닫기">
+        <button class="popup-close-btn" onclick="closeCalendarPopup()" aria-label="닫기">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
         <div class="calendar-header-controls">
             <button class="cal-btn" onclick="changeMonth(-1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-            <div class="calendar-title" id="calendarMonthText">2026. 07</div>
+            <div class="calendar-title" id="calendarMonthText"></div>
             <button class="cal-btn" onclick="changeMonth(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
         <div class="calendar-grid"><div class="weekday" data-wd="0">SUN</div><div class="weekday" data-wd="1">MON</div><div class="weekday" data-wd="2">TUE</div><div class="weekday" data-wd="3">WED</div><div class="weekday" data-wd="4">THU</div><div class="weekday" data-wd="5">FRI</div><div class="weekday" data-wd="6">SAT</div></div>
@@ -147,11 +121,10 @@ function renderCalendarWidgets() {
         </div>
     </div>
 
-    <!-- 세부 일정 모달 -->
     <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
     <div class="modal-wrapper" id="scheduleModal">
         <div class="sheet-drag-handle" id="scheduleSheetHandle"></div>
-        <button class="popup-close-btn" onclick="closeModal()" aria-label="일정 닫기">
+        <button class="popup-close-btn" onclick="closeModal()" aria-label="닫기">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
         <div id="modalScheduleText"></div>

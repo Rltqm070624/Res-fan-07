@@ -209,11 +209,6 @@ function mediaCardHtml(item, idx) {
     </div>`;
 }
 
-function mediaUpdateResultCount(shown, total) {
-    const el = document.getElementById('mediaResultCount');
-    if (el) el.innerHTML = total ? `<b>${shown}</b> / ${total}개` : '';
-}
-
 function mediaRenderGrid(reset) {
     const grid = document.getElementById('mediaGrid');
     const endMsg = document.getElementById('mediaEndMessage');
@@ -224,7 +219,6 @@ function mediaRenderGrid(reset) {
     if (!filtered.length) {
         grid.innerHTML = '<div class="media-empty">검색 결과가 없어요.</div>';
         if (endMsg) endMsg.style.display = 'none';
-        mediaUpdateResultCount(0, 0);
         return;
     }
 
@@ -236,7 +230,6 @@ function mediaRenderGrid(reset) {
         grid.insertAdjacentHTML('beforeend', slice.map((item, i) => mediaCardHtml(item, start + i)).join(''));
     }
 
-    mediaUpdateResultCount(Math.min(mediaVisibleCount, filtered.length), filtered.length);
     if (endMsg) endMsg.style.display = (mediaVisibleCount >= filtered.length) ? 'block' : 'none';
 }
 

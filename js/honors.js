@@ -10,19 +10,33 @@ function logoImg(key, size) {
 }
 
 function renderHonorsPreview() {
+    // 1. 음악방송 최신 3개 렌더링 (날짜 포함)
     const list = document.getElementById('awardsPreviewList');
     if (list) {
         list.innerHTML = MUSIC_SHOW_WINS.slice(-3).reverse().map(w => `
             <li>
-                ${logoImg(w.logo, 20)}
-                <span class="h-name">${w.program} · ${w.song}</span>
-                <span class="h-tag">${w.notes[0].split(' (')[0]}</span>
+                <div class="h-info">
+                    ${logoImg(w.logo, 20)}
+                    <span class="h-name">${w.program} · ${w.song}</span>
+                    <span class="h-tag">${w.notes[0].split(' (')[0]}</span>
+                </div>
+                <span class="h-date">${w.date}</span>
             </li>`).join('');
     }
-    const chipWrap = document.getElementById('adsPreviewChips');
-    if (chipWrap) {
-        const ambassadors = AD_TIMELINE.filter(i => i.type === '홍보대사').slice(0, 8);
-        chipWrap.innerHTML = ambassadors.map(a => `<span class="h-chip">${a.title}${a.note ? ` <em>${a.note.split(' (')[0]}</em>` : ''}</span>`).join('');
+    
+    // 2. 광고 · 홍보대사 최신 3개 렌더링 (날짜 포함 리스트 뷰)
+    const adsWrap = document.getElementById('adsPreviewChips');
+    if (adsWrap) {
+        // 날짜 기준 내림차순(최신순) 정렬 후 3개 추출
+        const latestAds = AD_TIMELINE.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+        adsWrap.innerHTML = latestAds.map(a => `
+            <li>
+                <div class="h-info">
+                    <span class="h-name">[${a.type}] ${a.title}</span>
+                    ${a.note ? `<span class="h-tag">${a.note.split(' (')[0]}</span>` : ''}
+                </div>
+                <span class="h-date">${a.date}</span>
+            </li>`).join('');
     }
 }
 

@@ -80,6 +80,29 @@ function setActiveEra(eraKey) {
     updateEraPreview();
 }
 
+function openEraModal() {
+    const previewImg = document.getElementById('memberEraPreviewImg');
+    const previewLabel = document.getElementById('memberEraPreviewLabel');
+    const modalImg = document.getElementById('memEraModalImg');
+    const modalLabel = document.getElementById('memEraModalLabel');
+    const modal = document.getElementById('memEraModal');
+    const backdrop = document.getElementById('memEraModalBackdrop');
+    if (!previewImg || !modal) return;
+    if (modalImg) modalImg.src = previewImg.src;
+    if (modalLabel) modalLabel.textContent = previewLabel ? previewLabel.textContent : '';
+    modal.classList.add('active');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeEraModal() {
+    const modal = document.getElementById('memEraModal');
+    const backdrop = document.getElementById('memEraModalBackdrop');
+    if (modal) modal.classList.remove('active');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     renderMemberSelector();
     renderMemberDetail();

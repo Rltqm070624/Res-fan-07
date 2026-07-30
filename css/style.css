@@ -83,12 +83,12 @@ body {
 html[data-theme="light"] .top-nav { background: rgba(250, 250, 251, 0.68); }
 
 .nav-left { min-width: 0; grid-column: 1; }
-.nav-logo-link {
-    font-family: 'Gaegu', var(--font-head); font-weight: 700; font-size: 22px;
-    color: var(--text-primary); text-decoration: none; letter-spacing: 0.5px;
-    display: inline-flex; align-items: center; transition: color 0.3s ease, opacity 0.3s ease;
+.nav-home-btn {
+    display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px;
+    border-radius: 50%; color: var(--text-primary); text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease;
 }
-.nav-logo-link:hover { color: var(--c-accent); opacity: 0.85; }
+.nav-home-btn:hover { background: var(--bg-surface-hover); color: var(--c-accent); }
 
 .desktop-menu {
     list-style: none; margin: 0; padding: 0; display: flex; gap: 36px; align-items: center;

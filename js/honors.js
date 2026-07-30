@@ -72,7 +72,7 @@ function renderHonorsPreview() {
         adsWrap.innerHTML = latestAds.map((a, i) => `
             <li>
                 <span class="h-rank">0${i + 1}</span>
-                <div class="h-thumb-wrap"><span class="h-type-tile" style="background:${AD_TYPE_COLOR[a.type]};">${a.type.charAt(0)}</span></div>
+                <div class="h-type-wrap"><span class="h-type-tile" style="background:${AD_TYPE_COLOR[a.type]};">${a.type}</span></div>
                 <div class="h-info">
                     <span class="h-name">${a.title}</span>
                     ${a.note ? `<span class="h-note">${a.note.split(' (')[0]}</span>` : ''}
@@ -94,7 +94,6 @@ function openAwardsHistoryModal() {
         </div>
         <div class="honors-tab-panels">
             <div class="honors-tab-panel active" data-panel="cum">
-                ${panelStat(MUSIC_SHOW_CUMULATIVE.reduce((s, c) => s + c.wins, 0), '누적 1위')}
                 <div class="honors-cum-list">`;
         const maxWins = Math.max(1, ...MUSIC_SHOW_CUMULATIVE.map(c => c.wins));
         MUSIC_SHOW_CUMULATIVE.slice().sort((a, b) => b.wins - a.wins).forEach((c, i) => {
@@ -109,7 +108,6 @@ function openAwardsHistoryModal() {
         html += `</div>
             </div>
             <div class="honors-tab-panel" data-panel="dated">
-                ${panelStat(MUSIC_SHOW_WINS.length, '관왕')}
                 <ul class="honors-timeline honors-timeline-song">`;
         MUSIC_SHOW_WINS.slice().reverse().forEach((w, i) => {
             html += `<li>
@@ -130,7 +128,6 @@ function openAwardsHistoryModal() {
         html += `</ul>
             </div>
             <div class="honors-tab-panel" data-panel="ceremony">
-                ${panelStat(CEREMONY_AWARDS.length, '수상')}
                 <ul class="honors-timeline">`;
         CEREMONY_AWARDS.slice().reverse().forEach((c, i) => {
             html += `<li>
@@ -165,7 +162,6 @@ function openAdsHistoryModal() {
         categories.forEach((cat, i) => {
             const items = AD_TIMELINE.filter(a => a.type === cat).slice().sort((a, b) => b.date.localeCompare(a.date));
             html += `<div class="honors-tab-panel${i === 0 ? ' active' : ''}" data-panel="cat${i}">
-                ${panelStat(items.length, '건')}
                 <div class="ad-row-list">`;
             items.forEach(a => {
                 const titleParts = splitTrailingParen(a.title);

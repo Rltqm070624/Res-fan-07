@@ -84,7 +84,7 @@ html[data-theme="light"] .top-nav { background: rgba(250, 250, 251, 0.68); }
 
 .nav-left { min-width: 0; grid-column: 1; }
 .nav-home-btn {
-    display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px;
+    display: none; align-items: center; justify-content: center; width: 38px; height: 38px;
     border-radius: 50%; color: var(--text-primary); text-decoration: none;
     transition: background 0.3s ease, color 0.3s ease;
 }
@@ -211,6 +211,7 @@ html[data-theme="light"] .lang-btn.active { background: #18181b; color: #ffffff;
 .footer-copyright { font-family: var(--font-num); letter-spacing: 0.5px; opacity: 0.6; }
 
 @media (max-width: 800px) {
+    .nav-home-btn { display: flex; }
     .top-nav { padding: 15px 20px; }
     .desktop-menu, .desktop-only-utils { display: none !important; }
     .hamburger-btn { display: flex; }

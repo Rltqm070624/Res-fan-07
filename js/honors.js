@@ -5,7 +5,19 @@ function logoImg(key, size) {
     return `<img src="${AWARDS_LOGO_PATH}${file}" alt="" class="honors-logo" style="height:${size}px;" onerror="this.style.display='none'">`;
 }
 
-/* 탭 클릭 시 해당 패널만 보여주는 공용 바인딩 (모달 내부에서 재사용) */
+/* 곡 제목으로 실제 앨범 커버 이미지를 찾아 미리보기에 사용 (main.js의 ALBUMS 배열 재사용) */
+function findAlbumCover(songName) {
+    if (typeof ALBUMS === 'undefined' || !songName) return null;
+    const target = songName.trim().toLowerCase();
+    for (const album of ALBUMS) {
+        if (album.tracks && album.tracks.some(t => t.name && t.name.trim().toLowerCase() === target)) {
+            return album.image;
+        }
+    }
+    return null;
+}
+
+const AD_TYPE_COLOR = { '홍보대사': '#9AA6FF', '화보': '#ec407a', '콜라보': '#26c6da', '광고': '#66bb6a' };
 function bindHonorsTabs(root) {
     const tabs = root.querySelectorAll('.honors-tab');
     const panels = root.querySelectorAll('.honors-tab-panel');
@@ -23,27 +35,34 @@ function bindHonorsTabs(root) {
 function renderHonorsPreview() {
     const list = document.getElementById('awardsPreviewList');
     if (list) {
-        list.innerHTML = MUSIC_SHOW_WINS.slice(-3).reverse().map((w, i) => `
+        list.innerHTML = MUSIC_SHOW_WINS.slice(-3).reverse().map((w, i) => {
+            const cover = findAlbumCover(w.song);
+            const thumb = cover
+                ? `<img src="images/${cover}" alt="" class="h-thumb" onerror="this.parentElement.innerHTML=''">`
+                : logoImg(w.logo, 26);
+            return `
             <li>
                 <span class="h-rank">0${i + 1}</span>
+                <div class="h-thumb-wrap">${thumb}</div>
                 <div class="h-info">
-                    ${logoImg(w.logo, 20)}
                     <span class="h-name">${w.program} · ${w.song}</span>
-                    <span class="h-badge">🏆 ${w.notes[0].split(' (')[0]}</span>
+                    <span class="h-badge">${w.notes[0].split(' (')[0]}</span>
                 </div>
                 <span class="h-date">${w.date}</span>
-            </li>`).join('');
+            </li>`;
+        }).join('');
     }
-    
+
     const adsWrap = document.getElementById('adsPreviewChips');
     if (adsWrap) {
         const latestAds = AD_TIMELINE.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
         adsWrap.innerHTML = latestAds.map((a, i) => `
             <li>
                 <span class="h-rank">0${i + 1}</span>
+                <div class="h-thumb-wrap"><span class="h-type-tile" style="background:${AD_TYPE_COLOR[a.type]};">${a.type.charAt(0)}</span></div>
                 <div class="h-info">
-                    <span class="h-name">[${a.type}] ${a.title}</span>
-                    ${a.note ? `<span class="h-note">- ${a.note.split(' (')[0]}</span>` : ''}
+                    <span class="h-name">${a.title}</span>
+                    ${a.note ? `<span class="h-note">${a.note.split(' (')[0]}</span>` : ''}
                 </div>
                 <span class="h-date">${a.date}</span>
             </li>`).join('');

@@ -292,17 +292,41 @@ html[data-theme="light"] .honors-history-modal { background: #FFFFFF; }
 
 .honors-panel-subtitle { font-family: var(--font-num); font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin: 28px 0 4px; }
 
+/* 장황한 안내문 대신 절제된 스탯 배지 하나로 총 건수를 표시 */
+.honors-panel-top { display: flex; justify-content: flex-end; margin: 26px 0 2px; }
+.honors-stat-pill {
+    display: inline-flex; align-items: baseline; gap: 6px;
+    padding: 7px 16px; border-radius: 999px;
+    background: var(--c-accent-glow); border: 1px solid rgba(154,166,255,0.28);
+}
+html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22); }
+.honors-stat-pill .stat-num { font-family: var(--font-num); font-size: 16px; font-weight: 800; color: var(--c-accent); letter-spacing: -0.2px; }
+.honors-stat-pill .stat-label { font-family: var(--font-head); font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; color: var(--text-secondary); }
+
 .honors-logo { width: auto; object-fit: contain; vertical-align: middle; flex-shrink: 0; filter: grayscale(0.15); }
 
 /* 타임라인 — 점/연결선/떠 있는 카드 대신 인덱스 번호 + 가로줄 구분의 에디토리얼 리스트 */
 .honors-timeline { list-style: none; margin: 0; padding: 0; }
-.honors-timeline li { display: flex; align-items: flex-start; gap: 26px; padding: 14px 0; border-top: 1px solid var(--border-light); }
-.honors-timeline li:first-child { border-top: none; padding-top: 2px; }
-.ht-index { flex: 0 0 30px; font-family: var(--font-num); font-size: 12px; font-weight: 700; color: var(--text-muted); padding-top: 3px; letter-spacing: 0.02em; }
+.honors-timeline li { display: flex; align-items: flex-start; gap: 22px; padding: 18px 14px; border-top: 1px solid var(--border-light); border-radius: 14px; transition: background 0.3s ease, padding 0.3s ease, margin 0.3s ease; }
+.honors-timeline li:first-child { border-top: none; padding-top: 6px; }
+.honors-timeline li:hover { background: var(--bg-surface-hover); margin: 0 -14px; padding-left: 28px; padding-right: 28px; }
+.ht-index {
+    flex: 0 0 26px; height: 26px; margin-top: 2px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-num); font-size: 11px; font-weight: 700; color: var(--text-secondary);
+    background: var(--bg-surface-hover); border: 1px solid var(--border-light); letter-spacing: 0.02em;
+}
 .ht-body { flex: 1; min-width: 0; }
-.ht-head { display: flex; align-items: center; gap: 12px; margin-bottom: 7px; flex-wrap: wrap; }
-.ht-program { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text-secondary); }
-.ht-date { font-family: var(--font-num); font-size: 11.5px; color: var(--text-muted); margin-left: auto; }
+.ht-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.ht-logo-wrap { display: flex; align-items: center; flex-shrink: 0; }
+.ht-program { font-family: var(--font-head); font-size: 12.5px; font-weight: 700; color: var(--text-secondary); letter-spacing: 0.01em; }
+.ht-divider { color: var(--border-highlight); font-size: 12px; font-weight: 300; margin: 0 -2px; }
+.ht-song-inline {
+    font-family: var(--font-body); font-size: 16.5px; font-weight: 800; color: var(--text-primary);
+    letter-spacing: -0.2px; position: relative; padding-bottom: 1px;
+    background: linear-gradient(90deg, var(--c-accent), transparent 90%) left bottom / 100% 2px no-repeat;
+}
+.ht-date { font-family: var(--font-num); font-size: 11.5px; color: var(--text-muted); margin-left: auto; letter-spacing: 0.02em; }
 .ht-song { font-family: var(--font-body); font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 7px; letter-spacing: -0.2px; }
 .ht-notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
 .ht-notes li { font-family: var(--font-body); font-size: 12.5px; color: var(--text-muted); position: relative; padding-left: 14px; line-height: 1.4; }
@@ -311,8 +335,8 @@ html[data-theme="light"] .honors-history-modal { background: #FFFFFF; }
 /* 관왕 뱃지 — 채워진 필 대신 얇은 아웃라인 칩으로, 톤을 한 단계 낮춤 */
 .ht-head .h-tag {
     font-family: var(--font-num); font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
-    color: var(--text-secondary); background: transparent; border: 1px solid var(--border-highlight);
-    padding: 2px 9px; border-radius: 3px; white-space: nowrap;
+    color: var(--c-accent); background: var(--c-accent-glow); border: 1px solid transparent;
+    padding: 3px 10px; border-radius: 999px; white-space: nowrap;
 }
 
 /* 프로그램별 순위 — 카드 그리드 대신 막대 비교가 있는 랭킹 리스트 */
@@ -337,6 +361,18 @@ html[data-theme="light"] .honors-history-modal { background: #FFFFFF; }
 .ad-row-title { font-family: var(--font-body); font-size: 14.5px; font-weight: 700; color: var(--text-primary); }
 .ad-row-note { font-family: var(--font-body); font-size: 12.5px; color: var(--text-muted); }
 
+/* 괄호로 뭉쳐 있던 카테고리/기간 표기를 별도 배지로 분리 */
+.ad-row-tag {
+    font-family: var(--font-num); font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
+    color: var(--c-accent); background: var(--c-accent-glow);
+    padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+}
+.ad-row-period {
+    font-family: var(--font-num); font-size: 10.5px; font-weight: 600; letter-spacing: 0.02em;
+    color: var(--text-muted); border: 1px solid var(--border-highlight);
+    padding: 2.5px 9px; border-radius: 999px; white-space: nowrap;
+}
+
 @media (max-width: 700px) {
     .honors-history-modal { width: 95%; height: 90vh; }
     .honors-history-head { padding: 26px 56px 0 22px; }
@@ -348,6 +384,11 @@ html[data-theme="light"] .honors-history-modal { background: #FFFFFF; }
     .cum-logo-wrap { flex-basis: 60px; }
     .ad-row { flex-wrap: wrap; gap: 4px 12px; }
     .ad-row-date { flex-basis: 100%; }
+    .honors-panel-top { margin: 20px 0 2px; }
+    .honors-timeline li { padding: 16px 4px; }
+    .honors-timeline li:hover { margin: 0; padding-left: 4px; padding-right: 4px; }
+    .ht-date { margin-left: 0; flex-basis: 100%; order: 5; }
+    .ht-song-inline { font-size: 15px; }
 }
 
 /* =========================================

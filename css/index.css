@@ -266,7 +266,6 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 .media-empty{ color:var(--text-muted); font-size:13px; text-align:center; width:100%; padding:40px 0; }
 @media (max-width:900px){ .latest-media-grid{ grid-template-columns:1fr; gap:36px; } }
 
-/* 🚨 제가 실수로 날려먹었던 헤더 복구 코드 (모바일 아이콘 우측 정렬 완벽 보장) 🚨 */
 .plain-link{ color:inherit; text-decoration:none; }
 .util-reset{ margin-left:0; padding-left:0; border-left:none; }
 .lang-switcher-inline{ position:static !important; opacity:1 !important; pointer-events:auto !important; transform:none !important; background:transparent !important; border:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; padding:0 !important; display: flex; align-items: center; }
@@ -277,9 +276,7 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 .section-header-sm{ margin-bottom:24px; }
 .section-header-md{ margin-bottom:30px; }
 
-/* 모바일 반응형 공통 */
 @media (max-width:800px){
-    /* 🚨 헤더 우측 쏠림 방지 및 우측 끝 정렬 강제 🚨 */
     .header-right, .nav-right, .header-utils { margin-left: auto !important; justify-content: flex-end !important; }
 
     .today-date-sub{ margin-bottom:34px; }

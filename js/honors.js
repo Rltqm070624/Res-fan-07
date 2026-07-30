@@ -5,6 +5,7 @@ function logoImg(key, size) {
     return `<img src="${AWARDS_LOGO_PATH}${file}" alt="" class="honors-logo" style="height:${size}px;" onerror="this.style.display='none'">`;
 }
 
+/* 곡 제목으로 실제 앨범 커버 이미지를 찾아 미리보기에 사용 (main.js의 ALBUMS 배열 재사용) */
 function findAlbumCover(songName) {
     if (typeof ALBUMS === 'undefined' || !songName) return null;
     const target = songName.trim().toLowerCase();
@@ -18,16 +19,19 @@ function findAlbumCover(songName) {
 
 const AD_TYPE_COLOR = { '홍보대사': '#9AA6FF', '화보': '#ec407a', '콜라보': '#26c6da', '광고': '#66bb6a' };
 
+/* 패널 상단의 장황한 문구("○○ 히스토리 (총 N건)") 대신 쓰는 절제된 스탯 배지 */
 function panelStat(value, label) {
     return `<div class="honors-panel-top"><span class="honors-stat-pill"><span class="stat-num">${value}</span><span class="stat-label">${label}</span></span></div>`;
 }
 
+/* 문자열 끝의 괄호를 분리해 배지로 쓰기 위한 파서 — "타이틀 (카테고리)" -> { main, tag } */
 function splitTrailingParen(str) {
     if (!str) return { main: '', tag: null };
     const m = str.trim().match(/^(.*?)\s*\(([^)]+)\)\s*$/);
     if (m) return { main: m[1].trim(), tag: m[2].trim() };
     return { main: str.trim(), tag: null };
 }
+/* "~2028.05.21" / "2025.12.31" 같은 기간/기한 표기인지 판별 */
 function isPeriodLike(str) {
     return /^~?\d{4}[.\-]\d{2}([.\-]\d{2})?/.test((str || '').trim());
 }
@@ -68,7 +72,9 @@ function renderHonorsPreview() {
         adsWrap.innerHTML = latestAds.map((a, i) => `
             <li>
                 <span class="h-rank">0${i + 1}</span>
-                <div class="h-type-wrap"><span class="h-type-tile" style="background:${AD_TYPE_COLOR[a.type]};">${a.type}</span></div>
+                ${a.img
+                    ? `<div class="h-thumb-wrap"><img class="h-thumb" src="images/ad/${a.img}" alt="" onerror="this.parentElement.outerHTML='<div class=\\'h-type-wrap\\'><span class=\\'h-type-tile\\' style=\\'background:${AD_TYPE_COLOR[a.type]};\\'>${a.type}</span></div>'"></div>`
+                    : `<div class="h-type-wrap"><span class="h-type-tile" style="background:${AD_TYPE_COLOR[a.type]};">${a.type}</span></div>`}
                 <div class="h-info">
                     <span class="h-name">${a.title}</span>
                     ${a.note ? `<span class="h-note">${a.note.split(' (')[0]}</span>` : ''}
@@ -150,7 +156,7 @@ function openAdsHistoryModal() {
         const categories = ['광고', '화보', '홍보대사', '콜라보'];
         const fmtDate = d => `${d.slice(0,4)}.${d.slice(5,7)}`;
 
-        let html = `<div class="ads-banner"><img src="images/ad/ber.png" alt="" onerror="this.parentElement.style.display='none'"></div>`;
+        let html = `<div class="ads-banner"><img src="images/ad/ber.webp" alt="" onerror="this.parentElement.style.display='none'"></div>`;
         html += '<div class="honors-tabbar">';
         categories.forEach((cat, i) => {
             html += `<button class="honors-tab${i === 0 ? ' active' : ''}" data-target="cat${i}">${cat}</button>`;
@@ -174,13 +180,17 @@ function openAdsHistoryModal() {
                     notePart = noteParts.main;
                 }
                 const side = idx % 2 === 0 ? 'side-left' : 'side-right';
+                const thumbHtml = a.img ? `<div class="ad-tl-thumb"><img src="images/ad/${a.img}" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
                 html += `<li class="ad-tl-item ${side}">
                     <div class="ad-tl-node"></div>
-                    <div class="ad-tl-card">
-                        <span class="ad-tl-date">${fmtDate(a.date)}</span>
-                        <div class="ad-tl-title">${titleParts.main}${titleParts.tag ? `<span class="ad-tl-tag">${titleParts.tag}</span>` : ''}</div>
-                        ${notePart ? `<div class="ad-tl-note">${notePart}</div>` : ''}
-                        ${periodPart ? `<div class="ad-tl-period">${periodPart}</div>` : ''}
+                    <div class="ad-tl-card${thumbHtml ? ' has-thumb' : ''}">
+                        ${thumbHtml}
+                        <div class="ad-tl-body">
+                            <span class="ad-tl-date">${fmtDate(a.date)}</span>
+                            <div class="ad-tl-title">${titleParts.main}${titleParts.tag ? `<span class="ad-tl-tag">${titleParts.tag}</span>` : ''}</div>
+                            ${notePart ? `<div class="ad-tl-note">${notePart}</div>` : ''}
+                            ${periodPart ? `<div class="ad-tl-period">${periodPart}</div>` : ''}
+                        </div>
                     </div>
                 </li>`;
             });

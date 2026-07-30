@@ -1,7 +1,3 @@
-/* =========================================
-   실시간 음원 차트 로직 (chart/chart.html 전용)
-   ⭐️ index.html 에 있던 fetchSongCharts 를 그대로 분리해온 것
-========================================= */
 let tickerInterval;
 async function fetchSongCharts() {
     try {

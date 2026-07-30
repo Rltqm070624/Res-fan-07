@@ -84,9 +84,23 @@ function renderHonorsPreview() {
     }
 }
 
+/* ⭐️ 히스토리 모달 상단 헤더 — 배너 이미지가 있으면 이미지를 헤더 자체로 쓰고 제목을 그 위에 오버레이 */
+function setHonorsHistoryHead(titleText, bannerSrc) {
+    const head = document.querySelector('.honors-history-head');
+    if (!head) return;
+    if (bannerSrc) {
+        head.classList.add('has-banner');
+        head.innerHTML = `
+            <img class="honors-history-head-bg" src="${bannerSrc}" alt="" onerror="this.style.display='none'; this.closest('.honors-history-head').classList.add('banner-failed');">
+            <span class="honors-history-head-title" id="honorsHistoryTitle">${titleText}</span>`;
+    } else {
+        head.classList.remove('has-banner', 'banner-failed');
+        head.innerHTML = `<span class="honors-history-head-title" id="honorsHistoryTitle">${titleText}</span>`;
+    }
+}
+
 function openAwardsHistoryModal() {
-    const title = document.getElementById('honorsHistoryTitle');
-    if (title) title.textContent = '음악방송 1위 히스토리';
+    setHonorsHistoryHead('음악방송 1위 히스토리', null);
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
         let html = `<div class="honors-tabbar">
@@ -149,15 +163,13 @@ function openAwardsHistoryModal() {
 }
 
 function openAdsHistoryModal() {
-    const title = document.getElementById('honorsHistoryTitle');
-    if (title) title.textContent = '광고 · 콜라보 · 화보 히스토리';
+    setHonorsHistoryHead('광고 · 콜라보 · 화보 히스토리', 'images/ad/ber.webp');
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
         const categories = ['광고', '화보', '홍보대사', '콜라보'];
         const fmtDate = d => `${d.slice(0,4)}.${d.slice(5,7)}`;
 
-        let html = `<div class="ads-banner"><img src="images/ad/ber.webp" alt="" onerror="this.parentElement.style.display='none'"></div>`;
-        html += '<div class="honors-tabbar">';
+        let html = '<div class="honors-tabbar">';
         categories.forEach((cat, i) => {
             html += `<button class="honors-tab${i === 0 ? ' active' : ''}" data-target="cat${i}">${cat}</button>`;
         });
@@ -184,13 +196,13 @@ function openAdsHistoryModal() {
                 html += `<li class="ad-tl-item ${side}">
                     <div class="ad-tl-node"></div>
                     <div class="ad-tl-card${thumbHtml ? ' has-thumb' : ''}">
-                        ${thumbHtml}
                         <div class="ad-tl-body">
                             <span class="ad-tl-date">${fmtDate(a.date)}</span>
                             <div class="ad-tl-title">${titleParts.main}${titleParts.tag ? `<span class="ad-tl-tag">${titleParts.tag}</span>` : ''}</div>
                             ${notePart ? `<div class="ad-tl-note">${notePart}</div>` : ''}
                             ${periodPart ? `<div class="ad-tl-period">${periodPart}</div>` : ''}
                         </div>
+                        ${thumbHtml}
                     </div>
                 </li>`;
             });

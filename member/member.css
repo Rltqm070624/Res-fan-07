@@ -1,32 +1,54 @@
 /* ⭐️ MEMBERS 페이지 — 멤버 선택 탭 + 프로필 히어로(좌 50%) + 포토 아카이브(우 50%, 가로 썸네일 + 미리보기 + 확대모달) */
+/* 한 화면(뷰포트) 안에 스크롤 없이 전부 들어오도록 nav(72px)~footer까지 flex로 높이 배분 */
 
-#mainWrapper .member-page-container { max-width: 100%; padding-left: 48px; padding-right: 48px; margin-left: 0; margin-right: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+
+.mem-page-wrapper {
+    height: 100vh; height: 100dvh;
+    padding-top: 72px; /* .top-nav 높이 */
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#mainWrapper .member-page-container {
+    max-width: 100%; padding: 14px 48px 6px; margin-left: 0; margin-right: 0; box-sizing: border-box;
+    flex: 1; min-height: 0; display: flex; flex-direction: column;
+}
 @media (max-width: 900px) { #mainWrapper .member-page-container { padding-left: 20px; padding-right: 20px; } }
 
+.member-page-container .section-header { flex-shrink: 0; margin-bottom: 12px; padding-bottom: 10px; }
+.member-page-container .section-title { font-size: 22px; }
+
 /* 멤버 선택 탭 — 언더라인 스타일 */
-.mem-selector-row { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--border-light); margin: 4px 0 24px; }
+.mem-selector-row { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--border-light); margin: 2px 0 14px; flex-shrink: 0; }
 .mem-chip {
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    padding: 0 20px 12px; background: transparent; border: none; border-bottom: 2px solid transparent;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 0 16px 10px; background: transparent; border: none; border-bottom: 2px solid transparent;
     cursor: pointer; transition: 0.3s cubic-bezier(0.16,1,0.3,1); margin-bottom: -1px;
 }
-.mem-chip-photo { width: 40px; height: 40px; border-radius: 9px; overflow: hidden; background: #000; filter: grayscale(65%) brightness(0.7); transition: filter 0.35s ease, transform 0.35s ease; }
+.mem-chip-photo { width: 34px; height: 34px; border-radius: 9px; overflow: hidden; background: #000; filter: grayscale(65%) brightness(0.7); transition: filter 0.35s ease, transform 0.35s ease; }
 .mem-chip-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
 .mem-chip:hover .mem-chip-photo { filter: grayscale(20%) brightness(0.9); }
 .mem-chip.active .mem-chip-photo { filter: none; transform: translateY(-2px); }
-.mem-chip-name { font-family: var(--font-head); font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; color: var(--text-muted); transition: color 0.3s ease; }
+.mem-chip-name { font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--text-muted); transition: color 0.3s ease; }
 .mem-chip.active { border-bottom-color: var(--mem-color, var(--c-accent)); }
 .mem-chip.active .mem-chip-name { color: var(--mem-color, var(--c-accent)); }
 
-/* 전체 레이아웃 — 좌 50% 프로필 / 우 50% 포토 아카이브, 좌측 정렬(중앙정렬 X), 양쪽 높이 맞춤 */
-.mem-detail-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: stretch; width: 100%; max-width: 1080px; margin: 0; animation: memberFadeIn 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+/* 전체 레이아웃 — 좌 50% 프로필 / 우 50% 포토 아카이브, 좌측 정렬(중앙정렬 X), 양쪽 높이 맞춤, 남은 세로 공간을 꽉 채움 */
+.mem-detail-panel {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: stretch;
+    width: 100%; max-width: 1080px; margin: 0;
+    flex: 1; min-height: 0;
+    animation: memberFadeIn 0.6s cubic-bezier(0.16,1,0.3,1) both;
+}
 @keyframes memberFadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-.mem-main-col { min-width: 0; display: flex; flex-direction: column; }
-.mem-photo-col { min-width: 0; display: flex; flex-direction: column; }
+.mem-main-col { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.mem-photo-col { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
 @media (max-width: 900px) { .mem-detail-panel { grid-template-columns: 1fr; } }
 
-/* 히어로 — 인물사진 원본 비율(4:5)에 맞춰서 짤리지 않게. 영역이 절반이 되면서 자연스럽게 세로형에 가까워짐 */
-.mem-hero { position: relative; width: 100%; height: min(40vh, 440px); min-height: 240px; border-radius: 24px; overflow: hidden; background: #000; border: 1px solid var(--border-light); }
+/* 히어로 — 남은 세로 공간을 채우도록 flex:1 (고정 vh값 대신 정보 카드가 차지하는 높이를 뺀 나머지를 자동으로 채움) */
+.mem-hero { position: relative; width: 100%; flex: 1 1 auto; min-height: 110px; border-radius: 24px; overflow: hidden; background: #000; border: 1px solid var(--border-light); }
 .mem-hero-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
 .mem-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,14,0.85) 0%, rgba(10,10,14,0.1) 42%, transparent 65%); }
 .mem-sign { position: absolute; right: 24px; bottom: 20px; width: 74px; height: auto; opacity: 0.92; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
@@ -35,32 +57,34 @@
 .mem-name-ko { font-family: var(--font-head); font-size: 30px; font-weight: 900; color: #fff; letter-spacing: -0.5px; line-height: 1.15; }
 @media (max-width: 700px) { .mem-name-ko { font-size: 26px; } .mem-sign { width: 60px; } }
 
-/* 정보 카드 */
-.mem-info-card { margin-top: 14px; padding: 18px 26px; border-radius: 20px; background: var(--bg-surface); border: 1px solid var(--border-light); }
-.mem-intro { margin: 0 0 14px; font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: var(--text-secondary); }
-.mem-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 16px; padding-top: 18px; border-top: 1px solid var(--border-light); }
-.mem-info-item { display: flex; flex-direction: column; gap: 6px; }
+/* 정보 카드 — 내용이 많아져도 페이지 전체가 아닌 카드 내부만 스크롤되도록 안전장치 */
+.mem-info-card { flex: 0 0 auto; margin-top: 12px; padding: 14px 24px; border-radius: 20px; background: var(--bg-surface); border: 1px solid var(--border-light); max-height: 42%; overflow-y: auto; box-sizing: border-box; }
+.mem-intro { margin: 0 0 12px; font-family: var(--font-body); font-size: 13.5px; line-height: 1.55; color: var(--text-secondary); }
+.mem-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--border-light); }
+.mem-info-item { display: flex; flex-direction: column; gap: 4px; }
 .mem-info-label { font-family: var(--font-head); font-size: 10px; font-weight: 800; letter-spacing: 0.12em; color: var(--text-muted); }
-.mem-info-val { font-family: var(--font-body); font-size: 13.5px; font-weight: 700; color: var(--text-primary); }
+.mem-info-val { font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--text-primary); }
 
 /* 포토 아카이브 — 우측 절반: 위쪽엔 가로 스크롤 썸네일(히어로 윗선에 맞춤), 아래 남은 여백엔 큰 미리보기 */
-.mem-era-label-row { font-family: var(--font-head); font-size: 15px; font-weight: 300; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 16px; }
+.mem-era-label-row { flex-shrink: 0; font-family: var(--font-head); font-size: 14px; font-weight: 300; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 10px; }
 .mem-era-label-row span { color: var(--text-primary); font-weight: 800; }
 
-.mem-era-rail { display: flex; gap: 10px; overflow-x: auto; flex-shrink: 0; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
+/* 원본 이미지 비율이 제각각(4:5, 1:1, 3:2 등)이라도 카드 크기(해상도)는 전부 동일하게 통일하고,
+   object-fit: contain 으로 잘리는 부분 없이 이미지 전체 내용이 보이도록 처리 (레터박스는 배경색으로 채움) */
+.mem-era-rail { display: flex; gap: 10px; overflow-x: auto; overflow-y: hidden; flex-shrink: 0; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
 .mem-era-rail::-webkit-scrollbar { height: 5px; }
 .mem-era-rail::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
-.mem-era-item { flex: 0 0 84px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
-.mem-era-thumb { width: 84px; aspect-ratio: 4/5; border-radius: 10px; overflow: hidden; border: 2px solid transparent; background: var(--bg-surface); transition: border-color 0.25s ease, transform 0.25s ease; }
-.mem-era-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mem-era-item { flex: 0 0 78px; display: flex; flex-direction: column; gap: 5px; cursor: pointer; }
+.mem-era-thumb { width: 78px; aspect-ratio: 4/5; border-radius: 10px; overflow: hidden; border: 2px solid transparent; background: #000; transition: border-color 0.25s ease, transform 0.25s ease; display: flex; align-items: center; justify-content: center; }
+.mem-era-thumb img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
 .mem-era-item:hover .mem-era-thumb { transform: translateY(-3px); }
 .mem-era-item.active .mem-era-thumb { border-color: var(--mem-active-color, var(--c-accent)); }
-.mem-era-label { text-align: center; font-family: var(--font-num); font-size: 11px; font-weight: 600; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mem-era-label { text-align: center; font-family: var(--font-num); font-size: 10.5px; font-weight: 600; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mem-era-item.active .mem-era-label { color: var(--mem-active-color, var(--c-accent)); font-weight: 700; }
 
-/* 남은 여백에 뜨는 큰 미리보기 — flex:1 로 히어로+정보카드 전체 높이에 맞춰 자동으로 채움 */
-.mem-era-preview { position: relative; flex: 1; min-height: 0; margin-top: 14px; border-radius: 18px; overflow: hidden; background: #000; border: 1px solid var(--border-light); cursor: zoom-in; }
-.mem-era-preview img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.25s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+/* 남은 여백에 뜨는 큰 미리보기 — flex:1 로 히어로+정보카드 전체 높이에 맞춰 자동으로 채움. 여기서도 contain 처리해 이미지 전체가 보이게 함 */
+.mem-era-preview { position: relative; flex: 1; min-height: 0; margin-top: 12px; border-radius: 18px; overflow: hidden; background: #000; border: 1px solid var(--border-light); cursor: zoom-in; display: flex; align-items: center; justify-content: center; }
+.mem-era-preview img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; transition: opacity 0.25s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1); }
 .mem-era-preview:hover img { transform: scale(1.03); }
 .mem-era-preview-label { position: absolute; left: 16px; bottom: 14px; font-family: var(--font-num); font-size: 13px; font-weight: 700; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7); }
 .mem-era-zoom-hint {
@@ -71,8 +95,20 @@
 .mem-era-zoom-hint svg { width: 16px; height: 16px; }
 .mem-era-preview:hover .mem-era-zoom-hint { opacity: 1; }
 
+/* 이 페이지에서만 푸터를 한 줄로 압축해 세로 공간을 확보 (다른 페이지에는 영향 없음) */
+.mem-page-wrapper .global-footer { flex-shrink: 0; margin-top: 0; padding: 6px 48px; }
+.mem-page-wrapper .global-footer p { font-size: 9px; line-height: 1.3; margin-bottom: 1px !important; }
+
+/* 좌우 2컬럼이 세로로 쌓이는 좁은 화면(모바일)에서는 한 화면에 다 욱여넣는 대신 정상적으로 스크롤되도록 처리 */
 @media (max-width: 900px) {
-    .mem-era-preview { min-height: 320px; }
+    .mem-page-wrapper { height: auto; min-height: 100vh; min-height: 100dvh; overflow: visible; }
+    #mainWrapper .member-page-container { overflow: visible; }
+    .mem-detail-panel { flex: none; }
+    .mem-hero { flex: none; height: 46vh; min-height: 260px; }
+    .mem-info-card { max-height: none; overflow: visible; }
+    .mem-era-preview { flex: none; min-height: 320px; }
+    .mem-page-wrapper .global-footer { padding: 14px 20px; }
+    .mem-page-wrapper .global-footer p { font-size: 11px; }
 }
 
 /* 포토 아카이브 확대 모달 */

@@ -5,7 +5,6 @@ function logoImg(key, size) {
     return `<img src="${AWARDS_LOGO_PATH}${file}" alt="" class="honors-logo" style="height:${size}px;" onerror="this.style.display='none'">`;
 }
 
-/* 곡 제목으로 실제 앨범 커버 이미지를 찾아 미리보기에 사용 (main.js의 ALBUMS 배열 재사용) */
 function findAlbumCover(songName) {
     if (typeof ALBUMS === 'undefined' || !songName) return null;
     const target = songName.trim().toLowerCase();
@@ -19,19 +18,17 @@ function findAlbumCover(songName) {
 
 const AD_TYPE_COLOR = { '홍보대사': '#9AA6FF', '화보': '#ec407a', '콜라보': '#26c6da', '광고': '#66bb6a' };
 
-/* 패널 상단의 장황한 문구("○○ 히스토리 (총 N건)") 대신 쓰는 절제된 스탯 배지 */
 function panelStat(value, label) {
     return `<div class="honors-panel-top"><span class="honors-stat-pill"><span class="stat-num">${value}</span><span class="stat-label">${label}</span></span></div>`;
 }
 
-/* 문자열 끝의 괄호를 분리해 배지로 쓰기 위한 파서 — "타이틀 (카테고리)" -> { main, tag } */
 function splitTrailingParen(str) {
     if (!str) return { main: '', tag: null };
     const m = str.trim().match(/^(.*?)\s*\(([^)]+)\)\s*$/);
     if (m) return { main: m[1].trim(), tag: m[2].trim() };
     return { main: str.trim(), tag: null };
 }
-/* "~2028.05.21" / "2025.12.31" 같은 기간/기한 표기인지 판별 */
+
 function isPeriodLike(str) {
     return /^~?\d{4}[.\-]\d{2}([.\-]\d{2})?/.test((str || '').trim());
 }

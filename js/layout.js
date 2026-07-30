@@ -56,7 +56,7 @@ function renderSiteNav(activeKey, root, opts) {
 
     const navHtml = `
     <nav class="top-nav">
-        <div class="nav-left"><a href="${root}index.html" class="nav-logo-link">홈 리센느</a></div>
+        <div class="nav-left"><a href="${root}index.html" class="nav-home-btn" title="홈" aria-label="홈"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg></a></div>
         <ul class="desktop-menu">${desktopLinks}</ul>
         <div class="nav-right">${langSwitcherHtml}
             <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="테마 변경"></button>

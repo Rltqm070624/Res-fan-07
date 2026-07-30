@@ -63,18 +63,25 @@ function openAwardsHistoryModal() {
         <div class="honors-tab-panels">
             <div class="honors-tab-panel active" data-panel="cum">
                 <p class="honors-panel-subtitle">음악방송별 누적 1위 횟수</p>
-                <div class="honors-cum-grid">`;
-        MUSIC_SHOW_CUMULATIVE.forEach(c => {
-            html += `<div class="cum-card">${logoImg(c.logo, 26)}<span class="cum-program">${c.program}</span><span class="cum-wins">${c.wins}<em>회</em></span></div>`;
+                <div class="honors-cum-list">`;
+        const maxWins = Math.max(1, ...MUSIC_SHOW_CUMULATIVE.map(c => c.wins));
+        MUSIC_SHOW_CUMULATIVE.slice().sort((a, b) => b.wins - a.wins).forEach((c, i) => {
+            html += `<div class="cum-row">
+                <span class="cum-rank">${String(i + 1).padStart(2, '0')}</span>
+                <span class="cum-logo-wrap">${logoImg(c.logo, 20)}</span>
+                <span class="cum-program">${c.program}</span>
+                <span class="cum-bar-track"><span class="cum-bar-fill" style="width:${(c.wins / maxWins) * 100}%;"></span></span>
+                <span class="cum-wins">${c.wins}<em>회</em></span>
+            </div>`;
         });
         html += `</div>
             </div>
             <div class="honors-tab-panel" data-panel="dated">
                 <p class="honors-panel-subtitle">날짜별 1위 히스토리 (총 3관왕)</p>
                 <ul class="honors-timeline">`;
-        MUSIC_SHOW_WINS.slice().reverse().forEach(w => {
+        MUSIC_SHOW_WINS.slice().reverse().forEach((w, i) => {
             html += `<li>
-                <div class="ht-dot"></div>
+                <span class="ht-index">${String(i + 1).padStart(2, '0')}</span>
                 <div class="ht-body">
                     <div class="ht-head">${logoImg(w.logo, 24)}<span class="ht-program">${w.program}</span><span class="h-tag">${w.crown}</span><span class="ht-date">${w.date}</span></div>
                     <div class="ht-song">${w.song}</div>
@@ -87,9 +94,9 @@ function openAwardsHistoryModal() {
             <div class="honors-tab-panel" data-panel="ceremony">
                 <p class="honors-panel-subtitle">시상식 수상 내역</p>
                 <ul class="honors-timeline">`;
-        CEREMONY_AWARDS.slice().reverse().forEach(c => {
+        CEREMONY_AWARDS.slice().reverse().forEach((c, i) => {
             html += `<li>
-                <div class="ht-dot"></div>
+                <span class="ht-index">${String(i + 1).padStart(2, '0')}</span>
                 <div class="ht-body">
                     <div class="ht-head">${logoImg(c.logo, 24)}<span class="ht-program">${c.name}</span><span class="ht-date">${c.date}</span></div>
                     <div class="ht-song">${c.award}</div>

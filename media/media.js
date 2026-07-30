@@ -7,11 +7,34 @@ let mediaSearchTerm = '';
 let mediaVisibleCount = 24;
 const MEDIA_PAGE_SIZE = 24;
 
-// 대분류별 소분류(서브탭) 정의. 라이브 방송은 멤버(소분류) > 연도(세분류) 2단계까지 있음
+// 컨텐츠 탭 안에서 광고·콜라보 / 외부 콘텐츠로 나누고, 그 안에서 브랜드·채널명으로 다시 나누는 트리 분류
+const MEDIA_AD_BRAND_KEYWORDS = [
+    '서든어택', '카사베르디', '엘리트', 'CU', '도미노피자', '나랑드', 'I-SHA', 'Wish I-GIRL',
+    'WINDANDSEA', 'WIND AND SEA', '프리티스킨', '김씨네과일', 'KREAM', '티오더', 'FC모바일', 'FC 모바일'
+];
+function mediaGetContentBrand(item) {
+    const title = item.title || '';
+    const hit = MEDIA_AD_BRAND_KEYWORDS.find(kw => title.includes(kw));
+    if (hit) return hit;
+    return item.channel && item.channel !== '유튜브 채널' ? item.channel : '기타';
+}
+function mediaClassifyContentGroup(item) {
+    const title = item.title || '';
+    return MEDIA_AD_BRAND_KEYWORDS.some(kw => title.includes(kw)) ? '광고 · 콜라보' : '외부 콘텐츠';
+}
+
+// 대분류별 소분류(서브탭) 정의. 라이브 방송/컨텐츠는 소분류 > 세분류 2단계까지 있음
 const MEDIA_SUBFILTERS = {
     '컨텐츠': {
-        getOptions: () => ['원이', '리브', '미나미', '메이', '제나'],
-        match: (item, sub) => (item.cast || '') === '전원' || (item.cast || '').includes(sub)
+        getOptions: (items) => {
+            const groups = new Set(items.map(mediaClassifyContentGroup));
+            return ['광고 · 콜라보', '외부 콘텐츠'].filter(g => groups.has(g));
+        },
+        match: (item, sub) => mediaClassifyContentGroup(item) === sub,
+        third: {
+            getOptions: (items) => [...new Set(items.map(mediaGetContentBrand))].filter(Boolean),
+            match: (item, sub2) => mediaGetContentBrand(item) === sub2
+        }
     },
     '음반 활동 컨텐츠': {
         getOptions: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),

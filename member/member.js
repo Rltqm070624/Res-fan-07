@@ -1,3 +1,7 @@
+/* ==========================================================================
+   ⭐️ MEMBERS 페이지 — 멤버 선택 + 프로필 히어로 + 정보 카드 + 포토 아카이브(연도별 화보)
+   - MEMBER_DATA / MEMBER_ERAS 는 js/member_data.js 에 정의됨
+   ========================================================================== */
 let memberActiveKey = 'woni';
 let memberActiveEra = null; /* 카드 홀더는 기본적으로 빈 상태 — 클릭해서 골라야 채워짐 */
 
@@ -52,6 +56,38 @@ function renderMemberDetail() {
     }
 
     updateEraPreview();
+}
+
+/* ⭐️ 포토카드 스타일 — 10종. data-style 값이 member.css의 .mem-card-photo[data-style="..."] 규칙과 매칭됨 */
+const PHOTOCARD_STYLES = [
+    { key: 'basic', label: '기본' },
+    { key: 'polaroid', label: '폴라로이드' },
+    { key: 'film80s', label: '80s 필름' },
+    { key: 'bw', label: '흑백 무비' },
+    { key: 'sepia', label: '빈티지 세피아' },
+    { key: 'neon', label: '네온' },
+    { key: 'holo', label: '홀로그램' },
+    { key: 'kraft', label: '크래프트지' },
+    { key: 'washi', label: '워시테이프' },
+    { key: 'glossy', label: '글로시' }
+];
+let memberCardStyle = 'basic';
+
+function renderCardStyleRow() {
+    const row = document.getElementById('memberCardStyleRow');
+    if (!row) return;
+    row.innerHTML = PHOTOCARD_STYLES.map(s =>
+        `<button type="button" class="mem-style-chip${s.key === memberCardStyle ? ' active' : ''}" data-style-key="${s.key}" onclick="setCardStyle('${s.key}')">${s.label}</button>`
+    ).join('');
+}
+
+function setCardStyle(styleKey) {
+    memberCardStyle = styleKey;
+    const photo = document.getElementById('memberCardPhoto');
+    if (photo) photo.setAttribute('data-style', styleKey);
+    document.querySelectorAll('.mem-style-chip').forEach(el => {
+        el.classList.toggle('active', el.dataset.styleKey === styleKey);
+    });
 }
 
 function updateEraPreview() {
@@ -114,4 +150,5 @@ function closeEraModal() {
 window.addEventListener('DOMContentLoaded', () => {
     renderMemberSelector();
     renderMemberDetail();
+    renderCardStyleRow();
 });

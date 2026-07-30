@@ -1,5 +1,202 @@
 {
-  "updatedAt": null,
-  "platforms": ["melon", "genie", "vibe", "bugs", "flo", "youtube_music", "spotify"],
-  "songs": []
+  "updatedAt": "2026-07-30T16:48:37.104Z",
+  "platforms": [
+    "melon",
+    "genie",
+    "vibe",
+    "bugs",
+    "flo",
+    "youtube_music",
+    "spotify"
+  ],
+  "songs": [
+    {
+      "songName": "LOVE ATTACK",
+      "artistName": "RESCENE (리센느)",
+      "albumImageUrl": "https://cdnimg.melon.co.kr/cm2/album/images/115/75/849/11575849_20240826152240_500.jpg?da43be78cb2cc67e9ee423c739bc09b6/melon/resize/144/optimize/90",
+      "ranks": {
+        "melon": {
+          "rank": 1,
+          "previousRank": 1
+        },
+        "genie": {
+          "rank": 17,
+          "previousRank": 1
+        },
+        "vibe": {
+          "rank": 2,
+          "previousRank": 2
+        },
+        "bugs": {
+          "rank": 2,
+          "previousRank": 2
+        },
+        "flo": {
+          "rank": 1,
+          "previousRank": 1
+        },
+        "youtube_music": {
+          "rank": 1,
+          "previousRank": 4
+        },
+        "spotify": {
+          "rank": 2,
+          "previousRank": 2
+        }
+      }
+    },
+    {
+      "songName": "Pretty Girl",
+      "artistName": "RESCENE (리센느)",
+      "albumImageUrl": "https://cdnimg.melon.co.kr/cm2/album/images/137/88/545/13788545_20260707111659_500.jpg?3ef0f9e6af1ea09e3f919c7cb69065ed/melon/resize/144/optimize/90",
+      "ranks": {
+        "melon": {
+          "rank": 6,
+          "previousRank": 6
+        },
+        "genie": {
+          "rank": 24,
+          "previousRank": 21
+        },
+        "vibe": {
+          "rank": 6,
+          "previousRank": 6
+        },
+        "bugs": {
+          "rank": 10,
+          "previousRank": 11
+        },
+        "flo": {
+          "rank": 6,
+          "previousRank": 6
+        },
+        "youtube_music": {
+          "rank": 4,
+          "previousRank": 3
+        },
+        "spotify": {
+          "rank": 3,
+          "previousRank": 4
+        }
+      }
+    },
+    {
+      "songName": "Deja Vu",
+      "artistName": "RESCENE (리센느)",
+      "albumImageUrl": "https://cdnimg.melon.co.kr/cm2/album/images/118/75/116/11875116_20250701165641_500.jpg?86da3088c776a346e926b1b4052f227c/melon/resize/144/optimize/90",
+      "ranks": {
+        "melon": {
+          "rank": 12,
+          "previousRank": 12
+        },
+        "genie": {
+          "rank": 44,
+          "previousRank": 38
+        },
+        "vibe": {
+          "rank": 45,
+          "previousRank": 43
+        },
+        "bugs": {
+          "rank": 8,
+          "previousRank": 8
+        },
+        "flo": {
+          "rank": 7,
+          "previousRank": 7
+        },
+        "youtube_music": {
+          "rank": 9,
+          "previousRank": 10
+        },
+        "spotify": {
+          "rank": 10,
+          "previousRank": 13
+        }
+      }
+    },
+    {
+      "songName": "Runaway",
+      "artistName": "RESCENE (리센느)",
+      "albumImageUrl": "https://cdnimg.melon.co.kr/cm2/album/images/133/12/413/13312413_20260406143448_500.jpg?0d1b1aec895dbf60aa601748ddf64dd9/melon/resize/144/optimize/90",
+      "ranks": {
+        "melon": {
+          "rank": 69,
+          "previousRank": 69
+        },
+        "bugs": {
+          "rank": 41,
+          "previousRank": 41
+        },
+        "flo": {
+          "rank": 66,
+          "previousRank": 65
+        },
+        "youtube_music": {
+          "rank": 35,
+          "previousRank": 34
+        },
+        "spotify": {
+          "rank": 27,
+          "previousRank": 25
+        }
+      }
+    },
+    {
+      "songName": "Pinball",
+      "artistName": "RESCENE (리센느)",
+      "albumImageUrl": "https://image.bugsm.co.kr/album/images/350/41063/4106349.jpg",
+      "ranks": {
+        "bugs": {
+          "rank": 90,
+          "previousRank": 84
+        },
+        "youtube_music": {
+          "rank": 33,
+          "previousRank": 37
+        },
+        "spotify": {
+          "rank": 58,
+          "previousRank": 62
+        }
+      }
+    },
+    {
+      "songName": "Glow Up",
+      "artistName": "RESCENE",
+      "albumImageUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b6/72/c9/b672c9d1-e8a1-4def-363e-dc0e86042761/cover_KM0020943_1.jpg/600x600bb.jpg",
+      "ranks": {
+        "youtube_music": {
+          "rank": 52,
+          "previousRank": 51
+        },
+        "spotify": {
+          "rank": 197,
+          "previousRank": null
+        }
+      }
+    },
+    {
+      "songName": "Bloom",
+      "artistName": "RESCENE",
+      "albumImageUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/91/66/5a/91665a02-b5c1-8336-e973-88746539ab71/8804775401787.jpg/600x600bb.jpg",
+      "ranks": {
+        "youtube_music": {
+          "rank": 60,
+          "previousRank": 54
+        }
+      }
+    },
+    {
+      "songName": "Busy Boy",
+      "artistName": "RESCENE",
+      "albumImageUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/04/87/f4/0487f448-50a5-59d6-fdb5-21e440d969f7/191953518954.jpg/600x600bb.jpg",
+      "ranks": {
+        "youtube_music": {
+          "rank": 79,
+          "previousRank": 70
+        }
+      }
+    }
+  ]
 }

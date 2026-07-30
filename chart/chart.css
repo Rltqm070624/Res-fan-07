@@ -1,24 +1,25 @@
-/* ⭐️ MUSIC CHARTS — 탭으로 플랫폼 골라보는 랭킹 리스트 */
+
+.chart-page-container { max-width: none !important; width: 100%; padding-left: 56px; padding-right: 56px; }
+@media (max-width: 800px) { .chart-page-container { padding-left: 20px; padding-right: 20px; } }
 
 .chart-updated { font-size: 11px; color: var(--text-muted); font-family: var(--font-num); }
 
 .chart-wrap { width: 100%; margin-top: 20px; }
 
-/* 탭 바 — 세그먼트 필 형태 (다른 페이지 탭과 톤 맞춤, 색상pill 그리드는 지양) */
+/* 탭 — 알약형 배경 없이 문구 + 밑줄로만 깔끔하게 */
 .chart-tabbar {
-    display: flex; flex-wrap: wrap; gap: 4px;
-    background: var(--bg-surface-hover); border: 1px solid var(--border-light);
-    border-radius: 999px; padding: 6px; margin-bottom: 22px; width: fit-content; max-width: 100%;
+    display: flex; flex-wrap: wrap; gap: 28px;
+    border-bottom: 1px solid var(--border-light); margin-bottom: 26px; padding-bottom: 2px;
 }
 .chart-tab {
     appearance: none; background: transparent; border: none; cursor: pointer;
-    font-family: var(--font-head); font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em;
-    color: var(--text-muted); padding: 9px 18px; border-radius: 999px; white-space: nowrap;
-    transition: color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    font-family: var(--font-head); font-size: 13px; font-weight: 600; letter-spacing: 0.03em;
+    color: var(--text-muted); padding: 0 0 14px; position: relative;
+    transition: color 0.25s ease;
 }
 .chart-tab:hover { color: var(--text-secondary); }
-.chart-tab.active { color: var(--text-primary); font-weight: 700; background: var(--bg-base); box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
-html[data-theme="light"] .chart-tab.active { background: #ffffff; }
+.chart-tab.active { color: var(--text-primary); font-weight: 700; }
+.chart-tab.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--c-accent); }
 
 .chart-list { display: flex; flex-direction: column; }
 

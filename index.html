@@ -1,200 +1,294 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESCENE ARCHIVE | 메인</title>
-    <meta name="description" content="RESCENE 비공식 팬 아카이브">
-    <link rel="icon" type="image/png" href="images/logo.png">
+@charset "UTF-8";
 
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="RESCENE ARCHIVE">
-    <meta property="og:description" content="RESCENE 비공식 팬 아카이브">
-    <meta property="og:image" content="images/logo.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="RESCENE ARCHIVE">
-    <meta name="twitter:description" content="RESCENE 비공식 팬 아카이브">
-    <meta name="twitter:image" content="images/logo.png">
+/* 메인 비디오 영역 */
+.video-container { position: relative; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; scroll-snap-align: start; }
+.bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.7; }
+.video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(18,19,24,0.2) 0%, rgba(18,19,24,0.6) 60%, var(--bg-base) 100%); z-index: 2; }
+html[data-theme="light"] .video-overlay { background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 60%, var(--bg-base) 100%); }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+.hero-content { position: relative; z-index: 5; text-align: center; margin-top: 60px; opacity: 0; animation: heroFadeIn 1.5s ease-out forwards; }
+@keyframes heroFadeIn { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+.hero-logo { max-width: 220px; width: 50%; filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5)); }
+.debut-timer { margin-top: 40px; }
+.debut-timer .d-day { font-family: var(--font-head); font-size: 28px; font-weight: 800; color: #ffffff; letter-spacing: 4px; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.45); }
+.debut-timer .time-flow { font-family: var(--font-num); font-size: 14px; font-weight: 500; color: rgba(244,244,245,0.7); letter-spacing: 3px; }
+
+/* ⭐️ 전체 가로 스크롤 완전 차단 (Full Size View 튀어나오는 문제 완벽 해결) */
+html, body { scroll-snap-type: y proximity; overflow-x: hidden; width: 100%; position: relative; }
+
+.section-container { padding: 0 20px; max-width: 1040px; margin: 0 auto; position: relative; z-index: 2; }
+.full-page-section { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; scroll-snap-align: start; padding-top: 60px; padding-bottom: 60px; }
+.full-page-section > .section-inner, .full-page-section .section-header { width: 100%; }
+#historySection { position: relative; width: 100%; height: 100vh; height: 100dvh; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; overflow: hidden; cursor: pointer; }
+#historySection .section-title { position: relative; z-index: 5; margin-bottom: 15px; font-size: 54px; letter-spacing: 2px; transition: letter-spacing 0.5s ease; }
+#historySection:hover .section-title { letter-spacing: 5px; }
+.history-subtitle { position: relative; z-index: 5; font-family: var(--font-body); font-size: 15px; font-weight: 400; color: var(--text-muted); letter-spacing: 0.5px; margin: 0; transition: color 0.4s ease; }
+#historySection:hover .history-subtitle { color: var(--c-accent); }
+
+/* ⭐️ 위드 리센스: 클릭하면 같은 자리에서 문구 → 벚꽃 → 발자취(추후 추가) 순으로 전환 */
+#historySection.wr-playing .section-title,
+#historySection.wr-playing .history-subtitle { pointer-events: none; }
+#historySection.wr-playing { cursor: default; }
+
+.wr-layer-stack { position: relative; z-index: 5; display: grid; }
+.wr-layer-stack > * { grid-area: 1 / 1; }
+
+.wr-text { text-align: center; opacity: 1; transform: translateY(0); transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1), transform 1.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.wr-text.wr-hide { opacity: 0; transform: translateY(-10px); transition: opacity 2.2s ease, transform 2.2s ease; }
+
+.wr-next { text-align: center; opacity: 0; transition: opacity 2s ease; }
+.wr-next.show { opacity: 1; }
+.wr-next-text { font-family: var(--font-body); font-size: 14.5px; color: var(--text-secondary); letter-spacing: 0.3px; line-height: 1.9; margin: 0; }
+
+.slow-reveal { opacity: 0; transform: translateY(60px); transition: opacity 3s cubic-bezier(0.22, 1, 0.36, 1), transform 3s cubic-bezier(0.22, 1, 0.36, 1); }
+.slow-reveal.active { opacity: 1; transform: translateY(0); }
+
+/* 전체화면 이미지 모달 */
+.image-modal-backdrop { z-index: 99990; }
+.image-modal-wrapper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); z-index: 99995; opacity: 0; visibility: hidden; pointer-events: none; transition: 0.3s ease; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; padding: 20px; box-sizing: border-box; }
+.image-modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+.image-modal-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+
+/* 섹션 타이틀 가로 확장 */
+.section-header { position: relative; margin-bottom: 22px; display: flex; align-items: flex-end; border-bottom: 1px solid var(--border-light); padding-bottom: 14px; width: 100%; }
+.section-header::after { content: ''; position: absolute; left: 0; bottom: -1px; width: 56px; height: 2px; background: var(--accent-gradient); }
+.section-header.center-header { justify-content: center; text-align: center; }
+.section-header.center-header::after { left: 50%; transform: translateX(-50%); }
+.section-header h2 { font-family: var(--font-head); font-size: 2.4rem; font-weight: 800; font-style: normal; letter-spacing: -0.5px; margin: 0; }
+
+/* 서브 헤더 (PROFILE PHOTO / ALBUM) */
+.archive-sub-header { font-family: var(--font-head); font-size: 12px; font-weight: 700; color: var(--text-secondary); width: 100%; text-align: left; letter-spacing: 2.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.archive-sub-header::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent-gradient); flex-shrink: 0; }
+.mt-40 { margin-top: 40px; }
+
+.profile-scroll-wrapper { position: relative; width: 100%; }
+.profile-track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; }
+.archive-split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; }
+.archive-col { min-width: 0; }
+@media (max-width: 800px) { .archive-split { grid-template-columns: 1fr; gap: 32px; } }
+
+/* YOUTUBE 모아보기를 RESCENE ARCHIVE 섹션 하단(남는 여백)으로 병합 */
+.archive-media-divider { width: 100%; height: 1px; background: var(--border-light); margin: 56px 0 40px; }
+.archive-media-block { width: 100%; }
+.archive-media-head { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 14px; }
+.archive-media-head .archive-sub-header { margin-bottom: 0; }
+.archive-media-more { font-family: var(--font-num); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-decoration: none; transition: color 0.25s ease; white-space: nowrap; }
+.archive-media-more:hover { color: var(--c-accent); }
+
+.profile-item { position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; background: transparent; cursor: pointer; border: 1px solid var(--border-light); box-shadow: 0 6px 18px rgba(0,0,0,0.25); transition: box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.profile-item:hover { border-color: var(--c-accent); box-shadow: 0 14px 34px rgba(0,0,0,0.4), 0 0 0 1px var(--c-accent-glow); transform: translateY(-3px); }
+.album-broken-label { display: none; }
+.profile-item.img-broken { display: flex; align-items: center; justify-content: center; text-align: center; border: 1px dashed var(--border-highlight); }
+.profile-item.img-broken .album-broken-label { display: block; color: var(--text-muted); font-size: 11px; line-height: 1.6; padding: 10px; word-break: break-all; }
+.profile-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+.profile-item:hover img { transform: scale(1.08); }
+.profile-item .pf-index { position: absolute; left: 10px; bottom: 9px; font-family: var(--font-num); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7); }
+.profile-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 40%); pointer-events: none; }
+.profile-item.archive-more-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: var(--text-secondary); font-family: var(--font-head); font-size: 12.5px; font-weight: 700; border: 1px dashed var(--border-highlight); background: var(--bg-surface); }
+.profile-item.archive-more-tile:hover { color: var(--c-accent); border-color: var(--c-accent); }
+.profile-item.archive-more-tile::after { display: none; }
+#profileSection.section-container,
+#todayScheduleSection.section-container,
+#honorsSection.section-container,
+#latestMediaSection.section-container { max-width: 100%; padding-left: 48px; padding-right: 48px; }
+@media (max-width: 700px) {
+    #profileSection.section-container,
+    #todayScheduleSection.section-container,
+    #honorsSection.section-container,
+    #latestMediaSection.section-container { padding-left: 20px; padding-right: 20px; }
+}
+
+/* ⭐️ 다가오는 일정 드래그 스트립 */
+.upcoming-strip-wrap { margin-bottom: 28px; }
+.upcoming-strip { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; cursor: grab; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; }
+.upcoming-strip::-webkit-scrollbar { display: none; }
+.upcoming-strip.dragging { cursor: grabbing; user-select: none; }
+html[data-theme="light"]{ --bg-base:#ffffff; }
+html[data-theme="light"] body{ background:#ffffff; }
+
+/* ===== TODAY'S SCHEDULE — 왼쪽: 오늘 일정 카드 / 오른쪽: 이번 달 일정 스크롤 ===== */
+.today-double { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; width: 100%; }
+.today-list-col { min-width: 0; display: flex; align-items: center; justify-content: center; min-height: 560px; }
+.today-list-col .today-grid { grid-template-columns: 1fr; max-width: none; margin: 0; width: 100%; }
+.today-month-col { min-width: 0; }
+@media (max-width: 900px) {
+    .today-double { grid-template-columns: 1fr; gap: 24px; }
+}
+
+.today-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px; max-width:1120px; margin:0 auto; width: 100%; }
+.today-card{ position:relative; isolation:isolate; overflow:hidden; display:flex; flex-direction:column; min-height:212px; padding:28px 28px 22px; border-radius:18px; background:var(--bg-surface); border:none; transition:transform .55s cubic-bezier(.16,1,.3,1), box-shadow .55s cubic-bezier(.16,1,.3,1); animation:todayCardIn .8s cubic-bezier(.16,1,.3,1) both; }
+.today-card:nth-child(2){ animation-delay:.09s; }
+.today-card:nth-child(3){ animation-delay:.18s; }
+.today-card:nth-child(4){ animation-delay:.27s; }
+.today-card:nth-child(n+5){ animation-delay:.36s; }
+@keyframes todayCardIn{ from{ opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+.today-card::before{ content:''; position:absolute; inset:0; z-index:-1; background:radial-gradient(115% 90% at 0% 0%, color-mix(in srgb, var(--accent-color) 16%, transparent) 0%, transparent 58%); opacity:.7; transition:opacity .55s ease; }
+.today-card::after{ content:''; position:absolute; left:0; top:26px; bottom:26px; width:2px; background:var(--accent-color); transform:scaleY(.3); transform-origin:center; transition:transform .55s cubic-bezier(.16,1,.3,1); }
+.today-card:hover{ transform:translateY(-6px); box-shadow:0 24px 50px rgba(0,0,0,.45); }
+.today-card:hover::after{ transform:scaleY(1); }
+.today-card:hover::before{ opacity:1; }
+html[data-theme="light"] .today-card{ background:var(--bg-surface); box-shadow:0 1px 2px rgba(0,0,0,.03); }
+html[data-theme="light"] .today-card:hover{ box-shadow:0 20px 44px rgba(0,0,0,.09); }
+.today-card-top{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:18px; }
+.today-time{ font-family:var(--font-num, 'Montserrat', sans-serif); font-size:32px; font-weight:200; line-height:1; letter-spacing:.02em; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+.today-time .tbd{ font-size:15px; font-weight:400; letter-spacing:.04em; color:var(--text-muted); }
+.today-status{ display:inline-flex; align-items:center; gap:7px; font-family:var(--font-num, 'Montserrat', sans-serif); font-size:10px; font-weight:600; letter-spacing:.16em; color:var(--text-muted); white-space:nowrap; }
+.today-status.is-live{ color:#ff4d6d; }
+.today-status .live-dot{ width:6px; height:6px; border-radius:50%; background:#ff4d6d; animation:todayPulse 1.9s ease-out infinite; }
+@keyframes todayPulse{ 0% { box-shadow:0 0 0 0 rgba(255,77,109,.55); } 70% { box-shadow:0 0 0 7px rgba(255,77,109,0); } 100%{ box-shadow:0 0 0 0 rgba(255,77,109,0); } }
+.today-title{ margin:0 0 24px; flex:1; font-size:18px; font-weight:600; line-height:1.55; letter-spacing:-.01em; color:var(--text-primary); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.today-card-foot{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding-top:16px; border-top:1px solid var(--border-light); }
+.today-type{ display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:600; letter-spacing:.09em; color:var(--text-secondary); }
+.today-type-dot{ width:5px; height:5px; border-radius:50%; background:var(--accent-color); }
+.today-card.is-ended::before{ opacity:.2; }
+.today-card.is-ended .today-card-top, .today-card.is-ended .today-title, .today-card.is-ended .today-card-foot{ opacity:.45; transition:opacity .4s ease; }
+.today-card.is-ended:hover .today-card-top, .today-card.is-ended:hover .today-title, .today-card.is-ended:hover .today-card-foot{ opacity:.8; }
+.today-card.is-live{ box-shadow:0 0 0 1.5px color-mix(in srgb, var(--accent-color) 55%, transparent); }
+.today-card.is-live::after{ transform:scaleY(1); }
+.today-empty-card{ grid-column:1 / -1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; min-height:212px; padding:48px 24px; text-align:center; border-radius:18px; border:none; background:transparent; }
+html[data-theme="light"] .today-empty-card{ background:transparent; border:none; }
+.today-empty-card .mark{ width:40px; height:40px; border-radius:50%; border:1px solid var(--border-light); display:flex; align-items:center; justify-content:center; color:var(--text-muted); }
+.today-empty-card p{ margin:0; font-size:14px; color:var(--text-secondary); letter-spacing:.01em; }
+.today-empty-card button{ background:transparent; border:none; cursor:pointer; font-family:var(--font-body); font-size:12px; letter-spacing:.06em; color:var(--text-muted); padding:4px 2px; border-bottom:1px solid var(--border-light); transition:color .3s ease, border-color .3s ease; }
+.today-empty-card button:hover{ color:var(--text-primary); border-color:var(--text-primary); }
+@media (prefers-reduced-motion:reduce){ .today-card, .today-status .live-dot{ animation:none !important; } .today-card{ transition:none; } }
+
+.today-month-head { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin: 0 0 20px; }
+.today-month-title { font-family: var(--font-head); font-size: 20px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px; }
+.today-month-count { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); }
+
+.tm-col {
+    height: 560px; overflow-y: auto; padding: 4px 14px 4px 0;
+    scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent;
+}
+.tm-col::-webkit-scrollbar { width: 6px; }
+.tm-col::-webkit-scrollbar-track { background: transparent; }
+.tm-col::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
+.tm-col::-webkit-scrollbar-thumb:hover { background: var(--c-accent); }
+@media (max-width: 900px) {
+    .tm-col { height: 440px; }
+}
+
+.tm-group { margin-bottom: 22px; }
+.tm-group:last-child { margin-bottom: 0; }
+.tm-group-date { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border-light); }
+.tm-day { font-family: var(--font-num); font-size: 20px; font-weight: 800; color: var(--text-primary); line-height: 1; }
+.tm-dow { font-family: var(--font-head); font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em; }
+.tm-group-date.sun .tm-day, .tm-group-date.sun .tm-dow { color: #ff6b81; }
+.tm-group-date.sat .tm-day, .tm-group-date.sat .tm-dow { color: #5b9bff; }
+.tm-group.is-today .tm-group-date { border-bottom-color: var(--c-accent); }
+.tm-group.is-today .tm-day { color: var(--c-accent); }
+
+.tm-group-items { display: flex; flex-direction: column; gap: 4px; }
+.tm-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; cursor: pointer; transition: background 0.25s ease, padding-left 0.25s ease; }
+.tm-item:hover { background: var(--bg-surface-hover); padding-left: 14px; }
+.tm-item-tag { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 3px 9px; border-radius: 999px; color: #fff; font-family: var(--font-head); font-size: 10px; font-weight: 800; letter-spacing: 0.02em; white-space: nowrap; }
+.tm-item-time { flex-shrink: 0; font-family: var(--font-num); font-size: 12px; font-weight: 600; color: var(--text-muted); min-width: 38px; }
+.tm-item-title { font-family: var(--font-body); font-size: 13.5px; font-weight: 500; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.tm-empty { text-align: center; color: var(--text-muted); font-size: 13px; padding: 60px 0; }
+
+
+/* ⭐️ AWARDS & AMBASSADOR 홈 섹션 (2026 프리미엄 에디토리얼 리스트) */
+.honors-linear-layout { max-width: 100%; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: 100%; align-items: start; }
+
+.honors-linear-group {
+    position: relative; isolation: isolate; overflow: hidden;
+    background: var(--bg-surface); border-radius: 22px; padding: 34px 32px 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    animation: todayCardIn 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+.honors-linear-group:nth-child(2) { animation-delay: 0.1s; }
+
+.honors-linear-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 18px; margin-bottom: 6px; }
+.honors-linear-header h3 { font-family: var(--font-head); font-size: 18px; font-weight: 800; color: var(--text-primary); margin: 0; letter-spacing: -0.1px; display: flex; align-items: center; gap: 10px; }
+.honors-linear-header h3::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--c-accent); box-shadow: 0 0 10px var(--c-accent-glow); flex-shrink: 0; }
+.honors-more-text { font-family: var(--font-num); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-decoration: none; transition: color 0.25s ease; }
+.honors-more-text:hover { color: var(--c-accent); }
+
+.honors-list { list-style: none; margin: 0; padding: 0; }
+.honors-list li {
+    display: flex; align-items: center; gap: 14px; padding: 18px 6px; border-bottom: 1px solid var(--border-light);
+    border-radius: 12px; transition: background 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+}
+.honors-list li:last-child { border-bottom: none; }
+.honors-list li:hover { background: var(--bg-surface-hover); padding-left: 12px; padding-right: 12px; margin: 0 -6px; }
+.honors-list .h-rank { font-family: var(--font-num); font-size: 12px; font-weight: 700; color: var(--text-muted); width: 20px; flex-shrink: 0; letter-spacing: 0.02em; }
+.honors-list .h-info { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+
+/* 앨범 커버/유형 썸네일 — 텍스트만 나열되던 리스트에 실제 이미지를 붙여 '게시판' 느낌을 덜어냄 */
+.h-thumb-wrap { width: 42px; height: 42px; border-radius: 11px; overflow: hidden; flex-shrink: 0; background: transparent; display: flex; align-items: center; justify-content: center; }
+.h-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+.h-thumb-wrap .honors-logo { max-width: 30px; max-height: 20px; }
+.h-type-wrap { display: flex; align-items: center; flex-shrink: 0; }
+.h-type-tile { display: inline-flex; align-items: center; justify-content: center; height: 30px; padding: 0 12px; border-radius: 999px; font-family: var(--font-head); font-size: 11.5px; font-weight: 800; letter-spacing: 0.01em; color: #fff; white-space: nowrap; }
+
+.honors-list .h-name { font-family: var(--font-body); font-size: 14.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+.honors-list .h-badge {
+    display: inline-flex; align-items: center; font-family: var(--font-num); font-size: 10px; font-weight: 700;
+    color: var(--text-secondary); background: transparent; border: 1px solid var(--border-highlight);
+    padding: 3px 9px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-left: 4px;
+}
+.honors-list .h-note { font-family: var(--font-body); font-size: 12.5px; font-weight: 400; color: var(--text-muted); margin-left: 4px; white-space: nowrap; }
+.honors-list .h-tag { font-family: var(--font-head); font-size: 11px; font-weight: 700; color: var(--c-accent); background: var(--c-accent-glow); padding: 4px 10px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+.honors-list .h-date { font-family: var(--font-num); font-size: 12.5px; font-weight: 500; color: var(--text-muted); flex-shrink: 0; text-align: right; letter-spacing: 0.02em; }
+
+/* 모바일 대응 */
+@media (max-width: 900px) {
+    .honors-linear-layout { grid-template-columns: 1fr; gap: 20px; }
+}
+@media (max-width: 600px) {
+    .honors-linear-group { padding: 26px 20px 6px; border-radius: 18px; }
+    .honors-list li { flex-wrap: wrap; align-items: flex-start; gap: 4px 10px; padding: 16px 6px; }
+    .honors-list .h-info { flex: 1 1 auto; min-width: 0; width: auto; }
+    .honors-list .h-date { width: 100%; text-align: left; padding-left: 66px; font-size: 12px; color: var(--text-secondary); }
+}
+
+/* ⭐️ YOUTUBE 모아보기 홈 섹션 — 카테고리별 최신 영상 1개 (모달 없음, 위아래로 자유롭게) */
+.latest-media-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:32px 24px; width:100%; align-items:start; }
+.media-cat-block{ display:flex; flex-direction:column; }
+.media-cat-tag{ display:inline-flex; align-self:flex-start; padding:5px 14px; border-radius:999px; background:var(--bg-surface); border:1px solid var(--border-light); color:var(--c-accent); font-family:var(--font-head); font-size:11px; font-weight:700; letter-spacing:1px; margin-bottom:12px; }
+.media-cat-thumb{ position:relative; width:100%; aspect-ratio:16/9; border-radius:16px; overflow:hidden; background:var(--bg-surface); border:1px solid var(--border-light); cursor:pointer; transition: box-shadow .4s ease, border-color .4s ease; }
+.media-cat-thumb img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+.media-cat-thumb::after{ content:''; position:absolute; inset:0; background:rgba(0,0,0,0.2); opacity:0; transition:opacity .3s ease; }
+.media-play-icon{ position:absolute; top:50%; left:50%; transform:translate(-50%, -50%) scale(0.8); width:48px; height:48px; background:rgba(255,255,255,0.9); border-radius:50%; display:flex; align-items:center; justify-content:center; opacity:0; z-index:2; transition:all .3s cubic-bezier(0.175,0.885,0.32,1.275); }
+.media-play-icon svg{ width:24px; height:24px; fill:var(--bg-base); margin-left:3px; }
+.media-cat-thumb:hover{ border-color:var(--c-accent); box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+.media-cat-thumb:hover img{ transform:scale(1.05); }
+.media-cat-thumb:hover::after{ opacity:1; }
+.media-cat-thumb:hover .media-play-icon{ opacity:1; transform:translate(-50%, -50%) scale(1); }
+
+.media-cat-info{ padding:14px 2px 0; }
+.media-cat-info .mc-title{ font-family:var(--font-body); font-size:14px; font-weight:600; color:var(--text-primary); line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.media-cat-info .mc-sub{ font-family:var(--font-num); font-size:11.5px; color:var(--text-muted); margin-top:6px; }
+.media-cat-more{ display:inline-flex; align-self:flex-start; margin-top:14px; font-family:var(--font-head); font-size:12px; font-weight:700; letter-spacing:.5px; color:var(--text-secondary); text-decoration:none; transition:color .25s ease; }
+.media-cat-more:hover{ color:var(--c-accent); }
+.media-empty{ color:var(--text-muted); font-size:13px; text-align:center; width:100%; padding:40px 0; }
+@media (max-width:900px){ .latest-media-grid{ grid-template-columns:1fr; gap:36px; } }
+
+/* 🚨 제가 실수로 날려먹었던 헤더 복구 코드 (모바일 아이콘 우측 정렬 완벽 보장) 🚨 */
+.plain-link{ color:inherit; text-decoration:none; }
+.util-reset{ margin-left:0; padding-left:0; border-left:none; }
+.lang-switcher-inline{ position:static !important; opacity:1 !important; pointer-events:auto !important; transform:none !important; background:transparent !important; border:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; padding:0 !important; display: flex; align-items: center; }
+.lang-switcher-inline.mobile-lang{ margin-top:40px !important; align-self:flex-start !important; }
+.nav-divider{ margin:0; padding:0; width:0; height:18px; align-self:center; border-left:1px solid var(--border-light); }
+.sns-icon-sm{ transform:scale(0.75); }
+.footer-sns .sns-icon-sm{ transform:scale(0.66); }
+.section-header-sm{ margin-bottom:24px; }
+.section-header-md{ margin-bottom:30px; }
+
+/* 모바일 반응형 공통 */
+@media (max-width:800px){
+    /* 🚨 헤더 우측 쏠림 방지 및 우측 끝 정렬 강제 🚨 */
+    .header-right, .nav-right, .header-utils { margin-left: auto !important; justify-content: flex-end !important; }
+
+    .today-date-sub{ margin-bottom:34px; }
+    .today-grid{ grid-template-columns:1fr; gap:14px; max-height: 55vh; overflow-y: auto; padding-bottom: 20px; -webkit-overflow-scrolling: touch; }
+    .today-card{ min-height:0; padding:22px 22px 18px; }
+    .today-time{ font-size:26px; }
+    .today-title{ font-size:16px; margin-bottom:18px; }
+    #historySection .section-title { font-size: 40px; }
+    .section-header.center-header { align-items: center; flex-direction: column; }
     
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/modal.css">
-    <link rel="stylesheet" href="css/i18n.css">
-
-    <script src="js/theme-init.js"></script>
-    <script src="js/i18n.js"></script>
-</head>
-<body id="homeSection">
-
-    <div class="landing-splash" id="landingSplash">
-        <div class="landing-inner">
-            <img src="images/logo.png" alt="RESCENE" class="landing-logo" onerror="this.style.display='none'">
-            <p class="landing-welcome">리센느 비공식 팬 아카이브에 오신 것을 환영합니다.</p>
-            <a href="javascript:void(0)" class="landing-enter" onclick="closeLandingSplash()">바로가기 →</a>
-        </div>
-        <p class="landing-disclaimer">해당 홈페이지는 팬이 자발적으로 운영하는 비공식 팬 페이지입니다.<br>모든 저작권은 아티스트 RESCENE, 소속사 THE MUZE Entertainment에게 있으며 공식 관계가 없음을 알려드립니다.</p>
-    </div>
-
-    <div id="siteNavSlot"></div>
-    <script src="js/layout.js"></script>
-    <script>renderSiteNav('home', '', { calendar: true, lang: true });</script>
-
-    <div id="mainWrapper">
-        <div class="video-container" id="homeHero">
-            <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
-            <div class="video-overlay"></div>
-            <div class="hero-content">
-                <img src="images/logo.png" alt="RESCENE Logo" class="hero-logo" onerror="this.style.display='none'">
-                <div class="debut-timer">
-                    <div class="d-day" id="dDayText">D+000</div>
-                    <div class="time-flow" id="timeFlowText">00:00:00</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="historySection" class="slow-reveal history-link" role="button" tabindex="0" onclick="playWithRescene()" onkeydown="if(event.key==='Enter')playWithRescene()" aria-label="위드 리센스 — 함께 걸어온 길 보기">
-            <div class="wr-layer-stack">
-                <div class="wr-text" id="wrText">
-                    <div class="section-title">WITH <span>RESCENE</span></div>
-                    <p class="history-subtitle">지금까지 걸어 온 길을 같이 걸어 볼까요?</p>
-                </div>
-
-                <div class="wr-next" id="wrNext">
-                    <p class="wr-next-text">발자취를 하나씩 채워가는 중이에요.<br>곧 이 자리에서 리센느와 함께 걸어온 순간들을 만나요.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-container reveal full-page-section" id="profileSection">
-            <div class="section-inner">
-                <div class="section-header center-header section-header-md">
-                    <div class="section-title">RESCENE <span>ARCHIVE</span></div>
-                </div>
-                
-                <div class="archive-split">
-                    <div class="archive-col">
-                        <div class="archive-sub-header">PROFILE PHOTO</div>
-                        <div class="profile-scroll-wrapper" id="profileScroll"></div>
-                    </div>
-                    <div class="archive-col">
-                        <div class="archive-sub-header">ALBUM</div>
-                        <div class="profile-scroll-wrapper" id="albumScroll"></div>
-                    </div>
-                </div>
-
-                <div class="archive-media-divider"></div>
-
-                <div class="archive-media-block">
-                    <div class="archive-media-head">
-                        <div class="archive-sub-header">YOUTUBE <span>모아보기</span></div>
-                        <a href="media/media.html" class="archive-media-more">더보기 →</a>
-                    </div>
-                    <div class="latest-media-grid" id="latestMediaGrid"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-container reveal full-page-section" id="honorsSection">
-            <div class="section-header center-header section-header-md">
-                <div class="section-title">AWARDS & <span>AMBASSADOR</span></div>
-            </div>
-            
-            <div class="honors-linear-layout">
-                <!-- 음악방송 섹션 -->
-                <div class="honors-linear-group">
-                    <div class="honors-linear-header">
-                        <h3>음악방송</h3>
-                        <a href="javascript:void(0)" onclick="openAwardsHistoryModal()" class="honors-more-text">전체 히스토리 보기 →</a>
-                    </div>
-                    <ul class="honors-list" id="awardsPreviewList"></ul>
-                </div>
-
-                <!-- 광고/홍보대사 섹션 -->
-                <div class="honors-linear-group">
-                    <div class="honors-linear-header">
-                        <h3>광고 · 홍보대사</h3>
-                        <a href="javascript:void(0)" onclick="openAdsHistoryModal()" class="honors-more-text">전체 히스토리 보기 →</a>
-                    </div>
-                    <ul class="honors-list" id="adsPreviewChips"></ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-container reveal full-page-section" id="todayScheduleSection">
-            <div class="section-header center-header section-header-sm">
-                <div class="section-title">TODAY'S <span>SCHEDULE</span></div>
-            </div>
-            <div class="today-double">
-                <div class="today-list-col">
-                    <div class="today-grid" id="todayScheduleGrid"></div>
-                </div>
-                <div class="today-month-col">
-                    <div class="today-month-head">
-                        <div class="today-month-title" id="todayMonthTitle"></div>
-                        <div class="today-month-count" id="todayMonthCount"></div>
-                    </div>
-                    <div class="tm-col" id="todayScrollColA"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="siteFooterSlot"></div>
-        <script>renderSiteFooter('');</script>
-    </div> 
-
-    <!-- 이미지 확대 모달 -->
-    <div class="modal-backdrop image-modal-backdrop" id="imageModalBackdrop" onclick="closeImageModal()"></div>
-    <div class="image-modal-wrapper" id="imageModal" onclick="closeImageModal()">
-        <img src="" id="fullSizeImage" alt="Full Size View">
-    </div>
-
-    <!-- 앨범 상세 모달 (MV + 트랙리스트) -->
-    <div class="modal-backdrop" id="albumModalBackdrop" onclick="closeAlbumModal()"></div>
-    <div class="album-modal-wrapper" id="albumModal">
-        <button class="popup-close-btn" onclick="closeAlbumModal()" aria-label="앨범 닫기">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-        <div class="album-modal-media" id="albumMediaWrap"></div>
-        <div class="album-modal-info">
-            <img class="album-modal-cover" id="albumModalCover" alt="" onerror="this.style.display='none'">
-            <div class="album-modal-title" id="albumModalTitle"></div>
-            <div class="album-tracklist-label">TRACK LIST</div>
-            <div class="album-track-list" id="albumTrackList"></div>
-        </div>
-    </div>
-    <button type="button" class="album-nav-btn album-nav-prev" onclick="navigateAlbumModal(-1)" aria-label="이전 앨범">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-    <button type="button" class="album-nav-btn album-nav-next" onclick="navigateAlbumModal(1)" aria-label="다음 앨범">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-    </button>
-    <div class="modal-backdrop" id="honorsHistoryBackdrop" onclick="closeHonorsHistoryModal()"></div>
-    <div class="honors-history-modal" id="honorsHistoryModal">
-        <div class="honors-history-head">
-            <span class="honors-history-head-title" id="honorsHistoryTitle">HISTORY</span>
-        </div>
-        <button class="popup-close-btn" onclick="closeHonorsHistoryModal()" aria-label="닫기">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-        <div class="honors-history-body" id="awardsHistoryBody"></div>
-    </div>
-
-    <div id="siteCalendarSlot"></div>
-    <script>renderCalendarWidgets();</script>
-
-    <script src="js/common.js"></script>
-    <script src="js/contents_data.js"></script>
-    <script src="js/album_content_data.js"></script>
-    <script src="js/music_show_data.js"></script>
-    <script src="js/live_data.js"></script>
-    <script src="js/event_data.js"></script>
-    <script src="js/honors_data.js"></script>
-    <script src="js/honors.js"></script>
-    <script src="js/contents.js"></script>
-    <script src="js/main.js"></script>
-</body>
-</html>
+    .profile-track { grid-template-columns: repeat(2, 1fr); }
+}

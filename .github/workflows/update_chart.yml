@@ -12,21 +12,21 @@ jobs:
   run-scraper:
     runs-on: ubuntu-latest
     steps:
-      - name: 저장소 코드 불러오기
+      - name: import
         uses: actions/checkout@v3
 
-      - name: Node.js 세팅
+      - name: settings
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: 패키지 설치
+      - name: install
         run: npm install
 
-      - name: 크롤러 실행 (멀티 플랫폼 — melon/genie/vibe/bugs/flo/youtube_music/spotify)
+      - name: start
         run: node scripts/scrape_chart.js
 
-      - name: 결과 저장 및 푸시
+      - name: save
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'

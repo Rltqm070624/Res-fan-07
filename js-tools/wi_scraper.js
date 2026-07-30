@@ -87,6 +87,10 @@ export function parseSimpleTable($, table, extraFields) {
     return rows;
 }
 
+/**
+ * 음악방송 표 파싱: 날짜 | 방송사 | 프로그램 | (곡명, 굵게 표시될 때만) | 링크
+ * 방송사/프로그램/곡명은 이전 값을 이어받는(rowspan 대응) carry-forward 로직 사용.
+ */
 export function parseMusicShowTable($, table) {
     const rows = [];
     let year = null;
@@ -154,7 +158,25 @@ export function dedupe(rows) {
     });
 }
 
+/**
+ * ⭐️ 기존 파일에 있는 데이터는 절대 건드리지 않고, "새로 발견된 항목만" 뒤에 추가한다.
+ * (단, 환경변수 FULL_RESYNC=true 이면 기존 파일을 무시하고 이번에 긁어온 내용으로 완전히 새로 씀 —
+ *  날짜가 잘못 들어가 있는 등 데이터를 통째로 바로잡고 싶을 때 수동으로 한 번 켜서 쓰는 용도)
+ * - existingPath: 기존 const 배열이 들어있는 js 파일 경로 (예: js/contents_data.js)
+ * - varName: 그 파일 안의 const 이름 (예: CONTENTS_DATA)
+ * - freshRows: 이번에 나무위키에서 새로 긁어온 전체 목록
+ * - keyFn: 같은 항목인지 판별하는 기준 (기본: vid)
+ * 반환: { added, total, mode } — added=0이면 파일을 아예 쓰지 않는다(변경 없음).
+ */
 export function mergeAppendOnlyNew(existingPath, varName, freshRows, keyFn = (r) => r.vid) {
+    const fullResync = process.env.FULL_RESYNC === 'true';
+
+    if (fullResync) {
+        const merged = sortByDateDesc(dedupeBy(freshRows, keyFn));
+        fs.writeFileSync(existingPath, toConstJs(varName, merged));
+        return { added: merged.length, total: merged.length, mode: 'full_resync' };
+    }
+
     let existing = [];
     if (fs.existsSync(existingPath)) {
         const content = fs.readFileSync(existingPath, 'utf-8');
@@ -168,11 +190,21 @@ export function mergeAppendOnlyNew(existingPath, varName, freshRows, keyFn = (r)
     const newOnes = freshRows.filter(r => keyFn(r) && !existingKeys.has(keyFn(r)));
 
     if (!newOnes.length) {
-        return { added: 0, total: existing.length };
+        return { added: 0, total: existing.length, mode: 'append_only' };
     }
 
-    // 기존 항목은 순서/내용 그대로 유지하고, 새 항목만 맨 앞에 붙인 뒤 날짜 기준으로 재정렬
+    // 기존 항목은 순서/내용 그대로 유지하고, 새 항목만 붙인 뒤 날짜 기준으로 재정렬
     const merged = sortByDateDesc([...existing, ...newOnes]);
     fs.writeFileSync(existingPath, toConstJs(varName, merged));
-    return { added: newOnes.length, total: merged.length };
+    return { added: newOnes.length, total: merged.length, mode: 'append_only' };
+}
+
+function dedupeBy(rows, keyFn) {
+    const seen = new Set();
+    return rows.filter(r => {
+        const k = keyFn(r);
+        if (!k || seen.has(k)) return false;
+        seen.add(k);
+        return true;
+    });
 }

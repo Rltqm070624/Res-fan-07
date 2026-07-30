@@ -37,15 +37,13 @@ function renderHonorsPreview() {
     if (list) {
         list.innerHTML = MUSIC_SHOW_WINS.slice(-3).reverse().map((w, i) => {
             const cover = findAlbumCover(w.song);
-            const thumb = cover
-                ? `<img src="images/${cover}" alt="" class="h-thumb" onerror="this.parentElement.innerHTML=''">`
-                : logoImg(w.logo, 26);
+            const songThumb = cover ? `<img src="images/${cover}" alt="" class="h-song-thumb" onerror="this.remove()">` : '';
             return `
             <li>
                 <span class="h-rank">0${i + 1}</span>
-                <div class="h-thumb-wrap">${thumb}</div>
+                <div class="h-thumb-wrap">${logoImg(w.logo, 26)}</div>
                 <div class="h-info">
-                    <span class="h-name">${w.program} · ${w.song}</span>
+                    <span class="h-name"><span class="h-name-program">${w.program}</span><span class="h-name-sep">|</span>${songThumb}<span class="h-name-song">${w.song}</span></span>
                     <span class="h-badge">${w.notes[0].split(' (')[0]}</span>
                 </div>
                 <span class="h-date">${w.date}</span>
@@ -59,7 +57,7 @@ function renderHonorsPreview() {
         adsWrap.innerHTML = latestAds.map((a, i) => `
             <li>
                 <span class="h-rank">0${i + 1}</span>
-                <div class="h-thumb-wrap"><span class="h-type-tile" style="background:${AD_TYPE_COLOR[a.type]};">${a.type.charAt(0)}</span></div>
+                <span class="h-type-chip" style="color:${AD_TYPE_COLOR[a.type]}; border-color:${AD_TYPE_COLOR[a.type]}66;">${a.type}</span>
                 <div class="h-info">
                     <span class="h-name">${a.title}</span>
                     ${a.note ? `<span class="h-note">${a.note.split(' (')[0]}</span>` : ''}

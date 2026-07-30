@@ -23,7 +23,6 @@ body:has(#calendarPopupModal.active) .lang-switcher,
 body:has(#scheduleModal.active) .lang-switcher { opacity: 0; pointer-events: none; transform: translateY(10px); }
 body:has(#mobileMenuPanel.active) .lang-switcher:not(.lang-switcher-mobile) { opacity: 0; pointer-events: none; transform: translateY(10px); }
 
-/* ⭐️ 모바일 메뉴 안에 들어가는 버전은 fixed 안 쓰고 메뉴 흐름에 자연스럽게 */
 .lang-switcher.lang-switcher-mobile {
     position: static !important; left: auto; bottom: auto;
     display: flex !important; width: fit-content; margin: 4px 0 8px;

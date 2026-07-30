@@ -1,0 +1,1 @@
+const FANCHANT_DATA = [];

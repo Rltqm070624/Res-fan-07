@@ -83,6 +83,12 @@ body {
 html[data-theme="light"] .top-nav { background: rgba(250, 250, 251, 0.68); }
 
 .nav-left { min-width: 0; grid-column: 1; }
+.nav-logo-link {
+    font-family: 'Gaegu', var(--font-head); font-weight: 700; font-size: 22px;
+    color: var(--text-primary); text-decoration: none; letter-spacing: 0.5px;
+    display: inline-flex; align-items: center; transition: color 0.3s ease, opacity 0.3s ease;
+}
+.nav-logo-link:hover { color: var(--c-accent); opacity: 0.85; }
 
 .desktop-menu {
     list-style: none; margin: 0; padding: 0; display: flex; gap: 36px; align-items: center;
@@ -158,6 +164,33 @@ html[data-theme="light"] .icon-sun { display: block; }
 .lang-btn { background: transparent; border: none; border-radius: 999px; font-family: var(--font-head); font-size: 11px; font-weight: 700; color: var(--text-muted); padding: 5px 10px; cursor: pointer; transition: 0.3s ease; }
 .lang-btn.active, .lang-btn[aria-selected="true"] { background: var(--text-primary); color: var(--bg-base); }
 html[data-theme="light"] .lang-btn.active { background: #18181b; color: #ffffff; }
+
+/* 데스크톱 헤더: 지구본 아이콘 + 아코디언 언어 선택 */
+.lang-globe-wrap { position: relative; }
+.lang-globe-btn {
+    background: transparent; border: none; cursor: pointer; color: var(--text-primary);
+    display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 50%;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+.lang-globe-btn:hover { background: var(--bg-surface-hover); }
+.lang-globe-btn.open { color: var(--c-accent); transform: rotate(18deg); }
+.lang-accordion {
+    position: absolute; top: calc(100% + 10px); right: 0; min-width: 130px;
+    background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    display: flex; flex-direction: column; overflow: hidden;
+    max-height: 0; opacity: 0; pointer-events: none;
+    transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+}
+.lang-accordion.open { max-height: 220px; opacity: 1; pointer-events: auto; }
+.lang-accordion-item {
+    background: transparent; border: none; border-top: 1px solid var(--border-light);
+    font-family: var(--font-head); font-size: 12.5px; font-weight: 700; color: var(--text-secondary);
+    padding: 11px 16px; text-align: left; cursor: pointer; transition: background 0.2s ease, color 0.2s ease;
+}
+.lang-accordion-item:first-child { border-top: none; }
+.lang-accordion-item:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
+.lang-accordion-item.active { color: var(--c-accent); }
 
 /* 모든 페이지 공통 컨테이너 하단 여백 통일 (index.html과 동일하게) */
 .section-container { padding: 80px 20px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; box-sizing: border-box; }

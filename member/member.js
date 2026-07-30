@@ -37,6 +37,8 @@ function renderMemberDetail() {
 
     document.getElementById('memberNameKo').textContent = m.nameKo;
     document.getElementById('memberNameEn').textContent = m.nameEn;
+    document.getElementById('memberPageTitleKo').textContent = m.nameKo;
+    document.getElementById('memberPageTitleEn').textContent = m.nameEn;
     document.getElementById('memberIntro').textContent = m.intro;
     document.getElementById('memberBday').textContent = m.birthday;
     document.getElementById('memberPosition').textContent = m.position;

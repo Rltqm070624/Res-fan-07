@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '0 */6 * * *'
   workflow_dispatch:
+    inputs:
+      full_resync:
+        description: '전체 재동기화 (기존 데이터 무시하고 나무위키 기준으로 완전히 새로 씀 — 날짜 오류 등을 바로잡을 때만 체크)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -11,6 +16,8 @@ permissions:
 jobs:
   run-scrapers:
     runs-on: ubuntu-latest
+    env:
+      FULL_RESYNC: ${{ inputs.full_resync }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESCENE ARCHIVE | MUSIC CHARTS</title>
-    <meta name="description" content="RESCENE(리센느) 실시간 음원 차트">
+    <meta name="description" content="RESCENE 실시간 음원 차트">
     <link rel="icon" type="image/png" href="../images/logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,14 +31,14 @@
         <div class="section-container reveal active" style="flex:1;">
             <div class="section-header">
                 <div class="section-title">MUSIC <span>CHARTS</span></div>
-                <div class="chart-updated" id="currentTime">Loading..</div>
+                <div class="chart-updated" id="currentTime">데이터 로딩중...</div>
             </div>
             <div class="chart-wrap">
-                <div class="chart-platform-legend" id="chartLegend"></div>
+                <div class="chart-tabbar" id="chartTabbar"></div>
                 <div class="chart-list" id="chartList">
-                    <div class="chart-skel-card"></div>
-                    <div class="chart-skel-card"></div>
-                    <div class="chart-skel-card"></div>
+                    <div class="chart-skel-row"></div>
+                    <div class="chart-skel-row"></div>
+                    <div class="chart-skel-row"></div>
                 </div>
             </div>
         </div>
@@ -47,10 +47,12 @@
         <script>renderSiteFooter('../');</script>
     </div>
 
+    <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
     <div id="siteCalendarSlot"></div>
     <script>renderCalendarWidgets();</script>
 
     <script>
+        // 하위 폴더(chart/)에서 실행되므로 이미지/데이터 경로 앞에 ../ 를 붙여야 함
         var SITE_ROOT = '../';
     </script>
     <script src="../js/common.js"></script>

@@ -1,0 +1,74 @@
+function fcEscape(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+
+function fcRenderLyrics(text) {
+    return fcEscape(text)
+        .split('\n')
+        .map(line => line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'))
+        .join('<br>');
+}
+
+let fcActiveIndex = -1;
+
+function renderFcList() {
+    const wrap = document.getElementById('fcSongList');
+    if (!wrap || typeof FANCHANT_DATA === 'undefined') return;
+
+    const groups = {};
+    FANCHANT_DATA.forEach((s, i) => {
+        const key = s.album || '기타';
+        if (!groups[key]) groups[key] = [];
+        groups[key].push({ ...s, _index: i });
+    });
+
+    let html = '';
+    Object.keys(groups).forEach(album => {
+        html += `<div class="fc-album-group">
+            <div class="fc-album-title">${fcEscape(album)}</div>
+            <ul class="fc-song-items">`;
+        groups[album].forEach(s => {
+            html += `<li class="fc-song-item" data-index="${s._index}" onclick="showFcSong(${s._index})">${fcEscape(s.song)}</li>`;
+        });
+        html += `</ul></div>`;
+    });
+    wrap.innerHTML = html;
+}
+
+function showFcSong(index) {
+    const s = FANCHANT_DATA[index];
+    if (!s) return;
+    fcActiveIndex = index;
+
+    document.querySelectorAll('.fc-song-item').forEach(el => {
+        el.classList.toggle('active', Number(el.dataset.index) === index);
+    });
+
+    document.getElementById('fcEmpty').style.display = 'none';
+    document.getElementById('fcDetailBody').style.display = 'block';
+    document.getElementById('fcAlbum').textContent = s.album || '';
+    document.getElementById('fcSong').textContent = s.song || '';
+
+    const videoWrap = document.getElementById('fcVideoWrap');
+    if (s.vid) {
+        videoWrap.style.display = '';
+        videoWrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${s.vid}" title="${fcEscape(s.song)} 응원법" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    } else {
+        videoWrap.style.display = 'none';
+        videoWrap.innerHTML = '';
+    }
+
+    const photo = document.getElementById('fcPhoto');
+    if (s.image) { photo.src = s.image; photo.style.display = ''; photo.onerror = function () { this.style.display = 'none'; }; }
+    else { photo.style.display = 'none'; }
+
+    document.getElementById('fcLyrics').innerHTML = fcRenderLyrics(s.lyrics || '');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    try {
+        renderFcList();
+        if (typeof FANCHANT_DATA !== 'undefined' && FANCHANT_DATA.length) showFcSong(0);
+    } catch (e) { console.error('응원법 렌더링 실패:', e); }
+});

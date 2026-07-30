@@ -23,7 +23,10 @@
     <div id="mainWrapper" class="mem-page-wrapper">
         <div class="section-container member-page-container">
             <div class="section-header">
-                <div class="section-title">THE <span>MEMBERS</span></div>
+                <div class="section-title mem-page-title">
+                    <span class="mem-page-title-en" id="memberPageTitleEn"></span>
+                    <span class="mem-page-title-ko" id="memberPageTitleKo"></span>
+                </div>
             </div>
 
             <div class="mem-selector-row" id="memberSelectorRow"></div>
@@ -39,7 +42,9 @@
                             <span class="mem-name-ko" id="memberNameKo"></span>
                         </div>
                     </div>
+                </div>
 
+                <div class="mem-photo-col">
                     <div class="mem-info-card">
                         <p class="mem-intro" id="memberIntro"></p>
                         <div class="mem-info-grid">
@@ -50,9 +55,7 @@
                             <div class="mem-info-item"><span class="mem-info-label">HOBBY</span><span class="mem-info-val" id="memberHobby"></span></div>
                         </div>
                     </div>
-                </div>
 
-                <div class="mem-photo-col">
                     <div class="mem-era-label-row">PHOTO <span>ARCHIVE</span></div>
                     <div class="mem-era-rail" id="memberEraRow"></div>
                     <div class="mem-era-preview" id="memberEraPreviewBtn" onclick="openEraModal()">

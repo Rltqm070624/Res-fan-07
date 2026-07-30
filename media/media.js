@@ -12,13 +12,24 @@ const MEDIA_AD_BRAND_KEYWORDS = [
     '서든어택', '카사베르디', '엘리트', 'CU', '도미노피자', '나랑드', 'I-SHA', 'Wish I-GIRL',
     'WINDANDSEA', 'WIND AND SEA', '프리티스킨', '김씨네과일', 'KREAM', '티오더', 'FC모바일', 'FC 모바일'
 ];
+// 제목만으로는 브랜드가 안 드러나는 영상들 (예: "엘리트 룩북 촬영 현장 대공개" 처럼 브랜드명이 빠진 경우) — 영상 ID로 직접 매칭
+const MEDIA_AD_VID_BRAND_MAP = {
+    '_RQjePTZ6EQ': '엘리트',
+    '9i1cbplzxQM': '카사베르디',
+    'rxoGhCuz_4w': '카사베르디',
+    'hmF6PVJBhrc': '서든어택',
+    'Fwq84AVqJ9k': 'FC모바일',
+    'gaJlFzkZBNE': 'FC모바일'
+};
 function mediaGetContentBrand(item) {
+    if (item.vid && MEDIA_AD_VID_BRAND_MAP[item.vid]) return MEDIA_AD_VID_BRAND_MAP[item.vid];
     const title = item.title || '';
     const hit = MEDIA_AD_BRAND_KEYWORDS.find(kw => title.includes(kw));
     if (hit) return hit;
     return item.channel && item.channel !== '유튜브 채널' ? item.channel : '기타';
 }
 function mediaClassifyContentGroup(item) {
+    if (item.vid && MEDIA_AD_VID_BRAND_MAP[item.vid]) return '광고 · 콜라보';
     const title = item.title || '';
     return MEDIA_AD_BRAND_KEYWORDS.some(kw => title.includes(kw)) ? '광고 · 콜라보' : '외부 콘텐츠';
 }

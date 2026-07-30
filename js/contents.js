@@ -57,7 +57,6 @@ function renderLatestMedia() {
                 <div class="mc-title">${escapeHtml(latest.title)}</div>
                 <div class="mc-sub">${latest.sub ? escapeHtml(latest.sub) + ' · ' : ''}${latest.date}</div>
             </div>
-            <a class="media-cat-more" href="media/media.html?tag=${cat.key}">더보기 →</a>
         </div>`;
     });
 

@@ -271,18 +271,23 @@ html[data-theme="light"] .honors-history-modal { background: #FFFFFF; }
 .honors-history-head-title { font-family: var(--font-head); font-size: 23px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; margin-bottom: 24px; }
 .honors-history-modal .popup-close-btn { top: 28px; right: 28px; }
 
-/* 탭 바 */
-.honors-tabbar { display: flex; gap: 30px; border-bottom: 1px solid var(--border-light); flex-wrap: wrap; }
+/* 탭 바 — 알약형 세그먼트 컨트롤로 리디자인 (올드한 밑줄 탭 대신) */
+.honors-tabbar {
+    display: inline-flex; gap: 4px; flex-wrap: wrap;
+    background: var(--bg-surface-hover); border: 1px solid var(--border-light);
+    border-radius: 999px; padding: 5px; margin-bottom: 8px;
+}
 .honors-tab {
     appearance: none; background: transparent; border: none; cursor: pointer;
-    font-family: var(--font-head); font-size: 13px; font-weight: 600; letter-spacing: 0.1px;
-    color: var(--text-muted); padding: 0 0 15px; margin-bottom: -1px;
-    border-bottom: 1.5px solid transparent; transition: color 0.25s ease, border-color 0.25s ease;
+    font-family: var(--font-head); font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em;
+    color: var(--text-muted); padding: 9px 20px; border-radius: 999px;
+    transition: color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
 .honors-tab:hover { color: var(--text-secondary); }
-.honors-tab.active { color: var(--text-primary); font-weight: 700; border-bottom-color: var(--text-primary); }
+.honors-tab.active { color: var(--text-primary); font-weight: 700; background: var(--bg-base); box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
+html[data-theme="light"] .honors-tab.active { background: #ffffff; }
 
-.honors-history-body { flex: 1; min-height: 0; overflow-y: auto; padding: 8px 44px 40px; box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
+.honors-history-body { flex: 1; min-height: 0; overflow-y: auto; padding: 26px 44px 40px; box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
 .honors-history-body::-webkit-scrollbar { width: 6px; }
 .honors-history-body::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
 
@@ -351,44 +356,59 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22)
 .cum-wins { flex: 0 0 46px; text-align: right; font-family: var(--font-num); font-size: 16px; font-weight: 700; color: var(--text-primary); }
 .cum-wins em { font-style: normal; font-size: 11px; color: var(--text-muted); margin-left: 2px; font-weight: 500; }
 
-/* 광고·콜라보 등 — 줄 간격을 넉넉히 띄우고, 배경 대신 텍스트 톤 변화로만 hover 표시 */
-.ad-row-list { display: flex; flex-direction: column; }
-.ad-row { display: flex; align-items: baseline; gap: 20px; padding: 15px 0; border-top: 1px solid var(--border-light); transition: opacity 0.2s ease; }
-.ad-row:first-child { border-top: none; padding-top: 4px; }
-.ad-row:hover { opacity: 0.7; }
-.ad-row-date { flex: 0 0 76px; font-family: var(--font-num); font-size: 12px; font-weight: 600; color: var(--text-muted); }
-.ad-row-main { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.ad-row-title { font-family: var(--font-body); font-size: 14.5px; font-weight: 700; color: var(--text-primary); }
-.ad-row-note { font-family: var(--font-body); font-size: 12.5px; color: var(--text-muted); }
+/* 광고 히스토리 상단 — 가로로 쫙 펼쳐지는 배너 이미지 (images/ad/ber.png) */
+.ads-banner { width: 100%; border-radius: 16px; overflow: hidden; margin: 2px 0 30px; background: var(--bg-surface-hover); border: 1px solid var(--border-light); line-height: 0; }
+.ads-banner img { display: block; width: 100%; height: auto; max-height: 180px; object-fit: cover; }
 
-/* 괄호로 뭉쳐 있던 카테고리/기간 표기를 별도 배지로 분리 */
-.ad-row-tag {
-    font-family: var(--font-num); font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
-    color: var(--c-accent); background: var(--c-accent-glow);
-    padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+/* 광고·콜라보·화보·홍보대사 — 가운데 세로선을 기준으로 좌우 번갈아 배치되는 연대기형 타임라인 (4개 탭 공통) */
+.ad-timeline { position: relative; list-style: none; margin: 4px 0 0; padding: 8px 0 4px; }
+.ad-timeline::before {
+    content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--border-highlight) 6%, var(--border-highlight) 94%, transparent);
+    transform: translateX(-50%);
 }
-.ad-row-period {
-    font-family: var(--font-num); font-size: 10.5px; font-weight: 600; letter-spacing: 0.02em;
-    color: var(--text-muted); border: 1px solid var(--border-highlight);
-    padding: 2.5px 9px; border-radius: 999px; white-space: nowrap;
+.ad-tl-item { position: relative; width: 100%; display: flex; margin-bottom: 30px; }
+.ad-tl-item:last-child { margin-bottom: 4px; }
+.ad-tl-node {
+    position: absolute; left: 50%; top: 8px; width: 11px; height: 11px; border-radius: 50%;
+    background: var(--bg-base); border: 2.5px solid var(--c-accent); transform: translateX(-50%); z-index: 2;
+    box-shadow: 0 0 0 4px var(--bg-base);
 }
+.ad-tl-card {
+    width: calc(50% - 34px); box-sizing: border-box;
+    background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 16px;
+    padding: 16px 20px; transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.ad-tl-item:hover .ad-tl-card { border-color: var(--border-highlight); transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.12); }
+.ad-tl-item.side-left { justify-content: flex-start; }
+.ad-tl-item.side-right { justify-content: flex-end; }
+.ad-tl-date { font-family: var(--font-num); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--c-accent); margin-bottom: 6px; display: block; }
+.ad-tl-title { font-family: var(--font-body); font-size: 14.5px; font-weight: 700; color: var(--text-primary); line-height: 1.4; }
+.ad-tl-tag { display: inline-block; margin-left: 6px; font-family: var(--font-num); font-size: 10px; font-weight: 700; color: var(--c-accent); background: var(--c-accent-glow); padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
+.ad-tl-note { margin-top: 6px; font-family: var(--font-body); font-size: 12.5px; color: var(--text-muted); }
+.ad-tl-period { display: inline-block; margin-top: 8px; font-family: var(--font-num); font-size: 10.5px; font-weight: 600; color: var(--text-muted); border: 1px solid var(--border-highlight); padding: 2.5px 10px; border-radius: 999px; }
 
 @media (max-width: 700px) {
     .honors-history-modal { width: 95%; height: 90vh; }
     .honors-history-head { padding: 26px 56px 0 22px; }
     .honors-history-head-title { font-size: 18px; margin-bottom: 16px; }
-    .honors-tabbar { gap: 18px; overflow-x: auto; }
-    .honors-tab { font-size: 12.5px; white-space: nowrap; }
-    .honors-history-body { padding: 8px 20px 32px; }
+    .honors-tabbar { gap: 3px; overflow-x: auto; max-width: 100%; }
+    .honors-tab { font-size: 12px; white-space: nowrap; padding: 8px 14px; }
+    .honors-history-body { padding: 20px 20px 32px; }
     .cum-program { flex-basis: 92px; font-size: 12px; }
     .cum-logo-wrap { flex-basis: 60px; }
-    .ad-row { flex-wrap: wrap; gap: 4px 12px; }
-    .ad-row-date { flex-basis: 100%; }
     .honors-panel-top { margin: 20px 0 2px; }
     .honors-timeline li { padding: 16px 4px; }
     .honors-timeline li:hover { margin: 0; padding-left: 4px; padding-right: 4px; }
     .ht-date { margin-left: 0; flex-basis: 100%; order: 5; }
     .ht-song-inline { font-size: 15px; }
+
+    /* 좁은 화면에서는 타임라인을 왼쪽 정렬 단일 컬럼으로 축소 */
+    .ads-banner img { max-height: 110px; }
+    .ad-timeline::before { left: 14px; }
+    .ad-tl-node { left: 14px; }
+    .ad-tl-item, .ad-tl-item.side-left, .ad-tl-item.side-right { justify-content: flex-start; padding-left: 34px; }
+    .ad-tl-card { width: 100%; }
 }
 
 /* =========================================

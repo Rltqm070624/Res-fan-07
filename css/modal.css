@@ -379,6 +379,10 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22)
     background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 16px;
     padding: 16px 20px; transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
+.ad-tl-card.has-thumb { display: flex; align-items: center; gap: 14px; padding: 12px 16px; }
+.ad-tl-thumb { flex: 0 0 52px; width: 52px; height: 52px; border-radius: 10px; overflow: hidden; background: var(--bg-surface-hover); border: 1px solid var(--border-light); }
+.ad-tl-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ad-tl-body { min-width: 0; flex: 1; }
 .ad-tl-item:hover .ad-tl-card { border-color: var(--border-highlight); transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.12); }
 .ad-tl-item.side-left { justify-content: flex-start; }
 .ad-tl-item.side-right { justify-content: flex-end; }

@@ -28,7 +28,6 @@ function splitTrailingParen(str) {
     if (m) return { main: m[1].trim(), tag: m[2].trim() };
     return { main: str.trim(), tag: null };
 }
-
 function isPeriodLike(str) {
     return /^~?\d{4}[.\-]\d{2}([.\-]\d{2})?/.test((str || '').trim());
 }

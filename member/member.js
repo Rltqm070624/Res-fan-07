@@ -1,3 +1,5 @@
+let memberActiveKey = 'woni';
+let memberActiveEra = null; /* 카드 홀더는 기본적으로 빈 상태 — 클릭해서 골라야 채워짐 */
 
 function renderMemberSelector() {
     const row = document.getElementById('memberSelectorRow');

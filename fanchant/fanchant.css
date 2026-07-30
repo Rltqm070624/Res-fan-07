@@ -1,0 +1,26 @@
+/* ⭐️ 응원법(FANCHANT) 페이지 */
+.fc-layout { display: grid; grid-template-columns: 260px 1fr; gap: 32px; align-items: start; margin-top: 24px; }
+@media (max-width: 800px) { .fc-layout { grid-template-columns: 1fr; } }
+
+.fc-song-list { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 18px; padding: 10px; max-height: 70vh; overflow-y: auto; }
+.fc-album-group { margin-bottom: 14px; }
+.fc-album-title { font-family: var(--font-head); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: var(--text-muted); padding: 10px 12px 6px; text-transform: uppercase; }
+.fc-song-items { list-style: none; margin: 0; padding: 0; }
+.fc-song-item { padding: 10px 14px; border-radius: 10px; font-family: var(--font-body); font-size: 14px; color: var(--text-secondary); cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+.fc-song-item:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
+.fc-song-item.active { background: var(--c-accent-glow); color: var(--c-accent); font-weight: 700; }
+
+.fc-detail { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 20px; padding: 32px; min-height: 400px; }
+.fc-empty { display: flex; align-items: center; justify-content: center; height: 300px; color: var(--text-muted); font-family: var(--font-head); font-size: 14px; }
+
+.fc-detail-head { margin-bottom: 18px; }
+.fc-detail-album { font-family: var(--font-num); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--c-accent); text-transform: uppercase; }
+.fc-detail-song { margin: 4px 0 0; font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.3px; }
+
+.fc-video-wrap { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; background: #000; margin-bottom: 18px; }
+.fc-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.fc-photo { display: block; max-width: 260px; width: 100%; height: auto; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-light); }
+
+.fc-lyrics { font-family: var(--font-body); font-size: 15px; line-height: 1.85; color: var(--text-secondary); white-space: normal; }
+.fc-lyrics strong { color: var(--c-accent); font-weight: 800; }

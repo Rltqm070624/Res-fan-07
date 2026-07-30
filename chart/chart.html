@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESCENE ARCHIVE | MUSIC CHARTS</title>
-    <meta name="description" content="RESCENE(리센느) 실시간 음원 차트 — 멜론·벅스·지니·플로·바이브 실시간 순위를 한눈에.">
+    <meta name="description" content="RESCENE(리센느) 실시간 음원 차트">
     <link rel="icon" type="image/png" href="../images/logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/index.css">
@@ -28,16 +28,17 @@
     <script>renderSiteNav('charts', '../', { calendar: true, lang: true });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
-        <div class="section-container reveal active" style="flex:1; max-width: 720px; margin: 0 auto; width: 100%;">
-            <div class="section-header center-header section-header-md">
+        <div class="section-container reveal active" style="flex:1;">
+            <div class="section-header">
                 <div class="section-title">MUSIC <span>CHARTS</span></div>
+                <div class="chart-updated" id="currentTime">Loading..</div>
             </div>
             <div class="chart-wrap">
-                <div class="update-time chart-update-time" id="currentTime">데이터 로딩중...</div>
-                <div class="ticker-container">
-                    <div class="ticker-wrapper" id="tickerWrapper">
-                        <div class="ticker-item skeleton"></div>
-                    </div>
+                <div class="chart-platform-legend" id="chartLegend"></div>
+                <div class="chart-list" id="chartList">
+                    <div class="chart-skel-card"></div>
+                    <div class="chart-skel-card"></div>
+                    <div class="chart-skel-card"></div>
                 </div>
             </div>
         </div>
@@ -46,12 +47,10 @@
         <script>renderSiteFooter('../');</script>
     </div>
 
-    <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
     <div id="siteCalendarSlot"></div>
     <script>renderCalendarWidgets();</script>
 
     <script>
-        // 하위 폴더(chart/)에서 실행되므로 이미지/데이터 경로 앞에 ../ 를 붙여야 함
         var SITE_ROOT = '../';
     </script>
     <script src="../js/common.js"></script>

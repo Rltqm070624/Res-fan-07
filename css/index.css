@@ -209,19 +209,12 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 .honors-list .h-info { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
 
 /* 앨범 커버/유형 썸네일 — 텍스트만 나열되던 리스트에 실제 이미지를 붙여 '게시판' 느낌을 덜어냄 */
-.h-thumb-wrap { width: 42px; height: 42px; border-radius: 11px; overflow: hidden; flex-shrink: 0; background: var(--bg-surface-hover); display: flex; align-items: center; justify-content: center; }
+.h-thumb-wrap { width: 42px; height: 42px; border-radius: 11px; overflow: hidden; flex-shrink: 0; background: transparent; display: flex; align-items: center; justify-content: center; }
 .h-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
 .h-thumb-wrap .honors-logo { max-width: 30px; max-height: 20px; }
-.h-type-chip {
-    flex-shrink: 0; font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
-    border: 1px solid; padding: 5px 11px; border-radius: 6px; white-space: nowrap; background: transparent;
-}
+.h-type-tile { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 15px; font-weight: 800; color: #fff; }
 
-.honors-list .h-name { font-family: var(--font-body); font-size: 14.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; display: flex; align-items: center; }
-.h-name-program { overflow: hidden; text-overflow: ellipsis; }
-.h-name-sep { color: var(--border-highlight); margin: 0 10px; font-weight: 400; flex-shrink: 0; }
-.h-song-thumb { width: 20px; height: 20px; border-radius: 5px; object-fit: cover; flex-shrink: 0; margin-right: 6px; }
-.h-name-song { overflow: hidden; text-overflow: ellipsis; }
+.honors-list .h-name { font-family: var(--font-body); font-size: 14.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
 .honors-list .h-badge {
     display: inline-flex; align-items: center; font-family: var(--font-num); font-size: 10px; font-weight: 700;
     color: var(--text-secondary); background: transparent; border: 1px solid var(--border-highlight);

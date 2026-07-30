@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESCENE ARCHIVE | 응원법</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/i18n.css">
+    <link rel="stylesheet" href="fanchant.css">
+
+    <script src="../js/theme-init.js"></script>
+</head>
+<body>
+    <div id="siteNavSlot"></div>
+    <script src="../js/layout.js"></script>
+    <script>renderSiteNav('fanchant', '../', { calendar: true, lang: true });</script>
+
+    <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
+        <div class="section-container" style="flex: 1;">
+            <div class="section-header">
+                <div class="section-title">FAN<span>CHANT</span></div>
+                <div style="font-size:12px; color:var(--text-muted);">굵게 표시된 부분을 다같이 외쳐주세요 🎤</div>
+            </div>
+
+            <div class="fc-layout">
+                <div class="fc-song-list" id="fcSongList"></div>
+                <div class="fc-detail" id="fcDetail">
+                    <div class="fc-empty" id="fcEmpty">왼쪽에서 곡을 선택해주세요</div>
+                    <div class="fc-detail-body" id="fcDetailBody" style="display:none;">
+                        <div class="fc-detail-head">
+                            <span class="fc-detail-album" id="fcAlbum"></span>
+                            <h2 class="fc-detail-song" id="fcSong"></h2>
+                        </div>
+                        <div class="fc-video-wrap" id="fcVideoWrap"></div>
+                        <img class="fc-photo" id="fcPhoto" alt="응원법 사진" style="display:none;">
+                        <div class="fc-lyrics" id="fcLyrics"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="siteFooterSlot"></div>
+        <script>renderSiteFooter('../');</script>
+    </div>
+
+    <script>var SITE_ROOT = '../';</script>
+    <script src="../js/i18n.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="fanchant_data.js"></script>
+    <script src="fanchant.js"></script>
+
+    <div id="siteCalendarSlot"></div>
+    <script>renderCalendarWidgets();</script>
+</body>
+</html>

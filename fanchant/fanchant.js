@@ -2,7 +2,6 @@ function fcEscape(str) {
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-
 function fcRenderLyrics(text) {
     return fcEscape(text)
         .split('\n')
@@ -15,6 +14,14 @@ let fcActiveIndex = -1;
 function renderFcList() {
     const wrap = document.getElementById('fcSongList');
     if (!wrap || typeof FANCHANT_DATA === 'undefined') return;
+
+    if (!FANCHANT_DATA.length) {
+        wrap.innerHTML = `<div class="fc-empty-list">
+            <div class="ico">🎤</div>
+            <p>아직 등록된 응원법이 없어요.<br>준비되는 대로 곡별 응원법을 채워넣을 예정이에요!</p>
+        </div>`;
+        return;
+    }
 
     const groups = {};
     FANCHANT_DATA.forEach((s, i) => {

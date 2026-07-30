@@ -18,6 +18,23 @@ function findAlbumCover(songName) {
 }
 
 const AD_TYPE_COLOR = { '홍보대사': '#9AA6FF', '화보': '#ec407a', '콜라보': '#26c6da', '광고': '#66bb6a' };
+
+/* 패널 상단의 장황한 문구("○○ 히스토리 (총 N건)") 대신 쓰는 절제된 스탯 배지 */
+function panelStat(value, label) {
+    return `<div class="honors-panel-top"><span class="honors-stat-pill"><span class="stat-num">${value}</span><span class="stat-label">${label}</span></span></div>`;
+}
+
+/* 문자열 끝의 괄호를 분리해 배지로 쓰기 위한 파서 — "타이틀 (카테고리)" -> { main, tag } */
+function splitTrailingParen(str) {
+    if (!str) return { main: '', tag: null };
+    const m = str.trim().match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+    if (m) return { main: m[1].trim(), tag: m[2].trim() };
+    return { main: str.trim(), tag: null };
+}
+/* "~2028.05.21" / "2025.12.31" 같은 기간/기한 표기인지 판별 */
+function isPeriodLike(str) {
+    return /^~?\d{4}[.\-]\d{2}([.\-]\d{2})?/.test((str || '').trim());
+}
 function bindHonorsTabs(root) {
     const tabs = root.querySelectorAll('.honors-tab');
     const panels = root.querySelectorAll('.honors-tab-panel');
@@ -36,14 +53,12 @@ function renderHonorsPreview() {
     const list = document.getElementById('awardsPreviewList');
     if (list) {
         list.innerHTML = MUSIC_SHOW_WINS.slice(-3).reverse().map((w, i) => {
-            const cover = findAlbumCover(w.song);
-            const songThumb = cover ? `<img src="images/${cover}" alt="" class="h-song-thumb" onerror="this.remove()">` : '';
             return `
             <li>
                 <span class="h-rank">0${i + 1}</span>
-                <div class="h-thumb-wrap">${logoImg(w.logo, 26)}</div>
+                <div class="h-thumb-wrap">${logoImg(w.logo, 28)}</div>
                 <div class="h-info">
-                    <span class="h-name"><span class="h-name-program">${w.program}</span><span class="h-name-sep">|</span>${songThumb}<span class="h-name-song">${w.song}</span></span>
+                    <span class="h-name">${w.program} · ${w.song}</span>
                     <span class="h-badge">${w.notes[0].split(' (')[0]}</span>
                 </div>
                 <span class="h-date">${w.date}</span>
@@ -57,7 +72,7 @@ function renderHonorsPreview() {
         adsWrap.innerHTML = latestAds.map((a, i) => `
             <li>
                 <span class="h-rank">0${i + 1}</span>
-                <span class="h-type-chip" style="color:${AD_TYPE_COLOR[a.type]}; border-color:${AD_TYPE_COLOR[a.type]}66;">${a.type}</span>
+                <div class="h-thumb-wrap"><span class="h-type-tile" style="background:${AD_TYPE_COLOR[a.type]};">${a.type.charAt(0)}</span></div>
                 <div class="h-info">
                     <span class="h-name">${a.title}</span>
                     ${a.note ? `<span class="h-note">${a.note.split(' (')[0]}</span>` : ''}
@@ -79,7 +94,7 @@ function openAwardsHistoryModal() {
         </div>
         <div class="honors-tab-panels">
             <div class="honors-tab-panel active" data-panel="cum">
-                <p class="honors-panel-subtitle">음악방송별 누적 1위 횟수</p>
+                ${panelStat(MUSIC_SHOW_CUMULATIVE.reduce((s, c) => s + c.wins, 0), '누적 1위')}
                 <div class="honors-cum-list">`;
         const maxWins = Math.max(1, ...MUSIC_SHOW_CUMULATIVE.map(c => c.wins));
         MUSIC_SHOW_CUMULATIVE.slice().sort((a, b) => b.wins - a.wins).forEach((c, i) => {
@@ -94,14 +109,20 @@ function openAwardsHistoryModal() {
         html += `</div>
             </div>
             <div class="honors-tab-panel" data-panel="dated">
-                <p class="honors-panel-subtitle">날짜별 1위 히스토리 (총 3관왕)</p>
-                <ul class="honors-timeline">`;
+                ${panelStat(MUSIC_SHOW_WINS.length, '관왕')}
+                <ul class="honors-timeline honors-timeline-song">`;
         MUSIC_SHOW_WINS.slice().reverse().forEach((w, i) => {
             html += `<li>
                 <span class="ht-index">${String(i + 1).padStart(2, '0')}</span>
                 <div class="ht-body">
-                    <div class="ht-head">${logoImg(w.logo, 24)}<span class="ht-program">${w.program}</span><span class="h-tag">${w.crown}</span><span class="ht-date">${w.date}</span></div>
-                    <div class="ht-song">${w.song}</div>
+                    <div class="ht-head">
+                        <span class="ht-logo-wrap">${logoImg(w.logo, 22)}</span>
+                        <span class="ht-program">${w.program}</span>
+                        <span class="ht-divider">|</span>
+                        <span class="ht-song-inline">${w.song}</span>
+                        <span class="h-tag">${w.crown}</span>
+                        <span class="ht-date">${w.date}</span>
+                    </div>
                     <ul class="ht-notes">${w.notes.map(n => `<li>${n}</li>`).join('')}</ul>
                 </div>
             </li>`;
@@ -109,7 +130,7 @@ function openAwardsHistoryModal() {
         html += `</ul>
             </div>
             <div class="honors-tab-panel" data-panel="ceremony">
-                <p class="honors-panel-subtitle">시상식 수상 내역</p>
+                ${panelStat(CEREMONY_AWARDS.length, '수상')}
                 <ul class="honors-timeline">`;
         CEREMONY_AWARDS.slice().reverse().forEach((c, i) => {
             html += `<li>
@@ -144,14 +165,28 @@ function openAdsHistoryModal() {
         categories.forEach((cat, i) => {
             const items = AD_TIMELINE.filter(a => a.type === cat).slice().sort((a, b) => b.date.localeCompare(a.date));
             html += `<div class="honors-tab-panel${i === 0 ? ' active' : ''}" data-panel="cat${i}">
-                <p class="honors-panel-subtitle">${cat} 히스토리 (총 ${items.length}건)</p>
+                ${panelStat(items.length, '건')}
                 <div class="ad-row-list">`;
             items.forEach(a => {
+                const titleParts = splitTrailingParen(a.title);
+                const noteParts = splitTrailingParen(a.note);
+                let notePart = '';
+                let periodPart = '';
+                if (noteParts.tag) {
+                    notePart = noteParts.main;
+                    periodPart = noteParts.tag;
+                } else if (isPeriodLike(noteParts.main)) {
+                    periodPart = noteParts.main;
+                } else {
+                    notePart = noteParts.main;
+                }
                 html += `<div class="ad-row">
                     <span class="ad-row-date">${fmtDate(a.date)}</span>
                     <span class="ad-row-main">
-                        <span class="ad-row-title">${a.title}</span>
-                        ${a.note ? `<span class="ad-row-note">${a.note}</span>` : ''}
+                        <span class="ad-row-title">${titleParts.main}</span>
+                        ${titleParts.tag ? `<span class="ad-row-tag">${titleParts.tag}</span>` : ''}
+                        ${notePart ? `<span class="ad-row-note">${notePart}</span>` : ''}
+                        ${periodPart ? `<span class="ad-row-period">${periodPart}</span>` : ''}
                     </span>
                 </div>`;
             });

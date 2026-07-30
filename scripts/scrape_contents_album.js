@@ -56,8 +56,8 @@ async function run() {
     // ⭐️ 기존에 수동으로 넣어둔 항목은 절대 건드리지 않고, "새로 발견된 것만" 뒤에 추가
     const albumResult = mergeAppendOnlyNew('js/album_content_data.js', 'ALBUM_CONTENT_DATA', album, r => r.vid);
     const contentsResult = mergeAppendOnlyNew('js/contents_data.js', 'CONTENTS_DATA', contents, r => r.vid);
-    console.log(`[scrape_contents_album] ALBUM_CONTENT_DATA: 새 항목 ${albumResult.added}건 추가 (총 ${albumResult.total}건)`);
-    console.log(`[scrape_contents_album] CONTENTS_DATA: 새 항목 ${contentsResult.added}건 추가 (총 ${contentsResult.total}건)`);
+    console.log(`[scrape_contents_album] ALBUM_CONTENT_DATA: ${albumResult.mode === 'full_resync' ? '전체 재동기화' : `새 항목 ${albumResult.added}건 추가`} (총 ${albumResult.total}건)`);
+    console.log(`[scrape_contents_album] CONTENTS_DATA: ${contentsResult.mode === 'full_resync' ? '전체 재동기화' : `새 항목 ${contentsResult.added}건 추가`} (총 ${contentsResult.total}건)`);
 }
 
 run().catch(e => { console.error('[scrape_contents_album] 실패:', e); process.exit(1); });

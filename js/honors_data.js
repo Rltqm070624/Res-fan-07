@@ -27,7 +27,7 @@ const MUSIC_SHOW_WINS = [
       notes: ['데뷔 첫 1위 (데뷔 841일 / 2년 3개월 19일 만)', '케이블 음악방송 첫 1위', '더 쇼 첫 1위'] },
     { date: '2026-07-25', logo: 'umc', program: '쇼! 음악중심', song: 'Pretty Girl', crown: '2관왕',
       notes: ['데뷔 첫 지상파 음악방송 1위 (데뷔 852일 / 2년 4개월 만)', '쇼! 음악중심 첫 1위'] },
-    { date: '2026-07-26', logo: 'sbs', program: 'SBS 인기가요', song: 'LOVE ATTACK', crown: '1관왕',
+    { date: '2026-07-26', logo: 'sbs', program: '인기가요', song: 'LOVE ATTACK', crown: '1관왕',
       notes: ['SBS 인기가요 첫 1위 (발매 699일 / 1년 11개월 만)'] }
 ];
 
@@ -38,7 +38,7 @@ const MUSIC_SHOW_CUMULATIVE = [
     { logo: 'mcount', program: '엠 카운트다운', wins: 0 },
     { logo: 'musicbank', program: '뮤직뱅크', wins: 0 },
     { logo: 'umc', program: '쇼! 음악중심', wins: 1 },
-    { logo: 'sbs', program: 'SBS 인기가요', wins: 1 }
+    { logo: 'sbs', program: '인기가요', wins: 1 }
 ];
 
 // 시상식

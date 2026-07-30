@@ -19,7 +19,7 @@
 .mem-chip.active .mem-chip-name { color: var(--mem-color, var(--c-accent)); }
 
 /* 전체 레이아웃 — 좌 50% 프로필 / 우 50% 포토 아카이브, 좌측 정렬(중앙정렬 X), 양쪽 높이 맞춤 */
-.mem-detail-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: stretch; width: 100%; max-width: none; margin: 0; animation: memberFadeIn 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+.mem-detail-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: stretch; width: 100%; max-width: 1080px; margin: 0; animation: memberFadeIn 0.6s cubic-bezier(0.16,1,0.3,1) both; }
 @keyframes memberFadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .mem-main-col { min-width: 0; display: flex; flex-direction: column; }
 .mem-photo-col { min-width: 0; display: flex; flex-direction: column; }

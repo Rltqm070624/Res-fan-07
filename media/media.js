@@ -26,7 +26,9 @@ function mediaGetContentBrand(item) {
     const title = item.title || '';
     const hit = MEDIA_AD_BRAND_KEYWORDS.find(kw => title.includes(kw));
     if (hit) return hit;
-    return item.channel && item.channel !== '유튜브 채널' ? item.channel : '기타';
+    // ⚠️ contents.js의 MEDIA_CATEGORIES.getItems()에서 채널명을 item.channel이 아니라 item.sub로 매핑함
+    const channel = item.sub || item.channel;
+    return channel && channel !== '유튜브 채널' ? channel : '기타';
 }
 function mediaClassifyContentGroup(item) {
     if (item.vid && MEDIA_AD_VID_BRAND_MAP[item.vid]) return '광고 · 콜라보';

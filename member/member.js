@@ -3,14 +3,13 @@
    - MEMBER_DATA / MEMBER_ERAS 는 js/member_data.js 에 정의됨
    ========================================================================== */
 let memberActiveKey = 'woni';
-let memberActiveEra = 'prettygirl';
+let memberActiveEra = null; /* 카드 홀더는 기본적으로 빈 상태 — 클릭해서 골라야 채워짐 */
 
 function renderMemberSelector() {
     const row = document.getElementById('memberSelectorRow');
     if (!row) return;
     row.innerHTML = MEMBER_DATA.map(m => `
         <button type="button" class="mem-chip${m.key === memberActiveKey ? ' active' : ''}" style="--mem-color:${m.color};" onclick="setActiveMember('${m.key}')">
-            <span class="mem-chip-photo"><img src="../images/profile/${m.key}/debut.webp" alt="${m.nameKo}" loading="lazy" onerror="this.style.display='none'"></span>
             <span class="mem-chip-name">${m.nameKo}</span>
         </button>`).join('');
 }
@@ -18,7 +17,7 @@ function renderMemberSelector() {
 function setActiveMember(key) {
     if (key === memberActiveKey) return;
     memberActiveKey = key;
-    memberActiveEra = 'prettygirl';
+    memberActiveEra = null;
     renderMemberSelector();
     renderMemberDetail();
 }
@@ -35,8 +34,6 @@ function renderMemberDetail() {
     const signImg = document.getElementById('memberSign');
     if (signImg) { signImg.src = `../images/profile/${m.key}/sign.svg`; signImg.style.display = ''; signImg.onerror = function () { this.style.display = 'none'; }; }
 
-    document.getElementById('memberNameKo').textContent = m.nameKo;
-    document.getElementById('memberNameEn').textContent = m.nameEn;
     document.getElementById('memberPageTitleKo').textContent = m.nameKo;
     document.getElementById('memberPageTitleEn').textContent = m.nameEn;
     document.getElementById('memberIntro').textContent = m.intro;
@@ -63,8 +60,20 @@ function renderMemberDetail() {
 
 function updateEraPreview() {
     const m = MEMBER_DATA.find(x => x.key === memberActiveKey);
-    const era = MEMBER_ERAS.find(x => x.key === memberActiveEra);
-    if (!m || !era) return;
+    const emptyState = document.getElementById('memberCardEmpty');
+    const slotState = document.getElementById('memberCardSlot');
+    const era = memberActiveEra ? MEMBER_ERAS.find(x => x.key === memberActiveEra) : null;
+
+    /* 카드를 아직 고르지 않았으면 홀더를 빈 상태로 유지 (기본값) */
+    if (!m || !era) {
+        if (emptyState) emptyState.style.display = 'flex';
+        if (slotState) slotState.style.display = 'none';
+        return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+    if (slotState) slotState.style.display = 'flex';
+
     const previewImg = document.getElementById('memberEraPreviewImg');
     const previewLabel = document.getElementById('memberEraPreviewLabel');
     if (previewImg) {
@@ -83,6 +92,7 @@ function setActiveEra(eraKey) {
 }
 
 function openEraModal() {
+    if (!memberActiveEra) return; /* 빈 홀더 상태에서는 확대할 이미지가 없음 */
     const previewImg = document.getElementById('memberEraPreviewImg');
     const previewLabel = document.getElementById('memberEraPreviewLabel');
     const modalImg = document.getElementById('memEraModalImg');

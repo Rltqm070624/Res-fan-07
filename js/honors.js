@@ -36,6 +36,8 @@ function renderHonorsPreview() {
 }
 
 function openAwardsHistoryModal() {
+    const title = document.getElementById('honorsHistoryTitle');
+    if (title) title.textContent = '음악방송 1위 히스토리';
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
         let html = '<div class="honors-modal-block"><h4>날짜별 1위 히스토리 (총 3관왕)</h4><ul class="honors-timeline">';
@@ -75,6 +77,8 @@ function openAwardsHistoryModal() {
 }
 
 function openAdsHistoryModal() {
+    const title = document.getElementById('honorsHistoryTitle');
+    if (title) title.textContent = '광고 · 콜라보 · 화보 히스토리';
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
         const typeColor = { '홍보대사': '#9AA6FF', '화보': '#ec407a', '콜라보': '#26c6da', '광고': '#66bb6a' };

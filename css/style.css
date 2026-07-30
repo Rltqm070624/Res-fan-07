@@ -1,9 +1,7 @@
 @charset "UTF-8";
 
-/* ⭐️ 전역 리셋 — width/padding 계산 꼬임으로 인한 가로 스크롤/레이아웃 깨짐 방지 */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* ⭐️ 전역 스크롤바 — 다크모드에서 브라우저 기본(밝은) 스크롤바가 튀어보이는 문제 방지 */
 html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.22) transparent; color-scheme: dark; }
 html[data-theme="light"] { scrollbar-color: rgba(0,0,0,0.22) transparent; color-scheme: light; }
 ::-webkit-scrollbar { width: 9px; height: 9px; }
@@ -186,9 +184,6 @@ html[data-theme="light"] .lang-btn.active { background: #18181b; color: #ffffff;
     .global-footer { padding: 18px 20px; }
 }
 
-/* ==========================================================================
-   ⭐️ 루트 주소 접속 시에만 보이는 웰컴 스플래시 (index.html 명시 접속 시엔 안 뜸)
-   ========================================================================== */
 .landing-splash { display: none; }
 html.show-landing { overflow: hidden; height: 100%; }
 html.show-landing body { overflow: hidden; height: 100%; }

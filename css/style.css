@@ -82,10 +82,11 @@ body {
 }
 html[data-theme="light"] .top-nav { background: rgba(250, 250, 251, 0.68); }
 
-.nav-left { min-width: 0; }
+.nav-left { min-width: 0; grid-column: 1; }
 
 .desktop-menu {
     list-style: none; margin: 0; padding: 0; display: flex; gap: 36px; align-items: center;
+    grid-column: 2;
 }
 .desktop-menu a {
     color: var(--text-secondary); text-decoration: none;
@@ -97,7 +98,7 @@ html[data-theme="light"] .top-nav { background: rgba(250, 250, 251, 0.68); }
     content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--c-accent);
 }
 
-.nav-right { display: flex; align-items: center; justify-content: flex-end; gap: 18px; }
+.nav-right { display: flex; align-items: center; justify-content: flex-end; gap: 18px; grid-column: 3; }
 .nav-divider { width: 1px; height: 16px; background: var(--border-highlight); display: inline-block; }
 
 .theme-toggle-btn, .cal-icon-btn {

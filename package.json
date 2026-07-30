@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "melona": "^1.0.0"
+    "melona": "^1.0.0",
+    "cheerio": "^1.0.0"
   }
 }

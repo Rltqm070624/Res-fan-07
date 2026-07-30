@@ -11,6 +11,7 @@ function renderSiteNav(activeKey, root, opts) {
           href: isHome ? 'javascript:void(0)' : root + 'index.html#todayScheduleSection',
           onclick: isHome ? "scrollToSection('todayScheduleSection')" : '' },
         { key: 'goods', label: 'GOODS', href: root + 'goods/goods.html' },
+        { key: 'fanchant', label: '응원법', href: root + 'fanchant/fanchant.html' },
         { key: 'media', label: '영상 모음', href: root + 'media/media.html' },
     ];
 
@@ -24,12 +25,19 @@ function renderSiteNav(activeKey, root, opts) {
     const desktopLinks = NAV_LINKS.map(l => linkHtml(l)).join('');
     const mobileLinks = NAV_LINKS.map(l => linkHtml(l)).join('');
 
+    const LANG_OPTIONS = [
+        { code: 'ko', label: 'KOR', full: '한국어' },
+        { code: 'en', label: 'ENG', full: 'English' },
+        { code: 'ja', label: '日本語', full: '日本語' }
+    ];
+
     const langSwitcherHtml = opts.lang ? `
-            <div class="desktop-only-utils util-reset">
-                <div class="lang-switcher lang-switcher-inline notranslate" translate="no" role="group" aria-label="Language">
-                    <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko')">KOR</button>
-                    <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">ENG</button>
-                    <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>
+            <div class="desktop-only-utils util-reset lang-globe-wrap">
+                <button type="button" class="lang-globe-btn notranslate" translate="no" onclick="toggleLangAccordion()" title="Language" aria-label="Language">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                </button>
+                <div class="lang-accordion notranslate" translate="no" id="langAccordion" role="group" aria-label="Language">
+                    ${LANG_OPTIONS.map(l => `<button type="button" class="lang-accordion-item" data-lang="${l.code}" onclick="setLang('${l.code}'); toggleLangAccordion(false);">${l.label}</button>`).join('')}
                 </div>
             </div>
             <span class="desktop-only-utils nav-divider" aria-hidden="true"></span>` : '';
@@ -48,7 +56,7 @@ function renderSiteNav(activeKey, root, opts) {
 
     const navHtml = `
     <nav class="top-nav">
-        <div class="nav-left"></div>
+        <div class="nav-left"><a href="${root}index.html" class="nav-logo-link">홈 리센느</a></div>
         <ul class="desktop-menu">${desktopLinks}</ul>
         <div class="nav-right">${langSwitcherHtml}
             <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="테마 변경"></button>

@@ -5,6 +5,21 @@ function logoImg(key, size) {
     return `<img src="${AWARDS_LOGO_PATH}${file}" alt="" class="honors-logo" style="height:${size}px;" onerror="this.style.display='none'">`;
 }
 
+/* 탭 클릭 시 해당 패널만 보여주는 공용 바인딩 (모달 내부에서 재사용) */
+function bindHonorsTabs(root) {
+    const tabs = root.querySelectorAll('.honors-tab');
+    const panels = root.querySelectorAll('.honors-tab-panel');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            panels.forEach(p => p.classList.remove('active'));
+            tab.classList.add('active');
+            const panel = root.querySelector(`.honors-tab-panel[data-panel="${tab.dataset.target}"]`);
+            if (panel) panel.classList.add('active');
+        });
+    });
+}
+
 function renderHonorsPreview() {
     const list = document.getElementById('awardsPreviewList');
     if (list) {
@@ -40,7 +55,23 @@ function openAwardsHistoryModal() {
     if (title) title.textContent = '음악방송 1위 히스토리';
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
-        let html = '<div class="honors-modal-block"><h4>날짜별 1위 히스토리 (총 3관왕)</h4><ul class="honors-timeline">';
+        let html = `<div class="honors-tabbar">
+            <button class="honors-tab active" data-target="cum">프로그램별 순위</button>
+            <button class="honors-tab" data-target="dated">날짜별 히스토리</button>
+            <button class="honors-tab" data-target="ceremony">시상식</button>
+        </div>
+        <div class="honors-tab-panels">
+            <div class="honors-tab-panel active" data-panel="cum">
+                <p class="honors-panel-subtitle">음악방송별 누적 1위 횟수</p>
+                <div class="honors-cum-grid">`;
+        MUSIC_SHOW_CUMULATIVE.forEach(c => {
+            html += `<div class="cum-card">${logoImg(c.logo, 26)}<span class="cum-program">${c.program}</span><span class="cum-wins">${c.wins}<em>회</em></span></div>`;
+        });
+        html += `</div>
+            </div>
+            <div class="honors-tab-panel" data-panel="dated">
+                <p class="honors-panel-subtitle">날짜별 1위 히스토리 (총 3관왕)</p>
+                <ul class="honors-timeline">`;
         MUSIC_SHOW_WINS.slice().reverse().forEach(w => {
             html += `<li>
                 <div class="ht-dot"></div>
@@ -51,15 +82,11 @@ function openAwardsHistoryModal() {
                 </div>
             </li>`;
         });
-        html += '</ul></div>';
-
-        html += '<div class="honors-modal-block"><h4>프로그램별 누적 1위</h4><div class="honors-cum-grid">';
-        MUSIC_SHOW_CUMULATIVE.forEach(c => {
-            html += `<div class="cum-card">${logoImg(c.logo, 26)}<span class="cum-program">${c.program}</span><span class="cum-wins">${c.wins}<em>회</em></span></div>`;
-        });
-        html += '</div></div>';
-
-        html += '<div class="honors-modal-block"><h4>시상식</h4><ul class="honors-timeline">';
+        html += `</ul>
+            </div>
+            <div class="honors-tab-panel" data-panel="ceremony">
+                <p class="honors-panel-subtitle">시상식 수상 내역</p>
+                <ul class="honors-timeline">`;
         CEREMONY_AWARDS.slice().reverse().forEach(c => {
             html += `<li>
                 <div class="ht-dot"></div>
@@ -70,8 +97,9 @@ function openAwardsHistoryModal() {
                 </div>
             </li>`;
         });
-        html += '</ul></div>';
+        html += '</ul></div></div>';
         body.innerHTML = html;
+        bindHonorsTabs(body);
     }
     openGenericHistoryModal();
 }
@@ -81,20 +109,33 @@ function openAdsHistoryModal() {
     if (title) title.textContent = '광고 · 콜라보 · 화보 히스토리';
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
-        const typeColor = { '홍보대사': '#9AA6FF', '화보': '#ec407a', '콜라보': '#26c6da', '광고': '#66bb6a' };
-        let html = '<div class="honors-modal-block"><h4>광고 · 콜라보 · 화보 · 홍보대사</h4><ul class="honors-timeline ad-timeline">';
-        AD_TIMELINE.slice().sort((a, b) => b.date.localeCompare(a.date)).forEach(a => {
-            html += `<li>
-                <div class="ht-dot" style="background:${typeColor[a.type]};"></div>
-                <div class="ht-body">
-                    <div class="ht-head"><span class="ad-type-badge" style="background:${typeColor[a.type]}26; color:${typeColor[a.type]};">${a.type}</span><span class="ht-date">${a.date.slice(0,4)}년${a.date.slice(5,7) !== '01' ? ' ' + parseInt(a.date.slice(5,7)) + '월' : ''}</span></div>
-                    <div class="ht-song">${a.title}</div>
-                    ${a.note ? `<ul class="ht-notes"><li>${a.note}</li></ul>` : ''}
-                </div>
-            </li>`;
+        const categories = ['홍보대사', '화보', '콜라보', '광고'];
+        const fmtDate = d => `${d.slice(0,4)}.${d.slice(5,7)}`;
+
+        let html = '<div class="honors-tabbar">';
+        categories.forEach((cat, i) => {
+            html += `<button class="honors-tab${i === 0 ? ' active' : ''}" data-target="cat${i}">${cat}</button>`;
         });
-        html += '</ul></div>';
+        html += '</div><div class="honors-tab-panels">';
+        categories.forEach((cat, i) => {
+            const items = AD_TIMELINE.filter(a => a.type === cat).slice().sort((a, b) => b.date.localeCompare(a.date));
+            html += `<div class="honors-tab-panel${i === 0 ? ' active' : ''}" data-panel="cat${i}">
+                <p class="honors-panel-subtitle">${cat} 히스토리 (총 ${items.length}건)</p>
+                <div class="ad-row-list">`;
+            items.forEach(a => {
+                html += `<div class="ad-row">
+                    <span class="ad-row-date">${fmtDate(a.date)}</span>
+                    <span class="ad-row-main">
+                        <span class="ad-row-title">${a.title}</span>
+                        ${a.note ? `<span class="ad-row-note">${a.note}</span>` : ''}
+                    </span>
+                </div>`;
+            });
+            html += '</div></div>';
+        });
+        html += '</div>';
         body.innerHTML = html;
+        bindHonorsTabs(body);
     }
     openGenericHistoryModal();
 }

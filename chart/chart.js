@@ -1,51 +1,77 @@
-let tickerInterval;
+const CHART_PLATFORMS = [
+    { key: 'melon', label: 'MELON', color: '#00CD3C' },
+    { key: 'youtube_music', label: 'YT Music', color: '#FF0000' },
+    { key: 'spotify', label: 'SPOTIFY', color: '#1DB954' },
+    { key: 'genie', label: 'GENIE', color: '#1E7DE0' },
+    { key: 'flo', label: 'FLO', color: '#6A3FE0' },
+    { key: 'bugs', label: 'BUGS', color: '#E4322E' },
+    { key: 'vibe', label: 'VIBE', color: '#7B5CF0' }
+];
+
+function chartEsc(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function chartRankPillHtml(platform, rankInfo) {
+    if (!rankInfo || rankInfo.rank == null) {
+        return `<div class="chart-rank-pill out"><span class="plat" style="color:${platform.color};">${platform.label}</span><span class="rankval">-</span></div>`;
+    }
+    const rank = rankInfo.rank;
+    const prev = rankInfo.previousRank;
+    let deltaHtml;
+    if (prev == null) deltaHtml = '<span class="delta new">NEW</span>';
+    else if (prev === rank) deltaHtml = '<span class="delta same">-</span>';
+    else if (prev > rank) deltaHtml = `<span class="delta up">▲${prev - rank}</span>`;
+    else deltaHtml = `<span class="delta down">▼${rank - prev}</span>`;
+    return `<div class="chart-rank-pill"><span class="plat" style="color:${platform.color};">${platform.label}</span><span class="rankval">${rank}</span>${deltaHtml}</div>`;
+}
+
+function renderChartLegend() {
+    const el = document.getElementById('chartLegend');
+    if (!el) return;
+    el.innerHTML = CHART_PLATFORMS.map(p => `<span class="chart-legend-item"><span class="dot" style="background:${p.color};"></span>${p.label}</span>`).join('');
+}
+
+function renderChartGrid(data) {
+    const list = document.getElementById('chartList');
+    if (!list) return;
+    const songs = (data && data.songs) || [];
+    if (!songs.length) {
+        list.innerHTML = '<div class="chart-empty"><div class="ico">🎵</div><p>차트 정보를 불러올 수 없습니다.</p></div>';
+        return;
+    }
+    const noThumb = '<div class="chart-thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>';
+    list.innerHTML = songs.map(song => {
+        const thumb = song.albumImageUrl ? `<img class="chart-thumb" src="${chartEsc(song.albumImageUrl)}" alt="" loading="lazy">` : noThumb;
+        const ranks = song.ranks || {};
+        const pills = CHART_PLATFORMS.map(p => chartRankPillHtml(p, ranks[p.key])).join('');
+        return `<div class="chart-card">
+            ${thumb}
+            <div class="chart-info">
+                <div class="chart-song-title">${chartEsc(song.songName)}</div>
+                <div class="chart-song-artist">${chartEsc(song.artistName)}</div>
+            </div>
+            <div class="chart-ranks">${pills}</div>
+        </div>`;
+    }).join('');
+}
+
 async function fetchSongCharts() {
+    renderChartLegend();
     try {
-        const response = await fetch('../chart_data.json?t=' + new Date().getTime());
+        const response = await fetch('chart_data.json?t=' + Date.now());
         const data = await response.json();
         const timeEl = document.getElementById('currentTime');
-        if (timeEl) timeEl.innerText = (data.update_time || new Date().toLocaleTimeString('ko-KR'));
-
-        let tickerHtml = ''; let validCount = 0;
-        ["Melon", "Bugs", "Genie", "FLO", "VIBE"].forEach(platform => {
-            let songsHtml = '';
-            if (data.songs) {
-                for (const songTitle in data.songs) {
-                    const pd = data.songs[songTitle][platform];
-                    if (pd) {
-                        let rec = pd["실시간 (HOT100)"] || pd["실시간"] || pd["24시간"];
-                        if (rec) {
-                            let diffClass = 'diff-none'; let diffText = rec.diff;
-                            if (diffText === 'NEW' || diffText === '0' || diffText === '유지' || diffText === '') diffText = '-';
-                            if (diffText.includes('▲')) diffClass = 'diff-up'; else if (diffText.includes('▼')) diffClass = 'diff-down'; else if (diffText === 'NEW') diffClass = 'diff-new'; else if (diffText === '-') diffClass = 'diff-none';
-                            songsHtml += `<div class="ticker-song-info"><span class="title">${songTitle}</span><span class="rank">${rec.rank}</span><span class="rank-diff ${diffClass}">${diffText}</span></div>`;
-                        }
-                    }
-                }
-            }
-            if (songsHtml !== '') {
-                validCount++;
-                let logoHtml = `<span class="p-logo">${platform}</span>`;
-                if (platform === 'Melon') logoHtml = `<img src="../images/melon.jpeg" alt="Melon" class="p-logo-img" onerror="this.style.display='none'">`;
-                if (platform === 'Bugs') logoHtml = `<img src="../images/bugs.jpg" alt="Bugs" class="p-logo-img" onerror="this.style.display='none'">`;
-                tickerHtml += `<div class="ticker-item"><div class="ticker-platform">${logoHtml}</div><div class="ticker-songs">${songsHtml}</div></div>`;
-            }
-        });
-
-        const waitingMsg = (typeof window.t === 'function') ? window.t('chartWaiting') : '데이터 수집 중입니다.';
-        const wrapper = document.getElementById('tickerWrapper');
-        if (wrapper) {
-            wrapper.innerHTML = tickerHtml || `<div class="ticker-item"><div style="color:#666; font-size:13px;">${waitingMsg}</div></div>`;
-            clearInterval(tickerInterval);
-            if (validCount > 1) {
-                let cIdx = 0;
-                tickerInterval = setInterval(() => { cIdx = (cIdx + 1) % validCount; wrapper.style.transform = `translateY(-${cIdx * 56}px)`; }, 4000);
-            }
+        if (timeEl && data.updatedAt) {
+            const d = new Date(data.updatedAt);
+            timeEl.innerText = '업데이트: ' + d.toLocaleString('ko-KR');
         }
+        renderChartGrid(data);
     } catch (e) {
-        console.log("차트 대기 중", e);
-        const wrapper = document.getElementById('tickerWrapper');
-        if (wrapper) wrapper.innerHTML = `<div class="ticker-item"><div style="color:#666; font-size:13px;">차트 업데이트를 대기 중입니다.</div></div>`;
+        console.log('차트 데이터 로딩 실패', e);
+        const list = document.getElementById('chartList');
+        if (list) list.innerHTML = '<div class="chart-empty"><div class="ico">🎵</div><p>차트 업데이트를 대기 중입니다.</p></div>';
     }
 }
 

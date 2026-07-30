@@ -1,3 +1,5 @@
+/* ⭐️ MUSIC CHARTS — 탭으로 플랫폼을 골라서 보는 랭킹 리스트 (SCENE-FLIX의 카드+색상pill 그리드와는 다른 레이아웃) */
+
 const CHART_PLATFORMS = [
     { key: 'all', label: '종합' },
     { key: 'melon', label: '멜론' },
@@ -35,6 +37,7 @@ function chartSetPlatform(key) {
     renderChartList();
 }
 
+/* 종합 탭 — 곡마다 순위 대신 '몇 개 플랫폼에 차트인했는지'를 점으로 보여주는 개요 뷰 */
 function chartOverviewRowHtml(song, idx) {
     const noThumb = '<div class="chart-thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>';
     const thumb = song.albumImageUrl ? `<img class="chart-thumb" src="${chartEsc(song.albumImageUrl)}" alt="" loading="lazy">` : noThumb;

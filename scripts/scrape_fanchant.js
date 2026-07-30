@@ -1,3 +1,6 @@
+/* RESCENE/응원법 문서를 긁어서 곡별 응원법(가사 + 볼드체 떼창 표시 + 영상 + 사진) 데이터를 만든다.
+   나무위키의 **볼드체** 표기를 그대로 프론트엔드 마크업(**텍스트**)으로 유지해서,
+   fanchant.js에서 간단한 정규식으로 <strong>변환만 하면 되도록 한다. */
 import fs from 'fs';
 import { fetchNamuDoc, extractVideoId, mergeAppendOnlyNew } from '../js-tools/wi_scraper.js';
 
@@ -60,12 +63,12 @@ async function run() {
         });
     });
 
-    console.log(`[scrape_fanchant] 확인한 전체 곡: ${songs.length}곡`);
+    console.log(`[scrape_fanchant] 나무위키에서 확인한 전체 곡: ${songs.length}곡`);
     if (!songs.length) { console.error('결과가 비어 있어 기존 파일은 그대로 둡니다.'); process.exit(1); }
 
     fs.mkdirSync('fanchant', { recursive: true });
     const result = mergeAppendOnlyNew('fanchant/fanchant_data.js', 'FANCHANT_DATA', songs, r => `${r.album}__${r.song}`);
-    console.log(`[scrape_fanchant] FANCHANT_DATA: 새 곡 ${result.added}건 추가 (총 ${result.total}곡)`);
+    console.log(`[scrape_fanchant] FANCHANT_DATA: ${result.mode === 'full_resync' ? '전체 재동기화' : `새 곡 ${result.added}건 추가`} (총 ${result.total}곡)`);
 }
 
 run().catch(e => { console.error('[scrape_fanchant] 실패:', e); process.exit(1); });

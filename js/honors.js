@@ -151,10 +151,11 @@ function openAdsHistoryModal() {
     if (title) title.textContent = '광고 · 콜라보 · 화보 히스토리';
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
-        const categories = ['홍보대사', '화보', '콜라보', '광고'];
+        const categories = ['광고', '화보', '홍보대사', '콜라보'];
         const fmtDate = d => `${d.slice(0,4)}.${d.slice(5,7)}`;
 
-        let html = '<div class="honors-tabbar">';
+        let html = `<div class="ads-banner"><img src="images/ad/ber.png" alt="" onerror="this.parentElement.style.display='none'"></div>`;
+        html += '<div class="honors-tabbar">';
         categories.forEach((cat, i) => {
             html += `<button class="honors-tab${i === 0 ? ' active' : ''}" data-target="cat${i}">${cat}</button>`;
         });
@@ -162,8 +163,8 @@ function openAdsHistoryModal() {
         categories.forEach((cat, i) => {
             const items = AD_TIMELINE.filter(a => a.type === cat).slice().sort((a, b) => b.date.localeCompare(a.date));
             html += `<div class="honors-tab-panel${i === 0 ? ' active' : ''}" data-panel="cat${i}">
-                <div class="ad-row-list">`;
-            items.forEach(a => {
+                <ul class="ad-timeline">`;
+            items.forEach((a, idx) => {
                 const titleParts = splitTrailingParen(a.title);
                 const noteParts = splitTrailingParen(a.note);
                 let notePart = '';
@@ -176,17 +177,18 @@ function openAdsHistoryModal() {
                 } else {
                     notePart = noteParts.main;
                 }
-                html += `<div class="ad-row">
-                    <span class="ad-row-date">${fmtDate(a.date)}</span>
-                    <span class="ad-row-main">
-                        <span class="ad-row-title">${titleParts.main}</span>
-                        ${titleParts.tag ? `<span class="ad-row-tag">${titleParts.tag}</span>` : ''}
-                        ${notePart ? `<span class="ad-row-note">${notePart}</span>` : ''}
-                        ${periodPart ? `<span class="ad-row-period">${periodPart}</span>` : ''}
-                    </span>
-                </div>`;
+                const side = idx % 2 === 0 ? 'side-left' : 'side-right';
+                html += `<li class="ad-tl-item ${side}">
+                    <div class="ad-tl-node"></div>
+                    <div class="ad-tl-card">
+                        <span class="ad-tl-date">${fmtDate(a.date)}</span>
+                        <div class="ad-tl-title">${titleParts.main}${titleParts.tag ? `<span class="ad-tl-tag">${titleParts.tag}</span>` : ''}</div>
+                        ${notePart ? `<div class="ad-tl-note">${notePart}</div>` : ''}
+                        ${periodPart ? `<div class="ad-tl-period">${periodPart}</div>` : ''}
+                    </div>
+                </li>`;
             });
-            html += '</div></div>';
+            html += '</ul></div>';
         });
         html += '</div>';
         body.innerHTML = html;

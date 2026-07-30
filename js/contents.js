@@ -1,10 +1,3 @@
-/* ==========================================================================
-   ⭐️ 홈 "LATEST UPDATES" — 카테고리별 최신 영상 1개 + 더보기 (모달 없음, 클릭 시 그 자리에서 재생)
-   - 데이터 소스: js/contents_data.js(CONTENTS_DATA), js/album_content_data.js(ALBUM_CONTENT_DATA),
-     js/music_show_data.js(MUSIC_SHOW_DATA)
-   - "더보기" → media/media.html?tag=카테고리 로 이동 (전체 목록 페이지)
-   ========================================================================== */
-
 function ytThumb(vid) { return `https://img.youtube.com/vi/${vid}/hqdefault.jpg`; }
 
 function escapeHtml(str) {

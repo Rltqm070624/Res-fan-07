@@ -12,7 +12,7 @@ function safeThumb(vid) {
 let mediaActiveTag = '전체';
 let mediaActiveSub = '전체'; 
 let mediaActiveDetails = new Set();
-let mediaDetailVisible = false; // ⭐️ 하위 탭(Detail) 열림 상태 제어 변수
+let mediaYearClicked = false; // ⭐️ 순차적으로 열리기 위한 제어 변수
 let mediaSortField = 'date'; 
 let mediaSortDir = 'desc';   
 let mediaSearchTerm = '';
@@ -41,33 +41,26 @@ function mediaGetContentBrand(item) {
     return channel && channel !== '유튜브 채널' ? channel : '기타';
 }
 
+// ⭐️ 멤버 카테고리를 포함한 필터 구조 정의
 const MEDIA_SUBFILTERS = {
+    '멤버': {
+        year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse(),
+        sub: { getOptions: () => ['원이', '리브', '미나미', '메이', '제나', '전원'] }
+    },
     '컨텐츠': {
         year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse(),
-        sub: {
-            getOptions: (items) => [...new Set(items.map(mediaGetContentBrand))].filter(Boolean).sort((a, b) => a.localeCompare(b, 'ko')),
-            match: (item, targetDetails) => targetDetails.has(mediaGetContentBrand(item))
-        }
+        sub: { getOptions: (items) => [...new Set(items.map(mediaGetContentBrand))].filter(Boolean).sort((a, b) => a.localeCompare(b, 'ko')) }
     },
     '음반 활동 컨텐츠': {
         year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse()
     },
     '음악 방송': {
         year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse(),
-        sub: {
-            getOptions: (items) => [...new Set(items.map(i => i.program).filter(Boolean))],
-            match: (item, targetDetails) => targetDetails.has(item.program)
-        }
+        sub: { getOptions: (items) => [...new Set(items.map(i => i.program).filter(Boolean))] }
     },
     '라이브 방송': {
         year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse(),
-        sub: {
-            getOptions: () => ['원이', '리브', '미나미', '메이', '제나'],
-            match: (item, targetDetails) => {
-                const s = item.sub || '';
-                return s === '전원' || Array.from(targetDetails).some(name => s.includes(name));
-            }
-        }
+        sub: { getOptions: () => ['원이', '리브', '미나미', '메이', '제나'] }
     },
     '공연 및 행사': {
         year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse()
@@ -84,7 +77,7 @@ function mediaGetAllItems() {
 }
 
 // -----------------------------------------------------
-// 1. 좌측 사이드바(계단식) 렌더링 로직
+// 1. 좌측 사이드바(계단식) 렌더링
 // -----------------------------------------------------
 function mediaInitTagFromQuery() {
     if (typeof MEDIA_CATEGORIES === 'undefined') return;
@@ -98,17 +91,14 @@ function mediaInitTagFromQuery() {
 
 function mediaRenderTagRow() {
     const row = document.getElementById('mediaTagRow');
-    if (!row) return;
-    if (typeof MEDIA_CATEGORIES === 'undefined') {
-        row.innerHTML = '<div style="color:red; font-size:12px;">데이터 로드 오류 (MEDIA_CATEGORIES)</div>';
-        return;
-    }
+    if (!row || typeof MEDIA_CATEGORIES === 'undefined') return;
     
-    const all = [{ label: '전체' }].concat(MEDIA_CATEGORIES.map(c => ({ label: c.label })));
-    row.innerHTML = all.map(t => {
-        const active = t.label === mediaActiveTag;
-        return `<button type="button" class="ms-item${active ? ' active' : ''}" onclick="mediaSetTag('${safeEscape(t.label)}')">
-            <span>${safeEscape(t.label)}</span>
+    // ⭐️ 기본 카테고리 목록에 '멤버'를 추가
+    const all = ['전체', '멤버'].concat(MEDIA_CATEGORIES.map(c => c.label));
+    row.innerHTML = all.map(label => {
+        const active = label === mediaActiveTag;
+        return `<button type="button" class="ms-item${active ? ' active' : ''}" onclick="mediaSetTag('${safeEscape(label)}')">
+            <span>${safeEscape(label)}</span>
         </button>`;
     }).join('');
     
@@ -123,11 +113,15 @@ function mediaRenderYearCol() {
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     if (!cfg || !cfg.year) {
         wrap.classList.add('is-hidden');
-        mediaRenderSubCol(); // detail도 연쇄적으로 숨김 처리
+        mediaRenderSubCol(); 
         return;
     }
     
-    const itemsInTag = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
+    let itemsInTag = mediaGetAllItems();
+    if (mediaActiveTag !== '전체' && mediaActiveTag !== '멤버') {
+        itemsInTag = itemsInTag.filter(i => i.tagLabel === mediaActiveTag);
+    }
+    
     const options = ['전체'].concat(cfg.year(itemsInTag));
     wrap.classList.remove('is-hidden');
     
@@ -147,14 +141,19 @@ function mediaRenderSubCol() {
     
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     
-    // ⭐️ 조건: 카테고리가 없거나 상세 옵션이 없거나 detailVisible이 false이면 숨김
-    if (!cfg || !cfg.sub || !mediaDetailVisible) { 
+    // ⭐️ 년도가 먼저 열리고(클릭되어야), 그다음 하위 탭이 열리도록 조건 강화
+    if (!cfg || !cfg.sub || !mediaYearClicked) { 
         wrap.classList.add('is-hidden');
         return; 
     }
 
-    let itemsInYear = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
-    if (mediaActiveSub !== '전체') itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
+    let itemsInYear = mediaGetAllItems();
+    if (mediaActiveTag !== '전체' && mediaActiveTag !== '멤버') {
+        itemsInYear = itemsInYear.filter(i => i.tagLabel === mediaActiveTag);
+    }
+    if (mediaActiveSub !== '전체') {
+        itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
+    }
 
     const options = ['전체'].concat(cfg.sub.getOptions(itemsInYear));
     wrap.classList.remove('is-hidden');
@@ -168,17 +167,22 @@ function mediaRenderSubCol() {
 }
 
 // -----------------------------------------------------
-// 2. 필터 제어 함수 (토글 및 필터 유지 로직)
+// 2. 필터 제어 함수 (토글 및 유지 로직)
 // -----------------------------------------------------
 function mediaSetTag(label) {
     if (mediaActiveTag === label) {
-        mediaActiveTag = '전체'; // 토글 닫힘
-        mediaDetailVisible = false;
+        if (label !== '전체') {
+            // 한 번 더 누르면 닫힘(전체로 이동)
+            mediaActiveTag = '전체';
+            mediaActiveSub = '전체';
+            mediaYearClicked = false;
+        }
     } else {
         mediaActiveTag = label;
-        mediaDetailVisible = false; // 카테고리 클릭 시 하위 탭(Detail)은 숨기고 년도만 보이게 강제
+        mediaActiveSub = '전체';
+        mediaYearClicked = false; // 카테고리만 누르면 년도까지만 열림
     }
-    // ⭐️ 주의: mediaActiveSub = '전체'를 제거하여 컨텐츠 이동 시 필터가 풀리지 않게 유지함
+    // ⭐️ 중요: 카테고리를 이동해도 mediaActiveDetails(선택한 필터)는 비우지 않음으로써 필터 유지
     mediaRenderTagRow();
     mediaApplyFilters();
     if(typeof mediaRenderDrawer === 'function') mediaRenderDrawer();
@@ -187,16 +191,16 @@ function mediaSetTag(label) {
 function mediaSetSub(sub) {
     if (mediaActiveSub === sub) {
         if (sub === '전체') {
-            // 이미 '전체'인 상태에서 누르면 Detail 열림/닫힘 토글
-            mediaDetailVisible = !mediaDetailVisible;
+            // 전체를 다시 누르면 하위 탭 열기/닫기 토글
+            mediaYearClicked = !mediaYearClicked;
         } else {
-            // 특정 년도 활성화된 상태에서 누르면 닫힘
+            // 특정 년도를 다시 누르면 닫힘(전체로 이동)
             mediaActiveSub = '전체';
-            mediaDetailVisible = false;
+            mediaYearClicked = false;
         }
     } else {
         mediaActiveSub = sub;
-        mediaDetailVisible = true; // 년도를 클릭했으므로 하위 탭 활성화
+        mediaYearClicked = true; // 년도를 눌렀으므로 하위 탭(Detail) 열림
     }
     mediaRenderYearCol();
     mediaApplyFilters();
@@ -207,11 +211,8 @@ function mediaToggleDetail(detail) {
     if (detail === '전체') {
         mediaActiveDetails.clear();
     } else {
-        if (mediaActiveDetails.has(detail)) {
-            mediaActiveDetails.delete(detail);
-        } else {
-            mediaActiveDetails.add(detail);
-        }
+        if (mediaActiveDetails.has(detail)) mediaActiveDetails.delete(detail);
+        else mediaActiveDetails.add(detail);
     }
     mediaRenderSubCol();
     mediaApplyFilters();
@@ -219,7 +220,7 @@ function mediaToggleDetail(detail) {
 }
 
 // -----------------------------------------------------
-// 3. 서랍(Drawer) 필터 로직 (한글화 반영)
+// 3. 서랍(Drawer) 필터 로직
 // -----------------------------------------------------
 const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
 const closeSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
@@ -243,7 +244,7 @@ function mediaRenderDrawer() {
     // 1. 카테고리 필터
     const catBox = document.getElementById('afdCategoryChips');
     const catCount = document.getElementById('afdCatCount');
-    const categories = ['전체'].concat(MEDIA_CATEGORIES.map(c => c.label));
+    const categories = ['전체', '멤버'].concat(MEDIA_CATEGORIES.map(c => c.label));
     
     catBox.innerHTML = categories.map(cat => `
         <button class="afd-chip ${cat === mediaActiveTag ? 'active' : ''}" onclick="mediaSetTag('${safeEscape(cat)}'); mediaRenderDrawer();">
@@ -265,14 +266,19 @@ function mediaRenderDrawer() {
         </button>
     `).join('') : '<span style="font-size:13px; color:var(--text-muted);">활성화된 필터 없음</span>';
 
-    // 3. 디테일 다중 선택 (Topics)
+    // 3. 관련 주제 다중 선택 (Topics)
     const topicBox = document.getElementById('afdTopicChips');
     const topicCount = document.getElementById('afdTopicCount');
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     
     if (cfg && cfg.sub) {
-        let itemsInYear = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
-        if (mediaActiveSub !== '전체') itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
+        let itemsInYear = mediaGetAllItems();
+        if (mediaActiveTag !== '전체' && mediaActiveTag !== '멤버') {
+            itemsInYear = itemsInYear.filter(i => i.tagLabel === mediaActiveTag);
+        }
+        if (mediaActiveSub !== '전체') {
+            itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
+        }
         const options = cfg.sub.getOptions(itemsInYear);
         
         topicBox.innerHTML = options.map(opt => `
@@ -297,8 +303,8 @@ function mediaRemoveActiveFilter(type, val) {
 function mediaClearAllFilters() {
     mediaActiveTag = '전체';
     mediaActiveSub = '전체';
+    mediaYearClicked = false;
     mediaActiveDetails.clear();
-    mediaDetailVisible = false;
     mediaRenderTagRow();
     mediaApplyFilters();
     mediaRenderDrawer();
@@ -342,16 +348,26 @@ function mediaApplyFilters() {
 function mediaGetFiltered() {
     let list = mediaGetAllItems();
     
-    if (mediaActiveTag !== '전체') list = list.filter(i => i.tagLabel === mediaActiveTag);
+    // 카테고리 필터 (멤버 카테고리일 때는 전체 목록 유지 후 하위 항목으로 필터)
+    if (mediaActiveTag !== '전체' && mediaActiveTag !== '멤버') {
+        list = list.filter(i => i.tagLabel === mediaActiveTag);
+    }
 
-    const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    if (cfg) {
-        if (mediaActiveSub !== '전체') {
-            list = list.filter(i => (i.date || '').startsWith(mediaActiveSub));
-        }
-        if (cfg.sub && mediaActiveDetails.size > 0) {
-            list = list.filter(i => cfg.sub.match(i, mediaActiveDetails));
-        }
+    if (mediaActiveSub !== '전체') {
+        list = list.filter(i => (i.date || '').startsWith(mediaActiveSub));
+    }
+    
+    // ⭐️ 전역 Detail 매칭 (카테고리를 넘나들어도 적용됨)
+    if (mediaActiveDetails.size > 0) {
+        list = list.filter(i => {
+            const brand = mediaGetContentBrand(i);
+            const prog = i.program || '';
+            const text = ((i.title || '') + ' ' + (i.sub || '')).toLowerCase();
+            return Array.from(mediaActiveDetails).some(d => {
+                const lowerD = d.toLowerCase();
+                return brand === d || prog === d || text.includes(lowerD);
+            });
+        });
     }
 
     if (mediaSearchTerm) {
@@ -562,7 +578,7 @@ function mediaClosePlayer() {
     });
 })();
 
-// ⭐️ 에러 발생 시 빈 화면 대신 에러를 출력하는 보호 장치 (Failsafe)
+// 초기 실행 및 오류 보호
 window.addEventListener('DOMContentLoaded', () => {
     try {
         mediaInitTagFromQuery();

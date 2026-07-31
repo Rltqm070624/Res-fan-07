@@ -76,85 +76,103 @@ function mediaInitTagFromQuery() {
     }
 }
 
-// ⭐️ 새로운 셀렉트(Dropdown) 렌더링 로직
-function mediaRenderFilters() {
-    // 1. Category
-    const catSel = document.getElementById('filterCategory');
-    if (catSel) {
-        const options = ['전체'].concat(MEDIA_CATEGORIES.map(c => c.label));
-        catSel.innerHTML = options.map(opt => `<option value="${opt}" ${opt === mediaActiveTag ? 'selected' : ''}>${opt}</option>`).join('');
-    }
-    mediaUpdateSubFilters();
+// ⭐️ 좌측 사이드바: 카테고리 렌더링
+function mediaRenderTagRow() {
+    const row = document.getElementById('mediaTagRow');
+    if (!row) return;
+    const all = [{ label: '전체' }].concat(MEDIA_CATEGORIES.map(c => ({ label: c.label })));
+    row.innerHTML = all.map(t => {
+        const active = t.label === mediaActiveTag;
+        return `<button type="button" class="ms-item${active ? ' active' : ''}" onclick="mediaSetTag('${t.label}')">
+            <span>${t.label}</span>
+        </button>`;
+    }).join('');
+    mediaRenderYearCol();
 }
 
-function mediaUpdateSubFilters() {
-    const yearSel = document.getElementById('filterYear');
-    const detailSel = document.getElementById('filterDetail');
+// ⭐️ 좌측 사이드바: 연도 렌더링
+function mediaRenderYearCol() {
+    const col = document.getElementById('mediaYearCol');
+    const wrap = document.getElementById('mediaYearColWrap');
+    if (!col || !wrap) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-
-    // 연도 필터 업데이트
-    if (!cfg || !cfg.year) {
-        if (yearSel) yearSel.style.display = 'none';
-        if (detailSel) detailSel.style.display = 'none';
-        return;
-    }
-
-    const itemsInTag = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
-    const yearOptions = ['전체'].concat(cfg.year(itemsInTag));
     
-    if (yearSel) {
-        yearSel.style.display = 'inline-block';
-        yearSel.innerHTML = yearOptions.map(opt => 
-            `<option value="${opt}" ${opt === mediaActiveSub ? 'selected' : ''}>${opt === '전체' ? '연도 전체' : opt + '년'}</option>`
-        ).join('');
-    }
-
-    // 디테일 필터 업데이트
-    if (!cfg.sub) {
-        if (detailSel) detailSel.style.display = 'none';
+    if (!cfg || !cfg.year) {
+        wrap.classList.add('is-hidden');
+        col.innerHTML = '';
+        mediaRenderSubCol();
         return;
     }
-
-    let itemsInYear = itemsInTag;
-    if (mediaActiveSub !== '전체') {
-        itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
-    }
-    const detailOptions = ['전체'].concat(cfg.sub.getOptions(itemsInYear));
-
-    if (detailSel) {
-        detailSel.style.display = 'inline-block';
-        detailSel.innerHTML = detailOptions.map(opt => 
-            `<option value="${escapeAttr(opt)}" ${opt === mediaActiveSub2 ? 'selected' : ''}>${opt === '전체' ? '세부 전체' : escapeHtml(opt)}</option>`
-        ).join('');
-    }
+    
+    const itemsInTag = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
+    const options = ['전체'].concat(cfg.year(itemsInTag));
+    wrap.classList.remove('is-hidden');
+    
+    col.innerHTML = options.map(opt =>
+        `<button type="button" class="ms-item${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${opt}')">
+            <span>${opt === '전체' ? '전체' : opt + '년'}</span>
+        </button>`
+    ).join('');
+    
+    mediaRenderSubCol();
 }
 
-// 이벤트 핸들러
-function mediaSetTag(val) {
-    mediaActiveTag = val;
+// ⭐️ 좌측 사이드바: 디테일 렌더링
+function mediaRenderSubCol() {
+    const col = document.getElementById('mediaSubCol');
+    const wrap = document.getElementById('mediaSubColWrap');
+    if (!col || !wrap) return;
+    const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
+    
+    if (!cfg || !cfg.sub) { 
+        wrap.classList.add('is-hidden');
+        col.innerHTML = ''; 
+        return; 
+    }
+
+    let itemsInYear = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
+    if (mediaActiveSub !== '전체') itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
+
+    const options = ['전체'].concat(cfg.sub.getOptions(itemsInYear));
+    wrap.classList.remove('is-hidden');
+    
+    col.innerHTML = options.map(opt =>
+        `<button type="button" class="ms-item${opt === mediaActiveSub2 ? ' active' : ''}" onclick="mediaSetSub2('${escapeHtml(opt)}')">
+            <span>${escapeHtml(opt)}</span>
+        </button>`
+    ).join('');
+}
+
+function mediaSetTag(label) {
+    if (label === mediaActiveTag) return;
+    mediaActiveTag = label;
     mediaActiveSub = '전체';
     mediaActiveSub2 = '전체';
-    mediaUpdateSubFilters();
+    mediaRenderTagRow();
     mediaApplyFilters();
 }
 
-function mediaSetSub(val) {
-    mediaActiveSub = val;
+function mediaSetSub(sub) {
+    mediaActiveSub = sub;
     mediaActiveSub2 = '전체';
-    mediaUpdateSubFilters(); // 연도가 바뀌면 디테일 항목도 재구성
+    mediaRenderYearCol();
     mediaApplyFilters();
 }
 
-function mediaSetSub2(val) {
-    mediaActiveSub2 = val;
+function mediaSetSub2(sub2) {
+    mediaActiveSub2 = sub2;
+    mediaRenderSubCol();
     mediaApplyFilters();
 }
 
-// 정렬 셀렉트박스 핸들러
-function mediaSetSortSelect(val) {
-    const parts = val.split('_'); // 'date_desc' -> ['date', 'desc']
-    mediaSortField = parts[0];
-    mediaSortDir = parts[1];
+// ⭐️ 정렬 버튼(최신순, 오래된순 등) 클릭 시 동작 (롤백 완)
+function mediaSetSort(field, dir) {
+    mediaSortField = field;
+    mediaSortDir = dir;
+    document.querySelectorAll('.msort-btn').forEach(b => b.classList.remove('active'));
+    const id = field === 'date' ? (dir === 'desc' ? 'sortDateNew' : 'sortDateOld') : (dir === 'asc' ? 'sortNameAsc' : 'sortNameDesc');
+    const btn = document.getElementById(id);
+    if (btn) btn.classList.add('active');
     mediaApplyFilters();
 }
 
@@ -167,6 +185,8 @@ function mediaClearSearch() {
 function mediaApplyFilters() {
     const input = document.getElementById('mediaSearch');
     mediaSearchTerm = (input && input.value || '').trim().toLowerCase();
+    const clearBtn = document.getElementById('mediaSearchClear');
+    if (clearBtn) clearBtn.classList.toggle('show', !!mediaSearchTerm);
     mediaVisibleCount = MEDIA_PAGE_SIZE;
     mediaRenderGrid(true);
 }
@@ -174,12 +194,8 @@ function mediaApplyFilters() {
 function mediaGetFiltered() {
     let list = mediaGetAllItems();
     
-    // 카테고리 필터
-    if (mediaActiveTag !== '전체') {
-        list = list.filter(i => i.tagLabel === mediaActiveTag);
-    }
+    if (mediaActiveTag !== '전체') list = list.filter(i => i.tagLabel === mediaActiveTag);
 
-    // 서브 필터 (연도, 디테일)
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     if (cfg) {
         if (mediaActiveSub !== '전체') {
@@ -190,12 +206,10 @@ function mediaGetFiltered() {
         }
     }
 
-    // 검색어 필터
     if (mediaSearchTerm) {
         list = list.filter(i => ((i.title || '') + ' ' + (i.sub || '')).toLowerCase().includes(mediaSearchTerm));
     }
 
-    // 정렬
     if (mediaSortField === 'name') {
         list.sort((a, b) => {
             const an = mediaCardTitle(a) || '';
@@ -277,6 +291,7 @@ function mediaSetupInfiniteScroll() {
     mediaInfiniteObserver.observe(sentinel);
 }
 
+/* 영상 재생 모달 로직 유지 */
 let mmPlaylist = [];
 let mmIndex = -1;
 let mmExpanded = false;
@@ -400,8 +415,7 @@ function mediaClosePlayer() {
 
 window.addEventListener('DOMContentLoaded', () => {
     mediaInitTagFromQuery();
-    // ⭐️ 초기화 함수 이름 변경
-    mediaRenderFilters(); 
+    mediaRenderTagRow();
     mediaRenderGrid(true);
     mediaSetupInfiniteScroll();
 });

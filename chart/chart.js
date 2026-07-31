@@ -1,5 +1,3 @@
-/* ⭐️ MUSIC CHARTS — 탭으로 플랫폼을 골라서 보는 랭킹 리스트 (SCENE-FLIX의 카드+색상pill 그리드와는 다른 레이아웃) */
-
 const CHART_PLATFORMS = [
     { key: 'all', label: '종합' },
     { key: 'melon', label: '멜론' },
@@ -10,12 +8,25 @@ const CHART_PLATFORMS = [
     { key: 'youtube_music', label: '유튜브뮤직' },
     { key: 'spotify', label: '스포티파이' }
 ];
+function renderChartWave() {
+    const wave = document.getElementById('chartWave');
+    if (!wave) return;
+    const BAR_COUNT = 56;
+    let html = '';
+    for (let i = 0; i < BAR_COUNT; i++) {
+        const duration = (0.9 + Math.random() * 0.9).toFixed(2);
+        const delay = (-Math.random() * 1.8).toFixed(2);
+        html += `<span style="animation-duration:${duration}s; animation-delay:${delay}s;"></span>`;
+    }
+    wave.innerHTML = html;
+}
+window.addEventListener('DOMContentLoaded', renderChartWave);
+
 const CHART_PLATFORM_DOT_COLOR = {
     melon: '#00CD3C', genie: '#1E7DE0', vibe: '#7B5CF0', bugs: '#E4322E',
     flo: '#6A3FE0', youtube_music: '#FF3B3B', spotify: '#1DB954'
 };
 
-/* 각 플랫폼에서 RESCENE 검색/아티스트 페이지로 바로 이동할 수 있는 링크 — 아이콘 파일은 images/music/ 경로에 추가 예정 */
 const STREAM_SERVICE_LINKS = [
     { key: 'melon', label: '멜론', icon: 'melon.png', url: 'https://www.melon.com/artist/detail.htm?artistId=3709231' },
     { key: 'genie', label: '지니', icon: 'genie.png', url: 'https://www.genie.co.kr/detail/artistInfo?xxnm=82379125' },

@@ -33,8 +33,8 @@
     <div class="landing-splash" id="landingSplash">
         <div class="landing-inner">
             <img src="images/logo.png" alt="RESCENE" class="landing-logo" onerror="this.style.display='none'">
-            <p class="landing-welcome">리센느 비공식 팬 아카이브에 오신 것을 환영합니다.</p>
-            <a href="javascript:void(0)" class="landing-enter" onclick="closeLandingSplash()">바로가기 →</a>
+            <p class="landing-welcome" data-i18n="heroWelcome">리센느 비공식 팬 아카이브에 오신 것을 환영합니다.</p>
+            <a href="javascript:void(0)" class="landing-enter" onclick="closeLandingSplash()" data-i18n="heroEnter">바로가기 →</a>
         </div>
         <p class="landing-disclaimer">해당 홈페이지는 팬이 자발적으로 운영하는 비공식 팬 페이지입니다.<br>모든 저작권은 아티스트 RESCENE, 소속사 THE MUZE Entertainment에게 있으며 공식 관계가 없음을 알려드립니다.</p>
     </div>
@@ -59,8 +59,8 @@
         <div id="historySection" class="slow-reveal history-link" role="button" tabindex="0" onclick="playWithRescene()" onkeydown="if(event.key==='Enter')playWithRescene()" aria-label="위드 리센스 — 함께 걸어온 길 보기">
             <div class="wr-layer-stack">
                 <div class="wr-text" id="wrText">
-                    <div class="section-title">WITH <span>RESCENE</span></div>
-                    <p class="history-subtitle">지금까지 걸어 온 길을 같이 걸어 볼까요?</p>
+                    <div class="section-title" data-i18n="sectionWith">WITH <span>RESCENE</span></div>
+                    <p class="history-subtitle" data-i18n="historySubtitle">지금까지 걸어 온 길을 같이 걸어 볼까요?</p>
                 </div>
 
                 <div class="wr-next" id="wrNext">
@@ -72,16 +72,16 @@
         <div class="section-container reveal full-page-section" id="profileSection">
             <div class="section-inner">
                 <div class="section-header center-header section-header-md">
-                    <div class="section-title">RESCENE <span>ARCHIVE</span></div>
+                    <div class="section-title" data-i18n="sectionArchive">RESCENE <span>ARCHIVE</span></div>
                 </div>
                 
                 <div class="archive-split">
                     <div class="archive-col">
-                        <div class="archive-sub-header">PROFILE PHOTO</div>
+                        <div class="archive-sub-header" data-i18n="profilePhoto">PROFILE PHOTO</div>
                         <div class="profile-scroll-wrapper" id="profileScroll"></div>
                     </div>
                     <div class="archive-col">
-                        <div class="archive-sub-header">ALBUM</div>
+                        <div class="archive-sub-header" data-i18n="albumLabel">ALBUM</div>
                         <div class="profile-scroll-wrapper" id="albumScroll"></div>
                     </div>
                 </div>
@@ -90,8 +90,8 @@
 
                 <div class="archive-media-block">
                     <div class="archive-media-head">
-                        <div class="archive-sub-header">YOUTUBE <span>모아보기</span></div>
-                        <a href="media/media.html" class="archive-media-more">더보기 →</a>
+                        <div class="archive-sub-header" data-i18n="youtubeCollect">YOUTUBE <span>모아보기</span></div>
+                        <a href="media/media.html" class="archive-media-more" data-i18n="seeMore">더보기 →</a>
                     </div>
                     <div class="latest-media-grid" id="latestMediaGrid"></div>
                 </div>
@@ -100,15 +100,15 @@
 
         <div class="section-container reveal full-page-section" id="honorsSection">
             <div class="section-header center-header section-header-md">
-                <div class="section-title">AWARDS & <span>AMBASSADOR</span></div>
+                <div class="section-title" data-i18n="sectionAwards">AWARDS & <span>AMBASSADOR</span></div>
             </div>
             
             <div class="honors-linear-layout">
                 <!-- 음악방송 섹션 -->
                 <div class="honors-linear-group">
                     <div class="honors-linear-header">
-                        <h3>음악방송</h3>
-                        <a href="javascript:void(0)" onclick="openAwardsHistoryModal()" class="honors-more-text">전체 히스토리 보기 →</a>
+                        <h3 data-i18n="musicShowTitle">음악방송</h3>
+                        <a href="javascript:void(0)" onclick="openAwardsHistoryModal()" class="honors-more-text" data-i18n="fullHistory">전체 히스토리 보기 →</a>
                     </div>
                     <ul class="honors-list" id="awardsPreviewList"></ul>
                 </div>
@@ -116,8 +116,8 @@
                 <!-- 광고/홍보대사 섹션 -->
                 <div class="honors-linear-group">
                     <div class="honors-linear-header">
-                        <h3>광고 · 홍보대사</h3>
-                        <a href="javascript:void(0)" onclick="openAdsHistoryModal()" class="honors-more-text">전체 히스토리 보기 →</a>
+                        <h3 data-i18n="adsAmbassadorTitle">광고 · 홍보대사</h3>
+                        <a href="javascript:void(0)" onclick="openAdsHistoryModal()" class="honors-more-text" data-i18n="fullHistory">전체 히스토리 보기 →</a>
                     </div>
                     <ul class="honors-list" id="adsPreviewChips"></ul>
                 </div>
@@ -126,7 +126,7 @@
 
         <div class="section-container reveal full-page-section" id="todayScheduleSection">
             <div class="section-header center-header section-header-sm">
-                <div class="section-title">TODAY'S <span>SCHEDULE</span></div>
+                <div class="section-title" data-i18n="sectionToday">TODAY'S <span>SCHEDULE</span></div>
             </div>
             <div class="today-double">
                 <div class="today-list-col">

@@ -85,6 +85,7 @@ async function fetchScheduleData() {
     if (typeof renderTodaySchedule === 'function') renderTodaySchedule();
     if (typeof renderTodayMonthSchedule === 'function') renderTodayMonthSchedule();
     if (typeof renderAgendaList === 'function') renderAgendaList();
+    if (typeof scrollTodayMonthColToToday === 'function') scrollTodayMonthColToToday();
 }
 
 function renderCalendar() {

@@ -129,9 +129,22 @@ function renderAgendaList() {
     list.innerHTML = html || `<div class="agenda-list-empty">이번 달 등록된 일정이 없습니다.</div>`;
 }
 
+function renderTodayCalBanner() {
+    const dowEl = document.getElementById('todayCalDow');
+    const dayEl = document.getElementById('todayCalDayNum');
+    const monthEl = document.getElementById('todayCalMonth');
+    if (!dowEl || !dayEl || !monthEl) return;
+    const now = new Date();
+    const weekdays = window.t ? window.t('weekdays') : ["일", "월", "화", "수", "목", "금", "토"];
+    dowEl.textContent = weekdays[now.getDay()];
+    dayEl.textContent = now.getDate();
+    monthEl.textContent = `${now.getFullYear()}. ${now.getMonth() + 1}`;
+}
+
 function renderTodaySchedule() {
     const grid = document.getElementById('todayScheduleGrid');
     if (!grid) return;
+    renderTodayCalBanner();
 
     const items = scheduleDB[getTodayKey()]?.items || [];
     const typeLabelMap = window.t ? window.t('scheduleTypes') : {};
@@ -201,6 +214,16 @@ function renderTodayMonthSchedule() {
     colA.innerHTML = html;
 }
 setInterval(renderTodayMonthSchedule, 60000);
+
+let __didAutoScrollTodayCol = false;
+function scrollTodayMonthColToToday() {
+    if (__didAutoScrollTodayCol) return; // 사용자가 스크롤해서 보고 있는 중에 새로고침 타이머 때문에 다시 튀지 않도록 최초 1회만
+    const colA = document.getElementById('todayScrollColA');
+    const todayGroup = colA ? colA.querySelector('.tm-group.is-today') : null;
+    if (!colA || !todayGroup) return;
+    __didAutoScrollTodayCol = true;
+    colA.scrollTop = Math.max(0, todayGroup.offsetTop - 8);
+}
 
 function renderProfileArchive() {
     const profileWrap = document.getElementById('profileScroll'); 

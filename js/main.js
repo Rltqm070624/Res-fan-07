@@ -133,12 +133,17 @@ function renderTodayCalBanner() {
     const dowEl = document.getElementById('todayCalDow');
     const dayEl = document.getElementById('todayCalDayNum');
     const monthEl = document.getElementById('todayCalMonth');
+    const dateSubEl = document.getElementById('todayDateSub');
     if (!dowEl || !dayEl || !monthEl) return;
     const now = new Date();
     const weekdays = window.t ? window.t('weekdays') : ["일", "월", "화", "수", "목", "금", "토"];
     dowEl.textContent = weekdays[now.getDay()];
     dayEl.textContent = now.getDate();
     monthEl.textContent = `${now.getFullYear()}. ${now.getMonth() + 1}`;
+    if (dateSubEl) {
+        const dateStr = window.tDate ? window.tDate(now.getFullYear(), now.getMonth() + 1, now.getDate()) : `${now.getFullYear()}. ${now.getMonth() + 1}. ${now.getDate()}`;
+        dateSubEl.textContent = `${dateStr} (${weekdays[now.getDay()]})`;
+    }
 }
 
 function renderTodaySchedule() {

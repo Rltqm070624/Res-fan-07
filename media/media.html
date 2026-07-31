@@ -28,9 +28,9 @@
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
         <div class="section-container media-page-container" style="flex: 1;">
             <div class="section-header media-hero">
-                <div class="section-title">MEDIA <span>ARCHIVE</span></div>
+                <div class="section-title" data-i18n="mediaTitle">MEDIA <span>ARCHIVE</span></div>
             </div>
-            <p class="media-hero-sub">리센느 유튜브 모아보기<span class="media-count-badge" id="mediaCountBadge"></span></p>
+            <p class="media-hero-sub"><span data-i18n="mediaSub">리센느 유튜브 모아보기</span><span class="media-count-badge" id="mediaCountBadge"></span></p>
 
             <div class="media-toolbar">
                 <div class="media-toolbar-top">
@@ -45,7 +45,7 @@
                 <div class="media-sort-row-wrap">
                     <div class="media-search-wrap">
                         <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()" autocomplete="off">
+                        <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" data-i18n-placeholder="searchPlaceholder" oninput="mediaApplyFilters()" autocomplete="off">
                         <button type="button" class="media-search-clear" id="mediaSearchClear" onclick="mediaClearSearch()" aria-label="검색어 지우기">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </button>
@@ -53,20 +53,20 @@
                     <div class="media-sort-group" role="group" aria-label="정렬">
                         <button type="button" class="msort-btn active" id="sortDateNew" onclick="mediaSetSort('date','desc')">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                            최신순
+                            <span data-i18n="sortNewest">최신순</span>
                         </button>
                         <button type="button" class="msort-btn" id="sortDateOld" onclick="mediaSetSort('date','asc')">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            오래된순
+                            <span data-i18n="sortOldest">오래된순</span>
                         </button>
                         <span class="msort-divider"></span>
                         <button type="button" class="msort-btn" id="sortNameAsc" onclick="mediaSetSort('name','asc')">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                            가나다순
+                            <span data-i18n="sortNameAsc">가나다순</span>
                         </button>
                         <button type="button" class="msort-btn" id="sortNameDesc" onclick="mediaSetSort('name','desc')">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            역순
+                            <span data-i18n="sortNameDesc">역순</span>
                         </button>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
 
             <div class="media-grid" id="mediaGrid"></div>
             <div class="media-scroll-sentinel" id="mediaSentinel"></div>
-            <div class="media-end-message" id="mediaEndMessage" style="display:none;">모든 영상을 다 봤어요.</div>
+            <div class="media-end-message" id="mediaEndMessage" style="display:none;" data-i18n="mediaAllDone">모든 영상을 다 봤어요.</div>
         </div>
 
         <div id="siteFooterSlot"></div>
@@ -95,16 +95,16 @@
         <div class="media-modal-nav">
             <button type="button" class="mm-nav-btn" id="mediaPrevBtn" onclick="mediaPrev()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                이전 영상
+                <span data-i18n="prevVideo">이전 영상</span>
             </button>
             <button type="button" class="mm-nav-btn mm-nav-next" id="mediaNextBtn" onclick="mediaNext()">
-                다음 영상
+                <span data-i18n="nextVideo">다음 영상</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             </button>
         </div>
         <div class="media-modal-playlist" id="mediaModalPlaylist">
             <div class="mm-drag-handle" id="mmDragHandle">
-                <span class="mm-drag-label">재생목록 <b id="mmPlaylistCount">0</b></span>
+                <span class="mm-drag-label"><span data-i18n="playlist">재생목록</span> <b id="mmPlaylistCount">0</b></span>
             </div>
             <ul class="mm-playlist-list" id="mmPlaylistList"></ul>
         </div>

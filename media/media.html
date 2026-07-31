@@ -25,7 +25,7 @@
     <script src="../js/layout.js"></script>
     <script>renderSiteNav('media', '../', { calendar: true, lang: true });</script>
 
-    <!-- ⭐️ 영상쪽만 스크롤되도록 media-wrapper-locked 클래스 적용 -->
+    <!-- ⭐️ 왼쪽 고정, 오른쪽 스크롤 락을 위한 media-wrapper-locked 클래스 -->
     <div id="mainWrapper" class="media-wrapper-locked" style="padding-top: 120px;">
         <div class="section-container media-page-container">
             <div class="section-header media-hero">
@@ -35,7 +35,7 @@
 
             <div class="media-layout">
                 
-                <!-- ⭐️ 좌측 고정 사이드바 필터 -->
+                <!-- ⭐️ 좌측 고정 사이드바 필터 (스크롤은 따로) -->
                 <aside class="media-sidebar">
                     <div class="ms-col">
                         <div class="ms-title">CATEGORY</div>
@@ -51,13 +51,13 @@
                     </div>
                 </aside>
 
-                <!-- ⭐️ 우측 메인(영상) 개별 스크롤 영역 -->
+                <!-- ⭐️ 우측 메인 (개별적으로 스크롤되는 영상 영역) -->
                 <main class="media-main">
                     <div class="media-toolbar">
                         <div class="media-toolbar-left">
-                            <button type="button" class="adv-filter-btn" onclick="openAdvFilter()">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-                                <span>필터</span>
+                            <!-- ⭐️ 필터 문구 삭제, 둥근 아이콘 형태만 남김 -->
+                            <button type="button" class="adv-filter-btn" aria-label="필터" onclick="openAdvFilter()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
                             </button>
                             <div class="media-search-wrap">
                                 <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -92,7 +92,7 @@
                     <div class="media-scroll-sentinel" id="mediaSentinel"></div>
                     <div class="media-end-message" id="mediaEndMessage" style="display:none;">모든 영상을 다 봤어요.</div>
 
-                    <!-- ⭐️ 푸터가 우측 스크롤에 따라오도록 메인 안에 배치 -->
+                    <!-- ⭐️ 메인 스크롤 하단에 푸터 배치 -->
                     <div id="siteFooterSlot" style="margin-top: 60px;"></div>
                     <script>renderSiteFooter('../');</script>
                 </main>
@@ -100,7 +100,7 @@
         </div>
     </div>
 
-    <!-- ⭐️ 한글화 및 버튼 디자인이 반영된 서랍(Drawer) -->
+    <!-- ⭐️ 한글화 적용된 고급 다중선택 서랍 (Drawer) -->
     <div class="drawer-backdrop" id="advFilterBackdrop" onclick="closeAdvFilter()"></div>
     <div class="adv-filter-drawer" id="advFilterDrawer">
         <div class="afd-header">
@@ -116,12 +116,14 @@
             <div class="afd-section">
                 <div class="afd-sec-title">상세 검색 <span>선택 해제 가능</span></div>
                 <div class="afd-chips" id="afdActiveChips"></div>
+                <!-- ⭐️ 검은색 초기화 버튼 반영 -->
                 <button class="afd-action-btn btn-black" onclick="mediaClearAllFilters()">전체 초기화</button>
             </div>
 
             <div class="afd-section">
                 <div class="afd-sec-title">관련 주제 선택 <span id="afdTopicCount">선택됨 0</span></div>
                 <div class="afd-chips" id="afdTopicChips"></div>
+                <!-- ⭐️ 검은색 초기화 버튼 반영 -->
                 <button class="afd-action-btn btn-black" onclick="mediaResetTopics()">초기화</button>
             </div>
         </div>

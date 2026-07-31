@@ -27,8 +27,14 @@ function renderMemberDetail() {
 
     document.getElementById('memberPageTitleKo').textContent = m.nameKo;
     document.getElementById('memberPageTitleEn').textContent = m.nameEn;
-    document.getElementById('memberIntro').textContent = m.intro;
     document.getElementById('memberBday').textContent = m.birthday;
+
+    const bdayBadge = document.getElementById('memberBdayBadge');
+    if (bdayBadge) {
+        const now = new Date();
+        const mmdd = `${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+        bdayBadge.style.display = m.birthday.endsWith(mmdd) ? '' : 'none';
+    }
     document.getElementById('memberPosition').textContent = m.position;
     document.getElementById('memberMbti').textContent = m.mbti;
     document.getElementById('memberSpecialty').textContent = m.specialty;

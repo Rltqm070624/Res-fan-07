@@ -16,9 +16,11 @@ function renderFcList() {
     if (!wrap || typeof FANCHANT_DATA === 'undefined') return;
 
     if (!FANCHANT_DATA.length) {
+        const t1 = window.t ? window.t('fanchantEmptyTitle') : '아직 등록된 응원법이 없어요.';
+        const t2 = window.t ? window.t('fanchantEmptySub') : '준비되는 대로 곡별 응원법을 채워넣을 예정이에요!';
         wrap.innerHTML = `<div class="fc-empty-list">
             <div class="ico">🎤</div>
-            <p>아직 등록된 응원법이 없어요.<br>준비되는 대로 곡별 응원법을 채워넣을 예정이에요!</p>
+            <p>${t1}<br>${t2}</p>
         </div>`;
         return;
     }

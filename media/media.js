@@ -1,19 +1,16 @@
 let mediaActiveTag = '전체';
-let mediaYearTouched = false; // ⭐️ 카테고리 클릭 직후엔 연도만 보이고, 실제로 연도를 눌러야 세부분류가 뜨게 하기 위한 플래그
-let mediaActiveSub = '전체';
-let mediaActiveSub2 = '전체';
+let mediaActiveSub = '전체'; // 연도 (Year)
+let mediaActiveSub2 = '전체'; // 디테일 (Detail)
 let mediaSortField = 'date'; // 'date' | 'name'
 let mediaSortDir = 'desc';   // 'desc' | 'asc'
 let mediaSearchTerm = '';
 let mediaVisibleCount = 24;
 const MEDIA_PAGE_SIZE = 24;
 
-// 컨텐츠 탭 안에서 광고·콜라보 / 외부 콘텐츠로 나누고, 그 안에서 브랜드·채널명으로 다시 나누는 트리 분류
 const MEDIA_AD_BRAND_KEYWORDS = [
     '서든어택', '카사베르디', '엘리트', 'CU', '도미노피자', '나랑드', 'I-SHA', 'Wish I-GIRL',
     'WINDANDSEA', 'WIND AND SEA', '프리티스킨', '김씨네과일', 'KREAM', '티오더', 'FC모바일', 'FC 모바일'
 ];
-// 제목만으로는 브랜드가 안 드러나는 영상들 (예: "엘리트 룩북 촬영 현장 대공개" 처럼 브랜드명이 빠진 경우) — 영상 ID로 직접 매칭
 const MEDIA_AD_VID_BRAND_MAP = {
     '_RQjePTZ6EQ': '엘리트',
     '9i1cbplzxQM': '카사베르디',
@@ -27,7 +24,6 @@ function mediaGetContentBrand(item) {
     const title = item.title || '';
     const hit = MEDIA_AD_BRAND_KEYWORDS.find(kw => title.includes(kw));
     if (hit) return hit;
-    // ⚠️ contents.js의 MEDIA_CATEGORIES.getItems()에서 채널명을 item.channel이 아니라 item.sub로 매핑함
     const channel = item.sub || item.channel;
     return channel && channel !== '유튜브 채널' ? channel : '기타';
 }
@@ -37,34 +33,33 @@ function mediaClassifyContentGroup(item) {
     return MEDIA_AD_BRAND_KEYWORDS.some(kw => title.includes(kw)) ? '광고 · 콜라보' : '외부 콘텐츠';
 }
 
-/* ⭐️ 하위 분류 트리 — 모든 대분류가 "연도 > 세부분류" 순서로 통일됨 */
 const MEDIA_SUBFILTERS = {
     '컨텐츠': {
-        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
+        year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse(),
         sub: {
             getOptions: (items) => [...new Set(items.map(mediaGetContentBrand))].filter(Boolean).sort((a, b) => a.localeCompare(b, 'ko')),
             match: (item, sub2) => mediaGetContentBrand(item) === sub2
         }
     },
     '음반 활동 컨텐츠': {
-        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse()
+        year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse()
     },
     '음악 방송': {
-        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
+        year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse(),
         sub: {
             getOptions: (items) => [...new Set(items.map(i => i.program).filter(Boolean))],
             match: (item, sub2) => item.program === sub2
         }
     },
     '라이브 방송': {
-        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
+        year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse(),
         sub: {
             getOptions: () => ['원이', '리브', '미나미', '메이', '제나'],
             match: (item, sub2) => item.sub === '전원' || (item.sub || '').includes(sub2)
         }
     },
     '공연 및 행사': {
-        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse()
+        year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse()
     }
 };
 
@@ -85,7 +80,6 @@ function mediaInitTagFromQuery() {
     }
 }
 
-/* ── 컬럼 1: 대분류 ── */
 function mediaRenderTagRow() {
     const row = document.getElementById('mediaTagRow');
     if (!row) return;
@@ -95,13 +89,11 @@ function mediaRenderTagRow() {
         const style = t.color ? `style="--chip-color:${t.color};"` : '';
         return `<button type="button" class="mf-row${active ? ' active' : ''}" ${style} onclick="mediaSetTag('${t.label}')">
             <span>${t.label}</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>`;
     }).join('');
     mediaRenderYearCol();
 }
 
-/* ── 컬럼 2: 연도 ── */
 function mediaRenderYearCol() {
     const col = document.getElementById('mediaYearCol');
     const wrap = document.getElementById('mediaYearColWrap');
@@ -119,27 +111,31 @@ function mediaRenderYearCol() {
     col.innerHTML = options.map(opt =>
         `<button type="button" class="mf-row${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${opt}')">
             <span>${opt === '전체' ? '전체' : opt + '년'}</span>
-            ${cfg.sub ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>' : ''}
         </button>`
     ).join('');
     mediaRenderSubCol();
 }
 
-/* ── 컬럼 3: 카테고리별 세부분류 — 연도를 실제로 클릭하기 전까진 숨김 ── */
 function mediaRenderSubCol() {
     const col = document.getElementById('mediaSubCol');
     const wrap = document.getElementById('mediaSubColWrap');
     if (!col || !wrap) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    if (!cfg || !cfg.sub || !mediaYearTouched) { wrap.style.display = 'none'; col.innerHTML = ''; return; }
+    
+    // ⭐️ 터치 여부(mediaYearTouched) 삭제: 카테고리만 선택해도 DETAIL 필터가 즉시 표시됨
+    if (!cfg || !cfg.sub) { 
+        wrap.style.display = 'none'; 
+        col.innerHTML = ''; 
+        return; 
+    }
 
     let itemsInYear = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
-    if (mediaActiveSub !== '전체') itemsInYear = itemsInYear.filter(i => i.date.slice(0, 4) === mediaActiveSub);
+    if (mediaActiveSub !== '전체') itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
 
     const options = ['전체'].concat(cfg.sub.getOptions(itemsInYear));
     wrap.style.display = 'flex';
     col.innerHTML = options.map(opt =>
-        `<button type="button" class="mf-row${opt === mediaActiveSub2 ? ' active' : ''}" onclick="mediaSetSub2('${opt}')"><span>${opt}</span></button>`
+        `<button type="button" class="mf-row${opt === mediaActiveSub2 ? ' active' : ''}" onclick="mediaSetSub2('${escapeHtml(opt)}')"><span>${escapeHtml(opt)}</span></button>`
     ).join('');
 }
 
@@ -148,15 +144,13 @@ function mediaSetTag(label) {
     mediaActiveTag = label;
     mediaActiveSub = '전체';
     mediaActiveSub2 = '전체';
-    mediaYearTouched = false;
     mediaRenderTagRow();
     mediaApplyFilters();
 }
 
 function mediaSetSub(sub) {
     mediaActiveSub = sub;
-    mediaActiveSub2 = '전체';
-    mediaYearTouched = true;
+    mediaActiveSub2 = '전체'; // 연도가 바뀌면 세부분류 리셋
     mediaRenderYearCol();
     mediaApplyFilters();
 }
@@ -192,18 +186,29 @@ function mediaApplyFilters() {
     mediaRenderGrid(true);
 }
 
+// ⭐️ 필터링 작동 오류 수정
 function mediaGetFiltered() {
     let list = mediaGetAllItems();
     if (mediaActiveTag !== '전체') list = list.filter(i => i.tagLabel === mediaActiveTag);
 
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    if (cfg && mediaActiveSub !== '전체') list = list.filter(i => cfg.match(i, mediaActiveSub));
-    if (cfg && cfg.third && mediaActiveSub2 !== '전체') list = list.filter(i => cfg.third.match(i, mediaActiveSub2));
+    if (cfg) {
+        // 1. 연도 필터링
+        if (mediaActiveSub !== '전체') {
+            list = list.filter(i => (i.date || '').startsWith(mediaActiveSub));
+        }
+        // 2. 세부 카테고리 필터링 (오류가 있던 원인인 cfg.match 부분 해결)
+        if (cfg.sub && mediaActiveSub2 !== '전체') {
+            list = list.filter(i => cfg.sub.match(i, mediaActiveSub2));
+        }
+    }
 
+    // 3. 검색어 필터링
     if (mediaSearchTerm) {
         list = list.filter(i => ((i.title || '') + ' ' + (i.sub || '')).toLowerCase().includes(mediaSearchTerm));
     }
 
+    // 4. 정렬
     if (mediaSortField === 'name') {
         list.sort((a, b) => {
             const an = mediaCardTitle(a) || '';
@@ -212,13 +217,12 @@ function mediaGetFiltered() {
             return mediaSortDir === 'asc' ? cmp : -cmp;
         });
     } else {
-        list.sort((a, b) => mediaSortDir === 'desc' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
+        list.sort((a, b) => mediaSortDir === 'desc' ? (b.date||'').localeCompare(a.date||'') : (a.date||'').localeCompare(b.date||''));
     }
     return list;
 }
 
 function mediaCardTitle(item) {
-    // ⭐️ 음악방송에서 프로그램을 특정해서 골랐으면, 카드 제목엔 이미 아는 프로그램명 대신 곡명만
     if (item.tagLabel === '음악 방송' && mediaActiveSub2 !== '전체' && item.program) {
         return item.title.replace(`${item.program} · `, '');
     }
@@ -227,11 +231,14 @@ function mediaCardTitle(item) {
 
 function mediaCardHtml(item, idx) {
     const title = mediaCardTitle(item);
+    // 태그 색상 가져오기
+    let badgeColor = item.tagColor || 'var(--text-primary)';
+    
     return `<div class="media-card">
         <div class="media-card-thumb" data-index="${idx}" onclick="mediaPlayCard(this)">
             <img src="${ytThumb(item.vid)}" alt="${escapeAttr(title)}" loading="lazy" onerror="this.closest('.media-card').style.display='none'">
             <button type="button" class="mc-play" aria-label="재생"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-            <span class="media-card-tag" style="background:${item.tagColor}e6;">${escapeHtml(item.tagLabel)}</span>
+            <span class="media-card-tag" style="background:${badgeColor};">${escapeHtml(item.tagLabel)}</span>
         </div>
         <div class="media-card-info">
             <div class="mc-title">${escapeHtml(title)}</div>
@@ -247,6 +254,10 @@ function mediaRenderGrid(reset) {
 
     const filtered = mediaGetFiltered();
 
+    // 뱃지 숫자 업데이트
+    const countBadge = document.getElementById('mediaCountBadge');
+    if (countBadge) countBadge.innerHTML = `검색결과 <b>${filtered.length}</b>개`;
+
     if (!filtered.length) {
         grid.innerHTML = '<div class="media-empty">검색 결과가 없어요.</div>';
         if (endMsg) endMsg.style.display = 'none';
@@ -256,6 +267,7 @@ function mediaRenderGrid(reset) {
     if (reset) grid.innerHTML = '';
     const start = reset ? 0 : grid.querySelectorAll('.media-card').length;
     const end = Math.min(mediaVisibleCount, filtered.length);
+    
     if (start < end) {
         const slice = filtered.slice(start, end);
         grid.insertAdjacentHTML('beforeend', slice.map((item, i) => mediaCardHtml(item, start + i)).join(''));
@@ -264,7 +276,6 @@ function mediaRenderGrid(reset) {
     if (endMsg) endMsg.style.display = (mediaVisibleCount >= filtered.length) ? 'block' : 'none';
 }
 
-/* ⭐️ 무한 스크롤 — 하단 감지 지점이 보이면 자동으로 다음 페이지 로드 (더 불러오기 버튼 없음) */
 let mediaInfiniteObserver = null;
 function mediaSetupInfiniteScroll() {
     const sentinel = document.getElementById('mediaSentinel');
@@ -281,9 +292,7 @@ function mediaSetupInfiniteScroll() {
     mediaInfiniteObserver.observe(sentinel);
 }
 
-/* ==========================================================================
-   ⭐️ 영상 재생 모달 — 제목/날짜 + 이전/다음 + 드래그 가능한 재생목록 시트
-   ========================================================================== */
+/* 영상 재생 모달 로직 (기존과 동일) */
 let mmPlaylist = [];
 let mmIndex = -1;
 let mmExpanded = false;
@@ -376,7 +385,6 @@ function mediaClosePlayer() {
     document.body.style.overflow = '';
 }
 
-/* 재생목록 시트 드래그 (마우스/터치 공용) — 위로 끌면 펼쳐지고, 아래로 끌면 접힘 */
 (function initMmDrag() {
     let startY = 0, dragging = false, moved = false;
     function pointY(e) { return e.touches ? e.touches[0].clientY : e.clientY; }
@@ -389,7 +397,7 @@ function mediaClosePlayer() {
         if (!dragging) return;
         dragging = false;
         const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
-        const delta = startY - endY; // 양수 = 위로 드래그
+        const delta = startY - endY;
         if (!moved) { mmToggleExpanded(); return; }
         if (delta > 20) mmSetExpanded(true);
         else if (delta < -20) mmSetExpanded(false);
@@ -411,6 +419,4 @@ window.addEventListener('DOMContentLoaded', () => {
     mediaRenderTagRow();
     mediaRenderGrid(true);
     mediaSetupInfiniteScroll();
-    const badge = document.getElementById('mediaCountBadge');
-    if (badge) badge.innerHTML = `총 <b>${mediaGetAllItems().length}</b>개`;
 });

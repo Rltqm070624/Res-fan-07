@@ -24,7 +24,8 @@
             noLink: "등록된 링크가 없습니다",
 
             navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
-            navGoods: "GOODS", navFanchant: "응원법", navMedia: "영상 모음",
+            navGoods: "GOODS", navNews: "NEWS", navFanchant: "응원법", navMedia: "영상 모음",
+            newsTitle: "RESCENE <span>NEWS</span>", newsSub: "구글·네이버·다음 등에서 모은 리센느 관련 기사입니다.", newsEmpty: "아직 등록된 기사가 없습니다.",
 
             heroWelcome: "리센느 비공식 팬 아카이브에 오신 것을 환영합니다.",
             heroEnter: "바로가기 →",
@@ -77,7 +78,8 @@
             noLink: "No link available",
 
             navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
-            navGoods: "GOODS", navFanchant: "FANCHANT", navMedia: "MEDIA",
+            navGoods: "GOODS", navNews: "NEWS", navFanchant: "FANCHANT", navMedia: "MEDIA",
+            newsTitle: "RESCENE <span>NEWS</span>", newsSub: "RESCENE news gathered from Google, Naver, and Daum.", newsEmpty: "No articles yet.",
 
             heroWelcome: "Welcome to the unofficial RESCENE fan archive.",
             heroEnter: "Enter →",
@@ -130,7 +132,8 @@
             noLink: "登録されたリンクがありません",
 
             navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
-            navGoods: "GOODS", navFanchant: "応援法", navMedia: "動画まとめ",
+            navGoods: "GOODS", navNews: "NEWS", navFanchant: "応援法", navMedia: "動画まとめ",
+            newsTitle: "RESCENE <span>NEWS</span>", newsSub: "Google・Naver・Daumなどで集めたRESCENE関連ニュースです。", newsEmpty: "まだ登録された記事がありません。",
 
             heroWelcome: "RESCENE非公式ファンアーカイブへようこそ。",
             heroEnter: "入る →",
@@ -183,7 +186,8 @@
             noLink: "暂无相关链接",
 
             navHome: "首页", navMembers: "成员", navCharts: "榜单", navSchedule: "日程",
-            navGoods: "周边", navFanchant: "应援口号", navMedia: "视频合集",
+            navGoods: "周边", navNews: "新闻", navFanchant: "应援口号", navMedia: "视频合集",
+            newsTitle: "RESCENE <span>新闻</span>", newsSub: "从谷歌、Naver、Daum等收集的RESCENE相关新闻。", newsEmpty: "暂无收录的新闻。",
 
             heroWelcome: "欢迎来到RESCENE非官方粉丝档案站。",
             heroEnter: "进入 →",

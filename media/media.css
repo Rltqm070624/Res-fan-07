@@ -3,54 +3,55 @@
 
 .media-hero { margin-bottom: 14px; }
 .media-hero-sub { font-family: var(--font-body); font-size: 13.5px; color: var(--text-muted); margin: 0 0 30px; }
-.media-count-badge { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); }
+.media-count-badge { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); margin-left: 6px; }
 .media-count-badge b { color: var(--text-primary); font-weight: 700; }
 
 .media-toolbar { margin-bottom: 30px; }
 
-/* ⭐️ 필터 패널 — 라벨 + 가로 필 칩 그룹, 박스/구분선 없이 깔끔하게 */
+/* ⭐️ 필터 패널 — 가로 스크롤(Single-line) 칩 그룹으로 변경하여 깔끔하게 표시 */
 .media-filter-panel {
-    display: flex; flex-direction: column; gap: 16px;
-    border: none; border-radius: 0; overflow: visible;
+    display: flex; flex-direction: column; gap: 12px;
+    border: none; border-radius: 0; overflow: hidden;
     background: transparent; margin-bottom: 4px;
 }
-.mf-col-wrap { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; border: none; }
-.mf-col-head {
-    flex-shrink: 0; width: 64px; font-family: var(--font-head); font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
-    color: var(--text-muted); padding: 0; border-bottom: none;
+.mf-col-wrap { 
+    display: flex; align-items: center; gap: 16px; 
+    border: none; width: 100%; overflow: hidden; 
 }
-.mf-col { display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px; max-height: none; overflow: visible; flex: 1; min-width: 0; }
+.mf-col-head {
+    flex-shrink: 0; width: 68px; font-family: var(--font-head); font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+    color: var(--text-muted); padding: 0; 
+}
+
+/* 감싸지 않고 1줄로 길게 늘어트린 후, 가로 스크롤 적용 (유튜브 스타일) */
+.mf-col { 
+    display: flex; flex-direction: row; flex-wrap: nowrap; gap: 8px; 
+    flex: 1; min-width: 0; 
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; 
+    padding-bottom: 4px; /* 스크롤 여백 */
+}
+.mf-col::-webkit-scrollbar { display: none; }
 
 .mf-row {
-    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-    width: auto; box-sizing: border-box; padding: 8px 16px; border: 1px solid var(--border-light); border-radius: 999px;
+    flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 8px 16px; border: 1px solid var(--border-light); border-radius: 999px;
     background: var(--bg-surface); color: var(--text-secondary);
-    font-family: var(--font-body); font-size: 12.5px; font-weight: 600; text-align: center; white-space: nowrap;
+    font-family: var(--font-body); font-size: 13px; font-weight: 600; text-align: center; white-space: nowrap;
     cursor: pointer; transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
 }
 .mf-row svg { width: 11px; height: 11px; flex-shrink: 0; opacity: 0.5; }
 .mf-row:hover { background: var(--bg-surface-hover); color: var(--text-primary); border-color: var(--border-highlight); }
 .mf-row.active {
-    background: var(--chip-color, var(--c-accent)); border-color: var(--chip-color, var(--c-accent));
-    color: #fff; font-weight: 700;
+    background: var(--chip-color, var(--text-primary)); border-color: var(--chip-color, var(--text-primary));
+    color: var(--bg-base); font-weight: 700;
 }
 .mf-row.active svg { opacity: 1; }
 
 @media (max-width: 900px) {
-    .mf-col-wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .mf-col-head { width: auto; }
-
-    /* 세로 스크롤 목록 여러 개가 쌓여서 지저분해지는 대신, 각 단계를 가로로 넘기는 칩 한 줄로 */
-    .mf-col {
-        flex-wrap: nowrap; width: 100%;
-        overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
-        gap: 6px;
-    }
-    .mf-col::-webkit-scrollbar { display: none; }
-    .mf-row { flex: 0 0 auto; padding: 7px 13px; font-size: 12px; }
-    .mf-row svg { width: 10px; height: 10px; }
+    .mf-col-wrap { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .mf-col-head { width: auto; font-size: 10px; margin-bottom: 2px; }
+    .mf-row { padding: 7px 14px; font-size: 12px; }
 }
-
 
 .media-search-wrap {
     display: flex; align-items: center; gap: 8px;
@@ -74,6 +75,7 @@
 .media-search-clear.show { display: flex; }
 .media-search-clear:hover { color: var(--c-accent); }
 .media-search-clear svg { width: 11px; height: 11px; }
+
 .media-sort-row-wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border-light); }
 
 .media-sort-group { display: flex; align-items: center; gap: 2px; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 999px; padding: 4px; flex-wrap: wrap; }
@@ -100,7 +102,7 @@
 .media-card-thumb:hover .mc-play { background: rgba(0,0,0,0.22); }
 .media-card-thumb .mc-play svg { width: 26px; height: 26px; color: #fff; opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; transform: scale(0.85); filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7)); }
 .media-card-thumb:hover .mc-play svg { opacity: 0.96; transform: scale(1); }
-.media-card-tag { position: absolute; left: 9px; top: 9px; padding: 4px 10px; border-radius: 7px; color: #0c0c14; font-family: var(--font-head); font-size: 9.5px; font-weight: 800; letter-spacing: 0.3px; }
+.media-card-tag { position: absolute; left: 9px; top: 9px; padding: 4px 10px; border-radius: 7px; color: #fff; font-family: var(--font-head); font-size: 9.5px; font-weight: 800; letter-spacing: 0.3px; }
 .media-card-info { padding: 12px 2px 0; }
 .media-card-info .mc-title { font-family: var(--font-body); font-size: 13.5px; font-weight: 600; color: var(--text-primary); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .media-card-info .mc-sub { font-family: var(--font-num); font-size: 11px; color: var(--text-muted); margin-top: 6px; }

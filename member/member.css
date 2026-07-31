@@ -63,27 +63,27 @@
 .mem-hero .mem-era-zoom-hint svg { width: 16px; height: 16px; }
 .mem-hero:hover .mem-era-zoom-hint { opacity: 1; }
 
-
 /* ==============================================================
-   ⭐️ 오른쪽: 에디토리얼 스타일의 스탯 라인 (박스 삭제)
+   ⭐️ 오른쪽: 에디토리얼 스타일의 스탯 라인 
    ============================================================== */
 .mem-info-col {
     min-width: 0; display: flex; flex-direction: column;
-    justify-content: center; 
-    padding-bottom: 20px;
+    /* ⭐️ 왼쪽 이미지의 상/하단 선과 완벽하게 일치시키기 위한 정렬 */
+    justify-content: space-between; 
+    padding-top: 12px;
+    padding-bottom: 0; 
 }
 
 .mem-profile-stats {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-bottom: 60px;
-    background: transparent; /* 배경 날림 */
-    border: none;            /* 외곽선 날림 */
-    box-shadow: none;        /* 그림자 날림 */
+    margin-bottom: 40px; /* 창이 작아질 때를 대비한 여백 */
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
-/* 첫 번째 줄 위에 무게감 있는 굵은 선 */
 .stat-row:first-child {
     border-top: 2px solid var(--text-primary);
 }
@@ -95,7 +95,7 @@
 }
 
 .stat-label {
-    width: 130px; /* 라벨 너비 고정으로 깔끔한 정렬 */
+    width: 130px;
     flex-shrink: 0;
     font-family: var(--font-head);
     font-size: 11px;
@@ -114,24 +114,22 @@
     word-break: keep-all;
 }
 
-/* MBTI는 현대적인 뱃지 스타일로 포인트 부여 */
-.mbti-badge {
-    flex: none; /* 뱃지 크기만큼만 차지 */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 12px;
-    border-radius: 999px;
+/* ⭐️ MBTI 텍스트 - 다른 스탯과 통일하되 고유 색상 및 영문 폰트 적용 */
+.mbti-val {
     font-family: var(--font-num);
-    font-size: 13.5px;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: 0.05em;
-    background: color-mix(in srgb, var(--mem-active-color, var(--c-accent)) 12%, transparent);
-    color: var(--mem-active-color, var(--c-accent));
+    color: var(--mem-active-color, var(--text-primary));
 }
 
+/* ==============================================================
+   ⭐️ 포토 아카이브 하단 영역 
+   ============================================================== */
+.mem-archive-section {
+    width: 100%;
+    /* justify-content: space-between에 의해 자동으로 가장 하단에 배치됨 */
+}
 
-/* 포토 아카이브 갤러리 */
 .mem-era-header {
     display: flex;
     align-items: flex-end;
@@ -161,7 +159,7 @@
     gap: 16px;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 10px 4px 20px; 
+    padding: 10px 4px 10px; /* 패딩 최소화로 이미지 하단 맞춤 */
     scroll-behavior: smooth;
     scrollbar-width: none; 
     -ms-overflow-style: none;
@@ -236,6 +234,7 @@
 @media (max-width: 900px) {
     .mem-header-row { flex-direction: column; align-items: flex-start; gap: 14px; }
     .mem-hero { aspect-ratio: 4 / 5; max-height: 62vh; }
+    .mem-info-col { padding-top: 0; justify-content: flex-start; }
     .mem-profile-stats { margin-bottom: 40px; }
     .stat-row { padding: 16px 0; }
     .stat-label { width: 100px; }
@@ -249,7 +248,7 @@
     .mem-page-title-ko { font-size: 24px; }
 }
 
-/* 포토 아카이브 모달 */
+/* 포토 아카이브 모달 (변경 없음) */
 .mem-era-modal {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
     width: 92%; max-width: 640px; max-height: 86vh;

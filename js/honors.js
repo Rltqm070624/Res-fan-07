@@ -100,7 +100,7 @@ function setHonorsHistoryHead(titleText, bannerSrc) {
 }
 
 function openAwardsHistoryModal() {
-    setHonorsHistoryHead('음악방송 1위 히스토리', null);
+    setHonorsHistoryHead('음악 방송 및 시상식', null);
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
         let html = `<div class="honors-tabbar">
@@ -163,13 +163,13 @@ function openAwardsHistoryModal() {
 }
 
 function openAdsHistoryModal() {
-    setHonorsHistoryHead('광고 · 콜라보 · 화보 히스토리', 'images/ad/ber.webp');
+    setHonorsHistoryHead('', 'images/ad/ber.webp');
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
         const categories = ['광고', '화보', '홍보대사', '콜라보'];
         const fmtDate = d => `${d.slice(0,4)}.${d.slice(5,7)}`;
 
-        let html = '<div class="honors-tabbar">';
+        let html = '<div class="honors-tabbar honors-tabbar-center">';
         categories.forEach((cat, i) => {
             html += `<button class="honors-tab${i === 0 ? ' active' : ''}" data-target="cat${i}">${cat}</button>`;
         });

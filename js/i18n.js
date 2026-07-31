@@ -24,7 +24,7 @@
             noLink: "등록된 링크가 없습니다",
 
             navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
-            navGoods: "GOODS", navNews: "NEWS", navFanchant: "응원법", navMedia: "영상 모음",
+            navGoods: "GOODS", navNews: "NEWS", navFanchant: "응원법", navMedia: "영상 모음", langLabel: "언어",
             newsTitle: "RESCENE <span>NEWS</span>", newsSub: "구글·네이버·다음 등에서 모은 리센느 관련 기사입니다.", newsEmpty: "아직 등록된 기사가 없습니다.",
 
             heroWelcome: "리센느 비공식 팬 아카이브에 오신 것을 환영합니다.",
@@ -38,7 +38,7 @@
             youtubeCollect: "YOUTUBE <span>모아보기</span>",
             seeMore: "더보기 →",
             sectionAwards: "AWARDS & <span>AMBASSADOR</span>",
-            musicShowTitle: "음악방송",
+            musicShowTitle: "음악 방송 및 시상식",
             adsAmbassadorTitle: "광고 · 홍보대사",
             fullHistory: "전체 히스토리 보기 →",
             sectionToday: "TODAY'S <span>SCHEDULE</span>",
@@ -78,7 +78,7 @@
             noLink: "No link available",
 
             navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
-            navGoods: "GOODS", navNews: "NEWS", navFanchant: "FANCHANT", navMedia: "MEDIA",
+            navGoods: "GOODS", navNews: "NEWS", navFanchant: "FANCHANT", navMedia: "MEDIA", langLabel: "Language",
             newsTitle: "RESCENE <span>NEWS</span>", newsSub: "RESCENE news gathered from Google, Naver, and Daum.", newsEmpty: "No articles yet.",
 
             heroWelcome: "Welcome to the unofficial RESCENE fan archive.",
@@ -92,7 +92,7 @@
             youtubeCollect: "YOUTUBE <span>Highlights</span>",
             seeMore: "See more →",
             sectionAwards: "AWARDS & <span>AMBASSADOR</span>",
-            musicShowTitle: "Music Shows",
+            musicShowTitle: "Music Shows & Awards",
             adsAmbassadorTitle: "Ads · Ambassador",
             fullHistory: "View full history →",
             sectionToday: "TODAY'S <span>SCHEDULE</span>",
@@ -132,7 +132,7 @@
             noLink: "登録されたリンクがありません",
 
             navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
-            navGoods: "GOODS", navNews: "NEWS", navFanchant: "応援法", navMedia: "動画まとめ",
+            navGoods: "GOODS", navNews: "NEWS", navFanchant: "応援法", navMedia: "動画まとめ", langLabel: "言語",
             newsTitle: "RESCENE <span>NEWS</span>", newsSub: "Google・Naver・Daumなどで集めたRESCENE関連ニュースです。", newsEmpty: "まだ登録された記事がありません。",
 
             heroWelcome: "RESCENE非公式ファンアーカイブへようこそ。",
@@ -146,7 +146,7 @@
             youtubeCollect: "YOUTUBE <span>まとめ</span>",
             seeMore: "もっと見る →",
             sectionAwards: "AWARDS & <span>AMBASSADOR</span>",
-            musicShowTitle: "音楽番組",
+            musicShowTitle: "音楽番組と表彰式",
             adsAmbassadorTitle: "広告・広報大使",
             fullHistory: "全履歴を見る →",
             sectionToday: "TODAY'S <span>SCHEDULE</span>",
@@ -186,7 +186,7 @@
             noLink: "暂无相关链接",
 
             navHome: "首页", navMembers: "成员", navCharts: "榜单", navSchedule: "日程",
-            navGoods: "周边", navNews: "新闻", navFanchant: "应援口号", navMedia: "视频合集",
+            navGoods: "周边", navNews: "新闻", navFanchant: "应援口号", navMedia: "视频合集", langLabel: "语言",
             newsTitle: "RESCENE <span>新闻</span>", newsSub: "从谷歌、Naver、Daum等收集的RESCENE相关新闻。", newsEmpty: "暂无收录的新闻。",
 
             heroWelcome: "欢迎来到RESCENE非官方粉丝档案站。",
@@ -200,7 +200,7 @@
             youtubeCollect: "YOUTUBE <span>合集</span>",
             seeMore: "查看更多 →",
             sectionAwards: "获奖 & <span>代言</span>",
-            musicShowTitle: "音乐节目",
+            musicShowTitle: "音乐节目与颁奖典礼",
             adsAmbassadorTitle: "广告 · 代言",
             fullHistory: "查看全部记录 →",
             sectionToday: "今日 <span>日程</span>",

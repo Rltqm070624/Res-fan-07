@@ -139,24 +139,21 @@ function mediaRenderSubtag2Row() {
     mediaRefreshSubPanelHeight();
 }
 
-/* ⭐️ 하위 분류 트리 아코디언 — 대분류 클릭 시 아래로 펼쳐짐/접힘 */
+/* ⭐️ 하위 분류 — 대분류 클릭 시 그 아래에 뜨는 작은 드롭다운 패널 */
 function mediaSetSubPanelOpen(open) {
     const panel = document.getElementById('mediaSubPanel');
     if (!panel) return;
-    if (open) {
-        panel.classList.add('open');
-        requestAnimationFrame(() => { panel.style.maxHeight = panel.scrollHeight + 'px'; });
-    } else {
-        panel.style.maxHeight = '0px';
-        panel.classList.remove('open');
-    }
+    panel.classList.toggle('open', !!open);
 }
-function mediaRefreshSubPanelHeight() {
+function mediaRefreshSubPanelHeight() { /* 드롭다운 패널은 고정 max-height + 스크롤이라 별도 재계산 불필요 */ }
+document.addEventListener('click', (e) => {
     const panel = document.getElementById('mediaSubPanel');
+    const catRow = document.getElementById('mediaTagRow');
     if (!panel || !panel.classList.contains('open')) return;
-    panel.style.maxHeight = panel.scrollHeight + 'px';
-}
-window.addEventListener('resize', () => mediaRefreshSubPanelHeight());
+    if (panel.contains(e.target) || (catRow && catRow.contains(e.target))) return;
+    mediaSetSubPanelOpen(false);
+    mediaSyncTagArrow();
+});
 
 function mediaSetTag(label) {
     if (label === mediaActiveTag) {

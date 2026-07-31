@@ -33,7 +33,7 @@
             </div>
 
             <div class="mem-detail-panel">
-                <!-- 왼쪽 메인 이미지 영역 (수정 안함) -->
+                <!-- 왼쪽 메인 이미지 영역 -->
                 <div class="mem-main-col">
                     <div class="mem-hero" id="memberHeroBtn" onclick="openEraModal()">
                         <img id="memberHeroImg" class="mem-hero-img" src="" alt="">
@@ -49,7 +49,7 @@
                 <!-- ⭐️ 오른쪽 정보 및 포토 아카이브 영역 -->
                 <div class="mem-info-col">
                     
-                    <!-- ⭐️ 촌스러운 박스를 벗어난 에디토리얼 스타일 스탯 리스트 -->
+                    <!-- 프로필 스탯 영역 (위로 정렬) -->
                     <div class="mem-profile-stats">
                         <div class="stat-row">
                             <span class="stat-label" data-i18n="memberBirthday">BIRTHDAY</span>
@@ -61,7 +61,8 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-label" data-i18n="memberMbti">MBTI</span>
-                            <span class="stat-val mbti-badge" id="memberMbti"></span>
+                            <!-- ⭐️ 뱃지 디자인 삭제, 동일한 텍스트 밸류로 변경 -->
+                            <span class="stat-val mbti-val" id="memberMbti"></span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label" data-i18n="memberSpecialty">SPECIALTY</span>
@@ -73,12 +74,14 @@
                         </div>
                     </div>
 
-                    <!-- 가로 스크롤 갤러리 형태의 포토 아카이브 -->
-                    <div class="mem-era-header">
-                        <div class="mem-era-title" data-i18n="memberPhotoArchive">PHOTO <span>ARCHIVE</span></div>
-                        <div class="mem-era-hint">Scroll to explore &rarr;</div>
+                    <!-- ⭐️ 포토 아카이브 영역 (하단 선 맞춤을 위해 래퍼 추가) -->
+                    <div class="mem-archive-section">
+                        <div class="mem-era-header">
+                            <div class="mem-era-title" data-i18n="memberPhotoArchive">PHOTO <span>ARCHIVE</span></div>
+                            <div class="mem-era-hint">Scroll to explore &rarr;</div>
+                        </div>
+                        <div class="mem-era-rail" id="memberEraRow"></div>
                     </div>
-                    <div class="mem-era-rail" id="memberEraRow"></div>
                     
                 </div>
             </div>
@@ -98,7 +101,7 @@
         <div class="mem-era-modal-label" id="memEraModalLabel"></div>
     </div>
 
-    <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
+    <!-- 캘린더 팝업 + 세부 일정 모달 -->
     <div id="siteCalendarSlot"></div>
     <script>renderCalendarWidgets();</script>
 

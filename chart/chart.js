@@ -130,18 +130,25 @@ function chartToggleShare(evt, id, songName, artistName) {
     chartShareOpenId = willOpen ? id : null;
     if (!willOpen) return;
 
-    const encodedUrl = encodeURIComponent(info.url);
-    const encodedText = encodeURIComponent(info.title);
+    const q = encodeURIComponent(`${songName} ${artistName}`);
+    const platformLinks = {
+        melon: `https://www.melon.com/search/total/index.htm?q=${q}`,
+        genie: `https://www.genie.co.kr/search/searchMain?query=${q}`,
+        vibe: `https://vibe.naver.com/search?query=${q}`,
+        bugs: `https://music.bugs.co.kr/search/integrated?q=${q}`,
+        flo: `https://www.music-flo.com/search/all?keyword=${q}`,
+        youtube_music: `https://music.youtube.com/search?q=${q}`,
+        spotify: `https://open.spotify.com/search/${q}`
+    };
+    const platformIcons = CHART_PLATFORMS.filter(p => p.key !== 'all').map(p =>
+        `<a class="chart-share-platform" href="${platformLinks[p.key]}" target="_blank" rel="noopener" title="${p.label}에서 찾기" style="--pc:${CHART_PLATFORM_DOT_COLOR[p.key]};">${p.label.slice(0, 1)}</a>`
+    ).join('');
     pop.innerHTML = `
-        <button type="button" onclick="chartShareKakao(${JSON.stringify(songName)}, ${JSON.stringify(artistName)})">
-            <span class="dot" style="background:#FEE500;"></span>카카오톡으로 공유
-        </button>
-        <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" rel="noopener">
-            <span class="dot" style="background:#000;"></span>X로 공유
-        </a>
-        <button type="button" onclick="chartShareCopy(this, ${JSON.stringify(info.url)})">
-            <span class="dot" style="background:var(--c-accent);"></span>링크 복사
-        </button>
+        <div class="chart-share-platforms">${platformIcons}</div>
+        <div class="chart-share-divider"></div>
+        <button type="button" class="chart-share-round" onclick="chartShareKakao(${JSON.stringify(songName)}, ${JSON.stringify(artistName)})" title="카카오톡으로 공유" style="--pc:#FEE500; color:#3C1E1E;">K</button>
+        <a class="chart-share-round" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(info.title)}&url=${encodeURIComponent(info.url)}" target="_blank" rel="noopener" title="X로 공유" style="--pc:#000;">X</a>
+        <button type="button" class="chart-share-round" onclick="chartShareCopy(this, ${JSON.stringify(info.url)})" title="링크 복사" style="--pc:var(--c-accent);">🔗</button>
     `;
     pop.classList.add('open');
 }

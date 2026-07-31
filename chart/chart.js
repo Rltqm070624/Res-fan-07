@@ -15,6 +15,25 @@ const CHART_PLATFORM_DOT_COLOR = {
     flo: '#6A3FE0', youtube_music: '#FF3B3B', spotify: '#1DB954'
 };
 
+/* 각 플랫폼에서 RESCENE 검색/아티스트 페이지로 바로 이동할 수 있는 링크 — 아이콘 파일은 images/music/ 경로에 추가 예정 */
+const STREAM_SERVICE_LINKS = [
+    { key: 'melon', label: '멜론', icon: 'melon.png', url: 'https://www.melon.com/artist/detail.htm?artistId=3709231' },
+    { key: 'genie', label: '지니', icon: 'genie.png', url: 'https://www.genie.co.kr/detail/artistInfo?xxnm=82379125' },
+    { key: 'vibe', label: '바이브', icon: 'vibe.png', url: 'https://vibe.naver.com/search?query=RESCENE' },
+    { key: 'bugs', label: '벅스', icon: 'bugs.png', url: 'https://music.bugs.co.kr/artist/13624667' },
+    { key: 'flo', label: 'FLO', icon: 'flo.png', url: 'https://www.music-flo.com/search/all?keyword=RESCENE' },
+    { key: 'youtube_music', label: '유튜브뮤직', icon: 'youtube_music.png', url: 'https://music.youtube.com/search?q=RESCENE' },
+    { key: 'spotify', label: '스포티파이', icon: 'spotify.png', url: 'https://open.spotify.com/search/RESCENE' }
+];
+
+function renderStreamLinks() {
+    const el = document.getElementById('chartStreamLinks');
+    if (!el) return;
+    el.innerHTML = STREAM_SERVICE_LINKS.map(s =>
+        `<a href="${s.url}" target="_blank" rel="noopener" title="${s.label}에서 듣기"><img src="../images/music/${s.icon}" alt="${s.label}" onerror="this.parentElement.style.display='none'"></a>`
+    ).join('');
+}
+
 let chartActivePlatform = 'all';
 let CHART_DATA = { songs: [] };
 
@@ -74,10 +93,12 @@ function chartPlatformRowHtml(song, rankInfo) {
         <span class="chart-row-idx big">${rank}</span>
         ${thumb}
         <div class="chart-row-info">
-            <div class="chart-row-title">${chartEsc(song.songName)}</div>
+            <div class="chart-row-title-line">
+                <span class="chart-row-title">${chartEsc(song.songName)}</span>
+                ${deltaHtml}
+            </div>
             <div class="chart-row-artist">${chartEsc(song.artistName)}</div>
         </div>
-        ${deltaHtml}
     </div>`;
 }
 
@@ -108,6 +129,7 @@ function renderChartList() {
 
 async function fetchSongCharts() {
     renderChartTabs();
+    renderStreamLinks();
     try {
         const response = await fetch('chart_data.json?t=' + Date.now());
         const data = await response.json();

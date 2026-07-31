@@ -8,24 +8,43 @@
 
 .media-toolbar { margin-bottom: 30px; }
 
-.media-toolbar-top { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+/* ⭐️ 필터 패널 — 대분류 > 연도 > 세부분류 순서의 세로 브레드크럼 컬럼. 알약형 탭 없이 각지고 차분하게 */
+.media-filter-panel {
+    display: flex; align-items: flex-start; gap: 0;
+    border: 1px solid var(--border-light); border-radius: 4px; overflow: hidden;
+    background: var(--bg-surface); margin-bottom: 4px;
+}
+.mf-col-wrap { flex: 1 1 0; min-width: 0; border-left: 1px solid var(--border-light); }
+.mf-col-wrap:first-child { border-left: none; }
+.mf-col-head {
+    font-family: var(--font-head); font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
+    color: var(--text-muted); padding: 12px 16px 10px; border-bottom: 1px solid var(--border-light);
+}
+.mf-col { display: flex; flex-direction: column; max-height: 300px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
+.mf-col::-webkit-scrollbar { width: 5px; }
+.mf-col::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
 
-.media-cat-row { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; min-width: 260px; }
-.mt-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 10px 18px; border-radius: 999px; border: 1px solid var(--border-light);
-    background: var(--bg-surface); color: var(--text-secondary);
-    font-family: var(--font-head); font-size: 12.5px; font-weight: 700;
-    cursor: pointer; transition: 0.25s cubic-bezier(0.4,0,0.2,1); white-space: nowrap;
+.mf-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    width: 100%; box-sizing: border-box; padding: 10px 16px; border: none; border-radius: 0;
+    background: transparent; color: var(--text-secondary);
+    font-family: var(--font-body); font-size: 13px; font-weight: 500; text-align: left;
+    cursor: pointer; transition: background 0.18s ease, color 0.18s ease;
 }
-.mt-chip:hover { border-color: var(--chip-color, var(--border-highlight)); color: var(--text-primary); }
-.mt-chip.active {
-    background: color-mix(in srgb, var(--chip-color, var(--c-accent)) 16%, var(--bg-surface));
-    border-color: var(--chip-color, var(--c-accent));
-    color: var(--chip-color, var(--c-accent));
+.mf-row svg { width: 12px; height: 12px; flex-shrink: 0; opacity: 0.4; }
+.mf-row:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
+.mf-row.active {
+    background: color-mix(in srgb, var(--chip-color, var(--c-accent)) 10%, var(--bg-surface-hover));
+    color: var(--chip-color, var(--c-accent)); font-weight: 700;
 }
-.mt-chip .mt-chip-arrow { width: 10px; height: 10px; transition: transform 0.3s ease; opacity: 0.6; }
-.mt-chip.panel-open .mt-chip-arrow { transform: rotate(180deg); opacity: 1; }
+.mf-row.active svg { opacity: 1; }
+
+@media (max-width: 900px) {
+    .media-filter-panel { flex-direction: column; }
+    .mf-col-wrap { border-left: none; border-top: 1px solid var(--border-light); }
+    .mf-col-wrap:first-child { border-top: none; }
+    .mf-col { max-height: 220px; }
+}
 
 .media-search-wrap {
     display: flex; align-items: center; gap: 8px;
@@ -49,39 +68,6 @@
 .media-search-clear.show { display: flex; }
 .media-search-clear:hover { color: var(--c-accent); }
 .media-search-clear svg { width: 11px; height: 11px; }
-.media-subcat-panel {
-    position: absolute; top: calc(100% + 10px); left: 0; z-index: 40;
-    width: max-content; min-width: 260px; max-width: min(560px, 90vw);
-    max-height: 0; opacity: 0; overflow: hidden; pointer-events: none;
-    background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-    padding: 0 18px; box-sizing: border-box;
-    transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease, padding 0.4s ease;
-}
-.media-subcat-panel.open { opacity: 1; padding: 16px 18px; pointer-events: auto; max-height: 320px; overflow-y: auto; }
-
-.media-subtag-row { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 2px; }
-.mst-chip {
-    padding: 7px 15px; border-radius: 999px; border: 1px solid var(--border-light);
-    background: var(--bg-surface); color: var(--text-muted); font-family: var(--font-body);
-    font-size: 11.5px; font-weight: 600; cursor: pointer; transition: 0.2s ease;
-}
-.mst-chip:hover { color: var(--text-primary); border-color: var(--border-highlight); }
-.mst-chip.active { background: var(--bg-surface-hover); color: var(--c-accent); border-color: var(--c-accent); }
-
-.media-subtag2-row { display: none; flex-wrap: wrap; gap: 5px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-light); }
-.mst2-chip {
-    padding: 5px 12px; border-radius: 999px; border: 1px solid transparent;
-    background: transparent; color: var(--text-muted); font-family: var(--font-body);
-    font-size: 11px; font-weight: 500; cursor: pointer; transition: 0.2s ease;
-}
-.mst2-chip:hover { color: var(--text-primary); }
-.mst2-chip.active { color: var(--c-accent); font-weight: 700; background: var(--c-accent-glow); border-radius: 999px; }
-
-@media (max-width: 700px) {
-    .media-subcat-panel { left: 0; right: 0; width: auto; max-width: none; }
-}
-
 .media-sort-row-wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border-light); }
 
 .media-sort-group { display: flex; align-items: center; gap: 2px; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 999px; padding: 4px; flex-wrap: wrap; }

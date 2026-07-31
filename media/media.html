@@ -26,26 +26,29 @@
     <script>renderSiteNav('media', '../', { calendar: true, lang: true });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
+        <!-- ⭐️ 이전 버전처럼 100% 영역을 모두 사용하도록 복원 -->
         <div class="section-container media-page-container" style="flex: 1;">
             <div class="section-header media-hero">
                 <div class="section-title" data-i18n="mediaTitle">MEDIA <span>ARCHIVE</span></div>
             </div>
             <p class="media-hero-sub"><span data-i18n="mediaSub">리센느 유튜브 모아보기</span> <span class="media-count-badge" id="mediaCountBadge"></span></p>
 
-            <!-- ⭐️ 좌우 레이아웃 분리 -->
             <div class="media-layout">
                 
-                <!-- ⭐️ 좌측 사이드바 필터 -->
+                <!-- ⭐️ 좌측 사이드바 필터 (고정, 클릭 시 옆으로 퍼지는 가로 구조) -->
                 <aside class="media-sidebar">
-                    <div class="ms-group">
+                    <!-- 카테고리 -->
+                    <div class="ms-col">
                         <div class="ms-title">CATEGORY</div>
                         <div class="ms-list" id="mediaTagRow"></div>
                     </div>
-                    <div class="ms-group is-hidden" id="mediaYearColWrap">
+                    <!-- 연도 (카테고리 선택 시 옆에 표시) -->
+                    <div class="ms-col is-hidden" id="mediaYearColWrap">
                         <div class="ms-title">YEAR</div>
                         <div class="ms-list" id="mediaYearCol"></div>
                     </div>
-                    <div class="ms-group is-hidden" id="mediaSubColWrap">
+                    <!-- 디테일 (연도 선택 시 옆에 표시) -->
+                    <div class="ms-col is-hidden" id="mediaSubColWrap">
                         <div class="ms-title">DETAIL</div>
                         <div class="ms-list" id="mediaSubCol"></div>
                     </div>
@@ -53,7 +56,6 @@
 
                 <!-- ⭐️ 우측 메인 컨텐츠 영역 -->
                 <main class="media-main">
-                    <!-- 검색 및 정렬 툴바 (예전 버전 롤백) -->
                     <div class="media-toolbar">
                         <div class="media-search-wrap">
                             <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -62,23 +64,27 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                             </button>
                         </div>
-                        <div class="media-sort-group" role="group" aria-label="정렬">
-                            <button type="button" class="msort-btn active" id="sortDateNew" onclick="mediaSetSort('date','desc')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                <span data-i18n="sortNewest">최신순</span>
-                            </button>
-                            <button type="button" class="msort-btn" id="sortDateOld" onclick="mediaSetSort('date','asc')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                <span data-i18n="sortOldest">오래된순</span>
-                            </button>
-                            <span class="msort-divider"></span>
-                            <button type="button" class="msort-btn" id="sortNameAsc" onclick="mediaSetSort('name','asc')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                                <span data-i18n="sortNameAsc">가나다순</span>
-                            </button>
-                            <button type="button" class="msort-btn" id="sortNameDesc" onclick="mediaSetSort('name','desc')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                <span data-i18n="sortNameDesc">역순</span>
+                        
+                        <div class="media-toolbar-right">
+                            <div class="media-sort-group" role="group" aria-label="정렬">
+                                <button type="button" class="msort-btn active" id="sortDateNew" onclick="mediaSetSort('date','desc')">
+                                    <span data-i18n="sortNewest">최신순</span>
+                                </button>
+                                <button type="button" class="msort-btn" id="sortDateOld" onclick="mediaSetSort('date','asc')">
+                                    <span data-i18n="sortOldest">오래된순</span>
+                                </button>
+                                <span class="msort-divider"></span>
+                                <button type="button" class="msort-btn" id="sortNameAsc" onclick="mediaSetSort('name','asc')">
+                                    <span data-i18n="sortNameAsc">가나다순</span>
+                                </button>
+                                <button type="button" class="msort-btn" id="sortNameDesc" onclick="mediaSetSort('name','desc')">
+                                    <span data-i18n="sortNameDesc">역순</span>
+                                </button>
+                            </div>
+                            <!-- ⭐️ 고급 필터 열기 버튼 -->
+                            <button type="button" class="adv-filter-btn" onclick="openAdvFilter()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                                <span>Filter</span>
                             </button>
                         </div>
                     </div>
@@ -95,6 +101,36 @@
         <script>renderSiteFooter('../');</script>
     </div>
 
+    <!-- ⭐️ 이미지처럼 생긴 고급 필터 서랍 (Drawer) -->
+    <div class="drawer-backdrop" id="advFilterBackdrop" onclick="closeAdvFilter()"></div>
+    <div class="adv-filter-drawer" id="advFilterDrawer">
+        <div class="afd-header">
+            <h3>Filters</h3>
+            <button class="afd-close" onclick="closeAdvFilter()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="afd-body">
+            <!-- 1. Filter by category -->
+            <div class="afd-section">
+                <div class="afd-sec-title">Filter by category <span id="afdCatCount">0 chips</span></div>
+                <div class="afd-chips" id="afdCategoryChips"></div>
+            </div>
+            
+            <!-- 2. Refine results (선택된 항목들) -->
+            <div class="afd-section">
+                <div class="afd-sec-title">Refine results <span>Closeable chips</span></div>
+                <div class="afd-chips" id="afdActiveChips"></div>
+                <button class="afd-action-btn" onclick="mediaClearAllFilters()">Clear All</button>
+            </div>
+
+            <!-- 3. Pick relevant topics (디테일 칩, 다중 선택 가능) -->
+            <div class="afd-section">
+                <div class="afd-sec-title">Pick relevant topics <span id="afdTopicCount">Selected 0</span></div>
+                <div class="afd-chips" id="afdTopicChips"></div>
+                <button class="afd-action-btn btn-red" onclick="mediaResetTopics()">Reset</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 영상 재생 모달 -->
     <div class="modal-backdrop" id="mediaModalBackdrop" onclick="mediaClosePlayer()"></div>
     <div class="media-modal-wrapper" id="mediaModal">
@@ -106,22 +142,6 @@
             <div class="media-modal-date" id="mediaModalDate"></div>
         </div>
         <div class="media-modal-media" id="mediaModalMedia"></div>
-        <div class="media-modal-nav">
-            <button type="button" class="mm-nav-btn" id="mediaPrevBtn" onclick="mediaPrev()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                <span data-i18n="prevVideo">이전 영상</span>
-            </button>
-            <button type="button" class="mm-nav-btn mm-nav-next" id="mediaNextBtn" onclick="mediaNext()">
-                <span data-i18n="nextVideo">다음 영상</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
-        </div>
-        <div class="media-modal-playlist" id="mediaModalPlaylist">
-            <div class="mm-drag-handle" id="mmDragHandle">
-                <span class="mm-drag-label"><span data-i18n="playlist">재생목록</span> <b id="mmPlaylistCount">0</b></span>
-            </div>
-            <ul class="mm-playlist-list" id="mmPlaylistList"></ul>
-        </div>
     </div>
 
     <div id="siteCalendarSlot"></div>

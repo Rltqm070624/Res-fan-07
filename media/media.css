@@ -40,11 +40,27 @@
 .mf-row.active svg { opacity: 1; }
 
 @media (max-width: 900px) {
-    .media-filter-panel { flex-direction: column; }
+    .media-filter-panel { flex-direction: column; border-radius: 12px; }
     .mf-col-wrap { border-left: none; border-top: 1px solid var(--border-light); }
     .mf-col-wrap:first-child { border-top: none; }
-    .mf-col { max-height: 220px; }
+    .mf-col-head { padding: 10px 14px 8px; }
+
+    /* 세로 스크롤 목록 여러 개가 쌓여서 지저분해지는 대신, 각 단계를 가로로 넘기는 칩 한 줄로 */
+    .mf-col {
+        flex-direction: row; max-height: none; overflow-y: visible;
+        overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        gap: 6px; padding: 8px 10px;
+    }
+    .mf-col::-webkit-scrollbar { display: none; }
+    .mf-row {
+        flex: 0 0 auto; width: auto; justify-content: center; gap: 5px;
+        padding: 7px 13px; border-radius: 999px; border: 1px solid var(--border-light);
+        font-size: 12.5px; white-space: nowrap;
+    }
+    .mf-row.active { border-color: var(--chip-color, var(--c-accent)); }
+    .mf-row svg { width: 10px; height: 10px; }
 }
+
 
 .media-search-wrap {
     display: flex; align-items: center; gap: 8px;

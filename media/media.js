@@ -96,7 +96,7 @@ function mediaRenderYearCol() {
     if (!col || !wrap) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     
-    // ⭐️ 레이아웃 유지를 위해 아예 삭제하지 않고 is-hidden 클래스로 제어
+    // 연도 필터가 없는 카테고리는 숨김 처리
     if (!cfg) {
         wrap.classList.add('is-hidden');
         col.innerHTML = '';
@@ -123,7 +123,7 @@ function mediaRenderSubCol() {
     if (!col || !wrap) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     
-    // ⭐️ 레이아웃 유지 (투명화)
+    // 디테일 필터가 없는 카테고리는 하단 영역(bottom-row) 자체를 숨김
     if (!cfg || !cfg.sub) { 
         wrap.classList.add('is-hidden');
         col.innerHTML = ''; 
@@ -136,10 +136,10 @@ function mediaRenderSubCol() {
     const options = ['전체'].concat(cfg.sub.getOptions(itemsInYear));
     wrap.classList.remove('is-hidden');
     
-    // ⭐️ 수많은 항목을 렌더링하기 위해 드롭다운(Select) 형태로 렌더링
-    col.innerHTML = `<select class="mf-select" onchange="mediaSetSub2(this.value)">
-        ${options.map(opt => `<option value="${opt}" ${opt === mediaActiveSub2 ? 'selected' : ''}>${opt}</option>`).join('')}
-    </select>`;
+    // 드롭다운 삭제하고 원래의 칩 버튼 렌더링 방식으로 되돌림
+    col.innerHTML = options.map(opt =>
+        `<button type="button" class="mf-row${opt === mediaActiveSub2 ? ' active' : ''}" onclick="mediaSetSub2('${escapeHtml(opt)}')"><span>${escapeHtml(opt)}</span></button>`
+    ).join('');
 }
 
 function mediaSetTag(label) {
@@ -160,6 +160,7 @@ function mediaSetSub(sub) {
 
 function mediaSetSub2(sub2) {
     mediaActiveSub2 = sub2;
+    mediaRenderSubCol();
     mediaApplyFilters();
 }
 

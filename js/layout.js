@@ -79,13 +79,15 @@ function renderSiteNav(activeKey, root, opts) {
         </div>
         <ul class="mobile-menu-list">${mobileLinks}</ul>
         ${opts.lang ? `<div class="lang-globe-wrap-mobile">
-            <button type="button" class="lang-globe-btn-mobile" onclick="toggleLangAccordion(undefined, 'mobile')" title="Language" aria-label="Language">
-                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                <span data-i18n="langLabel">언어</span>
-            </button>
-            <div class="lang-accordion lang-accordion-mobile notranslate" translate="no" id="langAccordionMobile" role="group" aria-label="Language">
-                ${LANG_OPTIONS.map(l => `<button type="button" class="lang-accordion-item" data-lang="${l.code}" onclick="setLang('${l.code}'); toggleLangAccordion(false, 'mobile');">${l.label}</button>`).join('')}
+            <div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" id="langAccordionMobile">
+                <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko'); toggleLangAccordion(false, 'mobile');">KOR</button>
+                <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en'); toggleLangAccordion(false, 'mobile');">ENG</button>
+                <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja'); toggleLangAccordion(false, 'mobile');">日本語</button>
+                <button type="button" class="lang-btn" data-lang="zh" onclick="setLang('zh'); toggleLangAccordion(false, 'mobile');">中文</button>
             </div>
+            <button type="button" class="lang-globe-btn-mobile notranslate" translate="no" onclick="toggleLangAccordion(undefined, 'mobile')" title="Language" aria-label="Language">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            </button>
         </div>` : ''}
     </div>`;
 

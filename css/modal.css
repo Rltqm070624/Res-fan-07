@@ -111,7 +111,6 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
     flex-shrink: 0; 
 }
 .ec-card:last-child { border-bottom: none; }
-.ec-card-bday { background: linear-gradient(135deg, rgba(255,182,193,0.12), transparent); border-radius: 14px; }
 
 .ec-badge { flex-shrink: 0; align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; padding: 3px 10px; border-radius: 6px; color: #000; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; margin-top: 0; font-family: var(--font-body); }
 .tag-broadcast { background: #f0ebf8; color: #7b52ab; } 
@@ -251,7 +250,7 @@ html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
 ========================================= */
 .honors-history-modal {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
-    width: 94%; max-width: 1180px; height: 88vh; max-height: 860px;
+    width: 94%; max-width: 980px; height: 88vh; max-height: 860px;
     background: var(--bg-base); border: 1px solid var(--border-light); border-radius: 20px;
     overflow: hidden; z-index: 9950;
     opacity: 0; visibility: hidden; pointer-events: none;
@@ -311,7 +310,6 @@ html[data-theme="light"] .honors-tabbar { background: #ffffff; }
 .honors-tab:hover { color: var(--text-secondary); }
 .honors-tab.active { color: var(--text-primary); font-weight: 700; }
 .honors-tab.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--c-accent); }
-.honors-tabbar-center { justify-content: center; }
 
 .honors-history-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 40px; box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
 .honors-history-body::-webkit-scrollbar { width: 6px; }
@@ -378,34 +376,37 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22)
 .cum-rank { flex: 0 0 20px; font-family: var(--font-num); font-size: 11.5px; font-weight: 700; color: var(--text-muted); }
 .cum-logo-wrap { flex: 0 0 84px; display: flex; align-items: center; }
 .cum-program { flex: 0 0 128px; font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--text-secondary); }
-.cum-bar-track { flex: 1; height: 6px; background: var(--bg-surface-hover); border-radius: 999px; position: relative; overflow: hidden; }
-.cum-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--c-accent), color-mix(in srgb, var(--c-accent) 55%, #7B5CF0)); border-radius: 999px; transition: width 0.6s cubic-bezier(0.16,1,0.3,1); }
+.cum-bar-track { flex: 1; height: 3px; background: var(--border-light); border-radius: 2px; position: relative; overflow: hidden; }
+.cum-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--text-primary); border-radius: 2px; transition: width 0.6s cubic-bezier(0.16,1,0.3,1); }
 .cum-wins { flex: 0 0 46px; text-align: right; font-family: var(--font-num); font-size: 16px; font-weight: 700; color: var(--text-primary); }
 .cum-wins em { font-style: normal; font-size: 11px; color: var(--text-muted); margin-left: 2px; font-weight: 500; }
 
 /* 광고·콜라보·화보·홍보대사 — 가운데 세로선을 기준으로 좌우 번갈아 배치되는 연대기형 타임라인 (4개 탭 공통) */
 .ad-timeline { position: relative; list-style: none; margin: 4px 0 0; padding: 8px 0 4px; }
 .ad-timeline::before {
-    content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px;
+    content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
     background: linear-gradient(to bottom, transparent, var(--border-highlight) 6%, var(--border-highlight) 94%, transparent);
+    transform: translateX(-50%);
 }
-.ad-tl-item { position: relative; width: 100%; display: flex; margin-bottom: 22px; padding-left: 38px; box-sizing: border-box; }
+.ad-tl-item { position: relative; width: 100%; display: flex; margin-bottom: 30px; }
 .ad-tl-item:last-child { margin-bottom: 4px; }
 .ad-tl-node {
-    position: absolute; left: 15px; top: 8px; width: 11px; height: 11px; border-radius: 50%;
+    position: absolute; left: 50%; top: 8px; width: 11px; height: 11px; border-radius: 50%;
     background: var(--bg-base); border: 2.5px solid var(--c-accent); transform: translateX(-50%); z-index: 2;
     box-shadow: 0 0 0 4px var(--bg-base);
 }
 .ad-tl-card {
-    width: 100%; box-sizing: border-box; display: flex; align-items: stretch; gap: 20px;
+    width: calc(50% - 34px); box-sizing: border-box;
     background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 16px;
     padding: 16px 20px; transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
-.ad-tl-card.has-thumb { padding: 12px; }
-.ad-tl-thumb { flex: 0 0 220px; width: 220px; max-height: 220px; border-radius: 10px; overflow: hidden; margin-top: 0; background: var(--bg-surface-hover); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; }
-.ad-tl-thumb img { width: 100%; height: 100%; max-height: 220px; object-fit: contain; display: block; }
-.ad-tl-body { min-width: 0; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.ad-tl-card.has-thumb { padding: 16px 16px 16px; }
+.ad-tl-thumb { width: 100%; max-height: 280px; border-radius: 10px; overflow: hidden; margin-top: 12px; background: var(--bg-surface-hover); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; }
+.ad-tl-thumb img { width: 100%; height: 100%; max-height: 280px; object-fit: contain; display: block; }
+.ad-tl-body { min-width: 0; flex: 1; }
 .ad-tl-item:hover .ad-tl-card { border-color: var(--border-highlight); transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.12); }
+.ad-tl-item.side-left { justify-content: flex-start; }
+.ad-tl-item.side-right { justify-content: flex-end; }
 .ad-tl-date { font-family: var(--font-num); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--c-accent); margin-bottom: 6px; display: block; }
 .ad-tl-title { font-family: var(--font-body); font-size: 14.5px; font-weight: 700; color: var(--text-primary); line-height: 1.4; }
 .ad-tl-tag { display: inline-block; margin-left: 6px; font-family: var(--font-num); font-size: 10px; font-weight: 700; color: var(--c-accent); background: var(--c-accent-glow); padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
@@ -436,9 +437,8 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22)
     }
     .ad-timeline::before { left: 14px; }
     .ad-tl-node { left: 14px; }
-    .ad-tl-item { padding-left: 32px; }
-    .ad-tl-card { width: 100%; flex-direction: column; }
-    .ad-tl-thumb { flex: 0 0 auto; width: 100%; max-height: 200px; }
+    .ad-tl-item, .ad-tl-item.side-left, .ad-tl-item.side-right { justify-content: flex-start; padding-left: 34px; }
+    .ad-tl-card { width: 100%; }
 }
 
 /* =========================================

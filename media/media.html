@@ -33,12 +33,18 @@
             <p class="media-hero-sub"><span data-i18n="mediaSub">리센느 유튜브 모아보기</span><span class="media-count-badge" id="mediaCountBadge"></span></p>
 
             <div class="media-toolbar">
-                <div class="media-toolbar-top">
-                    <div class="media-cat-row" id="mediaTagRow"></div>
-
-                    <div class="media-subcat-panel" id="mediaSubPanel">
-                        <div class="media-subtag-row" id="mediaSubtagRow"></div>
-                        <div class="media-subtag2-row" id="mediaSubtag2Row"></div>
+                <div class="media-filter-panel">
+                    <div class="mf-col-wrap">
+                        <div class="mf-col-head">CATEGORY</div>
+                        <div class="mf-col" id="mediaTagRow"></div>
+                    </div>
+                    <div class="mf-col-wrap" id="mediaYearColWrap" style="display:none;">
+                        <div class="mf-col-head">YEAR</div>
+                        <div class="mf-col" id="mediaYearCol"></div>
+                    </div>
+                    <div class="mf-col-wrap" id="mediaSubColWrap" style="display:none;">
+                        <div class="mf-col-head">DETAIL</div>
+                        <div class="mf-col" id="mediaSubCol"></div>
                     </div>
                 </div>
 

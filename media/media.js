@@ -1,4 +1,5 @@
 let mediaActiveTag = '전체';
+let mediaYearTouched = false; // ⭐️ 카테고리 클릭 직후엔 연도만 보이고, 실제로 연도를 눌러야 세부분류가 뜨게 하기 위한 플래그
 let mediaActiveSub = '전체';
 let mediaActiveSub2 = '전체';
 let mediaSortField = 'date'; // 'date' | 'name'
@@ -124,13 +125,13 @@ function mediaRenderYearCol() {
     mediaRenderSubCol();
 }
 
-/* ── 컬럼 3: 카테고리별 세부분류 ── */
+/* ── 컬럼 3: 카테고리별 세부분류 — 연도를 실제로 클릭하기 전까진 숨김 ── */
 function mediaRenderSubCol() {
     const col = document.getElementById('mediaSubCol');
     const wrap = document.getElementById('mediaSubColWrap');
     if (!col || !wrap) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    if (!cfg || !cfg.sub) { wrap.style.display = 'none'; col.innerHTML = ''; return; }
+    if (!cfg || !cfg.sub || !mediaYearTouched) { wrap.style.display = 'none'; col.innerHTML = ''; return; }
 
     let itemsInYear = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
     if (mediaActiveSub !== '전체') itemsInYear = itemsInYear.filter(i => i.date.slice(0, 4) === mediaActiveSub);
@@ -147,6 +148,7 @@ function mediaSetTag(label) {
     mediaActiveTag = label;
     mediaActiveSub = '전체';
     mediaActiveSub2 = '전체';
+    mediaYearTouched = false;
     mediaRenderTagRow();
     mediaApplyFilters();
 }
@@ -154,6 +156,7 @@ function mediaSetTag(label) {
 function mediaSetSub(sub) {
     mediaActiveSub = sub;
     mediaActiveSub2 = '전체';
+    mediaYearTouched = true;
     mediaRenderYearCol();
     mediaApplyFilters();
 }

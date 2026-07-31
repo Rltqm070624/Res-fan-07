@@ -1,4 +1,4 @@
-/* ⭐️ 왼쪽 고정, 오른쪽 스크롤을 위한 레이아웃 락 */
+/* ⭐️ 왼쪽 고정, 오른쪽 개별 스크롤을 위한 레이아웃 락 */
 .media-wrapper-locked {
     display: flex;
     flex-direction: column;
@@ -26,7 +26,7 @@
 .media-count-badge { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); margin-left: 6px; }
 .media-count-badge b { color: var(--text-primary); font-weight: 700; }
 
-/* ⭐️ 좌우 레이아웃 */
+/* ⭐️ 좌우 레이아웃 분리 */
 .media-layout {
     display: flex;
     align-items: stretch;
@@ -44,7 +44,7 @@
     overflow-y: auto;
     overflow-x: visible;
     padding-bottom: 60px;
-    scrollbar-width: none; /* 깔끔하게 숨김 */
+    scrollbar-width: none;
 }
 .media-sidebar::-webkit-scrollbar { display: none; }
 
@@ -98,14 +98,18 @@
     font-weight: 700;
 }
 
-/* ⭐️ 우측 메인 (개별 스크롤 영역) */
+/* ⭐️ 우측 메인 컨텐츠 (개별 스크롤 영역) */
 .media-main {
     flex: 1;
     min-width: 0;
     height: 100%;
     overflow-y: auto;
     padding-bottom: 60px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-highlight) transparent;
 }
+.media-main::-webkit-scrollbar { width: 6px; }
+.media-main::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
 
 .media-toolbar {
     display: flex;
@@ -130,17 +134,17 @@
     align-items: center;
 }
 
-/* 필터 토글 아이콘 버튼 */
+/* ⭐️ 필터 문구 삭제하고 아이콘만 남긴 원형 버튼 디자인 */
 .adv-filter-btn {
-    display: flex; align-items: center; gap: 8px;
-    padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border-light);
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--border-light);
     background: var(--bg-surface); color: var(--text-primary);
-    font-family: var(--font-head); font-size: 13px; font-weight: 800;
-    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
-    flex-shrink: 0;
+    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0; padding: 0;
 }
-.adv-filter-btn:hover { background: var(--bg-surface-hover); border-color: var(--c-accent); }
-.adv-filter-btn svg { width: 14px; height: 14px; }
+.adv-filter-btn:hover { background: var(--bg-surface-hover); border-color: var(--c-accent); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.adv-filter-btn svg { width: 17px; height: 17px; }
 
 /* 검색창 */
 .media-search-wrap {
@@ -226,20 +230,20 @@
 .afd-chip.closeable { padding-right: 10px; }
 .afd-chip.closeable:hover svg { color: #ef4444; }
 
-/* ⭐️ 초기화 버튼 (검은색 테마 반영) */
+/* ⭐️ 검은색 테마 초기화 버튼 */
 .afd-action-btn {
-    align-self: flex-start; margin-top: 4px; padding: 6px 16px;
+    align-self: flex-start; margin-top: 4px; padding: 8px 18px;
     border-radius: 8px; border: none;
     font-family: var(--font-body); font-size: 13px; font-weight: 700; cursor: pointer;
     transition: 0.2s ease;
 }
 .afd-action-btn.btn-black {
-    background: #111; color: #fff;
+    background: #111; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 html[data-theme="dark"] .afd-action-btn.btn-black {
     background: #eee; color: #111;
 }
-.afd-action-btn.btn-black:hover { opacity: 0.8; }
+.afd-action-btn.btn-black:hover { transform: translateY(-1px); opacity: 0.9; }
 
 /* --- 영상 카드 및 그리드 --- */
 .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px 20px; }
@@ -262,7 +266,7 @@ html[data-theme="dark"] .afd-action-btn.btn-black {
 .media-empty { grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 13px; padding: 60px 0; }
 .media-scroll-sentinel { width: 100%; height: 1px; }
 
-/* 📱 모바일 대응: 작은 화면에서는 전체 스크롤 복구 */
+/* 📱 모바일 대응 */
 @media (max-width: 1000px) {
     .media-wrapper-locked { height: auto !important; overflow: visible !important; display: block; }
     .media-layout { flex-direction: column; gap: 24px; overflow: visible; height: auto; }

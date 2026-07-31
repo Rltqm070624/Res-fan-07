@@ -26,7 +26,7 @@
     <script>renderSiteNav('media', '../', { calendar: true, lang: true });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
-        <!-- ⭐️ 100% 꽉 찬 너비로 복구 -->
+        <!-- ⭐️ 100% 꽉 찬 너비 사용 -->
         <div class="section-container media-page-container" style="flex: 1;">
             <div class="section-header media-hero">
                 <div class="section-title" data-i18n="mediaTitle">MEDIA <span>ARCHIVE</span></div>
@@ -35,7 +35,7 @@
 
             <div class="media-layout">
                 
-                <!-- ⭐️ 좌측 사이드바 필터 (고정, 클릭 시 옆으로 넓게 퍼지는 가로 구조) -->
+                <!-- ⭐️ 좌측 사이드바 필터 (클릭 시 우측으로 계단식으로 펼쳐짐) -->
                 <aside class="media-sidebar">
                     <div class="ms-col">
                         <div class="ms-title">CATEGORY</div>
@@ -54,13 +54,12 @@
                 <!-- ⭐️ 우측 메인 컨텐츠 영역 -->
                 <main class="media-main">
                     <div class="media-toolbar">
-                        <!-- ⭐️ 왼쪽 툴바 (고급 필터 버튼 + 검색창) -->
+                        <!-- ⭐️ 왼쪽: 고급 필터 버튼 + 검색창 -->
                         <div class="media-toolbar-left">
                             <button type="button" class="adv-filter-btn" onclick="openAdvFilter()">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
                                 <span>Filter</span>
                             </button>
-                            
                             <div class="media-search-wrap">
                                 <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                 <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" data-i18n-placeholder="searchPlaceholder" oninput="mediaApplyFilters()" autocomplete="off">
@@ -70,7 +69,7 @@
                             </div>
                         </div>
                         
-                        <!-- ⭐️ 오른쪽 툴바 (정렬 탭) -->
+                        <!-- ⭐️ 오른쪽: 정렬 탭 -->
                         <div class="media-toolbar-right">
                             <div class="media-sort-group" role="group" aria-label="정렬">
                                 <button type="button" class="msort-btn active" id="sortDateNew" onclick="mediaSetSort('date','desc')">
@@ -102,7 +101,7 @@
         <script>renderSiteFooter('../');</script>
     </div>
 
-    <!-- ⭐️ 왼쪽에서 나타나는 고급 필터 다중선택 서랍 (Drawer) -->
+    <!-- ⭐️ 이미지처럼 생긴 다중 선택 서랍 (Drawer) -->
     <div class="drawer-backdrop" id="advFilterBackdrop" onclick="closeAdvFilter()"></div>
     <div class="adv-filter-drawer" id="advFilterDrawer">
         <div class="afd-header">
@@ -110,20 +109,17 @@
             <button class="afd-close" onclick="closeAdvFilter()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="afd-body">
-            <!-- 1. Filter by category -->
             <div class="afd-section">
-                <div class="afd-sec-title">Filter by category <span id="afdCatCount">0 chips</span></div>
+                <div class="afd-sec-title">Filter by category <span id="afdCatCount">0 chips discovered</span></div>
                 <div class="afd-chips" id="afdCategoryChips"></div>
             </div>
             
-            <!-- 2. Refine results (현재 적용된 필터) -->
             <div class="afd-section">
                 <div class="afd-sec-title">Refine results <span>Closeable chips</span></div>
                 <div class="afd-chips" id="afdActiveChips"></div>
                 <button class="afd-action-btn" onclick="mediaClearAllFilters()">Clear All</button>
             </div>
 
-            <!-- 3. Pick relevant topics (다중 선택 가능 칩) -->
             <div class="afd-section">
                 <div class="afd-sec-title">Pick relevant topics <span id="afdTopicCount">Selected 0</span></div>
                 <div class="afd-chips" id="afdTopicChips"></div>

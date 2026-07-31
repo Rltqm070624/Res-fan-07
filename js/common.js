@@ -76,7 +76,8 @@ function getDayItems(dateKey) {
     MEMBER_DATA.forEach(m => {
         const bmmdd = m.birthday.slice(5).replace('.', '-');
         if (bmmdd === mmdd) {
-            base.unshift({ time: '', title: `${m.nameKo} 생일`, type: 'birthday', color: m.color, isBirthday: true });
+            const bdayWord = window.t ? window.t('birthdayWord') : '생일';
+            base.unshift({ time: '', title: `${m.nameKo} ${bdayWord}`, type: 'birthday', color: m.color, isBirthday: true });
         }
     });
     return base;

@@ -6,6 +6,7 @@ function toggleMobileMenu() {
     document.getElementById('mobileMenuPanel').classList.toggle('active');
     document.getElementById('mobileMenuBackdrop').classList.toggle('active');
     document.body.style.overflow = document.getElementById('mobileMenuPanel').classList.contains('active') ? 'hidden' : 'auto';
+    toggleLangAccordion(false, 'mobile'); // ⭐️ 메뉴 열고 닫을 때마다 언어 아코디언은 항상 접힌 상태로 초기화
 }
 
 /* ---- 언어 선택 아코디언 (지구본 아이콘) — 데스크톱/모바일 공용 ---- */

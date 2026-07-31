@@ -3,16 +3,17 @@ function renderSiteNav(activeKey, root, opts) {
     opts = opts || {};
     const isHome = activeKey === 'home';
 
+    const tr = (typeof window.t === 'function') ? window.t : function (k) { return null; };
     const NAV_LINKS = [
-        { key: 'home', label: 'HOME', href: root + 'index.html' },
-        { key: 'members', label: 'MEMBERS', href: root + 'member/member.html' },
-        { key: 'charts', label: 'CHARTS', href: root + 'chart/chart.html' },
-        { key: 'schedule', label: 'SCHEDULE',
+        { key: 'home', label: tr('navHome') || 'HOME', href: root + 'index.html' },
+        { key: 'members', label: tr('navMembers') || 'MEMBERS', href: root + 'member/member.html' },
+        { key: 'charts', label: tr('navCharts') || 'CHARTS', href: root + 'chart/chart.html' },
+        { key: 'schedule', label: tr('navSchedule') || 'SCHEDULE',
           href: isHome ? 'javascript:void(0)' : root + 'index.html#todayScheduleSection',
           onclick: isHome ? "scrollToSection('todayScheduleSection')" : '' },
-        { key: 'goods', label: 'GOODS', href: root + 'goods/goods.html' },
-        { key: 'fanchant', label: '응원법', href: root + 'fanchant/fanchant.html' },
-        { key: 'media', label: '영상 모음', href: root + 'media/media.html' },
+        { key: 'goods', label: tr('navGoods') || 'GOODS', href: root + 'goods/goods.html' },
+        { key: 'fanchant', label: tr('navFanchant') || '응원법', href: root + 'fanchant/fanchant.html' },
+        { key: 'media', label: tr('navMedia') || '영상 모음', href: root + 'media/media.html' },
     ];
 
     function linkHtml(link, extraClass) {
@@ -28,7 +29,8 @@ function renderSiteNav(activeKey, root, opts) {
     const LANG_OPTIONS = [
         { code: 'ko', label: 'KOR', full: '한국어' },
         { code: 'en', label: 'ENG', full: 'English' },
-        { code: 'ja', label: '日本語', full: '日本語' }
+        { code: 'ja', label: '日本語', full: '日本語' },
+        { code: 'zh', label: '中文', full: '中文' }
     ];
 
     const langSwitcherHtml = opts.lang ? `
@@ -75,20 +77,28 @@ function renderSiteNav(activeKey, root, opts) {
             </div>
         </div>
         <ul class="mobile-menu-list">${mobileLinks}</ul>
-        ${opts.lang ? `<div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" style="margin-top: auto; display: flex; justify-content: center;">
+        ${opts.lang ? `<div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" style="margin-top: auto; display: flex; justify-content: center; flex-wrap: wrap;">
             <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko')">KOR</button>
             <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">ENG</button>
             <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>
+            <button type="button" class="lang-btn" data-lang="zh" onclick="setLang('zh')">中文</button>
         </div>` : ''}
     </div>`;
 
     const slot = document.getElementById('siteNavSlot');
     if (slot) slot.outerHTML = navHtml;
     if (typeof updateThemeIcon === 'function') updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+    if (typeof window.setLang === 'function' || true) window.__lastNavArgs = [activeKey, root, opts];
+    if (typeof updateButtonsAfterNavRender === 'function') updateButtonsAfterNavRender();
+    document.querySelectorAll('.lang-switcher button, .lang-accordion-item').forEach(function (b) {
+        var cur = localStorage.getItem('rescene-lang') || 'ko';
+        b.classList.toggle('active', b.getAttribute('data-lang') === cur);
+    });
 }
 
 function renderSiteFooter(root) {
     root = root || '';
+    window.__lastFooterArgs = [root];
     const footerHtml = `
     <footer class="global-footer">
         <p class="footer-disclaimer" data-i18n="footerDisclaimer">해당 홈페이지는 팬이 자발적으로 운영하는 비공식 팬 페이지입니다.<br>모든 저작권은 아티스트 RESCENE, 소속사 THE MUZE Entertainment에게 있으며 공식 관계가 없음을 알려드립니다.</p>

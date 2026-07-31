@@ -32,57 +32,39 @@
             </div>
             <p class="media-hero-sub"><span data-i18n="mediaSub">리센느 유튜브 모아보기</span> <span class="media-count-badge" id="mediaCountBadge"></span></p>
 
-            <div class="media-toolbar">
-                <!-- ⭐️ 변경된 필터 패널: 카테고리와 연도를 같은 줄(Top Row)에 배치해 빈 공간 활용 -->
-                <div class="media-filter-panel">
-                    <div class="mf-top-row">
-                        <div class="mf-col-wrap">
-                            <div class="mf-col-head">CATEGORY</div>
-                            <div class="mf-col" id="mediaTagRow"></div>
-                        </div>
-                        <div class="mf-col-wrap is-hidden" id="mediaYearColWrap">
-                            <div class="mf-col-head">YEAR</div>
-                            <div class="mf-col" id="mediaYearCol"></div>
-                        </div>
-                    </div>
-                    <div class="mf-bottom-row is-hidden" id="mediaSubColWrap">
-                        <div class="mf-col-wrap w-full">
-                            <div class="mf-col-head">DETAIL</div>
-                            <div class="mf-col" id="mediaSubCol"></div>
-                        </div>
+            <!-- ⭐️ 완전히 새로워진 필터 보드 (Select 방식) -->
+            <div class="media-filter-board">
+                <!-- 첫 번째 줄: FILTER [ 카테고리 ] [ 연도 ] [ 세부항목 ] -->
+                <div class="mfb-row">
+                    <div class="mfb-label">FILTER</div>
+                    <div class="mfb-controls">
+                        <select id="filterCategory" class="mfb-select" onchange="mediaSetTag(this.value)"></select>
+                        <select id="filterYear" class="mfb-select" onchange="mediaSetSub(this.value)" style="display:none;"></select>
+                        <select id="filterDetail" class="mfb-select" onchange="mediaSetSub2(this.value)" style="display:none;"></select>
                     </div>
                 </div>
+                
+                <hr class="mfb-divider">
 
-                <div class="media-sort-row-wrap">
-                    <div class="media-search-wrap">
-                        <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" data-i18n-placeholder="searchPlaceholder" oninput="mediaApplyFilters()" autocomplete="off">
-                        <button type="button" class="media-search-clear" id="mediaSearchClear" onclick="mediaClearSearch()" aria-label="검색어 지우기">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
-                    </div>
-                    <div class="media-sort-group" role="group" aria-label="정렬">
-                        <button type="button" class="msort-btn active" id="sortDateNew" onclick="mediaSetSort('date','desc')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                            <span data-i18n="sortNewest">최신순</span>
-                        </button>
-                        <button type="button" class="msort-btn" id="sortDateOld" onclick="mediaSetSort('date','asc')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            <span data-i18n="sortOldest">오래된순</span>
-                        </button>
-                        <span class="msort-divider"></span>
-                        <button type="button" class="msort-btn" id="sortNameAsc" onclick="mediaSetSort('name','asc')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                            <span data-i18n="sortNameAsc">가나다순</span>
-                        </button>
-                        <button type="button" class="msort-btn" id="sortNameDesc" onclick="mediaSetSort('name','desc')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            <span data-i18n="sortNameDesc">역순</span>
-                        </button>
+                <!-- 두 번째 줄: SEARCH [ 검색창 ] [ 정렬 ] -->
+                <div class="mfb-row">
+                    <div class="mfb-label">SEARCH</div>
+                    <div class="mfb-controls">
+                        <div class="mfb-search-wrap">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()" autocomplete="off">
+                        </div>
+                        <select id="filterSort" class="mfb-select mfb-sort" onchange="mediaSetSortSelect(this.value)">
+                            <option value="date_desc">최신순</option>
+                            <option value="date_asc">오래된순</option>
+                            <option value="name_asc">가나다순</option>
+                            <option value="name_desc">역순</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
+            <!-- 영상 그리드 -->
             <div class="media-grid" id="mediaGrid"></div>
             <div class="media-scroll-sentinel" id="mediaSentinel"></div>
             <div class="media-end-message" id="mediaEndMessage" style="display:none;" data-i18n="mediaAllDone">모든 영상을 다 봤어요.</div>

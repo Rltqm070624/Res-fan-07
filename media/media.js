@@ -76,101 +76,85 @@ function mediaInitTagFromQuery() {
     }
 }
 
-function mediaRenderTagRow() {
-    const row = document.getElementById('mediaTagRow');
-    if (!row) return;
-    const all = [{ label: '전체', color: null }].concat(MEDIA_CATEGORIES.map(c => ({ label: c.label, color: c.color })));
-    row.innerHTML = all.map(t => {
-        const active = t.label === mediaActiveTag;
-        const style = t.color ? `style="--chip-color:${t.color};"` : '';
-        return `<button type="button" class="mf-row${active ? ' active' : ''}" ${style} onclick="mediaSetTag('${t.label}')">
-            <span>${t.label}</span>
-        </button>`;
-    }).join('');
-    mediaRenderYearCol();
+// ⭐️ 새로운 셀렉트(Dropdown) 렌더링 로직
+function mediaRenderFilters() {
+    // 1. Category
+    const catSel = document.getElementById('filterCategory');
+    if (catSel) {
+        const options = ['전체'].concat(MEDIA_CATEGORIES.map(c => c.label));
+        catSel.innerHTML = options.map(opt => `<option value="${opt}" ${opt === mediaActiveTag ? 'selected' : ''}>${opt}</option>`).join('');
+    }
+    mediaUpdateSubFilters();
 }
 
-function mediaRenderYearCol() {
-    const col = document.getElementById('mediaYearCol');
-    const wrap = document.getElementById('mediaYearColWrap');
-    if (!col || !wrap) return;
+function mediaUpdateSubFilters() {
+    const yearSel = document.getElementById('filterYear');
+    const detailSel = document.getElementById('filterDetail');
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    
-    // 연도 필터가 없는 카테고리는 숨김 처리
-    if (!cfg) {
-        wrap.classList.add('is-hidden');
-        col.innerHTML = '';
-        mediaRenderSubCol();
+
+    // 연도 필터 업데이트
+    if (!cfg || !cfg.year) {
+        if (yearSel) yearSel.style.display = 'none';
+        if (detailSel) detailSel.style.display = 'none';
         return;
     }
-    
-    const itemsInTag = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
-    const options = ['전체'].concat(cfg.year(itemsInTag));
-    wrap.classList.remove('is-hidden');
-    
-    col.innerHTML = options.map(opt =>
-        `<button type="button" class="mf-row${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${opt}')">
-            <span>${opt === '전체' ? '전체' : opt + '년'}</span>
-        </button>`
-    ).join('');
-    
-    mediaRenderSubCol();
-}
 
-function mediaRenderSubCol() {
-    const col = document.getElementById('mediaSubCol');
-    const wrap = document.getElementById('mediaSubColWrap');
-    if (!col || !wrap) return;
-    const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
+    const itemsInTag = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
+    const yearOptions = ['전체'].concat(cfg.year(itemsInTag));
     
-    // 디테일 필터가 없는 카테고리는 하단 영역(bottom-row) 자체를 숨김
-    if (!cfg || !cfg.sub) { 
-        wrap.classList.add('is-hidden');
-        col.innerHTML = ''; 
-        return; 
+    if (yearSel) {
+        yearSel.style.display = 'inline-block';
+        yearSel.innerHTML = yearOptions.map(opt => 
+            `<option value="${opt}" ${opt === mediaActiveSub ? 'selected' : ''}>${opt === '전체' ? '연도 전체' : opt + '년'}</option>`
+        ).join('');
     }
 
-    let itemsInYear = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
-    if (mediaActiveSub !== '전체') itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
+    // 디테일 필터 업데이트
+    if (!cfg.sub) {
+        if (detailSel) detailSel.style.display = 'none';
+        return;
+    }
 
-    const options = ['전체'].concat(cfg.sub.getOptions(itemsInYear));
-    wrap.classList.remove('is-hidden');
-    
-    // 드롭다운 삭제하고 원래의 칩 버튼 렌더링 방식으로 되돌림
-    col.innerHTML = options.map(opt =>
-        `<button type="button" class="mf-row${opt === mediaActiveSub2 ? ' active' : ''}" onclick="mediaSetSub2('${escapeHtml(opt)}')"><span>${escapeHtml(opt)}</span></button>`
-    ).join('');
+    let itemsInYear = itemsInTag;
+    if (mediaActiveSub !== '전체') {
+        itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
+    }
+    const detailOptions = ['전체'].concat(cfg.sub.getOptions(itemsInYear));
+
+    if (detailSel) {
+        detailSel.style.display = 'inline-block';
+        detailSel.innerHTML = detailOptions.map(opt => 
+            `<option value="${escapeAttr(opt)}" ${opt === mediaActiveSub2 ? 'selected' : ''}>${opt === '전체' ? '세부 전체' : escapeHtml(opt)}</option>`
+        ).join('');
+    }
 }
 
-function mediaSetTag(label) {
-    if (label === mediaActiveTag) return;
-    mediaActiveTag = label;
+// 이벤트 핸들러
+function mediaSetTag(val) {
+    mediaActiveTag = val;
     mediaActiveSub = '전체';
     mediaActiveSub2 = '전체';
-    mediaRenderTagRow();
+    mediaUpdateSubFilters();
     mediaApplyFilters();
 }
 
-function mediaSetSub(sub) {
-    mediaActiveSub = sub;
+function mediaSetSub(val) {
+    mediaActiveSub = val;
     mediaActiveSub2 = '전체';
-    mediaRenderYearCol();
+    mediaUpdateSubFilters(); // 연도가 바뀌면 디테일 항목도 재구성
     mediaApplyFilters();
 }
 
-function mediaSetSub2(sub2) {
-    mediaActiveSub2 = sub2;
-    mediaRenderSubCol();
+function mediaSetSub2(val) {
+    mediaActiveSub2 = val;
     mediaApplyFilters();
 }
 
-function mediaSetSort(field, dir) {
-    mediaSortField = field;
-    mediaSortDir = dir;
-    document.querySelectorAll('.msort-btn').forEach(b => b.classList.remove('active'));
-    const id = field === 'date' ? (dir === 'desc' ? 'sortDateNew' : 'sortDateOld') : (dir === 'asc' ? 'sortNameAsc' : 'sortNameDesc');
-    const btn = document.getElementById(id);
-    if (btn) btn.classList.add('active');
+// 정렬 셀렉트박스 핸들러
+function mediaSetSortSelect(val) {
+    const parts = val.split('_'); // 'date_desc' -> ['date', 'desc']
+    mediaSortField = parts[0];
+    mediaSortDir = parts[1];
     mediaApplyFilters();
 }
 
@@ -183,16 +167,19 @@ function mediaClearSearch() {
 function mediaApplyFilters() {
     const input = document.getElementById('mediaSearch');
     mediaSearchTerm = (input && input.value || '').trim().toLowerCase();
-    const clearBtn = document.getElementById('mediaSearchClear');
-    if (clearBtn) clearBtn.classList.toggle('show', !!mediaSearchTerm);
     mediaVisibleCount = MEDIA_PAGE_SIZE;
     mediaRenderGrid(true);
 }
 
 function mediaGetFiltered() {
     let list = mediaGetAllItems();
-    if (mediaActiveTag !== '전체') list = list.filter(i => i.tagLabel === mediaActiveTag);
+    
+    // 카테고리 필터
+    if (mediaActiveTag !== '전체') {
+        list = list.filter(i => i.tagLabel === mediaActiveTag);
+    }
 
+    // 서브 필터 (연도, 디테일)
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     if (cfg) {
         if (mediaActiveSub !== '전체') {
@@ -203,10 +190,12 @@ function mediaGetFiltered() {
         }
     }
 
+    // 검색어 필터
     if (mediaSearchTerm) {
         list = list.filter(i => ((i.title || '') + ' ' + (i.sub || '')).toLowerCase().includes(mediaSearchTerm));
     }
 
+    // 정렬
     if (mediaSortField === 'name') {
         list.sort((a, b) => {
             const an = mediaCardTitle(a) || '';
@@ -411,7 +400,8 @@ function mediaClosePlayer() {
 
 window.addEventListener('DOMContentLoaded', () => {
     mediaInitTagFromQuery();
-    mediaRenderTagRow();
+    // ⭐️ 초기화 함수 이름 변경
+    mediaRenderFilters(); 
     mediaRenderGrid(true);
     mediaSetupInfiniteScroll();
 });

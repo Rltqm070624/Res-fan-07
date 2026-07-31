@@ -290,14 +290,15 @@ html[data-theme="light"] .honors-history-modal { background: #FFFFFF; }
 .honors-history-head.banner-failed .honors-history-head-title { position: static; color: var(--text-primary); padding: 0; margin-bottom: 24px; text-shadow: none; font-family: var(--font-head); font-size: 23px; font-weight: 700; }
 .honors-history-head.banner-failed::before { display: none; }
 
-/* 탭 바 — 도형 없이 문구 + 밑줄로만, 스크롤 시 우측 상단에 고정 */
+/* 탭 바 — 도형 없이 문구 + 밑줄로만, 스크롤 시 우측 상단에 고정.
+   ⭐️ body 자체엔 좌우 패딩을 안 주고(아래) 탭바가 폭 100%를 그대로 채우게 해서
+   음수 마진으로 폭을 맞추다 생기던 미세한 틈/이음선을 원천적으로 없앰. */
 .honors-tabbar {
     display: flex; gap: 26px; flex-wrap: wrap; justify-content: flex-end;
-    width: 100%; margin: 18px 0 14px auto;
+    width: 100%; box-sizing: border-box; margin: 0 0 14px;
     position: sticky; top: 0; z-index: 6;
-    background: var(--bg-base); padding: 10px 44px 12px; margin-left: -44px; margin-right: -44px; width: calc(100% + 88px);
+    background: var(--bg-base); padding: 20px 44px 12px;
     border-bottom: 1px solid var(--border-light);
-    box-shadow: 0 12px 20px -8px rgba(0,0,0,0.15);
 }
 html[data-theme="light"] .honors-tabbar { background: #ffffff; }
 .honors-tab {
@@ -310,9 +311,10 @@ html[data-theme="light"] .honors-tabbar { background: #ffffff; }
 .honors-tab.active { color: var(--text-primary); font-weight: 700; }
 .honors-tab.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--c-accent); }
 
-.honors-history-body { flex: 1; min-height: 0; overflow-y: auto; padding: 0 44px 40px; box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
+.honors-history-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 40px; box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
 .honors-history-body::-webkit-scrollbar { width: 6px; }
 .honors-history-body::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
+.honors-tab-panels { padding: 0 44px; box-sizing: border-box; }
 
 .honors-tab-panel { display: none; }
 .honors-tab-panel.active { display: block; animation: honorsPanelIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
@@ -415,9 +417,10 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22)
     .honors-history-modal { width: 95%; height: 90vh; }
     .honors-history-head { padding: 26px 56px 0 22px; }
     .honors-history-head-title { font-size: 18px; margin-bottom: 16px; }
-    .honors-tabbar { gap: 3px; overflow-x: auto; max-width: none; margin-left: -20px; margin-right: -20px; width: calc(100% + 40px); padding: 8px 20px 10px; }
+    .honors-tabbar { gap: 3px; overflow-x: auto; max-width: none; padding: 16px 20px 10px; }
     .honors-tab { font-size: 12px; white-space: nowrap; padding: 8px 14px; }
-    .honors-history-body { padding: 20px 20px 32px; }
+    .honors-history-body { padding: 0 0 32px; }
+    .honors-tab-panels { padding: 0 20px; }
     .cum-program { flex-basis: 92px; font-size: 12px; }
     .cum-logo-wrap { flex-basis: 60px; }
     .honors-panel-top { margin: 20px 0 2px; }

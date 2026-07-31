@@ -36,38 +36,34 @@ function mediaClassifyContentGroup(item) {
     return MEDIA_AD_BRAND_KEYWORDS.some(kw => title.includes(kw)) ? '광고 · 콜라보' : '외부 콘텐츠';
 }
 
-// 대분류별 소분류(서브탭) 정의. 라이브 방송/컨텐츠는 소분류 > 세분류 2단계까지 있음
+/* ⭐️ 하위 분류 트리 — 모든 대분류가 "연도 > 세부분류" 순서로 통일됨 */
 const MEDIA_SUBFILTERS = {
     '컨텐츠': {
-        getOptions: (items) => {
-            const groups = new Set(items.map(mediaClassifyContentGroup));
-            return ['광고 · 콜라보', '외부 콘텐츠'].filter(g => groups.has(g));
-        },
-        match: (item, sub) => mediaClassifyContentGroup(item) === sub,
-        third: {
-            getOptions: (items) => [...new Set(items.map(mediaGetContentBrand))].filter(Boolean),
+        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
+        sub: {
+            getOptions: (items) => [...new Set(items.map(mediaGetContentBrand))].filter(Boolean).sort((a, b) => a.localeCompare(b, 'ko')),
             match: (item, sub2) => mediaGetContentBrand(item) === sub2
         }
     },
     '음반 활동 컨텐츠': {
-        getOptions: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
-        match: (item, sub) => item.date.slice(0, 4) === sub
+        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse()
     },
     '음악 방송': {
-        getOptions: (items) => [...new Set(items.map(i => i.program).filter(Boolean))],
-        match: (item, sub) => item.program === sub
+        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
+        sub: {
+            getOptions: (items) => [...new Set(items.map(i => i.program).filter(Boolean))],
+            match: (item, sub2) => item.program === sub2
+        }
     },
     '라이브 방송': {
-        getOptions: () => ['원이', '리브', '미나미', '메이', '제나'],
-        match: (item, sub) => item.sub === '전원' || (item.sub || '').includes(sub),
-        third: {
-            getOptions: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
-            match: (item, sub2) => item.date.slice(0, 4) === sub2
+        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
+        sub: {
+            getOptions: () => ['원이', '리브', '미나미', '메이', '제나'],
+            match: (item, sub2) => item.sub === '전원' || (item.sub || '').includes(sub2)
         }
     },
     '공연 및 행사': {
-        getOptions: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse(),
-        match: (item, sub) => item.date.slice(0, 4) === sub
+        year: (items) => [...new Set(items.map(i => i.date.slice(0, 4)))].sort().reverse()
     }
 };
 
@@ -88,6 +84,7 @@ function mediaInitTagFromQuery() {
     }
 }
 
+/* ── 컬럼 1: 대분류 ── */
 function mediaRenderTagRow() {
     const row = document.getElementById('mediaTagRow');
     if (!row) return;
@@ -95,102 +92,75 @@ function mediaRenderTagRow() {
     row.innerHTML = all.map(t => {
         const active = t.label === mediaActiveTag;
         const style = t.color ? `style="--chip-color:${t.color};"` : '';
-        const hasSub = !!MEDIA_SUBFILTERS[t.label];
-        const arrow = hasSub ? `<svg class="mt-chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>` : '';
-        return `<button type="button" class="mt-chip${active ? ' active' : ''}" ${style} onclick="mediaSetTag('${t.label}')">${t.label}${arrow}</button>`;
+        return `<button type="button" class="mf-row${active ? ' active' : ''}" ${style} onclick="mediaSetTag('${t.label}')">
+            <span>${t.label}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>`;
     }).join('');
+    mediaRenderYearCol();
 }
 
-function mediaRenderSubtagRow() {
-    const row = document.getElementById('mediaSubtagRow');
-    if (!row) return;
+/* ── 컬럼 2: 연도 ── */
+function mediaRenderYearCol() {
+    const col = document.getElementById('mediaYearCol');
+    const wrap = document.getElementById('mediaYearColWrap');
+    if (!col || !wrap) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     if (!cfg) {
-        row.innerHTML = '';
-        mediaSetSubPanelOpen(false);
-        mediaRenderSubtag2Row();
+        wrap.style.display = 'none';
+        col.innerHTML = '';
+        mediaRenderSubCol();
         return;
     }
-
     const itemsInTag = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
-    const options = ['전체'].concat(cfg.getOptions(itemsInTag));
-    row.innerHTML = options.map(opt =>
-        `<button type="button" class="mst-chip${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${opt}')">${opt}</button>`
+    const options = ['전체'].concat(cfg.year(itemsInTag));
+    wrap.style.display = 'flex';
+    col.innerHTML = options.map(opt =>
+        `<button type="button" class="mf-row${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${opt}')">
+            <span>${opt === '전체' ? '전체' : opt + '년'}</span>
+            ${cfg.sub ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>' : ''}
+        </button>`
     ).join('');
-    mediaRenderSubtag2Row();
-    mediaSetSubPanelOpen(true);
+    mediaRenderSubCol();
 }
 
-function mediaRenderSubtag2Row() {
-    const row = document.getElementById('mediaSubtag2Row');
-    if (!row) return;
+/* ── 컬럼 3: 카테고리별 세부분류 ── */
+function mediaRenderSubCol() {
+    const col = document.getElementById('mediaSubCol');
+    const wrap = document.getElementById('mediaSubColWrap');
+    if (!col || !wrap) return;
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    if (!cfg || !cfg.third) { row.innerHTML = ''; row.style.display = 'none'; mediaRefreshSubPanelHeight(); return; }
+    if (!cfg || !cfg.sub) { wrap.style.display = 'none'; col.innerHTML = ''; return; }
 
-    // 소분류까지 적용된 상태에서 세분류(연도) 옵션 추출
-    let itemsInSub = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
-    if (mediaActiveSub !== '전체') itemsInSub = itemsInSub.filter(i => cfg.match(i, mediaActiveSub));
+    let itemsInYear = mediaGetAllItems().filter(i => i.tagLabel === mediaActiveTag);
+    if (mediaActiveSub !== '전체') itemsInYear = itemsInYear.filter(i => i.date.slice(0, 4) === mediaActiveSub);
 
-    const options = ['전체'].concat(cfg.third.getOptions(itemsInSub));
-    row.style.display = 'flex';
-    row.innerHTML = options.map(opt =>
-        `<button type="button" class="mst2-chip${opt === mediaActiveSub2 ? ' active' : ''}" onclick="mediaSetSub2('${opt}')">${opt}</button>`
+    const options = ['전체'].concat(cfg.sub.getOptions(itemsInYear));
+    wrap.style.display = 'flex';
+    col.innerHTML = options.map(opt =>
+        `<button type="button" class="mf-row${opt === mediaActiveSub2 ? ' active' : ''}" onclick="mediaSetSub2('${opt}')"><span>${opt}</span></button>`
     ).join('');
-    mediaRefreshSubPanelHeight();
 }
-
-/* ⭐️ 하위 분류 — 대분류 클릭 시 그 아래에 뜨는 작은 드롭다운 패널 */
-function mediaSetSubPanelOpen(open) {
-    const panel = document.getElementById('mediaSubPanel');
-    if (!panel) return;
-    panel.classList.toggle('open', !!open);
-}
-function mediaRefreshSubPanelHeight() { /* 드롭다운 패널은 고정 max-height + 스크롤이라 별도 재계산 불필요 */ }
-document.addEventListener('click', (e) => {
-    const panel = document.getElementById('mediaSubPanel');
-    const catRow = document.getElementById('mediaTagRow');
-    if (!panel || !panel.classList.contains('open')) return;
-    if (panel.contains(e.target) || (catRow && catRow.contains(e.target))) return;
-    mediaSetSubPanelOpen(false);
-    mediaSyncTagArrow();
-});
 
 function mediaSetTag(label) {
-    if (label === mediaActiveTag) {
-        // ⭐️ 이미 선택된 탭을 다시 클릭하면 하위 분류 트리만 열고 닫기
-        const panel = document.getElementById('mediaSubPanel');
-        const isOpen = !!(panel && panel.classList.contains('open'));
-        if (MEDIA_SUBFILTERS[label]) mediaSetSubPanelOpen(!isOpen);
-        mediaSyncTagArrow();
-        return;
-    }
+    if (label === mediaActiveTag) return;
     mediaActiveTag = label;
     mediaActiveSub = '전체';
     mediaActiveSub2 = '전체';
     mediaRenderTagRow();
-    mediaRenderSubtagRow();
-    mediaSyncTagArrow();
     mediaApplyFilters();
-}
-
-function mediaSyncTagArrow() {
-    const panel = document.getElementById('mediaSubPanel');
-    const isOpen = !!(panel && panel.classList.contains('open'));
-    document.querySelectorAll('.mt-chip').forEach(btn => {
-        btn.classList.toggle('panel-open', isOpen && btn.classList.contains('active'));
-    });
 }
 
 function mediaSetSub(sub) {
     mediaActiveSub = sub;
     mediaActiveSub2 = '전체';
-    mediaRenderSubtagRow();
+    mediaRenderYearCol();
     mediaApplyFilters();
 }
 
 function mediaSetSub2(sub2) {
     mediaActiveSub2 = sub2;
-    mediaRenderSubtag2Row();
+    mediaRenderSubCol();
     mediaApplyFilters();
 }
 
@@ -246,7 +216,7 @@ function mediaGetFiltered() {
 
 function mediaCardTitle(item) {
     // ⭐️ 음악방송에서 프로그램을 특정해서 골랐으면, 카드 제목엔 이미 아는 프로그램명 대신 곡명만
-    if (item.tagLabel === '음악 방송' && mediaActiveSub !== '전체' && item.program) {
+    if (item.tagLabel === '음악 방송' && mediaActiveSub2 !== '전체' && item.program) {
         return item.title.replace(`${item.program} · `, '');
     }
     return item.title;
@@ -436,8 +406,6 @@ function mediaClosePlayer() {
 window.addEventListener('DOMContentLoaded', () => {
     mediaInitTagFromQuery();
     mediaRenderTagRow();
-    mediaRenderSubtagRow();
-    mediaSyncTagArrow();
     mediaRenderGrid(true);
     mediaSetupInfiniteScroll();
     const badge = document.getElementById('mediaCountBadge');

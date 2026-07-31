@@ -1,136 +1,138 @@
-#mainWrapper .media-page-container { max-width: 100%; margin-left: 0; margin-right: 0; padding-left: 48px; padding-right: 48px; box-sizing: border-box; }
-@media (max-width: 700px) { #mainWrapper .media-page-container { padding-left: 20px; padding-right: 20px; } }
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESCENE ARCHIVE | MEDIA</title>
+    <meta name="description" content="RESCENE YOUTUBE ARCHIVE">
+    <link rel="icon" type="image/png" href="../images/logo.png">
 
-.media-hero { margin-bottom: 14px; }
-.media-hero-sub { font-family: var(--font-body); font-size: 13.5px; color: var(--text-muted); margin: 0 0 30px; }
-.media-count-badge { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); }
-.media-count-badge b { color: var(--text-primary); font-weight: 700; }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
 
-.media-toolbar { margin-bottom: 30px; }
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/i18n.css">
+    <link rel="stylesheet" href="media.css">
 
-/* ⭐️ 필터 패널 — 대분류 > 연도 > 세부분류 순서의 세로 브레드크럼 컬럼. 알약형 탭 없이 각지고 차분하게 */
-.media-filter-panel {
-    display: flex; align-items: flex-start; gap: 0;
-    border: 1px solid var(--border-light); border-radius: 4px; overflow: hidden;
-    background: var(--bg-surface); margin-bottom: 4px;
-}
-.mf-col-wrap { flex: 1 1 0; min-width: 0; border-left: 1px solid var(--border-light); }
-.mf-col-wrap:first-child { border-left: none; }
-.mf-col-head {
-    font-family: var(--font-head); font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
-    color: var(--text-muted); padding: 12px 16px 10px; border-bottom: 1px solid var(--border-light);
-}
-.mf-col { display: flex; flex-direction: column; max-height: 300px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
-.mf-col::-webkit-scrollbar { width: 5px; }
-.mf-col::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
+    <script src="../js/theme-init.js"></script>
+</head>
+<body>
 
-.mf-row {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    width: 100%; box-sizing: border-box; padding: 10px 16px; border: none; border-radius: 0;
-    background: transparent; color: var(--text-secondary);
-    font-family: var(--font-body); font-size: 13px; font-weight: 500; text-align: left;
-    cursor: pointer; transition: background 0.18s ease, color 0.18s ease;
-}
-.mf-row svg { width: 12px; height: 12px; flex-shrink: 0; opacity: 0.4; }
-.mf-row:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
-.mf-row.active {
-    background: color-mix(in srgb, var(--chip-color, var(--c-accent)) 10%, var(--bg-surface-hover));
-    color: var(--chip-color, var(--c-accent)); font-weight: 700;
-}
-.mf-row.active svg { opacity: 1; }
+    <div id="siteNavSlot"></div>
+    <script src="../js/layout.js"></script>
+    <script>renderSiteNav('media', '../', { calendar: true, lang: true });</script>
 
-@media (max-width: 900px) {
-    .media-filter-panel { flex-direction: column; border-radius: 12px; }
-    .mf-col-wrap { border-left: none; border-top: 1px solid var(--border-light); }
-    .mf-col-wrap:first-child { border-top: none; }
-    .mf-col-head { padding: 10px 14px 8px; }
+    <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
+        <div class="section-container media-page-container" style="flex: 1;">
+            <div class="section-header media-hero">
+                <div class="section-title" data-i18n="mediaTitle">MEDIA <span>ARCHIVE</span></div>
+            </div>
+            <p class="media-hero-sub"><span data-i18n="mediaSub">리센느 유튜브 모아보기</span><span class="media-count-badge" id="mediaCountBadge"></span></p>
 
-    /* 세로 스크롤 목록 여러 개가 쌓여서 지저분해지는 대신, 각 단계를 가로로 넘기는 칩 한 줄로 */
-    .mf-col {
-        flex-direction: row; max-height: none; overflow-y: visible;
-        overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
-        gap: 6px; padding: 8px 10px;
-    }
-    .mf-col::-webkit-scrollbar { display: none; }
-    .mf-row {
-        flex: 0 0 auto; width: auto; justify-content: center; gap: 5px;
-        padding: 7px 13px; border-radius: 999px; border: 1px solid var(--border-light);
-        font-size: 12.5px; white-space: nowrap;
-    }
-    .mf-row.active { border-color: var(--chip-color, var(--c-accent)); }
-    .mf-row svg { width: 10px; height: 10px; }
-}
+            <div class="media-toolbar">
+                <div class="media-filter-panel">
+                    <div class="mf-col-wrap">
+                        <div class="mf-col-head">CATEGORY</div>
+                        <div class="mf-col" id="mediaTagRow"></div>
+                    </div>
+                    <div class="mf-col-wrap" id="mediaYearColWrap" style="display:none;">
+                        <div class="mf-col-head">YEAR</div>
+                        <div class="mf-col" id="mediaYearCol"></div>
+                    </div>
+                    <div class="mf-col-wrap" id="mediaSubColWrap" style="display:none;">
+                        <div class="mf-col-head">DETAIL</div>
+                        <div class="mf-col" id="mediaSubCol"></div>
+                    </div>
+                </div>
 
+                <div class="media-sort-row-wrap">
+                    <div class="media-search-wrap">
+                        <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" data-i18n-placeholder="searchPlaceholder" oninput="mediaApplyFilters()" autocomplete="off">
+                        <button type="button" class="media-search-clear" id="mediaSearchClear" onclick="mediaClearSearch()" aria-label="검색어 지우기">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                    <div class="media-sort-group" role="group" aria-label="정렬">
+                        <button type="button" class="msort-btn active" id="sortDateNew" onclick="mediaSetSort('date','desc')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                            <span data-i18n="sortNewest">최신순</span>
+                        </button>
+                        <button type="button" class="msort-btn" id="sortDateOld" onclick="mediaSetSort('date','asc')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            <span data-i18n="sortOldest">오래된순</span>
+                        </button>
+                        <span class="msort-divider"></span>
+                        <button type="button" class="msort-btn" id="sortNameAsc" onclick="mediaSetSort('name','asc')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                            <span data-i18n="sortNameAsc">가나다순</span>
+                        </button>
+                        <button type="button" class="msort-btn" id="sortNameDesc" onclick="mediaSetSort('name','desc')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            <span data-i18n="sortNameDesc">역순</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-.media-search-wrap {
-    display: flex; align-items: center; gap: 8px;
-    width: 100%; max-width: 320px; box-sizing: border-box;
-    padding: 0 8px 0 16px; border-radius: 999px; border: 1px solid var(--border-light);
-    background: var(--bg-surface); transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    flex-shrink: 0;
-}
-.media-search-wrap:focus-within { border-color: var(--c-accent); box-shadow: 0 0 0 3px var(--c-accent-glow); }
-.media-search-wrap svg.msw-icon { width: 15px; height: 15px; color: var(--text-muted); flex-shrink: 0; }
-.media-search-wrap input {
-    flex: 1; min-width: 0; border: none; outline: none; background: transparent;
-    padding: 12px 0; color: var(--text-primary); font-family: var(--font-body); font-size: 13px;
-}
-.media-search-wrap input::placeholder { color: var(--text-muted); }
-.media-search-clear {
-    display: none; align-items: center; justify-content: center; width: 26px; height: 26px;
-    border-radius: 50%; border: none; background: var(--bg-surface-hover); color: var(--text-secondary);
-    cursor: pointer; flex-shrink: 0; transition: 0.2s ease;
-}
-.media-search-clear.show { display: flex; }
-.media-search-clear:hover { color: var(--c-accent); }
-.media-search-clear svg { width: 11px; height: 11px; }
-.media-sort-row-wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border-light); }
+            <div class="media-grid" id="mediaGrid"></div>
+            <div class="media-scroll-sentinel" id="mediaSentinel"></div>
+            <div class="media-end-message" id="mediaEndMessage" style="display:none;" data-i18n="mediaAllDone">모든 영상을 다 봤어요.</div>
+        </div>
 
-.media-sort-group { display: flex; align-items: center; gap: 2px; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 999px; padding: 4px; flex-wrap: wrap; }
-.msort-divider { width: 1px; height: 16px; background: var(--border-light); margin: 0 4px; flex-shrink: 0; }
-.msort-btn {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 8px 14px; border-radius: 999px; border: none; background: transparent;
-    color: var(--text-secondary); font-family: var(--font-head); font-size: 11.5px; font-weight: 700;
-    cursor: pointer; transition: 0.25s ease; white-space: nowrap;
-}
-.msort-btn svg { width: 11px; height: 11px; }
-.msort-btn:hover { color: var(--text-primary); }
-.msort-btn.active { background: var(--text-primary); color: var(--bg-base); }
+        <div id="siteFooterSlot"></div>
+        <script>renderSiteFooter('../');</script>
+    </div>
 
-.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px 20px; margin-top: 8px; }
-.media-card { display: flex; flex-direction: column; animation: mediaCardIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
-@keyframes mediaCardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    <!-- 영상 재생 모달 -->
+    <div class="modal-backdrop" id="mediaModalBackdrop" onclick="mediaClosePlayer()"></div>
+    <div class="media-modal-wrapper" id="mediaModal">
+        <button class="popup-close-btn" onclick="mediaClosePlayer()" aria-label="닫기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="media-modal-head">
+            <div class="media-modal-title" id="mediaModalTitle"></div>
+            <div class="media-modal-date" id="mediaModalDate"></div>
+        </div>
+        <div class="media-modal-media" id="mediaModalMedia"></div>
+        <div class="media-modal-nav">
+            <button type="button" class="mm-nav-btn" id="mediaPrevBtn" onclick="mediaPrev()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                <span data-i18n="prevVideo">이전 영상</span>
+            </button>
+            <button type="button" class="mm-nav-btn mm-nav-next" id="mediaNextBtn" onclick="mediaNext()">
+                <span data-i18n="nextVideo">다음 영상</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+        <div class="media-modal-playlist" id="mediaModalPlaylist">
+            <div class="mm-drag-handle" id="mmDragHandle">
+                <span class="mm-drag-label"><span data-i18n="playlist">재생목록</span> <b id="mmPlaylistCount">0</b></span>
+            </div>
+            <ul class="mm-playlist-list" id="mmPlaylistList"></ul>
+        </div>
+    </div>
 
-.media-card-thumb { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 16px; overflow: hidden; background: var(--bg-surface); border: 1px solid var(--border-light); cursor: pointer; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
-.media-card-thumb:hover { border-color: var(--c-accent); box-shadow: 0 16px 32px rgba(0,0,0,0.32); transform: translateY(-3px); }
-.media-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
-.media-card-thumb:hover img { transform: scale(1.06); }
-.media-card-thumb .mc-play { position: absolute; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0); border: none; padding: 0; cursor: pointer; transition: background 0.3s ease; }
-.media-card-thumb:hover .mc-play { background: rgba(0,0,0,0.22); }
-.media-card-thumb .mc-play svg { width: 26px; height: 26px; color: #fff; opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; transform: scale(0.85); filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7)); }
-.media-card-thumb:hover .mc-play svg { opacity: 0.96; transform: scale(1); }
-.media-card-tag { position: absolute; left: 9px; top: 9px; padding: 4px 10px; border-radius: 7px; color: #0c0c14; font-family: var(--font-head); font-size: 9.5px; font-weight: 800; letter-spacing: 0.3px; }
-.media-card-info { padding: 12px 2px 0; }
-.media-card-info .mc-title { font-family: var(--font-body); font-size: 13.5px; font-weight: 600; color: var(--text-primary); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.media-card-info .mc-sub { font-family: var(--font-num); font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+    <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
+    <div id="siteCalendarSlot"></div>
+    <script>renderCalendarWidgets();</script>
 
-.media-empty { grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 13px; padding: 60px 0; }
-
-.media-scroll-sentinel { width: 100%; height: 1px; }
-.media-loading-row { grid-column: 1 / -1; display: flex; justify-content: center; padding: 30px 0; }
-.media-loading-dot { display: inline-flex; gap: 6px; }
-.media-loading-dot span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: mediaDotPulse 1.2s ease-in-out infinite; }
-.media-loading-dot span:nth-child(2) { animation-delay: 0.15s; }
-.media-loading-dot span:nth-child(3) { animation-delay: 0.3s; }
-@keyframes mediaDotPulse { 0%, 100% { opacity: 0.25; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1); } }
-.media-end-message { grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-family: var(--font-num); font-size: 11.5px; letter-spacing: 0.05em; padding: 36px 0 8px; }
-
-@media (max-width: 700px) {
-    .media-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px 12px; }
-    .media-hero-sub { margin-bottom: 22px; }
-    .media-toolbar-top { flex-direction: column; align-items: stretch; }
-    .media-search-wrap { max-width: none; }
-    .media-sort-row-wrap { flex-direction: column; align-items: flex-start; }
-    .media-sort-group { width: 100%; justify-content: center; }
-}
+    <script src="../js/i18n.js"></script>
+    <script>
+        // 하위 폴더(media/)에서 실행되므로 이미지/데이터 경로 앞에 ../ 를 붙여야 함
+        var SITE_ROOT = '../';
+    </script>
+    <script src="../js/member_data.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/contents_data.js"></script>
+    <script src="../js/album_content_data.js"></script>
+    <script src="../js/music_show_data.js"></script>
+    <script src="../js/live_data.js"></script>
+    <script src="../js/event_data.js"></script>
+    <script src="../js/contents.js"></script>
+    <script src="media.js"></script>
+</body>
+</html>

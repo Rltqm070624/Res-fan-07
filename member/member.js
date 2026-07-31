@@ -13,7 +13,7 @@ function renderMemberSelector() {
 function setActiveMember(key) {
     if (key === memberActiveKey) return;
     memberActiveKey = key;
-    memberActiveEra = 'prettygirl';
+    memberActiveEra = 'prettygirl'; // 멤버가 바뀔 때마다 최신 활동 사진으로 리셋
     renderMemberSelector();
     renderMemberDetail();
 }
@@ -23,7 +23,11 @@ function renderMemberDetail() {
     if (!m) return;
 
     const signImg = document.getElementById('memberSign');
-    if (signImg) { signImg.src = `../images/profile/${m.key}/sign.svg`; signImg.style.display = ''; signImg.onerror = function () { this.style.display = 'none'; }; }
+    if (signImg) { 
+        signImg.src = `../images/profile/${m.key}/sign.svg`; 
+        signImg.style.display = ''; 
+        signImg.onerror = function () { this.style.display = 'none'; }; 
+    }
 
     document.getElementById('memberPageTitleKo').textContent = m.nameKo;
     document.getElementById('memberPageTitleEn').textContent = m.nameEn;
@@ -40,9 +44,11 @@ function renderMemberDetail() {
     document.getElementById('memberSpecialty').textContent = m.specialty;
     document.getElementById('memberHobby').textContent = m.hobby;
 
+    // 멤버 고유 색상 CSS 변수 주입
     const panel = document.querySelector('.mem-detail-panel');
     if (panel) panel.style.setProperty('--mem-active-color', m.color);
 
+    // 포토 아카이브 렌더링
     const eraRow = document.getElementById('memberEraRow');
     if (eraRow) {
         eraRow.innerHTML = MEMBER_ERAS.map(e => `
@@ -55,7 +61,7 @@ function renderMemberDetail() {
     updateEraPreview();
 }
 
-/* 포토 아카이브에서 고른 이미지를 메인 히어로 자리에 바로 반영 */
+/* 포토 아카이브에서 고른 이미지를 메인 히어로 자리에 자연스럽게 반영 */
 function updateEraPreview() {
     const m = MEMBER_DATA.find(x => x.key === memberActiveKey);
     const era = MEMBER_ERAS.find(x => x.key === memberActiveEra) || MEMBER_ERAS[MEMBER_ERAS.length - 1];
@@ -67,10 +73,12 @@ function updateEraPreview() {
         heroImg.classList.add('is-switching');
         const nextSrc = `../images/profile/${m.key}/${era.key}.webp`;
         heroImg.onerror = function () { this.onerror = null; this.src = `../images/profile/${m.key}/debut.webp`; };
+        
+        // 부드러운 페이드 인/아웃 효과
         setTimeout(() => {
             heroImg.src = nextSrc;
             heroImg.classList.remove('is-switching');
-        }, 120);
+        }, 150);
     }
     if (previewLabel) previewLabel.textContent = era.label;
 }
@@ -79,10 +87,16 @@ function setActiveEra(eraKey) {
     memberActiveEra = eraKey;
     document.querySelectorAll('.mem-era-item').forEach(el => {
         el.classList.toggle('active', el.dataset.era === eraKey);
+        
+        // 선택된 아이템이 화면에 잘 보이도록 자동 스크롤 (가로 스크롤 대응)
+        if (el.dataset.era === eraKey) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
     });
     updateEraPreview();
 }
 
+/* 이미지 클릭 시 확대 모달 */
 function openEraModal() {
     const heroImg = document.getElementById('memberHeroImg');
     const previewLabel = document.getElementById('memberEraPreviewLabel');
@@ -106,7 +120,22 @@ function closeEraModal() {
     document.body.style.overflow = '';
 }
 
+// ⭐️ 마우스 휠로 가로 스크롤 가능하게 해주는 UX 스크립트 (PC 사용자용)
+function initHorizontalScroll() {
+    const eraRail = document.getElementById('memberEraRow');
+    if (eraRail) {
+        eraRail.addEventListener('wheel', (e) => {
+            // 위아래 휠 스크롤을 가로 스크롤로 변환
+            if (e.deltaY !== 0) {
+                e.preventDefault();
+                eraRail.scrollLeft += e.deltaY * 2; // 스크롤 속도 조절
+            }
+        });
+    }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     renderMemberSelector();
     renderMemberDetail();
+    initHorizontalScroll();
 });

@@ -75,14 +75,19 @@ function renderSiteNav(activeKey, root, opts) {
                 <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="${root}images/x.png" alt="X" onerror="this.style.display='none'"></a>
                 <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="${root}images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
                 <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="${root}images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
+                ${opts.lang ? `<div class="lang-globe-wrap-mobile">
+                    <button type="button" class="lang-globe-btn-mobile notranslate" translate="no" onclick="toggleLangAccordion(undefined, 'mobile')" title="Language" aria-label="Language">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    </button>
+                </div>` : ''}
             </div>
         </div>
         <ul class="mobile-menu-list">${mobileLinks}</ul>
-        ${opts.lang ? `<div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" style="margin-top: auto; display: flex; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko')">KOR</button>
-            <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">ENG</button>
-            <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>
-            <button type="button" class="lang-btn" data-lang="zh" onclick="setLang('zh')">中文</button>
+        ${opts.lang ? `<div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" id="langAccordionMobile">
+            <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko'); toggleLangAccordion(false, 'mobile');">KOR</button>
+            <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en'); toggleLangAccordion(false, 'mobile');">ENG</button>
+            <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja'); toggleLangAccordion(false, 'mobile');">日本語</button>
+            <button type="button" class="lang-btn" data-lang="zh" onclick="setLang('zh'); toggleLangAccordion(false, 'mobile');">中文</button>
         </div>` : ''}
     </div>`;
 

@@ -1,13 +1,38 @@
-/* ⭐️ 응원법(FANCHANT) 페이지 — 다른 페이지처럼 화면 전체 너비 사용 */
-.fanchant-page-container { max-width: 100%; padding-left: 48px; padding-right: 48px; box-sizing: border-box; }
+/* ⭐️ 응원법(FANCHANT) 페이지 — 좌우 빈 여백을 꽉 채워서 사용 */
+.fanchant-page-container { 
+    max-width: 1400px; 
+    width: 100%;
+    margin: 0 auto; 
+    padding-left: 48px; 
+    padding-right: 48px; 
+    box-sizing: border-box; 
+}
 @media (max-width: 700px) { .fanchant-page-container { padding-left: 20px; padding-right: 20px; } }
 
-/* 한 화면 안에서 다 보이도록 — 목록/디테일 둘 다 남는 세로 공간을 꽉 채우고, 내부에서만 스크롤 */
-.fc-layout { display: grid; grid-template-columns: 300px 1fr; gap: 28px; align-items: stretch; margin-top: 24px; flex: 1; min-height: 0; padding-bottom: 40px; }
-@media (max-width: 900px) { .fc-layout { grid-template-columns: 1fr; min-height: auto; } }
+/* ⭐️ 전체 3단 느낌 레이아웃: 메뉴(280px) | 우측 디테일 패널(나머지) */
+.fc-layout { 
+    display: grid; 
+    grid-template-columns: 280px 1fr; 
+    gap: 32px; 
+    align-items: stretch; 
+    margin-top: 24px; 
+    flex: 1; 
+    min-height: 0; 
+    padding-bottom: 24px; 
+}
+@media (max-width: 900px) { .fc-layout { grid-template-columns: 1fr; min-height: auto; overflow-y: auto; } }
 
-.fc-song-list { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 18px; padding: 10px; overflow-y: auto; min-height: 0; }
-@media (max-width: 900px) { .fc-song-list { max-height: 360px; } }
+/* --- 1. 좌측 곡 리스트 --- */
+.fc-song-list { 
+    background: var(--bg-surface); 
+    border: 1px solid var(--border-light); 
+    border-radius: 18px; 
+    padding: 10px; 
+    overflow-y: auto; 
+    min-height: 0; 
+}
+@media (max-width: 900px) { .fc-song-list { max-height: 240px; } }
+
 .fc-album-group { margin-bottom: 14px; }
 .fc-album-title { font-family: var(--font-head); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: var(--text-muted); padding: 10px 12px 6px; text-transform: uppercase; }
 .fc-song-items { list-style: none; margin: 0; padding: 0; }
@@ -19,25 +44,66 @@
 .fc-empty-list .ico { font-size: 26px; opacity: 0.6; }
 .fc-empty-list p { margin: 0; font-family: var(--font-body); font-size: 12.5px; line-height: 1.6; }
 
-/* 상세 패널 — 영상은 고정, 가사만 내부 스크롤 (페이지 자체는 스크롤 안 되게) */
-.fc-detail { display: flex; flex-direction: column; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 20px; padding: 28px 32px 0; min-height: 0; overflow: hidden; }
+/* --- 2. 우측 상세 패널 전체 --- */
+.fc-detail { 
+    display: flex; 
+    flex-direction: column; 
+    background: var(--bg-surface); 
+    border: 1px solid var(--border-light); 
+    border-radius: 20px; 
+    padding: 32px 36px; /* 답답하지 않게 패딩 확보 */
+    min-height: 0; 
+    overflow: hidden; 
+}
 .fc-empty { display: flex; align-items: center; justify-content: center; flex: 1; color: var(--text-muted); font-family: var(--font-head); font-size: 14px; }
 
 .fc-detail-body { display: flex; flex-direction: column; min-height: 0; flex: 1; }
 
-.fc-detail-head { flex-shrink: 0; margin-bottom: 16px; }
+.fc-detail-head { flex-shrink: 0; margin-bottom: 24px; border-bottom: 1px solid var(--border-light); padding-bottom: 16px; }
 .fc-detail-album { font-family: var(--font-num); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--c-accent); text-transform: uppercase; }
-.fc-detail-song { margin: 4px 0 0; font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.3px; }
+.fc-detail-song { margin: 4px 0 0; font-family: var(--font-head); font-size: 28px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.3px; }
 
-.fc-video-wrap { position: relative; width: 100%; flex-shrink: 0; aspect-ratio: 16/9; max-height: 40vh; margin: 0 auto 18px; border-radius: 14px; overflow: hidden; background: #000; }
+/* ⭐️ 영상과 가사를 좌/우로 나누는 내부 컨테이너 (메뉴 | [영상 | 가사] 구조 완성) */
+.fc-detail-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 좌(영상) 50% : 우(가사) 50% */
+    gap: 40px;
+    flex: 1;
+    min-height: 0;
+    align-items: start;
+}
+
+/* 영상 영역 (좌측 고정) */
+.fc-video-wrap { 
+    position: relative; 
+    width: 100%; 
+    aspect-ratio: 16/9; 
+    border-radius: 14px; 
+    overflow: hidden; 
+    background: #000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
 .fc-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-/* 가사 영역 — 영상 바로 아래, 이 안에서만 스크롤 */
-.fc-lyrics-scroll { flex: 1; min-height: 60px; overflow-y: auto; padding-bottom: 28px; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
+/* 가사 영역 (우측, 내부 스크롤) */
+.fc-lyrics-scroll { 
+    height: 100%; /* 부모 높이를 꽉 채워야 스크롤이 발생함 */
+    overflow-y: auto; 
+    padding-right: 16px; 
+    padding-bottom: 40px;
+    scrollbar-width: thin; 
+    scrollbar-color: var(--border-highlight) transparent; 
+}
 .fc-lyrics-scroll::-webkit-scrollbar { width: 6px; }
 .fc-lyrics-scroll::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
 
-.fc-photo { display: block; max-width: 260px; width: 100%; height: auto; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-light); }
+.fc-photo { display: block; max-width: 100%; width: 100%; height: auto; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-light); }
 
 .fc-lyrics { font-family: var(--font-body); font-size: 15px; line-height: 1.85; color: var(--text-secondary); white-space: normal; }
-.fc-lyrics strong { color: var(--c-accent); font-weight: 800; }
+.fc-lyrics strong { color: var(--c-accent); font-weight: 800; background: var(--c-accent-glow); padding: 0 4px; border-radius: 4px; }
+
+/* 모바일/태블릿(화면이 좁을 때)은 다시 위-아래 구조로 변경 */
+@media (max-width: 1100px) {
+    .fc-detail-content { grid-template-columns: 1fr; gap: 24px; }
+    .fc-lyrics-scroll { padding-right: 8px; }
+}

@@ -105,6 +105,15 @@
     .mem-era-rail { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
 }
 
+@media (max-width: 480px) {
+    .mem-stat-line { flex-wrap: wrap; row-gap: 14px; }
+    .mem-stat { flex: 1 1 42%; min-width: 42%; }
+    .mem-stat:nth-child(2) { border-left: 1px solid var(--border-light); padding-left: 18px; }
+    .mem-stat:nth-child(3) { flex-basis: 100%; border-left: none; padding-left: 0; margin-top: 4px; }
+    .mem-stat-val { white-space: normal; }
+    .mem-page-title-ko { font-size: 24px; }
+}
+
 /* 포토 아카이브 확대 모달 */
 .mem-era-modal {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);

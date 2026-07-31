@@ -11,11 +11,11 @@ const CHART_PLATFORMS = [
 function renderChartWave() {
     const wave = document.getElementById('chartWave');
     if (!wave) return;
-    const BAR_COUNT = 56;
+    const BAR_COUNT = 56; // 넓은 화면에서도 끊기지 않게 충분히 촘촘하게
     let html = '';
     for (let i = 0; i < BAR_COUNT; i++) {
-        const duration = (0.9 + Math.random() * 0.9).toFixed(2);
-        const delay = (-Math.random() * 1.8).toFixed(2);
+        const duration = (0.9 + Math.random() * 0.9).toFixed(2); // 0.9s ~ 1.8s
+        const delay = (-Math.random() * 1.8).toFixed(2); // 각자 다른 타이밍에서 시작 (음수 delay = 이미 진행중인 지점에서 시작)
         html += `<span style="animation-duration:${duration}s; animation-delay:${delay}s;"></span>`;
     }
     wave.innerHTML = html;
@@ -26,24 +26,6 @@ const CHART_PLATFORM_DOT_COLOR = {
     melon: '#00CD3C', genie: '#1E7DE0', vibe: '#7B5CF0', bugs: '#E4322E',
     flo: '#6A3FE0', youtube_music: '#FF3B3B', spotify: '#1DB954'
 };
-
-const STREAM_SERVICE_LINKS = [
-    { key: 'melon', label: '멜론', icon: 'melon.png', url: 'https://www.melon.com/artist/detail.htm?artistId=3709231' },
-    { key: 'genie', label: '지니', icon: 'genie.png', url: 'https://www.genie.co.kr/detail/artistInfo?xxnm=82379125' },
-    { key: 'vibe', label: '바이브', icon: 'vibe.png', url: 'https://vibe.naver.com/search?query=RESCENE' },
-    { key: 'bugs', label: '벅스', icon: 'bugs.png', url: 'https://music.bugs.co.kr/artist/13624667' },
-    { key: 'flo', label: 'FLO', icon: 'flo.png', url: 'https://www.music-flo.com/search/all?keyword=RESCENE' },
-    { key: 'youtube_music', label: '유튜브뮤직', icon: 'youtube_music.png', url: 'https://music.youtube.com/search?q=RESCENE' },
-    { key: 'spotify', label: '스포티파이', icon: 'spotify.png', url: 'https://open.spotify.com/search/RESCENE' }
-];
-
-function renderStreamLinks() {
-    const el = document.getElementById('chartStreamLinks');
-    if (!el) return;
-    el.innerHTML = STREAM_SERVICE_LINKS.map(s =>
-        `<a href="${s.url}" target="_blank" rel="noopener" title="${s.label}에서 듣기"><img src="../images/music/${s.icon}" alt="${s.label}" onerror="this.parentElement.style.display='none'"></a>`
-    ).join('');
-}
 
 let chartActivePlatform = 'all';
 let CHART_DATA = { songs: [] };
@@ -100,6 +82,7 @@ function chartPlatformRowHtml(song, rankInfo) {
     else if (prev === rank) deltaHtml = '<span class="chart-delta same">–</span>';
     else if (prev > rank) deltaHtml = `<span class="chart-delta up">▲ ${prev - rank}</span>`;
     else deltaHtml = `<span class="chart-delta down">▼ ${rank - prev}</span>`;
+    const shareId = `share-${song.songId || rank}-${chartActivePlatform}`.replace(/[^a-zA-Z0-9_-]/g, '');
     return `<div class="chart-row">
         <span class="chart-row-idx big">${rank}</span>
         ${thumb}
@@ -110,8 +93,106 @@ function chartPlatformRowHtml(song, rankInfo) {
             </div>
             <div class="chart-row-artist">${chartEsc(song.artistName)}</div>
         </div>
+        <div class="chart-share-wrap">
+            <button type="button" class="chart-share-btn" title="공유하기" aria-label="공유하기" onclick="chartToggleShare(event, '${shareId}', ${JSON.stringify(song.songName)}, ${JSON.stringify(song.artistName)})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"></line></svg>
+            </button>
+            <div class="chart-share-pop" id="${shareId}"></div>
+        </div>
     </div>`;
 }
+
+/* ⭐️ 공유하기 — 모바일은 OS 공유시트(카카오톡 포함 설치된 앱 전부 뜸)로 바로 열고,
+   데스크톱은 카카오톡 / X / 링크복사 팝오버를 곡 행 옆에 띄움 */
+let chartShareOpenId = null;
+
+function chartShare(songName, artistName) {
+    return {
+        title: `${songName} - ${artistName} | RESCENE MUSIC CHARTS`,
+        url: window.location.href
+    };
+}
+
+function chartToggleShare(evt, id, songName, artistName) {
+    evt.stopPropagation();
+    const info = chartShare(songName, artistName);
+
+    // 모바일 등 OS 공유시트를 지원하면 그걸로 바로 — 카카오톡이 설치돼 있으면 목록에 자동으로 뜸
+    if (navigator.share) {
+        navigator.share(info).catch(() => {});
+        return;
+    }
+
+    const pop = document.getElementById(id);
+    if (!pop) return;
+    const willOpen = chartShareOpenId !== id;
+    document.querySelectorAll('.chart-share-pop.open').forEach(el => el.classList.remove('open'));
+    chartShareOpenId = willOpen ? id : null;
+    if (!willOpen) return;
+
+    const encodedUrl = encodeURIComponent(info.url);
+    const encodedText = encodeURIComponent(info.title);
+    pop.innerHTML = `
+        <button type="button" onclick="chartShareKakao(${JSON.stringify(songName)}, ${JSON.stringify(artistName)})">
+            <span class="dot" style="background:#FEE500;"></span>카카오톡으로 공유
+        </button>
+        <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" rel="noopener">
+            <span class="dot" style="background:#000;"></span>X로 공유
+        </a>
+        <button type="button" onclick="chartShareCopy(this, ${JSON.stringify(info.url)})">
+            <span class="dot" style="background:var(--c-accent);"></span>링크 복사
+        </button>
+    `;
+    pop.classList.add('open');
+}
+
+function chartShareKakao(songName, artistName) {
+    const info = chartShare(songName, artistName);
+    // 카카오 JS SDK가 연결돼 있으면(Kakao.init 완료) 정식 카카오톡 공유 카드로 전송
+    if (window.Kakao && window.Kakao.isInitialized && window.Kakao.isInitialized()) {
+        window.Kakao.Share.sendDefault({
+            objectType: 'text',
+            text: info.title,
+            link: { mobileWebUrl: info.url, webUrl: info.url }
+        });
+        return;
+    }
+    // SDK 연결 전이면 링크만 복사해서 카카오톡에 직접 붙여넣도록 안내
+    chartShareCopy(null, info.url, '카카오톡 SDK가 아직 연결되지 않아 링크를 복사했어요. 카카오톡 채팅방에 붙여넣어주세요!');
+}
+
+function chartShareCopy(btn, url, msg) {
+    navigator.clipboard.writeText(url).then(() => {
+        chartShowToast(msg || '링크를 복사했어요!');
+    }).catch(() => {
+        chartShowToast('복사에 실패했어요. 직접 주소창에서 복사해주세요.');
+    });
+    document.querySelectorAll('.chart-share-pop.open').forEach(el => el.classList.remove('open'));
+    chartShareOpenId = null;
+}
+
+function chartShowToast(msg) {
+    let toast = document.getElementById('chartToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'chartToast';
+        toast.className = 'chart-toast';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+document.addEventListener('click', (e) => {
+    if (!chartShareOpenId) return;
+    const openPop = document.getElementById(chartShareOpenId);
+    if (openPop && !openPop.contains(e.target) && !e.target.closest('.chart-share-btn')) {
+        openPop.classList.remove('open');
+        chartShareOpenId = null;
+    }
+});
 
 function renderChartList() {
     const list = document.getElementById('chartList');
@@ -140,7 +221,6 @@ function renderChartList() {
 
 async function fetchSongCharts() {
     renderChartTabs();
-    renderStreamLinks();
     try {
         const response = await fetch('chart_data.json?t=' + Date.now());
         const data = await response.json();

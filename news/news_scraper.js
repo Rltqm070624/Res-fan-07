@@ -2,6 +2,7 @@ import fs from 'fs';
 
 const QUERY = '리센느';
 
+// ⛔️ 정치/혐오 이슈와 엮인 기사는 제외 — 필요하면 여기에 키워드를 계속 추가하세요.
 const BLOCKED_KEYWORDS = [
     '김선태', '충주맨', '일베', '무섭노',
     '정치', '정당', '대통령', '국회', '여야', '탄핵', '보수', '진보', '좌파', '우파'
@@ -32,8 +33,6 @@ async function fetchGoogleNews() {
         const pubDate = stripHtml((block.match(/<pubDate>([\s\S]*?)<\/pubDate>/) || [])[1]);
         const source = stripHtml((block.match(/<source[^>]*>([\s\S]*?)<\/source>/) || [])[1]);
         const description = stripHtml((block.match(/<description>([\s\S]*?)<\/description>/) || [])[1]);
-        const rawDescription = (block.match(/<description>([\s\S]*?)<\/description>/) || [])[1] || '';
-        const imgMatch = rawDescription.match(/<img[^>]+src="([^"]+)"/);
         if (!title || !link) continue;
         if (isBlocked(title) || isBlocked(description)) continue;
 
@@ -42,8 +41,7 @@ async function fetchGoogleNews() {
             source: source || 'Google News',
             date: pubDate ? new Date(pubDate).toISOString().slice(0, 10) : '',
             url: link,
-            summary: description.slice(0, 160),
-            image: imgMatch ? imgMatch[1] : ''
+            summary: description.slice(0, 160)
         });
     }
     return items;
@@ -58,12 +56,6 @@ async function fetchNaverNews() {
         const html = await res.text();
 
         const items = [];
-        const thumbMap = {};
-        const thumbRegex = /<a[^>]+class="dsc_thumb"[^>]+href="([^"]+)"[\s\S]{0,300}?<img[^>]+src="([^"]+)"/g;
-        let tm;
-        while ((tm = thumbRegex.exec(html)) !== null) {
-            thumbMap[tm[1]] = tm[2];
-        }
         // 뉴스 검색 결과 링크 + 제목 텍스트를 대략적으로 추출 (정확한 파싱이 필요하면 cheerio 사용 권장)
         const anchorRegex = /<a[^>]+class="news_tit"[^>]+href="([^"]+)"[^>]+title="([^"]+)"/g;
         let m;
@@ -76,8 +68,7 @@ async function fetchNaverNews() {
                 source: '네이버뉴스',
                 date: new Date().toISOString().slice(0, 10),
                 url: link,
-                summary: '',
-                image: thumbMap[link] || ''
+                summary: ''
             });
         }
         return items;

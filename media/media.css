@@ -8,7 +8,7 @@
 
 .media-toolbar { margin-bottom: 30px; }
 
-/* ⭐️ 필터 패널 — 가로 스크롤(Single-line) 칩 그룹으로 변경하여 깔끔하게 표시 */
+/* ⭐️ 필터 패널 — 고정 높이 확보를 위한 셋업 */
 .media-filter-panel {
     display: flex; flex-direction: column; gap: 12px;
     border: none; border-radius: 0; overflow: hidden;
@@ -17,18 +17,23 @@
 .mf-col-wrap { 
     display: flex; align-items: center; gap: 16px; 
     border: none; width: 100%; overflow: hidden; 
+    min-height: 35px; /* 버튼과 드롭다운 높이만큼 기본 확보 */
 }
+/* ⭐️ 점핑 현상 방지: 공간은 남겨두고 투명하게만 만듦 */
+.mf-col-wrap.is-hidden { 
+    visibility: hidden; opacity: 0; pointer-events: none; 
+}
+
 .mf-col-head {
     flex-shrink: 0; width: 68px; font-family: var(--font-head); font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
     color: var(--text-muted); padding: 0; 
 }
 
-/* 감싸지 않고 1줄로 길게 늘어트린 후, 가로 스크롤 적용 (유튜브 스타일) */
 .mf-col { 
     display: flex; flex-direction: row; flex-wrap: nowrap; gap: 8px; 
     flex: 1; min-width: 0; 
     overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; 
-    padding-bottom: 4px; /* 스크롤 여백 */
+    padding-bottom: 4px; 
 }
 .mf-col::-webkit-scrollbar { display: none; }
 
@@ -47,10 +52,39 @@
 }
 .mf-row.active svg { opacity: 1; }
 
+/* ⭐️ 디테일 카테고리용 드롭다운(Select) 커스텀 디자인 */
+.mf-select {
+    appearance: none; -webkit-appearance: none;
+    background: var(--bg-surface) url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 12px center;
+    background-size: 14px;
+    border: 1px solid var(--border-light);
+    border-radius: 999px;
+    padding: 8px 36px 8px 16px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    outline: none;
+    max-width: 260px; /* 너무 길어지지 않게 방지 */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+.mf-select:focus {
+    border-color: var(--c-accent);
+}
+.mf-select option {
+    background: var(--bg-base);
+    color: var(--text-primary);
+}
+
 @media (max-width: 900px) {
     .mf-col-wrap { flex-direction: column; align-items: flex-start; gap: 6px; }
     .mf-col-head { width: auto; font-size: 10px; margin-bottom: 2px; }
     .mf-row { padding: 7px 14px; font-size: 12px; }
+    .mf-select { width: 100%; max-width: none; }
 }
 
 .media-search-wrap {

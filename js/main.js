@@ -204,8 +204,9 @@ function renderTodayMonthSchedule() {
         const isToday = dateKey === getTodayKey();
         const itemsHtml = items.map(item => {
             if (item.isBirthday) {
+                const bdayWord = window.t ? window.t('birthdayWord') : '생일';
                 return `<div class="tm-item tm-item-bday" onclick="openCalendarPopup(); openModal('${year}', '${month}', '${d.getDate()}', '${dateKey}')">
-                    <span class="tm-item-tag" style="background:${item.color};">🎂 생일</span>
+                    <span class="tm-item-tag" style="background:${item.color};">🎂 ${bdayWord}</span>
                     <span class="tm-item-title">${item.title}</span>
                 </div>`;
             }

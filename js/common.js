@@ -69,6 +69,19 @@ let currentCalYear = new Date().getFullYear();
 let currentCalMonth = new Date().getMonth() + 1;
 const colorMap = { "broadcast": "#7e57c2", "fansign": "#ec407a", "event": "#66bb6a", "concert": "#26c6da", "radio": "#ffa726", "notice": "#78909c" };
 
+function getDayItems(dateKey) {
+    const base = (scheduleDB[dateKey] && scheduleDB[dateKey].items) ? scheduleDB[dateKey].items.slice() : [];
+    if (typeof MEMBER_DATA === 'undefined' || !dateKey) return base;
+    const mmdd = dateKey.slice(5);
+    MEMBER_DATA.forEach(m => {
+        const bmmdd = m.birthday.slice(5).replace('.', '-');
+        if (bmmdd === mmdd) {
+            base.unshift({ time: '', title: `${m.nameKo} 생일`, type: 'birthday', color: m.color, isBirthday: true });
+        }
+    });
+    return base;
+}
+
 async function fetchScheduleData() {
     try {
         const response = await fetch(SITE_ROOT + 'js/schedule_data.json?t=' + new Date().getTime());
@@ -108,16 +121,17 @@ function renderCalendarInto(daysElId, monthTextElId) {
     for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; }
     for (let i = 1; i <= lastDate; i++) {
         const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-        const data = scheduleDB[dateKey]; const hasEvent = data && data.items && data.items.length > 0 ? 'has-event' : '';
+        const items = getDayItems(dateKey); const hasEvent = items.length > 0 ? 'has-event' : '';
         let eventsHtml = '';
-        if (data && data.items) {
+        if (items.length) {
             const MAX_VISIBLE = 2;
-            data.items.slice(0, MAX_VISIBLE).forEach(item => {
+            items.slice(0, MAX_VISIBLE).forEach(item => {
                 let dotColor = item.color ? item.color : 'var(--c-accent)';
-                eventsHtml += `<div class="cal-chip" style="color: ${dotColor};">${item.title}</div>`;
+                const cake = item.isBirthday ? '🎂 ' : '';
+                eventsHtml += `<div class="cal-chip" style="color: ${dotColor};">${cake}${item.title}</div>`;
             });
-            if (data.items.length > MAX_VISIBLE) {
-                eventsHtml += `<div class="cal-event-more">+${data.items.length - MAX_VISIBLE}개 더</div>`;
+            if (items.length > MAX_VISIBLE) {
+                eventsHtml += `<div class="cal-event-more">+${items.length - MAX_VISIBLE}개 더</div>`;
             }
         }
         html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`;
@@ -150,15 +164,19 @@ function openModal(year, month, day, dateKey) {
     if (calWrapper && window.innerWidth >= 1050) calWrapper.classList.add('split-active');
 
     const dateTitle = window.tDate ? window.tDate(year, String(month).padStart(2, '0'), String(day).padStart(2, '0')) : `${year}년 ${month}월 ${day}일`;
-    const data = scheduleDB[dateKey];
+    const items = getDayItems(dateKey);
     const typeLabelMap = window.t ? window.t('scheduleTypes') : { broadcast: "방송", fansign: "팬사인회", event: "행사", concert: "공연", radio: "라디오", notice: "공지" };
     const timeLabel = window.t ? window.t('timeLabel') : '시간';
     const timeTbd = window.t ? window.t('timeTbd') : '시간 미정';
 
     let scheduleHtml = `<div class="elegant-date-header">${dateTitle}</div>`;
 
-    if (data && data.items && data.items.length > 0) {
-        data.items.forEach(item => {
+    if (items.length > 0) {
+        items.forEach(item => {
+            if (item.isBirthday) {
+                scheduleHtml += `<div class="ec-card ec-card-bday"><span class="ec-badge" style="background-color: ${item.color}; box-shadow: 0 4px 12px ${item.color}40;">🎂 BIRTHDAY</span><div class="ec-body"><h2 class="ec-title">${item.title} 🎉</h2></div></div>`;
+                return;
+            }
             let dotColor = item.color ? item.color : 'var(--c-accent)';
             let label = typeLabelMap[item.type] || item.type || '일정';
             let time = item.time ? item.time : timeTbd;

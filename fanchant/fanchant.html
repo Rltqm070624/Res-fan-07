@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="../css/modal.css">
     <link rel="stylesheet" href="../css/i18n.css">
     <link rel="stylesheet" href="fanchant.css">
-
     <script src="../js/theme-init.js"></script>
 </head>
 <body>
@@ -18,8 +17,8 @@
     <script src="../js/layout.js"></script>
     <script>renderSiteNav('fanchant', '../', { calendar: true, lang: true });</script>
 
-    <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
-        <div class="section-container fanchant-page-container" style="flex: 1; display: flex; flex-direction: column;">
+    <div id="mainWrapper" style="padding-top: 120px; height: 100vh; overflow: hidden; display: flex; flex-direction: column;">
+        <div class="section-container fanchant-page-container" style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
             <div class="section-header">
                 <div class="section-title" data-i18n="fanchantTitle">FAN<span>CHANT</span></div>
                 <div style="font-size:12px; color:var(--text-muted);" data-i18n="fanchantHint">굵게 표시된 부분을 다같이 외쳐주세요 🎤</div>
@@ -34,11 +33,17 @@
                             <span class="fc-detail-album" id="fcAlbum"></span>
                             <h2 class="fc-detail-song" id="fcSong"></h2>
                         </div>
-                        <div class="fc-video-wrap" id="fcVideoWrap"></div>
-                        <div class="fc-lyrics-scroll">
-                            <img class="fc-photo" id="fcPhoto" alt="응원법 사진" style="display:none;">
-                            <div class="fc-lyrics" id="fcLyrics"></div>
+                        
+                        <!-- ⭐️ 추가된 영역: 영상과 가사를 좌우로 분리 -->
+                        <div class="fc-detail-content">
+                            <div class="fc-video-wrap" id="fcVideoWrap"></div>
+                            
+                            <div class="fc-lyrics-scroll">
+                                <img class="fc-photo" id="fcPhoto" alt="응원법 사진" style="display:none;">
+                                <div class="fc-lyrics" id="fcLyrics"></div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>

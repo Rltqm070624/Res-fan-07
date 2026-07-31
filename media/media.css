@@ -1,36 +1,57 @@
-/* ⭐️ 전체 너비 100% 꽉 차게 복원 */
-#mainWrapper .media-page-container { max-width: 100%; margin-left: 0; margin-right: 0; padding-left: 48px; padding-right: 48px; box-sizing: border-box; }
+/* ⭐️ 왼쪽 고정, 오른쪽 스크롤을 위한 레이아웃 락 */
+.media-wrapper-locked {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+}
+
+#mainWrapper .media-page-container { 
+    display: flex; 
+    flex-direction: column; 
+    flex: 1; 
+    min-height: 0; 
+    max-width: 100%; 
+    margin-left: 0; 
+    margin-right: 0; 
+    padding-left: 48px; 
+    padding-right: 48px; 
+    box-sizing: border-box; 
+}
 @media (max-width: 700px) { #mainWrapper .media-page-container { padding-left: 20px; padding-right: 20px; } }
 
-.media-hero { margin-bottom: 14px; }
-.media-hero-sub { font-family: var(--font-body); font-size: 13.5px; color: var(--text-muted); margin: 0 0 32px; }
+.media-hero { margin-bottom: 14px; flex-shrink: 0; }
+.media-hero-sub { font-family: var(--font-body); font-size: 13.5px; color: var(--text-muted); margin: 0 0 32px; flex-shrink: 0; }
 .media-count-badge { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); margin-left: 6px; }
 .media-count-badge b { color: var(--text-primary); font-weight: 700; }
 
-/* ⭐️ 좌우 레이아웃 분리 */
+/* ⭐️ 좌우 레이아웃 */
 .media-layout {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 48px;
+    flex: 1;
+    min-height: 0;
 }
 
-/* ⭐️ 좌측 사이드바: 가로 간격(gap) 2배 넓힘, 우측 계단식 구조 */
+/* ⭐️ 좌측 고정 사이드바 */
 .media-sidebar {
-    position: sticky;
-    top: 120px;
     display: flex;
     flex-direction: row; 
-    gap: 60px; /* ⭐️ 간격을 넓게 확보 */
-    align-items: flex-start;
-    max-height: calc(100vh - 120px);
+    gap: 56px; 
+    height: 100%;
     overflow-y: auto;
     overflow-x: visible;
+    padding-bottom: 60px;
+    scrollbar-width: none; /* 깔끔하게 숨김 */
 }
+.media-sidebar::-webkit-scrollbar { display: none; }
 
 .ms-col {
     display: flex;
     flex-direction: column;
-    width: 160px; /* 버튼 길이 충분히 확보 */
+    width: 150px;
     flex-shrink: 0;
 }
 .ms-col.is-hidden { display: none !important; }
@@ -77,10 +98,13 @@
     font-weight: 700;
 }
 
-/* ⭐️ 우측 메인 영역 */
+/* ⭐️ 우측 메인 (개별 스크롤 영역) */
 .media-main {
     flex: 1;
     min-width: 0;
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 60px;
 }
 
 .media-toolbar {
@@ -94,7 +118,6 @@
     border-bottom: 1px solid var(--border-light);
 }
 
-/* 툴바 왼쪽: 고급 필터 버튼 + 검색창 */
 .media-toolbar-left {
     display: flex;
     align-items: center;
@@ -156,7 +179,7 @@
 .msort-btn.active { background: var(--text-primary); color: var(--bg-base); }
 
 /* =======================================
-   ⭐️ 왼쪽에서 슬라이딩되는 다중 선택 서랍 
+   ⭐️ 슬라이딩 다중 선택 서랍 (Drawer)
    ======================================= */
 .drawer-backdrop {
     position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(2px);
@@ -190,7 +213,6 @@
 
 .afd-chips { display: flex; flex-wrap: wrap; gap: 10px; }
 
-/* 첨부 이미지 스타일의 칩(Chip) 디자인 */
 .afd-chip {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border-light);
@@ -204,14 +226,20 @@
 .afd-chip.closeable { padding-right: 10px; }
 .afd-chip.closeable:hover svg { color: #ef4444; }
 
+/* ⭐️ 초기화 버튼 (검은색 테마 반영) */
 .afd-action-btn {
     align-self: flex-start; margin-top: 4px; padding: 6px 16px;
-    border-radius: 8px; border: none; background: #fff3e0; color: #f97316;
+    border-radius: 8px; border: none;
     font-family: var(--font-body); font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: 0.2s ease;
 }
-html[data-theme="dark"] .afd-action-btn { background: rgba(249,115,22,0.15); }
-.afd-action-btn.btn-red { background: #fee2e2; color: #ef4444; }
-html[data-theme="dark"] .afd-action-btn.btn-red { background: rgba(239,68,68,0.15); }
+.afd-action-btn.btn-black {
+    background: #111; color: #fff;
+}
+html[data-theme="dark"] .afd-action-btn.btn-black {
+    background: #eee; color: #111;
+}
+.afd-action-btn.btn-black:hover { opacity: 0.8; }
 
 /* --- 영상 카드 및 그리드 --- */
 .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 28px 20px; }
@@ -234,21 +262,22 @@ html[data-theme="dark"] .afd-action-btn.btn-red { background: rgba(239,68,68,0.1
 .media-empty { grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 13px; padding: 60px 0; }
 .media-scroll-sentinel { width: 100%; height: 1px; }
 
-/* 📱 모바일 반응형 */
+/* 📱 모바일 대응: 작은 화면에서는 전체 스크롤 복구 */
 @media (max-width: 1000px) {
-    .media-layout { flex-direction: column; gap: 24px; }
-    .media-sidebar { position: static; max-height: none; flex-direction: column; gap: 24px; padding-bottom: 16px; }
+    .media-wrapper-locked { height: auto !important; overflow: visible !important; display: block; }
+    .media-layout { flex-direction: column; gap: 24px; overflow: visible; height: auto; }
+    .media-sidebar { flex-direction: column; gap: 24px; padding-bottom: 16px; overflow: visible; height: auto; }
     .ms-col { width: 100%; }
     .ms-list { flex-direction: row; overflow-x: auto; padding-bottom: 4px; gap: 8px; scrollbar-width: none; }
     .ms-list::-webkit-scrollbar { display: none; }
     .ms-item { width: auto; flex-shrink: 0; border: 1px solid var(--border-light); border-radius: 999px; padding: 7px 16px; text-align: center; }
     .ms-item.active { background: var(--text-primary); color: var(--bg-base); border-color: var(--text-primary); }
     
+    .media-main { overflow: visible; height: auto; padding-bottom: 20px; }
     .adv-filter-drawer { width: 100%; left: -100%; }
     .media-toolbar { flex-direction: column; align-items: stretch; gap: 16px; }
     .media-toolbar-left, .media-toolbar-right { width: 100%; justify-content: space-between; }
     .media-search-wrap { max-width: none; flex: 1; }
     .media-sort-group { justify-content: center; width: 100%; }
-    
     .media-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px 12px; }
 }

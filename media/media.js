@@ -1,4 +1,3 @@
-// ⭐️ 에러 방지용 안전 함수 추가
 function safeEscape(str) {
     if (!str) return '';
     return String(str).replace(/[&<>'"]/g, match => ({
@@ -12,7 +11,8 @@ function safeThumb(vid) {
 // ⭐️ 데이터 및 변수 초기화
 let mediaActiveTag = '전체';
 let mediaActiveSub = '전체'; 
-let mediaActiveDetails = new Set(); // 다중 선택 칩 지원
+let mediaActiveDetails = new Set();
+let mediaDetailVisible = false; // ⭐️ 하위 탭(Detail) 열림 상태 제어 변수
 let mediaSortField = 'date'; 
 let mediaSortDir = 'desc';   
 let mediaSearchTerm = '';
@@ -75,7 +75,7 @@ const MEDIA_SUBFILTERS = {
 };
 
 function mediaGetAllItems() {
-    if (typeof MEDIA_CATEGORIES === 'undefined') return []; // 보호 코드
+    if (typeof MEDIA_CATEGORIES === 'undefined') return [];
     let all = [];
     MEDIA_CATEGORIES.forEach(cat => {
         cat.getItems().forEach(item => all.push(Object.assign({ tagKey: cat.key, tagLabel: cat.label, tagColor: cat.color }, item)));
@@ -123,7 +123,7 @@ function mediaRenderYearCol() {
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     if (!cfg || !cfg.year) {
         wrap.classList.add('is-hidden');
-        mediaRenderSubCol();
+        mediaRenderSubCol(); // detail도 연쇄적으로 숨김 처리
         return;
     }
     
@@ -146,7 +146,9 @@ function mediaRenderSubCol() {
     if (!col || !wrap) return;
     
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
-    if (!cfg || !cfg.sub) { 
+    
+    // ⭐️ 조건: 카테고리가 없거나 상세 옵션이 없거나 detailVisible이 false이면 숨김
+    if (!cfg || !cfg.sub || !mediaDetailVisible) { 
         wrap.classList.add('is-hidden');
         return; 
     }
@@ -166,7 +168,58 @@ function mediaRenderSubCol() {
 }
 
 // -----------------------------------------------------
-// 2. 왼쪽 서랍(Drawer) 필터 로직
+// 2. 필터 제어 함수 (토글 및 필터 유지 로직)
+// -----------------------------------------------------
+function mediaSetTag(label) {
+    if (mediaActiveTag === label) {
+        mediaActiveTag = '전체'; // 토글 닫힘
+        mediaDetailVisible = false;
+    } else {
+        mediaActiveTag = label;
+        mediaDetailVisible = false; // 카테고리 클릭 시 하위 탭(Detail)은 숨기고 년도만 보이게 강제
+    }
+    // ⭐️ 주의: mediaActiveSub = '전체'를 제거하여 컨텐츠 이동 시 필터가 풀리지 않게 유지함
+    mediaRenderTagRow();
+    mediaApplyFilters();
+    if(typeof mediaRenderDrawer === 'function') mediaRenderDrawer();
+}
+
+function mediaSetSub(sub) {
+    if (mediaActiveSub === sub) {
+        if (sub === '전체') {
+            // 이미 '전체'인 상태에서 누르면 Detail 열림/닫힘 토글
+            mediaDetailVisible = !mediaDetailVisible;
+        } else {
+            // 특정 년도 활성화된 상태에서 누르면 닫힘
+            mediaActiveSub = '전체';
+            mediaDetailVisible = false;
+        }
+    } else {
+        mediaActiveSub = sub;
+        mediaDetailVisible = true; // 년도를 클릭했으므로 하위 탭 활성화
+    }
+    mediaRenderYearCol();
+    mediaApplyFilters();
+    if(typeof mediaRenderDrawer === 'function') mediaRenderDrawer();
+}
+
+function mediaToggleDetail(detail) {
+    if (detail === '전체') {
+        mediaActiveDetails.clear();
+    } else {
+        if (mediaActiveDetails.has(detail)) {
+            mediaActiveDetails.delete(detail);
+        } else {
+            mediaActiveDetails.add(detail);
+        }
+    }
+    mediaRenderSubCol();
+    mediaApplyFilters();
+    if(typeof mediaRenderDrawer === 'function') mediaRenderDrawer();
+}
+
+// -----------------------------------------------------
+// 3. 서랍(Drawer) 필터 로직 (한글화 반영)
 // -----------------------------------------------------
 const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
 const closeSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
@@ -187,7 +240,7 @@ function closeAdvFilter() {
 function mediaRenderDrawer() {
     if (typeof MEDIA_CATEGORIES === 'undefined') return;
     
-    // 1. 카테고리
+    // 1. 카테고리 필터
     const catBox = document.getElementById('afdCategoryChips');
     const catCount = document.getElementById('afdCatCount');
     const categories = ['전체'].concat(MEDIA_CATEGORIES.map(c => c.label));
@@ -197,7 +250,7 @@ function mediaRenderDrawer() {
             ${cat === mediaActiveTag ? checkSVG : ''} ${safeEscape(cat)}
         </button>
     `).join('');
-    catCount.textContent = `${categories.length} chips discovered`;
+    catCount.textContent = `${categories.length}개 항목`;
 
     // 2. 현재 활성화된 필터 칩 (Refine results)
     const activeBox = document.getElementById('afdActiveChips');
@@ -210,7 +263,7 @@ function mediaRenderDrawer() {
         <button class="afd-chip closeable" onclick="mediaRemoveActiveFilter('${a.type}', '${safeEscape(a.val || '')}')">
             ${safeEscape(a.label)} ${closeSVG}
         </button>
-    `).join('') : '<span style="font-size:13px; color:var(--text-muted);">No active filters</span>';
+    `).join('') : '<span style="font-size:13px; color:var(--text-muted);">활성화된 필터 없음</span>';
 
     // 3. 디테일 다중 선택 (Topics)
     const topicBox = document.getElementById('afdTopicChips');
@@ -227,9 +280,9 @@ function mediaRenderDrawer() {
                 ${mediaActiveDetails.has(opt) ? checkSVG : ''} ${safeEscape(opt)}
             </button>
         `).join('');
-        topicCount.innerHTML = `Selected <b style="color:#3b82f6;">${mediaActiveDetails.size}</b> / ${options.length}`;
+        topicCount.innerHTML = `선택됨 <b style="color:#3b82f6;">${mediaActiveDetails.size}</b> / ${options.length}`;
     } else {
-        topicBox.innerHTML = '<span style="font-size:13px; color:var(--text-muted);">No topics available for this category</span>';
+        topicBox.innerHTML = '<span style="font-size:13px; color:var(--text-muted);">해당 카테고리에는 관련 주제가 없습니다.</span>';
         topicCount.textContent = '';
     }
 }
@@ -245,6 +298,7 @@ function mediaClearAllFilters() {
     mediaActiveTag = '전체';
     mediaActiveSub = '전체';
     mediaActiveDetails.clear();
+    mediaDetailVisible = false;
     mediaRenderTagRow();
     mediaApplyFilters();
     mediaRenderDrawer();
@@ -258,35 +312,8 @@ function mediaResetTopics() {
 }
 
 // -----------------------------------------------------
-// 3. 필터 제어 함수
+// 4. 검색, 정렬, 렌더링
 // -----------------------------------------------------
-function mediaSetTag(label) {
-    if (label === mediaActiveTag) return;
-    mediaActiveTag = label;
-    mediaActiveSub = '전체';
-    mediaActiveDetails.clear();
-    mediaRenderTagRow();
-    mediaApplyFilters();
-}
-
-function mediaSetSub(sub) {
-    mediaActiveSub = sub;
-    mediaActiveDetails.clear();
-    mediaRenderYearCol();
-    mediaApplyFilters();
-}
-
-function mediaToggleDetail(detail) {
-    if (detail === '전체') {
-        mediaActiveDetails.clear();
-    } else {
-        if (mediaActiveDetails.has(detail)) mediaActiveDetails.delete(detail);
-        else mediaActiveDetails.add(detail);
-    }
-    mediaRenderSubCol();
-    mediaApplyFilters();
-}
-
 function mediaSetSort(field, dir) {
     mediaSortField = field;
     mediaSortDir = dir;
@@ -412,7 +439,7 @@ function mediaSetupInfiniteScroll() {
 }
 
 // -----------------------------------------------------
-// 4. 모달 및 드래그 관련 기능 
+// 5. 영상 재생 모달 로직
 // -----------------------------------------------------
 let mmPlaylist = [];
 let mmIndex = -1;
@@ -535,7 +562,7 @@ function mediaClosePlayer() {
     });
 })();
 
-// ⭐️ Try-Catch를 통해 에러를 화면에 띄워 원인 파악이 쉽도록 처리
+// ⭐️ 에러 발생 시 빈 화면 대신 에러를 출력하는 보호 장치 (Failsafe)
 window.addEventListener('DOMContentLoaded', () => {
     try {
         mediaInitTagFromQuery();

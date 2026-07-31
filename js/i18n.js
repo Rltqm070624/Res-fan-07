@@ -24,7 +24,7 @@
             noLink: "등록된 링크가 없습니다",
 
             navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
-            navGoods: "GOODS", navNews: "NEWS", navFanchant: "응원법", navMedia: "영상 모음", langLabel: "언어",
+            navGoods: "GOODS", navNews: "NEWS", navFanchant: "응원법", navMedia: "영상 모음", langLabel: "언어", birthdayWord: "생일",
             newsTitle: "RESCENE <span>NEWS</span>", newsSub: "구글·네이버·다음 등에서 모은 리센느 관련 기사입니다.", newsEmpty: "아직 등록된 기사가 없습니다.",
 
             heroWelcome: "리센느 비공식 팬 아카이브에 오신 것을 환영합니다.",
@@ -35,7 +35,7 @@
             sectionArchive: "RESCENE <span>ARCHIVE</span>",
             profilePhoto: "PROFILE PHOTO",
             albumLabel: "ALBUM",
-            youtubeCollect: "YOUTUBE <span>모아보기</span>",
+            youtubeCollect: "YOUTUBE <span>모아보기</span>", mediaBannerSub: "리센느의 모든 영상을 한 곳에서 만나보세요",
             seeMore: "더보기 →",
             sectionAwards: "AWARDS & <span>AMBASSADOR</span>",
             musicShowTitle: "음악 방송 및 시상식",
@@ -78,7 +78,7 @@
             noLink: "No link available",
 
             navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
-            navGoods: "GOODS", navNews: "NEWS", navFanchant: "FANCHANT", navMedia: "MEDIA", langLabel: "Language",
+            navGoods: "GOODS", navNews: "NEWS", navFanchant: "FANCHANT", navMedia: "MEDIA", langLabel: "Language", birthdayWord: "Birthday",
             newsTitle: "RESCENE <span>NEWS</span>", newsSub: "RESCENE news gathered from Google, Naver, and Daum.", newsEmpty: "No articles yet.",
 
             heroWelcome: "Welcome to the unofficial RESCENE fan archive.",
@@ -89,7 +89,7 @@
             sectionArchive: "RESCENE <span>ARCHIVE</span>",
             profilePhoto: "PROFILE PHOTO",
             albumLabel: "ALBUM",
-            youtubeCollect: "YOUTUBE <span>Highlights</span>",
+            youtubeCollect: "YOUTUBE <span>Highlights</span>", mediaBannerSub: "All RESCENE videos, in one place",
             seeMore: "See more →",
             sectionAwards: "AWARDS & <span>AMBASSADOR</span>",
             musicShowTitle: "Music Shows & Awards",
@@ -132,7 +132,7 @@
             noLink: "登録されたリンクがありません",
 
             navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
-            navGoods: "GOODS", navNews: "NEWS", navFanchant: "応援法", navMedia: "動画まとめ", langLabel: "言語",
+            navGoods: "GOODS", navNews: "NEWS", navFanchant: "応援法", navMedia: "動画まとめ", langLabel: "言語", birthdayWord: "誕生日",
             newsTitle: "RESCENE <span>NEWS</span>", newsSub: "Google・Naver・Daumなどで集めたRESCENE関連ニュースです。", newsEmpty: "まだ登録された記事がありません。",
 
             heroWelcome: "RESCENE非公式ファンアーカイブへようこそ。",
@@ -143,7 +143,7 @@
             sectionArchive: "RESCENE <span>ARCHIVE</span>",
             profilePhoto: "PROFILE PHOTO",
             albumLabel: "ALBUM",
-            youtubeCollect: "YOUTUBE <span>まとめ</span>",
+            youtubeCollect: "YOUTUBE <span>まとめ</span>", mediaBannerSub: "リセンヌのすべての動画をここで",
             seeMore: "もっと見る →",
             sectionAwards: "AWARDS & <span>AMBASSADOR</span>",
             musicShowTitle: "音楽番組と表彰式",
@@ -186,7 +186,7 @@
             noLink: "暂无相关链接",
 
             navHome: "首页", navMembers: "成员", navCharts: "榜单", navSchedule: "日程",
-            navGoods: "周边", navNews: "新闻", navFanchant: "应援口号", navMedia: "视频合集", langLabel: "语言",
+            navGoods: "周边", navNews: "新闻", navFanchant: "应援口号", navMedia: "视频合集", langLabel: "语言", birthdayWord: "生日",
             newsTitle: "RESCENE <span>新闻</span>", newsSub: "从谷歌、Naver、Daum等收集的RESCENE相关新闻。", newsEmpty: "暂无收录的新闻。",
 
             heroWelcome: "欢迎来到RESCENE非官方粉丝档案站。",
@@ -197,7 +197,7 @@
             sectionArchive: "RESCENE <span>档案</span>",
             profilePhoto: "PROFILE PHOTO",
             albumLabel: "专辑",
-            youtubeCollect: "YOUTUBE <span>合集</span>",
+            youtubeCollect: "YOUTUBE <span>合集</span>", mediaBannerSub: "在这里观看 RESCENE 的所有视频",
             seeMore: "查看更多 →",
             sectionAwards: "获奖 & <span>代言</span>",
             musicShowTitle: "音乐节目与颁奖典礼",

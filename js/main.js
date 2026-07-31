@@ -88,20 +88,22 @@ function renderAgendaList() {
 
     if (titleEl) titleEl.textContent = `${currentCalYear}년 ${currentCalMonth}월`;
 
-    const keys = Object.keys(scheduleDB)
-        .filter(k => k.startsWith(`${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}`))
-        .sort();
+    const daysInMonth = new Date(currentCalYear, currentCalMonth, 0).getDate();
+    const keys = [];
+    for (let d = 1; d <= daysInMonth; d++) {
+        keys.push(`${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
+    }
 
     let totalCount = 0;
     let html = '';
     keys.forEach(dateKey => {
-        const data = scheduleDB[dateKey];
-        if (!data || !data.items || !data.items.length) return;
+        const items = getDayItems(dateKey);
+        if (!items.length) return;
         const d = new Date(dateKey);
         const dow = d.getDay();
         const groupClass = dow === 0 ? ' sun-group' : (dow === 6 ? ' sat-group' : '');
         const isToday = dateKey === getTodayKey() ? ' today-group' : '';
-        totalCount += data.items.length;
+        totalCount += items.length;
 
         html += `<div class="agenda-group">
             <div class="agenda-group-date${groupClass}${isToday}">
@@ -111,11 +113,12 @@ function renderAgendaList() {
                     <span class="agenda-group-month">${currentCalMonth}월</span>
                 </div>
             </div>`;
-        data.items.forEach(item => {
+        items.forEach(item => {
+            const cake = item.isBirthday ? '<span class="agenda-item-cake">🎂</span>' : '';
             html += `<div class="agenda-item" onclick="openCalendarPopup(); openModal('${currentCalYear}', '${currentCalMonth}', '${d.getDate()}', '${dateKey}')">
                 <div class="agenda-item-bar" style="background:${item.color};"></div>
                 <div class="agenda-item-body">
-                    <div class="agenda-item-title">${item.title}</div>
+                    <div class="agenda-item-title">${cake}${item.title}</div>
                     <div class="agenda-item-meta">
                         <span class="agenda-item-time" style="color:${item.color};">${item.time || ''}</span>
                     </div>
@@ -151,7 +154,7 @@ function renderTodaySchedule() {
     if (!grid) return;
     renderTodayCalBanner();
 
-    const items = scheduleDB[getTodayKey()]?.items || [];
+    const items = getDayItems(getTodayKey());
     const typeLabelMap = window.t ? window.t('scheduleTypes') : {};
     const emptyMsg = window.t ? window.t('noSchedule') : '등록된 일정이 없습니다.';
     const viewMsg = window.t ? window.t('upcomingView') : '다가오는 일정 보기';
@@ -159,11 +162,14 @@ function renderTodaySchedule() {
     let html = items.length === 0 
         ? `<div class="today-empty-card"><div class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></div><p>${emptyMsg}</p><button type="button" onclick="openCalendarPopup()">${viewMsg}</button></div>`
         : items.map(item => {
+            if (item.isBirthday) {
+                return `<article class="today-card is-birthday" style="--accent-color:${item.color};"><label class="today-check"><input type="checkbox"><span class="today-check-box"></span></label><div class="today-card-main"><div class="today-card-top"><span class="today-time">🎂 BIRTHDAY</span></div><h3 class="today-title">${item.title} 🎉</h3></div></article>`;
+            }
             const status = getItemStatus(item.time), label = typeLabelMap[item.type] || item.type || '일정';
             const timeTbd = window.t ? window.t('timeTbd') : '시간 미정';
             const timeHtml = item.time ? item.time : `<span class="tbd">${timeTbd}</span>`;
             const statusHtml = status.key === 'live' ? `<span class="today-status is-live"><span class="live-dot"></span>${status.label}</span>` : `<span class="today-status">${status.label}</span>`;
-            return `<article class="today-card is-${status.key}" style="--accent-color:${item.color};"><div class="today-card-top"><span class="today-time">${timeHtml}</span>${statusHtml}</div><h3 class="today-title">${item.title}</h3><div class="today-card-foot"><span class="today-type"><span class="today-type-dot"></span>${label}</span></div></article>`;
+            return `<article class="today-card is-${status.key}" style="--accent-color:${item.color};"><label class="today-check"><input type="checkbox"><span class="today-check-box"></span></label><div class="today-card-main"><div class="today-card-top"><span class="today-time">${timeHtml}</span>${statusHtml}</div><h3 class="today-title">${item.title}</h3><div class="today-card-foot"><span class="today-type"><span class="today-type-dot"></span>${label}</span></div></div></article>`;
         }).join('');
     if (html !== __todayHtmlCache) { grid.innerHTML = html; __todayHtmlCache = html; }
 }
@@ -181,19 +187,28 @@ function renderTodayMonthSchedule() {
     const typeLabelMap = window.t ? window.t('scheduleTypes') : {};
     if (titleEl) titleEl.textContent = `${year}년 ${month}월`;
 
-    const monthKey = `${year}-${String(month).padStart(2, '0')}`;
-    const keys = Object.keys(scheduleDB).filter(k => k.startsWith(monthKey)).sort();
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const keys = [];
+    for (let d = 1; d <= daysInMonth; d++) {
+        keys.push(`${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
+    }
 
     let totalCount = 0;
     let html = '';
     keys.forEach(dateKey => {
-        const data = scheduleDB[dateKey];
-        if (!data || !data.items || !data.items.length) return;
+        const items = getDayItems(dateKey);
+        if (!items.length) return;
         const d = new Date(dateKey);
         const dow = d.getDay();
-        totalCount += data.items.length;
+        totalCount += items.length;
         const isToday = dateKey === getTodayKey();
-        const itemsHtml = data.items.map(item => {
+        const itemsHtml = items.map(item => {
+            if (item.isBirthday) {
+                return `<div class="tm-item tm-item-bday" onclick="openCalendarPopup(); openModal('${year}', '${month}', '${d.getDate()}', '${dateKey}')">
+                    <span class="tm-item-tag" style="background:${item.color};">🎂 생일</span>
+                    <span class="tm-item-title">${item.title}</span>
+                </div>`;
+            }
             const label = typeLabelMap[item.type] || item.type || '일정';
             return `<div class="tm-item" onclick="openCalendarPopup(); openModal('${year}', '${month}', '${d.getDate()}', '${dateKey}')">
                 <span class="tm-item-tag" style="background:${item.color};">${label}</span>
@@ -238,7 +253,7 @@ function renderProfileArchive() {
         for (let i = 1; i <= PREVIEW_COUNT; i++) {
             phtml += `<div class="profile-item" onclick="openImageModal('images/profile/${i}.jpg', ${i})"><img src="images/profile/${i}.jpg" alt="RESCENE profile ${i}" loading="lazy" onerror="this.closest('.profile-item').style.display='none'"><span class="pf-index">NO. ${String(i).padStart(2, '0')}</span></div>`;
         }
-        phtml += `<a class="profile-item archive-more-tile" href="archive.html#profile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>전체보기</span></a>`;
+        phtml += `<a class="profile-item archive-more-tile" href="archive.html#profile"><span data-i18n="seeMore">더보기</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg></a>`;
         profileWrap.innerHTML = `<div class="profile-track">${phtml}</div>`;
     }
 
@@ -323,7 +338,7 @@ function renderAlbumGrid() {
             // ⭐️ 이미지가 안 뜰 경우 조용히 숨기지 않고 눈에 보이게 표시 (원인 파악 쉽게)
             ahtml += `<div class="profile-item album-cover-item" onclick="openAlbumModal(${idx})"><img src="images/${album.image}" alt="${album.title}" loading="lazy" onerror="console.error('앨범 이미지 로드 실패:', this.src); this.closest('.profile-item').classList.add('img-broken'); this.style.display='none';"><span class="album-broken-label">이미지 없음<br>${album.image}</span></div>`;
         });
-        ahtml += `<a class="profile-item archive-more-tile" href="archive.html#album"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>전체보기</span></a>`;
+        ahtml += `<a class="profile-item archive-more-tile" href="archive.html#album"><span data-i18n="seeMore">더보기</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg></a>`;
         albumWrap.innerHTML = `<div class="profile-track album-track">${ahtml}</div>`;
     }
 

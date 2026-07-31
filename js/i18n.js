@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    var LANGS = ['ko', 'en', 'ja'];
-    var LABELS = { ko: 'KOR', en: 'ENG', ja: '日本語' };
+    var LANGS = ['ko', 'en', 'ja', 'zh'];
+    var LABELS = { ko: 'KOR', en: 'ENG', ja: '日本語', zh: '中文' };
     var current = localStorage.getItem('rescene-lang') || 'ko';
     if (LANGS.indexOf(current) === -1) current = 'ko';
 
@@ -21,7 +21,44 @@
             officialSites: "공식 사이트",
             trackList: "TRACK LIST",
             audioLink: "음원",
-            noLink: "등록된 링크가 없습니다"
+            noLink: "등록된 링크가 없습니다",
+
+            navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
+            navGoods: "GOODS", navFanchant: "응원법", navMedia: "영상 모음",
+
+            heroWelcome: "리센느 비공식 팬 아카이브에 오신 것을 환영합니다.",
+            heroEnter: "바로가기 →",
+
+            sectionWith: "WITH <span>RESCENE</span>",
+            historySubtitle: "지금까지 걸어 온 길을 같이 걸어 볼까요?",
+            sectionArchive: "RESCENE <span>ARCHIVE</span>",
+            profilePhoto: "PROFILE PHOTO",
+            albumLabel: "ALBUM",
+            youtubeCollect: "YOUTUBE <span>모아보기</span>",
+            seeMore: "더보기 →",
+            sectionAwards: "AWARDS & <span>AMBASSADOR</span>",
+            musicShowTitle: "음악방송",
+            adsAmbassadorTitle: "광고 · 홍보대사",
+            fullHistory: "전체 히스토리 보기 →",
+            sectionToday: "TODAY'S <span>SCHEDULE</span>",
+
+            chartTitle: "MUSIC <span>CHARTS</span>",
+            fanchantTitle: "FAN<span>CHANT</span>",
+            fanchantHint: "굵게 표시된 부분을 다같이 외쳐주세요 🎤",
+            fanchantSelectHint: "왼쪽에서 곡을 선택해주세요",
+            fanchantEmptyTitle: "아직 등록된 응원법이 없어요.",
+            fanchantEmptySub: "준비되는 대로 곡별 응원법을 채워넣을 예정이에요!",
+            mediaTitle: "MEDIA <span>ARCHIVE</span>",
+            mediaSub: "리센느 유튜브 모아보기",
+            merchTitle: "OFFICIAL <span>MERCH</span>",
+
+            memberBirthday: "BIRTHDAY", memberPosition: "POSITION", memberMbti: "MBTI",
+            memberSpecialty: "SPECIALTY", memberHobby: "HOBBY", memberPhotoArchive: "PHOTO <span>ARCHIVE</span>",
+
+            searchPlaceholder: "제목 · 채널 검색",
+            sortNewest: "최신순", sortOldest: "오래된순", sortNameAsc: "가나다순", sortNameDesc: "역순",
+            mediaAllDone: "모든 영상을 다 봤어요.",
+            prevVideo: "이전 영상", nextVideo: "다음 영상", playlist: "재생목록"
         },
         en: {
             weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -37,7 +74,44 @@
             officialSites: "Official",
             trackList: "TRACK LIST",
             audioLink: "Audio",
-            noLink: "No link available"
+            noLink: "No link available",
+
+            navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
+            navGoods: "GOODS", navFanchant: "FANCHANT", navMedia: "MEDIA",
+
+            heroWelcome: "Welcome to the unofficial RESCENE fan archive.",
+            heroEnter: "Enter →",
+
+            sectionWith: "WITH <span>RESCENE</span>",
+            historySubtitle: "Shall we walk through the journey together?",
+            sectionArchive: "RESCENE <span>ARCHIVE</span>",
+            profilePhoto: "PROFILE PHOTO",
+            albumLabel: "ALBUM",
+            youtubeCollect: "YOUTUBE <span>Highlights</span>",
+            seeMore: "See more →",
+            sectionAwards: "AWARDS & <span>AMBASSADOR</span>",
+            musicShowTitle: "Music Shows",
+            adsAmbassadorTitle: "Ads · Ambassador",
+            fullHistory: "View full history →",
+            sectionToday: "TODAY'S <span>SCHEDULE</span>",
+
+            chartTitle: "MUSIC <span>CHARTS</span>",
+            fanchantTitle: "FAN<span>CHANT</span>",
+            fanchantHint: "Shout the bold parts together! 🎤",
+            fanchantSelectHint: "Select a song from the list",
+            fanchantEmptyTitle: "No fanchants registered yet.",
+            fanchantEmptySub: "We'll add fanchants for each song as they're ready!",
+            mediaTitle: "MEDIA <span>ARCHIVE</span>",
+            mediaSub: "RESCENE YouTube collection",
+            merchTitle: "OFFICIAL <span>MERCH</span>",
+
+            memberBirthday: "BIRTHDAY", memberPosition: "POSITION", memberMbti: "MBTI",
+            memberSpecialty: "SPECIALTY", memberHobby: "HOBBY", memberPhotoArchive: "PHOTO <span>ARCHIVE</span>",
+
+            searchPlaceholder: "Search title · channel",
+            sortNewest: "Newest", sortOldest: "Oldest", sortNameAsc: "A–Z", sortNameDesc: "Z–A",
+            mediaAllDone: "You've watched everything.",
+            prevVideo: "Previous", nextVideo: "Next", playlist: "Playlist"
         },
         ja: {
             weekdays: ["日", "月", "火", "水", "木", "金", "土"],
@@ -53,7 +127,97 @@
             officialSites: "公式サイト",
             trackList: "TRACK LIST",
             audioLink: "音源",
-            noLink: "登録されたリンクがありません"
+            noLink: "登録されたリンクがありません",
+
+            navHome: "HOME", navMembers: "MEMBERS", navCharts: "CHARTS", navSchedule: "SCHEDULE",
+            navGoods: "GOODS", navFanchant: "応援法", navMedia: "動画まとめ",
+
+            heroWelcome: "RESCENE非公式ファンアーカイブへようこそ。",
+            heroEnter: "入る →",
+
+            sectionWith: "WITH <span>RESCENE</span>",
+            historySubtitle: "これまで歩んできた道を一緒に振り返ってみましょうか？",
+            sectionArchive: "RESCENE <span>ARCHIVE</span>",
+            profilePhoto: "PROFILE PHOTO",
+            albumLabel: "ALBUM",
+            youtubeCollect: "YOUTUBE <span>まとめ</span>",
+            seeMore: "もっと見る →",
+            sectionAwards: "AWARDS & <span>AMBASSADOR</span>",
+            musicShowTitle: "音楽番組",
+            adsAmbassadorTitle: "広告・広報大使",
+            fullHistory: "全履歴を見る →",
+            sectionToday: "TODAY'S <span>SCHEDULE</span>",
+
+            chartTitle: "MUSIC <span>CHARTS</span>",
+            fanchantTitle: "FAN<span>CHANT</span>",
+            fanchantHint: "太字部分をみんなで叫んでください 🎤",
+            fanchantSelectHint: "左のリストから曲を選んでください",
+            fanchantEmptyTitle: "まだ登録された応援法がありません。",
+            fanchantEmptySub: "準備が整い次第、曲ごとの応援法を追加していきます！",
+            mediaTitle: "MEDIA <span>ARCHIVE</span>",
+            mediaSub: "RESCENE YouTubeまとめ",
+            merchTitle: "OFFICIAL <span>MERCH</span>",
+
+            memberBirthday: "BIRTHDAY", memberPosition: "POSITION", memberMbti: "MBTI",
+            memberSpecialty: "SPECIALTY", memberHobby: "HOBBY", memberPhotoArchive: "PHOTO <span>ARCHIVE</span>",
+
+            searchPlaceholder: "タイトル・チャンネル検索",
+            sortNewest: "新しい順", sortOldest: "古い順", sortNameAsc: "あいうえお順", sortNameDesc: "逆順",
+            mediaAllDone: "すべての動画を見終わりました。",
+            prevVideo: "前の動画", nextVideo: "次の動画", playlist: "再生リスト"
+        },
+        zh: {
+            weekdays: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+            scheduleTypes: { broadcast: "播出", fansign: "粉丝签名会", event: "活动", concert: "演出", radio: "电台", notice: "公告" },
+            status: { upcoming: "即将开始", live: "直播中", ended: "已结束" },
+            timeLabel: "时间",
+            timeTbd: "时间待定",
+            noSchedule: "暂无日程安排。",
+            upcomingView: "查看近期日程",
+            chartWaiting: "正在获取榜单数据…",
+            shortsMore: "在YouTube上<br>查看更多 #RESCENE",
+            footerDisclaimer: "本网站是粉丝自发运营的非官方粉丝页面。<br>所有版权归属艺人RESCENE及所属公司THE MUZE Entertainment，与其官方无关，特此说明。",
+            officialSites: "官方网站",
+            trackList: "TRACK LIST",
+            audioLink: "音源",
+            noLink: "暂无相关链接",
+
+            navHome: "首页", navMembers: "成员", navCharts: "榜单", navSchedule: "日程",
+            navGoods: "周边", navFanchant: "应援口号", navMedia: "视频合集",
+
+            heroWelcome: "欢迎来到RESCENE非官方粉丝档案站。",
+            heroEnter: "进入 →",
+
+            sectionWith: "WITH <span>RESCENE</span>",
+            historySubtitle: "要不要一起回顾走过的这段旅程？",
+            sectionArchive: "RESCENE <span>档案</span>",
+            profilePhoto: "PROFILE PHOTO",
+            albumLabel: "专辑",
+            youtubeCollect: "YOUTUBE <span>合集</span>",
+            seeMore: "查看更多 →",
+            sectionAwards: "获奖 & <span>代言</span>",
+            musicShowTitle: "音乐节目",
+            adsAmbassadorTitle: "广告 · 代言",
+            fullHistory: "查看全部记录 →",
+            sectionToday: "今日 <span>日程</span>",
+
+            chartTitle: "音源 <span>榜单</span>",
+            fanchantTitle: "应援 <span>口号</span>",
+            fanchantHint: "请大家一起大声喊出加粗的部分 🎤",
+            fanchantSelectHint: "请从左侧列表选择歌曲",
+            fanchantEmptyTitle: "暂未收录应援口号。",
+            fanchantEmptySub: "准备好后会陆续补充各首歌曲的应援口号！",
+            mediaTitle: "视频 <span>合集</span>",
+            mediaSub: "RESCENE YouTube合集",
+            merchTitle: "官方 <span>周边</span>",
+
+            memberBirthday: "生日", memberPosition: "位置", memberMbti: "MBTI",
+            memberSpecialty: "特长", memberHobby: "爱好", memberPhotoArchive: "照片 <span>档案</span>",
+
+            searchPlaceholder: "搜索标题 · 频道",
+            sortNewest: "最新", sortOldest: "最早", sortNameAsc: "A-Z", sortNameDesc: "Z-A",
+            mediaAllDone: "已浏览全部视频。",
+            prevVideo: "上一个", nextVideo: "下一个", playlist: "播放列表"
         }
     };
 
@@ -69,6 +233,7 @@
             return MONTHS[parseInt(m, 10) - 1] + ' ' + d + ', ' + y;
         }
         if (current === 'ja') return y + '年' + m + '月' + d + '日';
+        if (current === 'zh') return y + '年' + m + '月' + d + '日';
         return y + '년 ' + m + '월 ' + d + '일';
     };
 
@@ -86,17 +251,32 @@
             var val = window.t(key);
             if (val !== undefined) el.innerHTML = val;
         });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+            var key = el.getAttribute('data-i18n-placeholder');
+            var val = window.t(key);
+            if (val !== undefined) el.setAttribute('placeholder', val);
+        });
         updateWeekdayHeaders();
+
+        // 네비게이션/푸터는 JS로 매번 새로 그려지므로, 렌더 함수가 있으면 다시 호출해서 반영
+        if (typeof window.__lastNavArgs !== 'undefined' && typeof renderSiteNav === 'function') {
+            renderSiteNav.apply(null, window.__lastNavArgs);
+        }
+        if (typeof window.__lastFooterArgs !== 'undefined' && typeof renderSiteFooter === 'function') {
+            renderSiteFooter.apply(null, window.__lastFooterArgs);
+        }
     }
 
     function refreshDynamicSections() {
         // 이미 화면에 그려진 동적 영역들 재렌더링 (내부적으로 window.t를 다시 읽어감)
         if (typeof renderTodaySchedule === 'function') renderTodaySchedule();
         if (typeof renderCalendar === 'function') renderCalendar();
+        if (typeof mediaRenderTagRow === 'function') mediaRenderTagRow();
+        if (typeof renderFcList === 'function') renderFcList();
     }
 
     function updateButtons() {
-        document.querySelectorAll('.lang-switcher button').forEach(function (b) {
+        document.querySelectorAll('.lang-switcher button, .lang-accordion-item').forEach(function (b) {
             b.classList.toggle('active', b.getAttribute('data-lang') === current);
         });
     }
@@ -117,6 +297,7 @@
     // → 자동 생성 없애고, nav 안에 있는 스위처(lang:true인 페이지)만 사용하도록 정리.
 
     window.addEventListener('DOMContentLoaded', function () {
+        document.documentElement.setAttribute('lang', current);
         updateButtons();
         applyStaticTexts();
         // 최초 로드시 동적 영역은 각 페이지 스크립트가 로드된 뒤 알아서 window.t를 읽어가므로 별도 호출 불필요

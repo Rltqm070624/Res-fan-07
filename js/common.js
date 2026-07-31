@@ -8,10 +8,11 @@ function toggleMobileMenu() {
     document.body.style.overflow = document.getElementById('mobileMenuPanel').classList.contains('active') ? 'hidden' : 'auto';
 }
 
-/* ---- 언어 선택 아코디언 (지구본 아이콘) ---- */
-function toggleLangAccordion(force) {
-    const acc = document.getElementById('langAccordion');
-    const btn = document.querySelector('.lang-globe-btn');
+/* ---- 언어 선택 아코디언 (지구본 아이콘) — 데스크톱/모바일 공용 ---- */
+function toggleLangAccordion(force, variant) {
+    const isMobile = variant === 'mobile';
+    const acc = document.getElementById(isMobile ? 'langAccordionMobile' : 'langAccordion');
+    const btn = document.querySelector(isMobile ? '.lang-globe-btn-mobile' : '.lang-globe-btn');
     if (!acc || !btn) return;
     const willOpen = typeof force === 'boolean' ? force : !acc.classList.contains('open');
     acc.classList.toggle('open', willOpen);
@@ -20,6 +21,9 @@ function toggleLangAccordion(force) {
 document.addEventListener('click', (e) => {
     const wrap = document.querySelector('.lang-globe-wrap');
     if (wrap && !wrap.contains(e.target)) toggleLangAccordion(false);
+    const wrapMobile = document.querySelector('.lang-globe-wrap-mobile');
+    const accMobile = document.getElementById('langAccordionMobile');
+    if (wrapMobile && accMobile && !wrapMobile.contains(e.target) && !accMobile.contains(e.target)) toggleLangAccordion(false, 'mobile');
 });
 
 /* ---- 다크 / 화이트 모드 토글 ---- */

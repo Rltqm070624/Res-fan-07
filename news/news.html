@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESCENE ARCHIVE | NEWS</title>
+    <meta name="description" content="RESCENE(리센느) 관련 뉴스 모아보기">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Gaegu:wght@400;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/i18n.css">
+    <link rel="stylesheet" href="news.css">
+
+    <script src="../js/theme-init.js"></script>
+</head>
+<body>
+
+    <div id="siteNavSlot"></div>
+    <script src="../js/layout.js"></script>
+    <script>renderSiteNav('news', '../', { calendar: true, lang: true });</script>
+
+    <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
+        <div class="section-container news-page-container" style="flex: 1;">
+            <div class="section-header">
+                <div class="section-title" data-i18n="newsTitle">RESCENE <span>NEWS</span></div>
+            </div>
+            <p class="news-hero-sub" data-i18n="newsSub">구글·네이버·다음 등에서 모은 리센느 관련 기사입니다.</p>
+
+            <div class="news-grid" id="newsGrid"></div>
+            <div class="news-empty" id="newsEmpty" style="display:none;" data-i18n="newsEmpty">아직 등록된 기사가 없습니다.</div>
+        </div>
+
+        <div id="siteFooterSlot"></div>
+        <script>renderSiteFooter('../');</script>
+    </div>
+
+    <script>var SITE_ROOT = '../';</script>
+    <script src="../js/i18n.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="news_data.js"></script>
+    <script src="news.js"></script>
+
+    <div id="siteCalendarSlot"></div>
+    <script>renderCalendarWidgets();</script>
+</body>
+</html>

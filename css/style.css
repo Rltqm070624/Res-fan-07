@@ -159,35 +159,19 @@ html[data-theme="light"] .icon-sun { display: block; }
 }
 .mobile-menu-list a.active-nav { color: var(--c-accent); }
 
-/* 언어 스위처 공통 */
-.lang-switcher { display: inline-flex; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 999px; padding: 3px; gap: 2px; }
-.lang-btn { background: transparent; border: none; border-radius: 999px; font-family: var(--font-head); font-size: 11px; font-weight: 700; color: var(--text-muted); padding: 5px 10px; cursor: pointer; transition: 0.3s ease; }
-.lang-btn.active, .lang-btn[aria-selected="true"] { background: var(--text-primary); color: var(--bg-base); }
-html[data-theme="light"] .lang-btn.active { background: #18181b; color: #ffffff; }
-
-/* 모바일 메뉴: 지구본 아이콘을 메뉴 왼쪽 아래에 고정 배치, 누르면 그 위로 아코디언이 펼쳐짐 */
+/* 모바일 메뉴: 지구본 아이콘 + 라벨 버튼, 누르면 그 위로 드롭다운이 펼쳐짐 */
 .lang-globe-wrap-mobile { position: relative; margin-top: auto; padding-top: 24px; align-self: flex-start; }
 .lang-globe-btn-mobile {
-    background: transparent; border: 1px solid var(--border-light); border-radius: 50%; cursor: pointer; color: var(--text-primary); opacity: 0.75;
-    width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; padding: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    display: flex; align-items: center; gap: 8px;
+    background: transparent; border: 1px solid var(--border-light); border-radius: 999px; cursor: pointer; color: var(--text-primary); opacity: 0.8;
+    padding: 8px 16px; font-family: var(--font-head); font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+    transition: opacity 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 .lang-globe-btn-mobile:hover { opacity: 1; border-color: var(--border-highlight); }
 .lang-globe-btn-mobile.open { color: var(--c-accent); opacity: 1; border-color: var(--c-accent); }
 
-.lang-switcher-mobile {
-    position: absolute; left: 0; bottom: calc(100% + 10px);
-    flex-direction: column; align-items: stretch; gap: 2px; width: max-content; min-width: 96px;
-    max-height: 0; opacity: 0; overflow: hidden; pointer-events: none;
-    border: none; background: transparent; padding: 0; box-shadow: none;
-    transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
-}
-.lang-switcher-mobile .lang-btn { text-align: center; border-radius: 10px; padding: 9px 14px; }
-.lang-switcher-mobile.open {
-    max-height: 260px; opacity: 1; pointer-events: auto;
-    border: 1px solid var(--border-light); background: var(--bg-surface); padding: 4px; border-radius: 14px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-}
+.lang-accordion-mobile { top: auto; bottom: calc(100% + 10px); left: 0; transform: translate(0, 6px) scale(0.96); transform-origin: bottom left; }
+.lang-accordion-mobile.open { transform: translate(0, 0) scale(1); }
 
 /* 데스크톱 헤더: 지구본 아이콘 + 아코디언 언어 선택 */
 .lang-globe-wrap { position: relative; }
@@ -199,23 +183,23 @@ html[data-theme="light"] .lang-btn.active { background: #18181b; color: #ffffff;
 .lang-globe-btn:hover { background: var(--bg-surface-hover); }
 .lang-globe-btn.open { color: var(--c-accent); transform: rotate(18deg); }
 .lang-accordion {
-    position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%); width: max-content; min-width: 92px;
+    position: absolute; top: calc(100% + 10px); left: 50%; width: max-content; min-width: 96px;
     background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 14px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-    display: flex; flex-direction: column; overflow: hidden;
-    max-height: 0; opacity: 0; pointer-events: none;
-    transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column; gap: 2px; padding: 6px; overflow: hidden;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transform: translate(-50%, -6px) scale(0.96); transform-origin: top center;
+    transition: opacity 0.22s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1), visibility 0.22s;
 }
-.lang-accordion.open { max-height: 260px; opacity: 1; pointer-events: auto; }
+.lang-accordion.open { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, 0) scale(1); }
 .lang-accordion-item {
-    background: transparent; border: none; border-top: 1px solid var(--border-light);
+    background: transparent; border: none; border-radius: 9px;
     font-family: var(--font-head); font-size: 12.5px; font-weight: 700; color: var(--text-secondary);
-    padding: 11px 18px; text-align: center; cursor: pointer; white-space: nowrap;
+    padding: 9px 18px; text-align: center; cursor: pointer; white-space: nowrap;
     transition: background 0.2s ease, color 0.2s ease;
 }
-.lang-accordion-item:first-child { border-top: none; }
 .lang-accordion-item:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
-.lang-accordion-item.active { color: var(--c-accent); }
+.lang-accordion-item.active { color: var(--c-accent); background: var(--c-accent-glow); }
 
 /* 모든 페이지 공통 컨테이너 하단 여백 통일 (index.html과 동일하게) */
 .section-container { padding: 80px 20px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; box-sizing: border-box; }

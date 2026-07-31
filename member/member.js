@@ -1,5 +1,5 @@
 let memberActiveKey = 'woni';
-let memberActiveEra = null; /* 카드 홀더는 기본적으로 빈 상태 — 클릭해서 골라야 채워짐 */
+let memberActiveEra = 'prettygirl'; /* 기본으로 최신 포토를 히어로에 표시 */
 
 function renderMemberSelector() {
     const row = document.getElementById('memberSelectorRow');
@@ -13,7 +13,7 @@ function renderMemberSelector() {
 function setActiveMember(key) {
     if (key === memberActiveKey) return;
     memberActiveKey = key;
-    memberActiveEra = null;
+    memberActiveEra = 'prettygirl';
     renderMemberSelector();
     renderMemberDetail();
 }
@@ -22,11 +22,6 @@ function renderMemberDetail() {
     const m = MEMBER_DATA.find(x => x.key === memberActiveKey);
     if (!m) return;
 
-    const heroImg = document.getElementById('memberHeroImg');
-    if (heroImg) {
-        heroImg.src = `../images/profile/${m.key}/prettygirl.webp`;
-        heroImg.onerror = function () { this.onerror = null; this.src = `../images/profile/${m.key}/debut.webp`; };
-    }
     const signImg = document.getElementById('memberSign');
     if (signImg) { signImg.src = `../images/profile/${m.key}/sign.svg`; signImg.style.display = ''; signImg.onerror = function () { this.style.display = 'none'; }; }
 
@@ -54,27 +49,22 @@ function renderMemberDetail() {
     updateEraPreview();
 }
 
+/* 포토 아카이브에서 고른 이미지를 메인 히어로 자리에 바로 반영 */
 function updateEraPreview() {
     const m = MEMBER_DATA.find(x => x.key === memberActiveKey);
-    const emptyState = document.getElementById('memberCardEmpty');
-    const slotState = document.getElementById('memberCardSlot');
-    const era = memberActiveEra ? MEMBER_ERAS.find(x => x.key === memberActiveEra) : null;
+    const era = MEMBER_ERAS.find(x => x.key === memberActiveEra) || MEMBER_ERAS[MEMBER_ERAS.length - 1];
+    if (!m || !era) return;
 
-    /* 카드를 아직 고르지 않았으면 홀더를 빈 상태로 유지 (기본값) */
-    if (!m || !era) {
-        if (emptyState) emptyState.style.display = 'flex';
-        if (slotState) slotState.style.display = 'none';
-        return;
-    }
-
-    if (emptyState) emptyState.style.display = 'none';
-    if (slotState) slotState.style.display = 'flex';
-
-    const previewImg = document.getElementById('memberEraPreviewImg');
+    const heroImg = document.getElementById('memberHeroImg');
     const previewLabel = document.getElementById('memberEraPreviewLabel');
-    if (previewImg) {
-        previewImg.onerror = function () { this.onerror = null; this.src = `../images/profile/${m.key}/debut.webp`; };
-        previewImg.src = `../images/profile/${m.key}/${era.key}.webp`;
+    if (heroImg) {
+        heroImg.classList.add('is-switching');
+        const nextSrc = `../images/profile/${m.key}/${era.key}.webp`;
+        heroImg.onerror = function () { this.onerror = null; this.src = `../images/profile/${m.key}/debut.webp`; };
+        setTimeout(() => {
+            heroImg.src = nextSrc;
+            heroImg.classList.remove('is-switching');
+        }, 120);
     }
     if (previewLabel) previewLabel.textContent = era.label;
 }
@@ -88,15 +78,14 @@ function setActiveEra(eraKey) {
 }
 
 function openEraModal() {
-    if (!memberActiveEra) return; /* 빈 홀더 상태에서는 확대할 이미지가 없음 */
-    const previewImg = document.getElementById('memberEraPreviewImg');
+    const heroImg = document.getElementById('memberHeroImg');
     const previewLabel = document.getElementById('memberEraPreviewLabel');
     const modalImg = document.getElementById('memEraModalImg');
     const modalLabel = document.getElementById('memEraModalLabel');
     const modal = document.getElementById('memEraModal');
     const backdrop = document.getElementById('memEraModalBackdrop');
-    if (!previewImg || !modal) return;
-    if (modalImg) modalImg.src = previewImg.src;
+    if (!heroImg || !modal) return;
+    if (modalImg) modalImg.src = heroImg.src;
     if (modalLabel) modalLabel.textContent = previewLabel ? previewLabel.textContent : '';
     modal.classList.add('active');
     if (backdrop) backdrop.classList.add('active');

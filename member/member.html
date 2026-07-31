@@ -6,7 +6,6 @@
     <title>RESCENE ARCHIVE | MEMBERS</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Gaegu:wght@400;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 
-    <!-- ⭐️ 상위 폴더의 공통 CSS와 자신의 폴더에 있는 CSS 호출 -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="../css/modal.css">
@@ -34,6 +33,7 @@
             </div>
 
             <div class="mem-detail-panel">
+                <!-- 왼쪽 메인 이미지 영역 (수정 안함) -->
                 <div class="mem-main-col">
                     <div class="mem-hero" id="memberHeroBtn" onclick="openEraModal()">
                         <img id="memberHeroImg" class="mem-hero-img" src="" alt="">
@@ -46,21 +46,40 @@
                     </div>
                 </div>
 
+                <!-- ⭐️ 오른쪽 정보 및 포토 아카이브 영역 (고급스럽게 전면 개편) -->
                 <div class="mem-info-col">
-                    <div class="mem-info-card">
-                        <div class="mem-stat-line">
-                            <div class="mem-stat"><span class="mem-stat-val" id="memberBday"></span><span class="mem-stat-label" data-i18n="memberBirthday">BIRTHDAY</span></div>
-                            <div class="mem-stat"><span class="mem-stat-val" id="memberPosition"></span><span class="mem-stat-label" data-i18n="memberPosition">POSITION</span></div>
-                            <div class="mem-stat mem-stat-mbti"><span class="mem-stat-val" id="memberMbti"></span><span class="mem-stat-label" data-i18n="memberMbti">MBTI</span></div>
+                    
+                    <!-- 세련된 프로필 스탯 영역 -->
+                    <div class="mem-profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-label" data-i18n="memberBirthday">BIRTHDAY</span>
+                            <span class="stat-val" id="memberBday"></span>
                         </div>
-                        <div class="mem-stat-line mem-stat-line-sub">
-                            <div class="mem-stat"><span class="mem-stat-val" id="memberSpecialty"></span><span class="mem-stat-label" data-i18n="memberSpecialty">SPECIALTY</span></div>
-                            <div class="mem-stat"><span class="mem-stat-val" id="memberHobby"></span><span class="mem-stat-label" data-i18n="memberHobby">HOBBY</span></div>
+                        <div class="stat-item">
+                            <span class="stat-label" data-i18n="memberPosition">POSITION</span>
+                            <span class="stat-val" id="memberPosition"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label" data-i18n="memberMbti">MBTI</span>
+                            <span class="stat-val mbti-val" id="memberMbti"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label" data-i18n="memberSpecialty">SPECIALTY</span>
+                            <span class="stat-val" id="memberSpecialty"></span>
+                        </div>
+                        <div class="stat-item hobby-item">
+                            <span class="stat-label" data-i18n="memberHobby">HOBBY</span>
+                            <span class="stat-val" id="memberHobby"></span>
                         </div>
                     </div>
 
-                    <div class="mem-era-label-row" data-i18n="memberPhotoArchive">PHOTO <span>ARCHIVE</span></div>
+                    <!-- 가로 스크롤 갤러리 형태의 포토 아카이브 -->
+                    <div class="mem-era-header">
+                        <div class="mem-era-title" data-i18n="memberPhotoArchive">PHOTO <span>ARCHIVE</span></div>
+                        <div class="mem-era-hint">Scroll to explore &rarr;</div>
+                    </div>
                     <div class="mem-era-rail" id="memberEraRow"></div>
+                    
                 </div>
             </div>
         </div>
@@ -84,7 +103,6 @@
     <script>renderCalendarWidgets();</script>
 
     <script>
-        // 하위 폴더(member/)에서 실행되므로 이미지 경로 앞에 ../ 를 붙여야 함
         var SITE_ROOT = '../';
     </script>
     <script src="../js/i18n.js"></script>

@@ -33,19 +33,23 @@
             <p class="media-hero-sub"><span data-i18n="mediaSub">리센느 유튜브 모아보기</span> <span class="media-count-badge" id="mediaCountBadge"></span></p>
 
             <div class="media-toolbar">
+                <!-- ⭐️ 변경된 필터 패널: 카테고리와 연도를 같은 줄(Top Row)에 배치해 빈 공간 활용 -->
                 <div class="media-filter-panel">
-                    <div class="mf-col-wrap">
-                        <div class="mf-col-head">CATEGORY</div>
-                        <div class="mf-col" id="mediaTagRow"></div>
+                    <div class="mf-top-row">
+                        <div class="mf-col-wrap">
+                            <div class="mf-col-head">CATEGORY</div>
+                            <div class="mf-col" id="mediaTagRow"></div>
+                        </div>
+                        <div class="mf-col-wrap is-hidden" id="mediaYearColWrap">
+                            <div class="mf-col-head">YEAR</div>
+                            <div class="mf-col" id="mediaYearCol"></div>
+                        </div>
                     </div>
-                    <!-- ⭐️ 점핑 방지를 위해 고정 영역으로 둠 (display:none 제거) -->
-                    <div class="mf-col-wrap is-hidden" id="mediaYearColWrap">
-                        <div class="mf-col-head">YEAR</div>
-                        <div class="mf-col" id="mediaYearCol"></div>
-                    </div>
-                    <div class="mf-col-wrap is-hidden" id="mediaSubColWrap">
-                        <div class="mf-col-head">DETAIL</div>
-                        <div class="mf-col" id="mediaSubCol"></div>
+                    <div class="mf-bottom-row is-hidden" id="mediaSubColWrap">
+                        <div class="mf-col-wrap w-full">
+                            <div class="mf-col-head">DETAIL</div>
+                            <div class="mf-col" id="mediaSubCol"></div>
+                        </div>
                     </div>
                 </div>
 

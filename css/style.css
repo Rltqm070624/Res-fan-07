@@ -152,16 +152,6 @@ html[data-theme="light"] .icon-sun { display: block; }
 .mobile-sns-box { display: flex; gap: 14px; align-items: center; }
 .mobile-sns-box a img { width: 18px; height: 18px; filter: var(--logo-filter); opacity: 0.6; }
 
-/* 모바일 메뉴: 지구본 아이콘 + 아코디언 언어 선택 (데스크톱과 동일한 패턴) */
-.lang-globe-wrap-mobile { position: relative; display: flex; align-items: center; }
-.lang-globe-btn-mobile {
-    background: transparent; border: none; cursor: pointer; color: var(--text-primary); opacity: 0.6;
-    display: flex; align-items: center; justify-content: center; padding: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
-}
-.lang-globe-btn-mobile:hover { opacity: 0.9; }
-.lang-globe-btn-mobile.open { color: var(--c-accent); opacity: 1; transform: rotate(18deg); }
-
 .mobile-menu-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 24px; }
 .mobile-menu-list a {
     color: var(--text-primary); text-decoration: none;
@@ -175,15 +165,27 @@ html[data-theme="light"] .icon-sun { display: block; }
 .lang-btn.active, .lang-btn[aria-selected="true"] { background: var(--text-primary); color: var(--bg-base); }
 html[data-theme="light"] .lang-btn.active { background: #18181b; color: #ffffff; }
 
-/* 모바일 메뉴 안의 언어 스위처는 지구본을 누르기 전엔 접혀 있음 */
-.lang-switcher-mobile {
-    align-self: center; flex-wrap: wrap; justify-content: center; gap: 6px;
-    max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; border: none; padding: 0; margin-top: 0;
-    transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease, margin-top 0.35s ease, padding 0.35s ease;
+/* 모바일 메뉴: 지구본 아이콘을 메뉴 왼쪽 아래에 고정 배치, 누르면 그 위로 아코디언이 펼쳐짐 */
+.lang-globe-wrap-mobile { position: relative; margin-top: auto; padding-top: 24px; align-self: flex-start; }
+.lang-globe-btn-mobile {
+    background: transparent; border: 1px solid var(--border-light); border-radius: 50%; cursor: pointer; color: var(--text-primary); opacity: 0.75;
+    width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; padding: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
+.lang-globe-btn-mobile:hover { opacity: 1; border-color: var(--border-highlight); }
+.lang-globe-btn-mobile.open { color: var(--c-accent); opacity: 1; border-color: var(--c-accent); transform: rotate(18deg); }
+
+.lang-switcher-mobile {
+    position: absolute; left: 0; bottom: calc(100% + 10px);
+    flex-direction: column; align-items: stretch; gap: 2px; width: max-content; min-width: 96px;
+    max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; border: none; padding: 0;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+}
+.lang-switcher-mobile .lang-btn { text-align: center; border-radius: 10px; padding: 9px 14px; }
 .lang-switcher-mobile.open {
-    max-height: 200px; opacity: 1; pointer-events: auto; margin-top: 18px;
-    border: 1px solid var(--border-light); background: var(--bg-surface); padding: 3px;
+    max-height: 260px; opacity: 1; pointer-events: auto;
+    border: 1px solid var(--border-light); background: var(--bg-surface); padding: 4px; border-radius: 14px;
 }
 
 /* 데스크톱 헤더: 지구본 아이콘 + 아코디언 언어 선택 */

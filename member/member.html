@@ -25,7 +25,10 @@
             <div class="mem-header-row">
                 <div class="section-title mem-page-title">
                     <span class="mem-page-title-en" id="memberPageTitleEn"></span>
-                    <span class="mem-page-title-ko" id="memberPageTitleKo"></span>
+                    <span class="mem-page-title-ko-row">
+                        <span class="mem-page-title-ko" id="memberPageTitleKo"></span>
+                        <span class="mem-bday-badge" id="memberBdayBadge" style="display:none;">🎂🎉</span>
+                    </span>
                 </div>
                 <div class="mem-selector-row" id="memberSelectorRow"></div>
             </div>
@@ -45,13 +48,14 @@
 
                 <div class="mem-info-col">
                     <div class="mem-info-card">
-                        <p class="mem-intro" id="memberIntro"></p>
-                        <div class="mem-info-grid">
-                            <div class="mem-info-item"><span class="mem-info-label" data-i18n="memberBirthday">BIRTHDAY</span><span class="mem-info-val" id="memberBday"></span></div>
-                            <div class="mem-info-item"><span class="mem-info-label" data-i18n="memberPosition">POSITION</span><span class="mem-info-val" id="memberPosition"></span></div>
-                            <div class="mem-info-item"><span class="mem-info-label" data-i18n="memberMbti">MBTI</span><span class="mem-info-val" id="memberMbti"></span></div>
-                            <div class="mem-info-item"><span class="mem-info-label" data-i18n="memberSpecialty">SPECIALTY</span><span class="mem-info-val" id="memberSpecialty"></span></div>
-                            <div class="mem-info-item"><span class="mem-info-label" data-i18n="memberHobby">HOBBY</span><span class="mem-info-val" id="memberHobby"></span></div>
+                        <div class="mem-stat-line">
+                            <div class="mem-stat"><span class="mem-stat-val" id="memberBday"></span><span class="mem-stat-label" data-i18n="memberBirthday">BIRTHDAY</span></div>
+                            <div class="mem-stat"><span class="mem-stat-val" id="memberPosition"></span><span class="mem-stat-label" data-i18n="memberPosition">POSITION</span></div>
+                            <div class="mem-stat mem-stat-mbti"><span class="mem-stat-val" id="memberMbti"></span><span class="mem-stat-label" data-i18n="memberMbti">MBTI</span></div>
+                        </div>
+                        <div class="mem-stat-line mem-stat-line-sub">
+                            <div class="mem-stat"><span class="mem-stat-val" id="memberSpecialty"></span><span class="mem-stat-label" data-i18n="memberSpecialty">SPECIALTY</span></div>
+                            <div class="mem-stat"><span class="mem-stat-val" id="memberHobby"></span><span class="mem-stat-label" data-i18n="memberHobby">HOBBY</span></div>
                         </div>
                     </div>
 

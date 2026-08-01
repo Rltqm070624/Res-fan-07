@@ -442,6 +442,12 @@ function closeBgSettings() {
     }
 }
 
+function updateActiveBgUI(type, src) {
+    document.querySelectorAll('.bg-option').forEach(el => el.classList.remove('active-bg'));
+    const activeOpts = document.querySelectorAll(`.bg-option[onclick="setCustomBg('${type}', '${src}')"]`);
+    activeOpts.forEach(opt => opt.classList.add('active-bg'));
+}
+
 function setCustomBg(type, src) {
     const vid = document.getElementById('bgVideo');
     const img = document.getElementById('bgImage');
@@ -469,18 +475,75 @@ function setCustomBg(type, src) {
     localStorage.setItem('rescene-bg-type', type);
     localStorage.setItem('rescene-bg-src', src);
     
-    document.querySelectorAll('.bg-option').forEach(el => el.classList.remove('active-bg'));
-    const activeOpt = document.querySelector(`.bg-option[onclick="setCustomBg('${type}', '${src}')"]`);
-    if (activeOpt) activeOpt.classList.add('active-bg');
+    updateActiveBgUI(type, src);
+}
+
+function renderBgOptions() {
+    const allWrap = document.getElementById('bgOptionsAll');
+    if (allWrap && allWrap.children.length === 0) {
+        let allHtml = `<div class="bg-option" onclick="setCustomBg('video', 'video/member.mp4')">
+            <img src="images/logo.png" onerror="this.src='images/logo.png'">
+            <div class="bg-applied-overlay">적용 완료</div>
+        </div>`;
+        for (let i = 1; i <= 10; i++) {
+            const src = `images/profile/${i}.jpg`;
+            allHtml += `<div class="bg-option" onclick="setCustomBg('image', '${src}')">
+                <img src="${src}" onerror="this.src='images/logo.png'">
+                <div class="bg-applied-overlay">적용 완료</div>
+            </div>`;
+        }
+        allWrap.innerHTML = allHtml;
+    }
+}
+
+function switchBgTab(tabId) {
+    document.querySelectorAll('.bg-tab').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.bg-tab[data-target="${tabId}"]`).classList.add('active');
+    document.querySelectorAll('.bg-tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+}
+
+function switchMemTab(member) {
+    document.querySelectorAll('.mem-tab').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.mem-tab[onclick="switchMemTab('${member}')"]`).classList.add('active');
+    
+    const memWrap = document.getElementById('bgOptionsMem');
+    if (memWrap) {
+        const files = ['dearest.webp', 'debut.webp', 'glowup.webp', 'heartdrop.webp', 'lipbomb.webp', 'prettygirl.webp', 'rescene.webp', 'runaway.webp', 'scenedrome.webp', 'sign.svg', 'yoyo.webp'];
+        let html = '';
+        files.forEach(f => {
+            const src = `images/profile/${member}/${f}`;
+            html += `<div class="bg-option" onclick="setCustomBg('image', '${src}')">
+                <img src="${src}" onerror="this.src='images/logo.png'">
+                <div class="bg-applied-overlay">적용 완료</div>
+            </div>`;
+        });
+        memWrap.innerHTML = html;
+        updateActiveBgUI(localStorage.getItem('rescene-bg-type') || 'video', localStorage.getItem('rescene-bg-src') || 'video/member.mp4');
+    }
 }
 
 function initCustomBg() {
-    const savedType = localStorage.getItem('rescene-bg-type');
-    const savedSrc = localStorage.getItem('rescene-bg-src');
-    if (savedType && savedSrc) {
-        setCustomBg(savedType, savedSrc);
-    } else {
-        const activeOpt = document.querySelector(`.bg-option[onclick="setCustomBg('video', 'video/member.mp4')"]`);
-        if (activeOpt) activeOpt.classList.add('active-bg');
+    renderBgOptions();
+    switchMemTab('woni');
+    
+    const savedType = localStorage.getItem('rescene-bg-type') || 'video';
+    const savedSrc = localStorage.getItem('rescene-bg-src') || 'video/member.mp4';
+    
+    const vid = document.getElementById('bgVideo');
+    const img = document.getElementById('bgImage');
+    if (vid && img) {
+        if (savedType === 'video') {
+            vid.src = savedSrc;
+            vid.style.display = 'block';
+            vid.style.opacity = '0.7';
+            img.style.display = 'none';
+        } else {
+            img.src = savedSrc;
+            img.style.display = 'block';
+            img.style.opacity = '0.7';
+            vid.style.display = 'none';
+        }
     }
+    updateActiveBgUI(savedType, savedSrc);
 }

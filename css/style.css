@@ -82,7 +82,7 @@ body {
 }
 html[data-theme="light"] .top-nav { background: rgba(250, 250, 251, 0.68); }
 
-.nav-left { min-width: 0; grid-column: 1; }
+.nav-left { min-width: 0; grid-column: 1; display: flex; align-items: center; gap: 6px; }
 .nav-home-btn {
     display: none; align-items: center; justify-content: center; width: 38px; height: 38px;
     border-radius: 50%; color: var(--text-primary); text-decoration: none;

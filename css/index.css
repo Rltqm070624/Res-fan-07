@@ -283,28 +283,11 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
     .profile-track { grid-template-columns: repeat(2, 1fr); }
 }
 
-.bg-settings-sheet { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--bg-surface); border-radius: 24px 24px 0 0; z-index: 99995; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); padding: 20px 24px 40px; box-sizing: border-box; max-height: 85vh; overflow-y: auto; }
+.bg-settings-sheet { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--bg-surface); border-radius: 24px 24px 0 0; z-index: 99995; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); padding: 20px 24px 40px; box-sizing: border-box; }
 .bg-settings-sheet.active { transform: translateY(0); }
-.settings-header { font-family: var(--font-head); font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 20px; color: var(--text-primary); }
-
-.bg-tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--border-light); margin-bottom: 16px; justify-content: center; }
-.bg-tab { background: none; border: none; font-family: var(--font-head); font-size: 15px; color: var(--text-muted); padding: 8px 12px; cursor: pointer; position: relative; }
-.bg-tab.active { color: var(--c-accent); font-weight: 700; }
-.bg-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--c-accent); }
-
-.bg-tab-content { display: none; }
-.bg-tab-content.active { display: block; }
-
-.member-sub-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; justify-content: flex-start; }
-.member-sub-tabs::-webkit-scrollbar { display: none; }
-.mem-tab { background: var(--bg-base); border: 1px solid var(--border-light); color: var(--text-primary); border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
-.mem-tab.active { background: var(--c-accent); color: #fff; border-color: var(--c-accent); }
-
+.settings-header { font-family: var(--font-head); font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 24px; color: var(--text-primary); }
 .bg-options-wrap { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none; }
 .bg-options-wrap::-webkit-scrollbar { display: none; }
 .bg-option { flex-shrink: 0; width: 100px; height: 160px; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border-color 0.3s; background: var(--bg-base); position: relative; }
 .bg-option.active-bg { border-color: var(--c-accent); box-shadow: 0 0 12px var(--c-accent-glow); }
 .bg-option img { width: 100%; height: 100%; object-fit: cover; }
-
-.bg-applied-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.55); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 10; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
-.bg-option.active-bg .bg-applied-overlay { opacity: 1; }

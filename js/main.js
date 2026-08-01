@@ -442,6 +442,75 @@ function closeBgSettings() {
     }
 }
 
+const BG_DEFAULT = { type: 'video', src: 'video/member.mp4' };
+const BG_MEMBERS = [
+    { key: 'woni', label: '원이' },
+    { key: 'liv', label: '리브' },
+    { key: 'minami', label: '미나미' },
+    { key: 'may', label: '메이' },
+    { key: 'zena', label: '제나' }
+];
+const BG_MEMBER_PHOTOS = ['yoyo', 'debut', 'rescene', 'scenedrome', 'glowup', 'dearest', 'heartdrop', 'lipbomb', 'runaway', 'prettygirl', 'sign'];
+let bgActiveMemberTab = 'woni';
+
+function bgOptionHtml(type, src, label) {
+    const thumb = type === 'video'
+        ? `<video src="${src}" muted loop playsinline preload="metadata"></video>`
+        : `<img src="${src}" alt="${label || ''}" loading="lazy" onerror="this.closest('.bg-option').style.display='none'">`;
+    return `<button type="button" class="bg-option" data-type="${type}" data-src="${src}" onclick="setCustomBg('${type}', '${src}')" title="${label || ''}">
+        ${thumb}
+        <span class="bg-option-check">적용완료</span>
+    </button>`;
+}
+
+function renderBgOptionsAll() {
+    const wrap = document.getElementById('bgOptionsAll');
+    if (!wrap) return;
+    let html = bgOptionHtml('video', BG_DEFAULT.src, '단체 영상');
+    for (let i = 1; i <= 10; i++) {
+        html += bgOptionHtml('image', `images/profile/${i}.jpg`, `프로필 ${i}`);
+    }
+    wrap.innerHTML = html;
+    bgMarkActiveOptions();
+}
+
+function renderBgMemberTabs() {
+    const row = document.getElementById('bgMemberRow');
+    if (!row) return;
+    row.innerHTML = BG_MEMBERS.map(m =>
+        `<button type="button" class="bg-member-chip${m.key === bgActiveMemberTab ? ' active' : ''}" onclick="bgSetMember('${m.key}')">${m.label}</button>`
+    ).join('');
+}
+
+function renderBgOptionsMember() {
+    const wrap = document.getElementById('bgOptionsMember');
+    if (!wrap) return;
+    wrap.innerHTML = BG_MEMBER_PHOTOS.map(p => {
+        const ext = p === 'sign' ? 'svg' : 'webp';
+        return bgOptionHtml('image', `images/profile/${bgActiveMemberTab}/${p}.${ext}`, p);
+    }).join('');
+    bgMarkActiveOptions();
+}
+
+function bgSetMember(key) {
+    bgActiveMemberTab = key;
+    renderBgMemberTabs();
+    renderBgOptionsMember();
+}
+
+function bgSetTab(tab) {
+    document.querySelectorAll('.bg-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    document.querySelectorAll('.bg-tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tab));
+}
+
+function bgMarkActiveOptions() {
+    const savedType = localStorage.getItem('rescene-bg-type') || BG_DEFAULT.type;
+    const savedSrc = localStorage.getItem('rescene-bg-src') || BG_DEFAULT.src;
+    document.querySelectorAll('.bg-option').forEach(el => {
+        el.classList.toggle('active-bg', el.dataset.type === savedType && el.dataset.src === savedSrc);
+    });
+}
+
 function setCustomBg(type, src) {
     const vid = document.getElementById('bgVideo');
     const img = document.getElementById('bgImage');
@@ -455,32 +524,30 @@ function setCustomBg(type, src) {
             vid.src = src;
             vid.style.display = 'block';
             img.style.display = 'none';
-            vid.play().catch(()=>{});
-            setTimeout(() => { vid.style.opacity = '0.7'; }, 50);
+            vid.play().catch(() => {});
+            requestAnimationFrame(() => { vid.style.opacity = '0.7'; });
         } else {
             img.src = src;
             img.style.display = 'block';
             vid.style.display = 'none';
             vid.pause();
-            setTimeout(() => { img.style.opacity = '0.7'; }, 50);
+            requestAnimationFrame(() => { img.style.opacity = '0.7'; });
         }
-    }, 400);
+    }, 500);
 
     localStorage.setItem('rescene-bg-type', type);
     localStorage.setItem('rescene-bg-src', src);
-    
-    document.querySelectorAll('.bg-option').forEach(el => el.classList.remove('active-bg'));
-    const activeOpt = document.querySelector(`.bg-option[onclick="setCustomBg('${type}', '${src}')"]`);
-    if (activeOpt) activeOpt.classList.add('active-bg');
+    bgMarkActiveOptions();
 }
 
 function initCustomBg() {
+    renderBgOptionsAll();
+    renderBgMemberTabs();
+    renderBgOptionsMember();
+
     const savedType = localStorage.getItem('rescene-bg-type');
     const savedSrc = localStorage.getItem('rescene-bg-src');
-    if (savedType && savedSrc) {
+    if (savedType && savedSrc && (savedType !== BG_DEFAULT.type || savedSrc !== BG_DEFAULT.src)) {
         setCustomBg(savedType, savedSrc);
-    } else {
-        const activeOpt = document.querySelector(`.bg-option[onclick="setCustomBg('video', 'video/member.mp4')"]`);
-        if (activeOpt) activeOpt.classList.add('active-bg');
     }
 }

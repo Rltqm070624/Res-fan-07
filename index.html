@@ -46,6 +46,7 @@
     <div id="mainWrapper">
         <div class="video-container" id="homeHero">
             <video id="bgVideo" src="video/member.mp4" autoplay loop muted playsinline class="bg-video"></video>
+            <img id="bgImage" src="" class="bg-video" style="display:none; opacity:0;" alt="background">
             <div class="video-overlay"></div>
             <div class="hero-content">
                 <img src="images/logo.png" alt="RESCENE Logo" class="hero-logo" onerror="this.style.display='none'">
@@ -102,7 +103,6 @@
             </div>
             
             <div class="honors-linear-layout">
-                <!-- 음악방송 섹션 -->
                 <div class="honors-linear-group">
                     <div class="honors-linear-header">
                         <h3 data-i18n="musicShowTitle">음악방송</h3>
@@ -111,7 +111,6 @@
                     <ul class="honors-list" id="awardsPreviewList"></ul>
                 </div>
 
-                <!-- 광고/홍보대사 섹션 -->
                 <div class="honors-linear-group">
                     <div class="honors-linear-header">
                         <h3 data-i18n="adsAmbassadorTitle">광고 · 홍보대사</h3>
@@ -153,13 +152,11 @@
         <script>renderSiteFooter('');</script>
     </div> 
 
-    <!-- 이미지 확대 모달 -->
     <div class="modal-backdrop image-modal-backdrop" id="imageModalBackdrop" onclick="closeImageModal()"></div>
     <div class="image-modal-wrapper" id="imageModal" onclick="closeImageModal()">
         <img src="" id="fullSizeImage" alt="Full Size View">
     </div>
 
-    <!-- 앨범 상세 모달 (MV + 트랙리스트) -->
     <div class="modal-backdrop" id="albumModalBackdrop" onclick="closeAlbumModal()"></div>
     <div class="album-modal-wrapper" id="albumModal">
         <button class="popup-close-btn" onclick="closeAlbumModal()" aria-label="앨범 닫기">
@@ -179,6 +176,7 @@
     <button type="button" class="album-nav-btn album-nav-next" onclick="navigateAlbumModal(1)" aria-label="다음 앨범">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </button>
+
     <div class="modal-backdrop" id="honorsHistoryBackdrop" onclick="closeHonorsHistoryModal()"></div>
     <div class="honors-history-modal" id="honorsHistoryModal">
         <div class="honors-history-head">
@@ -188,6 +186,20 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
         <div class="honors-history-body" id="awardsHistoryBody"></div>
+    </div>
+
+    <div class="modal-backdrop" id="bgSettingsBackdrop" onclick="closeBgSettings()"></div>
+    <div class="bg-settings-sheet" id="bgSettingsSheet">
+        <div class="sheet-drag-handle"></div>
+        <div class="settings-header">배경 화면 설정</div>
+        <div class="bg-options-wrap">
+            <div class="bg-option" onclick="setCustomBg('video', 'video/member.mp4')"><img src="images/thumb_v1.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('video', 'video/bg2.mp4')"><img src="images/thumb_v2.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('video', 'video/bg3.mp4')"><img src="images/thumb_v3.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('image', 'images/bg1.jpg')"><img src="images/bg1.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('image', 'images/bg2.jpg')"><img src="images/bg2.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('image', 'images/bg3.jpg')"><img src="images/bg3.jpg" onerror="this.src='images/logo.png'"></div>
+        </div>
     </div>
 
     <div id="siteCalendarSlot"></div>

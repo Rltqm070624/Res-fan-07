@@ -8,11 +8,10 @@ function safeThumb(vid) {
     return typeof ytThumb === 'function' ? ytThumb(vid) : `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
 }
 
-// ⭐️ 데이터 및 제어 변수 초기화
 let mediaActiveTag = '전체';
 let mediaActiveSub = '전체'; 
 let mediaActiveDetails = new Set();
-let mediaYearClicked = false; // 년도가 클릭되어야 하위 메뉴가 열리게 하는 플래그
+let mediaYearClicked = false;
 let mediaSortField = 'date'; 
 let mediaSortDir = 'desc';   
 let mediaSearchTerm = '';
@@ -32,7 +31,6 @@ const MEDIA_AD_VID_BRAND_MAP = {
     'gaJlFzkZBNE': 'FC모바일'
 };
 
-// ⭐️ 멤버 전역 필터링용 매핑
 const memberAlias = {
     '원이': ['원이', 'wonee'],
     '리브': ['리브', 'liv'],
@@ -50,7 +48,6 @@ function mediaGetContentBrand(item) {
     return channel && channel !== '유튜브 채널' ? channel : '기타';
 }
 
-// ⭐️ "전원" 삭제 및 "멤버" 가상 카테고리 추가
 const MEDIA_SUBFILTERS = {
     '멤버': {
         year: (items) => [...new Set(items.map(i => (i.date||'').slice(0, 4)))].filter(Boolean).sort().reverse(),
@@ -86,7 +83,7 @@ function mediaGetAllItems() {
 }
 
 // -----------------------------------------------------
-// 1. 사이드바 (단일 선택 기반 렌더링)
+// 1. 사이드바
 // -----------------------------------------------------
 function mediaInitTagFromQuery() {
     if (typeof MEDIA_CATEGORIES === 'undefined') return;
@@ -149,7 +146,6 @@ function mediaRenderSubCol() {
     
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     
-    // ⭐️ 조건: 카테고리가 없거나 옵션이 없거나, 년도를 누르지 않은 상태면 숨김
     if (!cfg || !cfg.sub || !mediaYearClicked) { 
         wrap.classList.add('is-hidden');
         return; 
@@ -167,23 +163,16 @@ function mediaRenderSubCol() {
     wrap.classList.remove('is-hidden');
     
     col.innerHTML = options.map(opt => {
-        // 사이드바 UI 상에서의 활성화 여부
         const isActive = (opt === '전체' && mediaActiveDetails.size === 0) || mediaActiveDetails.has(opt);
-        
-        // ⭐️ 사이드바에서는 "단일 선택" (mediaSetDetailFromSidebar 사용)
         return `<button type="button" class="ms-item${isActive ? ' active' : ''}" onclick="mediaSetDetailFromSidebar('${safeEscape(opt)}')">
             <span>${safeEscape(opt)}</span>
         </button>`;
     }).join('');
 }
 
-// -----------------------------------------------------
-// 2. 필터 제어 함수 (순차적 열림 및 전역 유지)
-// -----------------------------------------------------
 function mediaSetTag(label) {
     if (mediaActiveTag === label) {
         if (label !== '전체') {
-            // 한 번 더 누르면 리셋(전체로 이동)
             mediaActiveTag = '전체';
             mediaActiveSub = '전체';
             mediaYearClicked = false;
@@ -191,9 +180,8 @@ function mediaSetTag(label) {
     } else {
         mediaActiveTag = label;
         mediaActiveSub = '전체';
-        mediaYearClicked = false; // 카테고리만 누르면 년도까지만 열리게 제어
+        mediaYearClicked = false;
     }
-    // ⭐️ 의도적 생략: mediaActiveDetails.clear() 를 하지 않음으로써 전역 필터(제나 등)를 타 카테고리에서도 유지함
     mediaRenderTagRow();
     mediaApplyFilters();
     if(typeof mediaRenderDrawer === 'function') mediaRenderDrawer();
@@ -202,36 +190,32 @@ function mediaSetTag(label) {
 function mediaSetSub(sub) {
     if (mediaActiveSub === sub) {
         if (sub === '전체') {
-            // 전체를 다시 누르면 하위 탭 열기/닫기 토글
             mediaYearClicked = !mediaYearClicked;
         } else {
-            // 특정 년도를 다시 누르면 닫힘(전체로 이동)
             mediaActiveSub = '전체';
             mediaYearClicked = false;
         }
     } else {
         mediaActiveSub = sub;
-        mediaYearClicked = true; // 특정 년도 클릭 시 하위 탭 강제 열림
+        mediaYearClicked = true; 
     }
     mediaRenderYearCol();
     mediaApplyFilters();
     if(typeof mediaRenderDrawer === 'function') mediaRenderDrawer();
 }
 
-// ⭐️ 사이드바 전용 (중복 클릭 방지 단일 선택 로직)
 function mediaSetDetailFromSidebar(detail) {
     if (detail === '전체') {
         mediaActiveDetails.clear();
     } else {
-        mediaActiveDetails.clear(); // 기존 항목 모두 삭제
-        mediaActiveDetails.add(detail); // 하나만 추가
+        mediaActiveDetails.clear();
+        mediaActiveDetails.add(detail);
     }
     mediaRenderSubCol();
     mediaApplyFilters();
     if(typeof mediaRenderDrawer === 'function') mediaRenderDrawer();
 }
 
-// ⭐️ 서랍(Drawer) 전용 다중 선택 로직
 function mediaToggleDetail(detail) {
     if (detail === '전체') {
         mediaActiveDetails.clear();
@@ -257,16 +241,22 @@ function openAdvFilter() {
     mediaRenderDrawer();
 }
 
+// ⭐️ 드래그를 통해 닫을 때 Transform(위치이동값)을 깔끔히 초기화하기 위한 로직 추가
 function closeAdvFilter() {
-    document.getElementById('advFilterDrawer').classList.remove('active');
-    document.getElementById('advFilterBackdrop').classList.remove('active');
+    const drawer = document.getElementById('advFilterDrawer');
+    if (drawer) {
+        drawer.classList.remove('active');
+        // 모바일 바텀시트가 자연스럽게 닫힌 후 transform 초기화
+        setTimeout(() => { drawer.style.transform = ''; }, 400); 
+    }
+    const backdrop = document.getElementById('advFilterBackdrop');
+    if(backdrop) backdrop.classList.remove('active');
     document.body.style.overflow = '';
 }
 
 function mediaRenderDrawer() {
     if (typeof MEDIA_CATEGORIES === 'undefined') return;
     
-    // 카테고리 목록
     const catBox = document.getElementById('afdCategoryChips');
     const catCount = document.getElementById('afdCatCount');
     const categories = ['전체', '멤버'].concat(MEDIA_CATEGORIES.map(c => c.label));
@@ -278,7 +268,6 @@ function mediaRenderDrawer() {
     `).join('');
     catCount.textContent = `${categories.length}개 항목`;
 
-    // 현재 활성화된 모든 필터 내역
     const activeBox = document.getElementById('afdActiveChips');
     let actives = [];
     if (mediaActiveTag !== '전체') actives.push({ type: 'tag', label: mediaActiveTag });
@@ -291,7 +280,6 @@ function mediaRenderDrawer() {
         </button>
     `).join('') : '<span style="font-size:13px; color:var(--text-muted);">활성화된 필터 없음</span>';
 
-    // 해당 카테고리 주제 목록 (다중 선택 가능)
     const topicBox = document.getElementById('afdTopicChips');
     const topicCount = document.getElementById('afdTopicCount');
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
@@ -373,7 +361,6 @@ function mediaApplyFilters() {
 function mediaGetFiltered() {
     let list = mediaGetAllItems();
     
-    // ⭐️ 1. 카테고리 필터 ('멤버' 카테고리는 별도로 이름 필터링 진행)
     if (mediaActiveTag !== '전체') {
         if (mediaActiveTag === '멤버') {
             list = list.filter(i => {
@@ -386,12 +373,10 @@ function mediaGetFiltered() {
         }
     }
 
-    // ⭐️ 2. 연도 필터
     if (mediaActiveSub !== '전체') {
         list = list.filter(i => (i.date || '').startsWith(mediaActiveSub));
     }
     
-    // ⭐️ 3. 전역 세부 항목 필터 (카테고리를 넘나들어도 적용됨)
     if (mediaActiveDetails.size > 0) {
         list = list.filter(i => {
             const brand = mediaGetContentBrand(i);
@@ -401,7 +386,6 @@ function mediaGetFiltered() {
             return Array.from(mediaActiveDetails).some(d => {
                 const lowerD = d.toLowerCase();
                 let matched = brand === d || prog === d || text.includes(lowerD);
-                // 멤버 이름 별칭 지원 (예: '제나' 선택 시 'ZENA'도 포함되게 함)
                 if (!matched && memberAlias[d]) {
                     matched = memberAlias[d].some(alias => text.includes(alias));
                 }
@@ -410,12 +394,10 @@ function mediaGetFiltered() {
         });
     }
 
-    // ⭐️ 4. 직접 검색
     if (mediaSearchTerm) {
         list = list.filter(i => ((i.title || '') + ' ' + (i.sub || '')).toLowerCase().includes(mediaSearchTerm));
     }
 
-    // ⭐️ 5. 정렬
     if (mediaSortField === 'name') {
         list.sort((a, b) => {
             const an = mediaCardTitle(a) || '';
@@ -497,7 +479,7 @@ function mediaSetupInfiniteScroll() {
 }
 
 // -----------------------------------------------------
-// 5. 모달 제어
+// 5. 영상 모달 및 바텀시트(Drawer) 터치 드래그 로직
 // -----------------------------------------------------
 let mmPlaylist = [];
 let mmIndex = -1;
@@ -591,6 +573,7 @@ function mediaClosePlayer() {
     document.body.style.overflow = '';
 }
 
+// 영상 플레이리스트 드래그 로직
 (function initMmDrag() {
     let startY = 0, dragging = false, moved = false;
     function pointY(e) { return e.touches ? e.touches[0].clientY : e.clientY; }
@@ -620,7 +603,61 @@ function mediaClosePlayer() {
     });
 })();
 
-// 초기 실행 및 오류 캡처
+// ⭐️ 모바일 바텀시트(Drawer) 스와이프 다운 닫기 로직 ⭐️
+(function initFilterDrawerDrag() {
+    document.addEventListener('DOMContentLoaded', () => {
+        const drawer = document.getElementById('advFilterDrawer');
+        // 사용자가 터치할 수 있는 넓은 영역 (헤더 전체)
+        const handleArea = drawer ? drawer.querySelector('.afd-header') : null; 
+        if (!drawer || !handleArea) return;
+
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+
+        function onStart(e) {
+            // PC 화면(1000px 초과)에서는 작동하지 않음
+            if (window.innerWidth > 1000) return; 
+            startY = e.touches ? e.touches[0].clientY : e.clientY;
+            isDragging = true;
+            // 부드러운 드래그를 위해 트랜지션 해제
+            drawer.style.transition = 'none'; 
+        }
+
+        function onMove(e) {
+            if (!isDragging) return;
+            currentY = e.touches ? e.touches[0].clientY : e.clientY;
+            const diff = currentY - startY;
+            
+            // 아래로 끌어내릴 때만 모달 이동 허용
+            if (diff > 0) {
+                drawer.style.transform = `translateY(${diff}px)`;
+            }
+        }
+
+        function onEnd(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            // 드래그 종료 시 다시 애니메이션 복구
+            drawer.style.transition = 'bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease';
+            
+            const diff = currentY - startY;
+            // 80px 이상 끌어내렸으면 닫기 함수 호출
+            if (diff > 80) { 
+                closeAdvFilter();
+            } else { 
+                // 조금 끌다 말았으면 원위치
+                drawer.style.transform = `translateY(0)`;
+            }
+        }
+
+        // 터치 이벤트 리스너 부착
+        handleArea.addEventListener('touchstart', onStart, { passive: true });
+        window.addEventListener('touchmove', onMove, { passive: true });
+        window.addEventListener('touchend', onEnd);
+    });
+})();
+
 window.addEventListener('DOMContentLoaded', () => {
     try {
         mediaInitTagFromQuery();
@@ -629,9 +666,5 @@ window.addEventListener('DOMContentLoaded', () => {
         mediaSetupInfiniteScroll();
     } catch (e) {
         console.error("Initialization error:", e);
-        const grid = document.getElementById('mediaGrid');
-        if (grid) grid.innerHTML = `<div style="grid-column:1/-1; color:#ff4d6d; font-size:14px; padding:40px; background:var(--bg-surface); border-radius:12px;">
-            <b>[스크립트 에러 발생]</b><br><br>${e.message}
-        </div>`;
     }
 });

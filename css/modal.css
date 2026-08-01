@@ -138,6 +138,49 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 .modal-wrapper.active.dragging { transition: none !important; transform: translateY(var(--drag-y, 0px)) !important; }
 .modal-wrapper.active.sheet-snap { transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1) !important; transform: translateY(var(--drag-y, 0px)) !important; }
 
+/* 배경 화면 설정 바텀 시트 */
+.bg-settings-sheet {
+    position: fixed; left: 50%; bottom: 0; transform: translate(-50%, 100%);
+    width: 100%; max-width: 560px; max-height: 82vh; box-sizing: border-box;
+    background: var(--bg-base); border: 1px solid var(--border-light); border-bottom: none;
+    border-radius: 22px 22px 0 0; box-shadow: 0 -20px 60px rgba(0,0,0,0.45);
+    z-index: 9999; padding: 4px 24px 28px; display: flex; flex-direction: column; gap: 16px;
+    opacity: 0; pointer-events: none;
+    transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+}
+.bg-settings-sheet .sheet-drag-handle { display: block; }
+.bg-settings-sheet.active { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.bg-settings-sheet .settings-header { font-family: var(--font-head); font-size: 15px; font-weight: 800; color: var(--text-primary); text-align: center; padding: 2px 0; }
+
+.bg-tabbar { display: flex; gap: 8px; justify-content: center; }
+.bg-tab { appearance: none; border: 1px solid var(--border-light); background: var(--bg-surface); color: var(--text-secondary); font-family: var(--font-head); font-size: 12.5px; font-weight: 700; padding: 8px 22px; border-radius: 999px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+.bg-tab:hover { color: var(--text-primary); }
+.bg-tab.active { background: var(--c-accent); border-color: var(--c-accent); color: #fff; }
+
+.bg-tab-panel { display: none; flex-direction: column; gap: 12px; min-height: 0; }
+.bg-tab-panel.active { display: flex; }
+
+.bg-member-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; flex-shrink: 0; }
+.bg-member-row::-webkit-scrollbar { display: none; }
+.bg-member-chip { flex-shrink: 0; appearance: none; border: 1px solid var(--border-light); background: var(--bg-surface); color: var(--text-secondary); font-family: var(--font-body); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 999px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+.bg-member-chip.active { background: var(--text-primary); border-color: var(--text-primary); color: var(--bg-base); }
+
+.bg-options-wrap { display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px 10px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
+.bg-options-wrap::-webkit-scrollbar { height: 6px; }
+.bg-options-wrap::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
+
+.bg-option { position: relative; flex-shrink: 0; width: 96px; height: 96px; border-radius: 16px; overflow: hidden; border: 2px solid var(--border-light); background: var(--bg-surface); padding: 0; cursor: pointer; transition: border-color 0.25s ease, transform 0.25s ease; }
+.bg-option:hover { border-color: var(--c-accent); transform: translateY(-2px); }
+.bg-option img, .bg-option video { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.bg-option.active-bg { border-color: var(--c-accent); }
+.bg-option-check { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; background: rgba(0,0,0,0.55); color: #fff; font-family: var(--font-head); font-size: 11px; font-weight: 800; letter-spacing: 0.02em; text-align: center; padding: 4px; }
+.bg-option.active-bg .bg-option-check { display: flex; }
+
+@media (max-width: 700px) {
+    .bg-settings-sheet { max-width: 100%; border-radius: 20px 20px 0 0; padding: 4px 16px 26px; }
+    .bg-option { width: 80px; height: 80px; }
+}
+
 /* 모바일 모달 바텀시트 유지 (모바일에서는 높이 고정 해제) */
 @media (max-width: 1049px) {
     .calendar-popup-wrapper.active.split-active { transform: translate(-50%, -50%); }

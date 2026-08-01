@@ -25,7 +25,6 @@
     <script src="../js/layout.js"></script>
     <script>renderSiteNav('media', '../', { calendar: true, lang: true });</script>
 
-    <!-- 왼쪽 고정, 오른쪽 개별 스크롤 구조 -->
     <div id="mainWrapper" class="media-wrapper-locked" style="padding-top: 120px;">
         <div class="section-container media-page-container">
             <div class="section-header media-hero">
@@ -34,8 +33,6 @@
             <p class="media-hero-sub"><span data-i18n="mediaSub">리센느 유튜브 모아보기</span> <span class="media-count-badge" id="mediaCountBadge"></span></p>
 
             <div class="media-layout">
-                
-                <!-- 좌측 사이드바 필터 (스크롤 락) -->
                 <aside class="media-sidebar">
                     <div class="ms-col">
                         <div class="ms-title">CATEGORY</div>
@@ -51,7 +48,6 @@
                     </div>
                 </aside>
 
-                <!-- 우측 메인 영역 (개별 스크롤) -->
                 <main class="media-main">
                     <div class="media-toolbar">
                         <div class="media-toolbar-left">
@@ -60,7 +56,7 @@
                             </button>
                             <div class="media-search-wrap">
                                 <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                                <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" oninput="mediaApplyFilters()" autocomplete="off">
+                                <input type="text" id="mediaSearch" placeholder="제목 · 채널 검색" data-i18n-placeholder="searchPlaceholder" oninput="mediaApplyFilters()" autocomplete="off">
                                 <button type="button" class="media-search-clear" id="mediaSearchClear" onclick="mediaClearSearch()" aria-label="검색어 지우기">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                 </button>
@@ -86,7 +82,6 @@
                         </div>
                     </div>
 
-                    <!-- 영상 그리드 -->
                     <div class="media-grid" id="mediaGrid"></div>
                     <div class="media-scroll-sentinel" id="mediaSentinel"></div>
                     <div class="media-end-message" id="mediaEndMessage" style="display:none;">모든 영상을 다 봤어요.</div>
@@ -98,9 +93,11 @@
         </div>
     </div>
 
-    <!-- 고급 서랍 필터 (한글화 및 버튼 색상 변경) -->
+    <!-- ⭐️ 바텀 시트(Bottom Sheet) 모달 창으로 개편된 필터 서랍 -->
     <div class="drawer-backdrop" id="advFilterBackdrop" onclick="closeAdvFilter()"></div>
     <div class="adv-filter-drawer" id="advFilterDrawer">
+        <!-- ⭐️ 아래로 끌어당길 수 있음을 직관적으로 알려주는 핸들 바 추가 -->
+        <div class="afd-drag-handle"></div>
         <div class="afd-header">
             <h3>필터</h3>
             <button class="afd-close" onclick="closeAdvFilter()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
@@ -114,7 +111,7 @@
             <div class="afd-section">
                 <div class="afd-sec-title">상세 검색 <span>선택 해제 가능</span></div>
                 <div class="afd-chips" id="afdActiveChips"></div>
-                <button class="afd-action-btn btn-black" onclick="mediaClearAllFilters()">초기화</button>
+                <button class="afd-action-btn btn-black" onclick="mediaClearAllFilters()">전체 초기화</button>
             </div>
 
             <div class="afd-section">

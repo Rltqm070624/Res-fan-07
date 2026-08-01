@@ -192,25 +192,13 @@
     <div class="bg-settings-sheet" id="bgSettingsSheet">
         <div class="sheet-drag-handle"></div>
         <div class="settings-header">배경 화면 설정</div>
-        
-        <div class="bg-tabs">
-            <button class="bg-tab active" data-target="bg-tab-all" onclick="switchBgTab('bg-tab-all')">전원</button>
-            <button class="bg-tab" data-target="bg-tab-member" onclick="switchBgTab('bg-tab-member')">멤버</button>
-        </div>
-        
-        <div class="bg-tab-content active" id="bg-tab-all">
-            <div class="bg-options-wrap" id="bgOptionsAll"></div>
-        </div>
-        
-        <div class="bg-tab-content" id="bg-tab-member">
-            <div class="member-sub-tabs">
-                <button class="mem-tab active" onclick="switchMemTab('woni')">원이</button>
-                <button class="mem-tab" onclick="switchMemTab('liv')">리브</button>
-                <button class="mem-tab" onclick="switchMemTab('minami')">미나미</button>
-                <button class="mem-tab" onclick="switchMemTab('may')">메이</button>
-                <button class="mem-tab" onclick="switchMemTab('zena')">제나</button>
-            </div>
-            <div class="bg-options-wrap" id="bgOptionsMem"></div>
+        <div class="bg-options-wrap">
+            <div class="bg-option" onclick="setCustomBg('video', 'video/member.mp4')"><img src="images/thumb_v1.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('video', 'video/bg2.mp4')"><img src="images/thumb_v2.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('video', 'video/bg3.mp4')"><img src="images/thumb_v3.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('image', 'images/bg1.jpg')"><img src="images/bg1.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('image', 'images/bg2.jpg')"><img src="images/bg2.jpg" onerror="this.src='images/logo.png'"></div>
+            <div class="bg-option" onclick="setCustomBg('image', 'images/bg3.jpg')"><img src="images/bg3.jpg" onerror="this.src='images/logo.png'"></div>
         </div>
     </div>
 

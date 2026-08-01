@@ -27,7 +27,6 @@ function navigateAlbumModal(delta) {
     if (idx >= ALBUMS.length) idx = 0;
     openAlbumModal(idx);
 }
-// ⭐️ 모달 안에서 좌우로 드래그(스와이프)하면 다음/이전 항목으로 이동
 let suppressModalTap = false;
 function enableModalSwipe(modalId, onSwipeLeft, onSwipeRight) {
     const el = document.getElementById(modalId);
@@ -43,7 +42,6 @@ function enableModalSwipe(modalId, onSwipeLeft, onSwipeRight) {
         }
     }
 
-    // 터치(모바일)
     el.addEventListener('touchstart', (e) => {
         if (e.touches.length !== 1) return;
         startX = e.touches[0].clientX; startY = e.touches[0].clientY; tracking = true;
@@ -53,7 +51,6 @@ function enableModalSwipe(modalId, onSwipeLeft, onSwipeRight) {
         finish(e.changedTouches[0].clientX - startX, e.changedTouches[0].clientY - startY);
     }, { passive: true });
 
-    // 마우스(데스크탑) — 이미지/닫기 버튼 클릭은 그대로 동작하도록 살짝만 움직였을 땐 클릭으로 취급
     el.addEventListener('mousedown', (e) => {
         startX = e.clientX; startY = e.clientY; tracking = true;
     });
@@ -65,6 +62,7 @@ function enableModalSwipe(modalId, onSwipeLeft, onSwipeRight) {
 window.addEventListener('DOMContentLoaded', () => {
     enableModalSwipe('imageModal', () => navigateImageModal(1), () => navigateImageModal(-1));
     enableModalSwipe('albumModal', () => navigateAlbumModal(1), () => navigateAlbumModal(-1));
+    initCustomBg();
 });
 
 function getTodayKey() { const now = new Date(); return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`; }
@@ -222,7 +220,7 @@ setInterval(renderTodayMonthSchedule, 60000);
 
 let __didAutoScrollTodayCol = false;
 function scrollTodayMonthColToToday() {
-    if (__didAutoScrollTodayCol) return; // 사용자가 스크롤해서 보고 있는 중에 새로고침 타이머 때문에 다시 튀지 않도록 최초 1회만
+    if (__didAutoScrollTodayCol) return; 
     const colA = document.getElementById('todayScrollColA');
     const todayGroup = colA ? colA.querySelector('.tm-group.is-today') : null;
     if (!colA || !todayGroup) return;
@@ -256,7 +254,7 @@ function renderProfileArchive() {
 
 function enableDragScroll(el) {
     if (!el) return;
-    el.style.scrollBehavior = 'auto'; // CSS의 scroll-behavior:smooth가 JS 애니메이션과 충돌해서 안 움직이던 문제 수정
+    el.style.scrollBehavior = 'auto'; 
     let isDown = false, startX = 0, startScrollLeft = 0, moved = false;
     el.addEventListener('mousedown', (e) => {
         isDown = true; moved = false;
@@ -296,7 +294,7 @@ function enableDragScroll(el) {
         if (wheelLockDirection === null) {
             wheelLockDirection = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? 'vertical' : 'horizontal';
         }
-        if (wheelLockDirection !== 'vertical') return; // 이미 가로 스크롤 제스처면 네이티브 동작에 맡김
+        if (wheelLockDirection !== 'vertical') return; 
 
         e.preventDefault();
         const maxScroll = el.scrollWidth - el.clientWidth;
@@ -320,14 +318,12 @@ function renderAlbumGrid() {
         let ahtml = '';
         const PREVIEW_COUNT = 7;
         ALBUMS.slice(0, PREVIEW_COUNT).forEach(function (album, idx) {
-            // ⭐️ 이미지가 안 뜰 경우 조용히 숨기지 않고 눈에 보이게 표시 (원인 파악 쉽게)
             ahtml += `<div class="profile-item album-cover-item" onclick="openAlbumModal(${idx})"><img src="images/${album.image}" alt="${album.title}" loading="lazy" onerror="console.error('앨범 이미지 로드 실패:', this.src); this.closest('.profile-item').classList.add('img-broken'); this.style.display='none';"><span class="album-broken-label">이미지 없음<br>${album.image}</span></div>`;
         });
         ahtml += `<a class="profile-item archive-more-tile" href="archive.html#album"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg><span>전체보기</span></a>`;
         albumWrap.innerHTML = `<div class="profile-track album-track">${ahtml}</div>`;
     }
 
-    // ⭐️ archive.html 전용 — 전체 앨범 그리드 (있으면 채움)
     const fullAlbumGrid = document.getElementById('fullAlbumGrid');
     if (fullAlbumGrid) {
         let fahtml = '';
@@ -422,10 +418,69 @@ function playWithRescene() {
     if (!section || !text || !next) return;
 
     section.classList.add('wr-playing');
-
-    // 1. WITH RESCENE 문구가 천천히 사라짐
     text.classList.add('wr-hide');
-
-    // 2. (임시) 발자취 준비중 안내 — 추후 마일스톤 타임라인으로 교체 예정
     setTimeout(() => { next.classList.add('show'); }, 2200);
+}
+
+function openBgSettings() {
+    const sheet = document.getElementById('bgSettingsSheet');
+    const backdrop = document.getElementById('bgSettingsBackdrop');
+    if (sheet && backdrop) {
+        sheet.classList.add('active');
+        backdrop.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeBgSettings() {
+    const sheet = document.getElementById('bgSettingsSheet');
+    const backdrop = document.getElementById('bgSettingsBackdrop');
+    if (sheet && backdrop) {
+        sheet.classList.remove('active');
+        backdrop.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function setCustomBg(type, src) {
+    const vid = document.getElementById('bgVideo');
+    const img = document.getElementById('bgImage');
+    if (!vid || !img) return;
+
+    vid.style.opacity = '0';
+    img.style.opacity = '0';
+
+    setTimeout(() => {
+        if (type === 'video') {
+            vid.src = src;
+            vid.style.display = 'block';
+            img.style.display = 'none';
+            vid.play().catch(()=>{});
+            setTimeout(() => { vid.style.opacity = '0.7'; }, 50);
+        } else {
+            img.src = src;
+            img.style.display = 'block';
+            vid.style.display = 'none';
+            vid.pause();
+            setTimeout(() => { img.style.opacity = '0.7'; }, 50);
+        }
+    }, 400);
+
+    localStorage.setItem('rescene-bg-type', type);
+    localStorage.setItem('rescene-bg-src', src);
+    
+    document.querySelectorAll('.bg-option').forEach(el => el.classList.remove('active-bg'));
+    const activeOpt = document.querySelector(`.bg-option[onclick="setCustomBg('${type}', '${src}')"]`);
+    if (activeOpt) activeOpt.classList.add('active-bg');
+}
+
+function initCustomBg() {
+    const savedType = localStorage.getItem('rescene-bg-type');
+    const savedSrc = localStorage.getItem('rescene-bg-src');
+    if (savedType && savedSrc) {
+        setCustomBg(savedType, savedSrc);
+    } else {
+        const activeOpt = document.querySelector(`.bg-option[onclick="setCustomBg('video', 'video/member.mp4')"]`);
+        if (activeOpt) activeOpt.classList.add('active-bg');
+    }
 }

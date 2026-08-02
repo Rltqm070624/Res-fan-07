@@ -323,8 +323,7 @@ html[data-theme="dark"] .afd-action-btn.btn-black {
 .mv-tab.active { color: var(--c-accent); }
 .mv-tab.active::after { background: var(--c-accent); }
 
-/* 쇼츠 탭 안 media-main 상단 카운트 표시줄 (풀영상의 media-toolbar 재사용) */
-.media-shorts-view .shorts-toolbar { justify-content: flex-end; }
+/* 쇼츠 탭 툴바는 풀영상 탭과 동일한 media-toolbar 기본 정렬(space-between)을 그대로 사용 */
 
 .sh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 24px 16px; width: 100%; }
 

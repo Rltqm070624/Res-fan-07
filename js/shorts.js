@@ -202,6 +202,7 @@ function shModalLoad(idx) {
     shModalIndex = idx;
 
     const media = document.getElementById('shModalMediaBox');
+    const title = document.getElementById('shModalTitle');
     const sub = document.getElementById('shModalSub');
     if (media) {
         media.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1"
@@ -229,6 +230,7 @@ function shModalClose() {
     const modal = document.getElementById('shModal');
     const backdrop = document.getElementById('shModalBackdrop');
     const media = document.getElementById('shModalMediaBox');
+    if (modal) modal.classList.remove('active');
     if (backdrop) backdrop.classList.remove('active');
     if (media) media.innerHTML = '';
     document.body.style.overflow = '';

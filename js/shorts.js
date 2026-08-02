@@ -16,6 +16,7 @@ const SHORTS_TAG_META = [
 // 화면(홈/미디어탭)별로 현재 선택된 필터와, 필터링된 목록을 각각 기억해둠
 const shState = { home: 'all', media: 'all' };
 const shListCache = { home: [], media: [] };
+let shMediaSearchTerm = '';
 
 function shEscapeHtml(str) {
     return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -113,7 +114,16 @@ function shRenderGrid(containerId, scope) {
     if (!grid) return;
 
     const all = shGetAll().slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-    const filtered = shFilterByTag(all, shState[scope]);
+    let filtered = shFilterByTag(all, shState[scope]);
+
+    if (scope === 'media' && shMediaSearchTerm) {
+        const term = shMediaSearchTerm.toLowerCase();
+        filtered = filtered.filter(item =>
+            (item.title || '').toLowerCase().includes(term) ||
+            (item.channel || '').toLowerCase().includes(term)
+        );
+    }
+
     shListCache[scope] = filtered;
 
     const countBadge = document.getElementById('shMediaCountBadge');
@@ -124,6 +134,20 @@ function shRenderGrid(containerId, scope) {
         return;
     }
     grid.innerHTML = filtered.map((item, i) => shCardHtml(item, i, scope)).join('');
+}
+
+function shMediaApplyFilters() {
+    const input = document.getElementById('shMediaSearch');
+    shMediaSearchTerm = (input && input.value || '').trim();
+    const clearBtn = document.getElementById('shMediaSearchClear');
+    if (clearBtn) clearBtn.classList.toggle('show', !!shMediaSearchTerm);
+    shRenderGrid('shMediaGrid', 'media');
+}
+
+function shMediaClearSearch() {
+    const input = document.getElementById('shMediaSearch');
+    if (input) input.value = '';
+    shMediaApplyFilters();
 }
 
 /* ---------------------------------------------------
@@ -177,8 +201,7 @@ function shModalLoad(idx) {
     if (!item) return;
     shModalIndex = idx;
 
-    const media = document.getElementById('shModalMedia');
-    const title = document.getElementById('shModalTitle');
+    const media = document.getElementById('shModalMediaBox');
     const sub = document.getElementById('shModalSub');
     if (media) {
         media.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1"
@@ -205,8 +228,7 @@ function shModalNext() {
 function shModalClose() {
     const modal = document.getElementById('shModal');
     const backdrop = document.getElementById('shModalBackdrop');
-    const media = document.getElementById('shModalMedia');
-    if (modal) modal.classList.remove('active');
+    const media = document.getElementById('shModalMediaBox');
     if (backdrop) backdrop.classList.remove('active');
     if (media) media.innerHTML = '';
     document.body.style.overflow = '';

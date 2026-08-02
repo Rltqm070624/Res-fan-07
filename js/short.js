@@ -1,0 +1,168 @@
+const SHORTS_TAG_META = [
+    { key: 'all',     label: '전체',   color: 'var(--c-accent)' },
+    { key: 'rescene', label: '리센느', color: 'var(--c-accent)' },
+    { key: 'woni',    label: '원이',   color: '#f4c95d' },
+    { key: 'liv',     label: '리브',   color: '#6ec6ff' },
+    { key: 'minami',  label: '미나미', color: '#2b99c4' },
+    { key: 'may',     label: '메이',   color: '#ecd25b' },
+    { key: 'zena',    label: '제나',   color: '#ff6b6b' }
+];
+
+// 화면(홈/미디어탭)별로 현재 선택된 필터와, 필터링된 목록을 각각 기억해둠
+const shState = { home: 'all', media: 'all' };
+const shListCache = { home: [], media: [] };
+
+function shEscapeHtml(str) {
+    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function shEscapeAttr(str) { return shEscapeHtml(str).replace(/"/g, '&quot;'); }
+function shThumb(vid) { return `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`; }
+
+function shGetAll() {
+    return typeof SHORTS_DATA !== 'undefined' ? SHORTS_DATA : [];
+}
+
+function shFilterByTag(list, tagKey) {
+    if (!tagKey || tagKey === 'all') return list;
+    return list.filter(item => Array.isArray(item.tags) && item.tags.includes(tagKey));
+}
+
+/* ---------------------------------------------------
+   필터 칩 렌더링
+--------------------------------------------------- */
+function shRenderFilterChips(containerId, scope) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = SHORTS_TAG_META.map(t => `
+        <button type="button" class="sh-chip${shState[scope] === t.key ? ' active' : ''}"
+            style="--sh-color:${t.color};" onclick="shSetFilter('${scope}', '${t.key}')">
+            <span>#${shEscapeHtml(t.label)}</span>
+        </button>
+    `).join('');
+}
+
+function shSetFilter(scope, key) {
+    shState[scope] = key;
+    if (scope === 'home') {
+        shRenderFilterChips('shHomeFilterRow', 'home');
+        shRenderRow('shHomeGrid', 'home');
+    } else if (scope === 'media') {
+        shRenderFilterChips('shMediaFilterRow', 'media');
+        shRenderGrid('shMediaGrid', 'media');
+    }
+}
+
+/* ---------------------------------------------------
+   카드 HTML
+--------------------------------------------------- */
+function shCardHtml(item, idx, scope) {
+    return `
+    <div class="sh-card" data-idx="${idx}" onclick="shPlay('${scope}', this)">
+        <div class="sh-card-thumb">
+            <img src="${shThumb(item.vid)}" alt="${shEscapeAttr(item.title)}" loading="lazy"
+                onerror="this.closest('.sh-card').style.display='none'">
+            <button type="button" class="sh-play-btn" aria-label="재생">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+        </div>
+        <div class="sh-card-info">
+            <div class="sh-card-title">${shEscapeHtml(item.title)}</div>
+            <div class="sh-card-sub">${item.channel ? shEscapeHtml(item.channel) + ' · ' : ''}${item.date || ''}</div>
+        </div>
+    </div>`;
+}
+
+/* ---------------------------------------------------
+   홈 화면: 가로 스크롤 줄 (최신순 최대 16개)
+--------------------------------------------------- */
+function shRenderRow(containerId, scope) {
+    const grid = document.getElementById(containerId);
+    if (!grid) return;
+
+    const all = shGetAll().slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    const filtered = shFilterByTag(all, shState[scope]).slice(0, 16);
+    shListCache[scope] = filtered;
+
+    if (!filtered.length) {
+        grid.innerHTML = '<div class="sh-empty">아직 등록된 쇼츠가 없어요.<br>scripts/scrape_shorts.js 를 실행해서 채워보세요.</div>';
+        return;
+    }
+    grid.innerHTML = filtered.map((item, i) => shCardHtml(item, i, scope)).join('');
+}
+
+/* ---------------------------------------------------
+   media.html 쇼츠 탭: 전체 그리드
+--------------------------------------------------- */
+function shRenderGrid(containerId, scope) {
+    const grid = document.getElementById(containerId);
+    if (!grid) return;
+
+    const all = shGetAll().slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    const filtered = shFilterByTag(all, shState[scope]);
+    shListCache[scope] = filtered;
+
+    const countBadge = document.getElementById('shMediaCountBadge');
+    if (countBadge) countBadge.innerHTML = `<b>${filtered.length}</b>개`;
+
+    if (!filtered.length) {
+        grid.innerHTML = '<div class="sh-empty">아직 등록된 쇼츠가 없어요.<br>scripts/scrape_shorts.js 를 실행해서 채워보세요.</div>';
+        return;
+    }
+    grid.innerHTML = filtered.map((item, i) => shCardHtml(item, i, scope)).join('');
+}
+
+/* ---------------------------------------------------
+   재생 (썸네일 클릭 시 그 자리에서 바로 임베드)
+--------------------------------------------------- */
+function shPlay(scope, el) {
+    if (el.classList.contains('is-playing')) return;
+    const idx = parseInt(el.dataset.idx, 10);
+    const item = shListCache[scope] && shListCache[scope][idx];
+    if (!item) return;
+
+    el.classList.add('is-playing');
+    const thumb = el.querySelector('.sh-card-thumb');
+    if (thumb) {
+        thumb.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1"
+            title="${shEscapeAttr(item.title)}" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>`;
+    }
+}
+
+/* ---------------------------------------------------
+   media.html 전용: 풀영상 / 쇼츠 탭 전환
+--------------------------------------------------- */
+function mediaSetView(view) {
+    document.querySelectorAll('.mv-tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+    const fullView = document.getElementById('mediaFullView');
+    const shortsView = document.getElementById('mediaShortsView');
+    if (fullView) fullView.style.display = view === 'full' ? '' : 'none';
+    if (shortsView) shortsView.style.display = view === 'shorts' ? '' : 'none';
+
+    if (view === 'shorts') {
+        shRenderFilterChips('shMediaFilterRow', 'media');
+        shRenderGrid('shMediaGrid', 'media');
+    }
+}
+
+function shInitMediaViewFromQuery() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'shorts') mediaSetView('shorts');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    try {
+        // 홈 화면(index.html)에만 존재하는 요소들
+        if (document.getElementById('shHomeGrid')) {
+            shRenderFilterChips('shHomeFilterRow', 'home');
+            shRenderRow('shHomeGrid', 'home');
+        }
+        // media.html에만 존재하는 요소들
+        if (document.getElementById('shMediaGrid')) {
+            shInitMediaViewFromQuery();
+        }
+    } catch (e) {
+        console.error('쇼츠 렌더링 실패:', e);
+    }
+});

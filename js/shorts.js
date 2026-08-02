@@ -1,3 +1,8 @@
+/* ⭐️ RESCENE SHORTS 렌더링 & 필터 & 모달 로직
+   - 홈(index.html) 하단 "YOUTUBE SHORTS" 섹션 (가로 스크롤 + 상단 필터 칩)
+   - media.html "쇼츠" 탭 (풀영상 탭과 동일하게 좌측 CATEGORY 사이드바 + 그리드)
+   두 화면 모두 클릭 시 세로(9:16) 모달로 재생됩니다. */
+
 const SHORTS_TAG_META = [
     { key: 'all',     label: '전체',   color: 'var(--c-accent)' },
     { key: 'rescene', label: '리센느', color: 'var(--c-accent)' },
@@ -122,7 +127,7 @@ function shRenderGrid(containerId, scope) {
 }
 
 /* ---------------------------------------------------
-   ⭐️ 쇼츠 재생 모달 (세로 9:16) — 홈/미디어 공용
+   ⭐️ 쇼츠 재생 모달 (풀영상 모달과 동일 크기, 좌: 영상 / 우: 재생목록) — 홈/미디어 공용
 --------------------------------------------------- */
 let shModalScope = null;
 let shModalIndex = -1;
@@ -135,7 +140,35 @@ function shModalOpen(scope, idx) {
     modal.classList.add('active');
     if (backdrop) backdrop.classList.add('active');
     document.body.style.overflow = 'hidden';
+    shModalRenderPlaylist();
     shModalLoad(idx);
+}
+
+function shModalRenderPlaylist() {
+    const list = shListCache[shModalScope] || [];
+    const listEl = document.getElementById('shModalPlaylistList');
+    const countEl = document.getElementById('shModalPlaylistCount');
+    if (countEl) countEl.textContent = list.length;
+    if (!listEl) return;
+    listEl.innerHTML = list.map((item, i) => `
+        <li class="mm-playlist-item" data-idx="${i}" onclick="shModalLoad(${i})">
+            <span class="mm-playlist-index">${i + 1}</span>
+            <div class="sh-modal-playlist-thumb"><img src="${shThumb(item.vid)}" alt="" loading="lazy"></div>
+            <div class="mm-playlist-info">
+                <div class="mm-playlist-title">${shEscapeHtml(item.title)}</div>
+                <div class="mm-playlist-date">${item.channel ? shEscapeHtml(item.channel) + ' · ' : ''}${item.date || ''}</div>
+            </div>
+        </li>`).join('');
+}
+
+function shModalHighlightPlaylistActive() {
+    const listEl = document.getElementById('shModalPlaylistList');
+    if (!listEl) return;
+    listEl.querySelectorAll('.mm-playlist-item').forEach(el => {
+        el.classList.toggle('active', parseInt(el.dataset.idx, 10) === shModalIndex);
+    });
+    const activeEl = listEl.querySelector('.mm-playlist-item.active');
+    if (activeEl) activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
 function shModalLoad(idx) {
@@ -160,6 +193,7 @@ function shModalLoad(idx) {
     const nextBtn = document.getElementById('shModalNextBtn');
     if (prevBtn) prevBtn.disabled = shModalIndex <= 0;
     if (nextBtn) nextBtn.disabled = shModalIndex >= list.length - 1;
+    shModalHighlightPlaylistActive();
 }
 
 function shModalPrev() { if (shModalIndex > 0) shModalLoad(shModalIndex - 1); }
@@ -177,6 +211,27 @@ function shModalClose() {
     if (media) media.innerHTML = '';
     document.body.style.overflow = '';
 }
+
+// 모바일: 영상 위에서 위/아래로 드래그(스와이프)하면 다음/이전 쇼츠로 이동
+(function initShModalSwipe() {
+    let startY = 0, dragging = false;
+    function pointY(e) { return e.touches ? e.touches[0].clientY : e.clientY; }
+    function onStart(e) { dragging = true; startY = pointY(e); }
+    function onEnd(e) {
+        if (!dragging) return;
+        dragging = false;
+        const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+        const delta = startY - endY; // 양수 = 위로 스와이프
+        if (Math.abs(delta) < 40) return; // 살짝 스크롤/탭한 건 무시
+        if (delta > 0) shModalNext(); else shModalPrev();
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.sh-modal-media').forEach(el => {
+            el.addEventListener('touchstart', onStart, { passive: true });
+            el.addEventListener('touchend', onEnd);
+        });
+    });
+})();
 
 /* ---------------------------------------------------
    media.html 전용: 풀영상 / 쇼츠 탭 전환

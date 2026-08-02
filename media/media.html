@@ -175,26 +175,34 @@
         </div>
     </div>
 
-    <!-- 쇼츠 재생 모달 (세로) -->
+    <!-- 쇼츠 재생 모달 (풀영상 모달과 동일 크기, 좌: 영상 / 우: 재생목록) -->
     <div class="modal-backdrop" id="shModalBackdrop" onclick="shModalClose()"></div>
     <div class="sh-modal-wrapper" id="shModal">
         <button class="popup-close-btn" onclick="shModalClose()" aria-label="닫기">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
-        <div class="sh-modal-head">
-            <div class="sh-modal-title" id="shModalTitle"></div>
-            <div class="sh-modal-sub" id="shModalSub"></div>
-        </div>
-        <div class="sh-modal-media" id="shModalMedia"></div>
-        <div class="sh-modal-nav">
-            <button type="button" class="mm-nav-btn" id="shModalPrevBtn" onclick="shModalPrev()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                <span>이전</span>
-            </button>
-            <button type="button" class="mm-nav-btn" id="shModalNextBtn" onclick="shModalNext()">
-                <span>다음</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
+        <div class="sh-modal-body">
+            <div class="sh-modal-video-col">
+                <div class="sh-modal-head">
+                    <div class="sh-modal-title" id="shModalTitle"></div>
+                    <div class="sh-modal-sub" id="shModalSub"></div>
+                </div>
+                <div class="sh-modal-media" id="shModalMedia"></div>
+                <div class="sh-modal-nav">
+                    <button type="button" class="mm-nav-btn" id="shModalPrevBtn" onclick="shModalPrev()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                        <span>이전 영상</span>
+                    </button>
+                    <button type="button" class="mm-nav-btn" id="shModalNextBtn" onclick="shModalNext()">
+                        <span>다음 영상</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="sh-modal-playlist">
+                <div class="sh-modal-playlist-head">재생목록 <b id="shModalPlaylistCount">0</b></div>
+                <ul class="mm-playlist-list sh-modal-playlist-list" id="shModalPlaylistList"></ul>
+            </div>
         </div>
     </div>
 

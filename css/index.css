@@ -260,6 +260,20 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 @media (max-width:900px){ .latest-media-grid{ grid-template-columns:1fr; gap:36px; } }
 
 .plain-link{ color:inherit; text-decoration:none; }
+
+/* ── YOUTUBE 모아보기 / SHORTS 풀페이지 섹션 ── */
+#youtubeSection.section-container,
+#youtubeShortsSection.section-container { max-width: 100%; padding-left: 48px; padding-right: 48px; }
+@media (max-width: 900px) {
+    #youtubeSection.section-container,
+    #youtubeShortsSection.section-container { padding-left: 20px; padding-right: 20px; }
+}
+#youtubeSection .section-inner, #youtubeShortsSection .section-inner { max-width: 1040px; margin: 0 auto; width: 100%; }
+
+.sh-row-wrapper { width: 100%; overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; padding-bottom: 6px; }
+.sh-row { display: flex; gap: 16px; }
+.sh-row .sh-card { flex: 0 0 auto; width: 168px; }
+@media (max-width: 640px) { .sh-row .sh-card { width: 138px; } }
 .util-reset{ margin-left:0; padding-left:0; border-left:none; }
 .lang-switcher-inline{ position:static !important; opacity:1 !important; pointer-events:auto !important; transform:none !important; background:transparent !important; border:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; padding:0 !important; display: flex; align-items: center; }
 .lang-switcher-inline.mobile-lang{ margin-top:40px !important; align-self:flex-start !important; }

@@ -96,15 +96,23 @@
                 </main>
             </div>
 
-            <div class="media-shorts-view" id="mediaShortsView" style="display:none;">
-                <div class="media-toolbar shorts-toolbar">
-                    <div class="sh-filter-row" id="shMediaFilterRow"></div>
-                    <span class="media-count-badge" id="shMediaCountBadge"></span>
-                </div>
-                <div class="sh-grid" id="shMediaGrid"></div>
+            <div class="media-shorts-view media-layout" id="mediaShortsView" style="display:none;">
+                <aside class="media-sidebar">
+                    <div class="ms-col">
+                        <div class="ms-title">CATEGORY</div>
+                        <div class="ms-list" id="shMediaTagCol"></div>
+                    </div>
+                </aside>
+                <main class="media-main">
+                    <div class="media-toolbar shorts-toolbar">
+                        <span></span>
+                        <span class="media-count-badge" id="shMediaCountBadge"></span>
+                    </div>
+                    <div class="sh-grid" id="shMediaGrid"></div>
 
-                <div id="siteFooterSlotShorts" style="margin-top: 60px;"></div>
-                <script>renderSiteFooter('../', 'siteFooterSlotShorts');</script>
+                    <div id="siteFooterSlotShorts" style="margin-top: 60px;"></div>
+                    <script>renderSiteFooter('../', 'siteFooterSlotShorts');</script>
+                </main>
             </div>
         </div>
     </div>
@@ -164,6 +172,29 @@
                 <span class="mm-drag-label"><span>재생목록</span> <b id="mmPlaylistCount">0</b></span>
             </div>
             <ul class="mm-playlist-list" id="mmPlaylistList"></ul>
+        </div>
+    </div>
+
+    <!-- 쇼츠 재생 모달 (세로) -->
+    <div class="modal-backdrop" id="shModalBackdrop" onclick="shModalClose()"></div>
+    <div class="sh-modal-wrapper" id="shModal">
+        <button class="popup-close-btn" onclick="shModalClose()" aria-label="닫기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="sh-modal-head">
+            <div class="sh-modal-title" id="shModalTitle"></div>
+            <div class="sh-modal-sub" id="shModalSub"></div>
+        </div>
+        <div class="sh-modal-media" id="shModalMedia"></div>
+        <div class="sh-modal-nav">
+            <button type="button" class="mm-nav-btn" id="shModalPrevBtn" onclick="shModalPrev()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                <span>이전</span>
+            </button>
+            <button type="button" class="mm-nav-btn" id="shModalNextBtn" onclick="shModalNext()">
+                <span>다음</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
         </div>
     </div>
 

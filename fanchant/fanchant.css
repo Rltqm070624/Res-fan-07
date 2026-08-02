@@ -1,5 +1,5 @@
 .fanchant-page-container { 
-    max-width: 1400px; 
+    max-width: 100%; 
     width: 100%;
     margin: 0 auto; 
     padding-left: 48px; 
@@ -11,6 +11,7 @@
 .fc-layout { 
     display: grid; 
     grid-template-columns: 280px 1fr; 
+    grid-template-rows: minmax(0, 1fr);
     gap: 32px; 
     align-items: stretch; 
     margin-top: 24px; 
@@ -65,6 +66,7 @@
 .fc-detail-content {
     display: grid;
     grid-template-columns: 1fr 1fr; /* 좌(영상) 50% : 우(가사) 50% */
+    grid-template-rows: minmax(0, 1fr);
     gap: 40px;
     flex: 1;
     min-height: 0;

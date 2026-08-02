@@ -52,6 +52,7 @@ html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05
 #calendarDays .day-cell:nth-child(7n) .day-number, .weekday[data-wd="6"] { color: #5b9bd5; }
 .cell-event-list { display: flex; flex-direction: column; gap: 3px; width: 100%; overflow: hidden; flex: 1; justify-content: flex-start; }
 .cal-chip { font-size: 9px; font-weight: 700; line-height: 1.4; padding: 2px 5px; border-radius: 4px; background: var(--bg-surface); border-left: 2px solid currentColor; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box; flex-shrink: 0; }
+.cal-chip-birthday { color: #ff6b9d; border-left-color: #ff6b9d; background: rgba(255,107,157,0.12); }
 .cal-event-more { font-size: 9px; line-height: 1; font-weight: 600; font-family: var(--font-num); color: var(--text-muted); flex-shrink: 0; padding-left: 2px; }
 
 .calendar-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: center; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border-light); flex-shrink: 0; }
@@ -138,19 +139,24 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 .modal-wrapper.active.dragging { transition: none !important; transform: translateY(var(--drag-y, 0px)) !important; }
 .modal-wrapper.active.sheet-snap { transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1) !important; transform: translateY(var(--drag-y, 0px)) !important; }
 
-/* 배경 화면 설정 바텀 시트 */
+/* 배경 화면 설정 — 데스크톱: 톱니바퀴 바로 아래에 뜨는 드롭다운 / 모바일: 하단 바텀시트 */
 .bg-settings-sheet {
-    position: fixed; left: 50%; bottom: 0; transform: translate(-50%, 100%);
-    width: 100%; max-width: 560px; max-height: 82vh; box-sizing: border-box;
-    background: var(--bg-base); border: 1px solid var(--border-light); border-bottom: none;
-    border-radius: 22px 22px 0 0; box-shadow: 0 -20px 60px rgba(0,0,0,0.45);
-    z-index: 9999; padding: 4px 24px 28px; display: flex; flex-direction: column; gap: 16px;
-    opacity: 0; pointer-events: none;
-    transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+    position: fixed; top: 84px; left: 48px; z-index: 9999;
+    width: 420px; max-width: calc(100vw - 24px); max-height: 78vh; box-sizing: border-box;
+    background: var(--bg-base); border: 1px solid var(--border-light);
+    border-radius: 18px; box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    padding: 8px 22px 22px; display: flex; flex-direction: column; gap: 16px;
+    opacity: 0; pointer-events: none; transform-origin: top left;
+    transform: translateY(-8px) scale(0.98);
+    transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.2s ease;
 }
-.bg-settings-sheet .sheet-drag-handle { display: block; }
-.bg-settings-sheet.active { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.bg-settings-sheet .sheet-drag-handle { display: none; }
+.bg-settings-sheet.active { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
 .bg-settings-sheet .settings-header { font-family: var(--font-head); font-size: 15px; font-weight: 800; color: var(--text-primary); text-align: center; padding: 2px 0; }
+
+@media (min-width: 701px) {
+    #bgSettingsBackdrop.active { background: transparent; backdrop-filter: none; }
+}
 
 .bg-tabbar { display: flex; gap: 8px; justify-content: center; }
 .bg-tab { appearance: none; border: 1px solid var(--border-light); background: var(--bg-surface); color: var(--text-secondary); font-family: var(--font-head); font-size: 12.5px; font-weight: 700; padding: 8px 22px; border-radius: 999px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
@@ -177,7 +183,15 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 .bg-option.active-bg .bg-option-check { display: flex; }
 
 @media (max-width: 700px) {
-    .bg-settings-sheet { max-width: 100%; border-radius: 20px 20px 0 0; padding: 4px 16px 26px; }
+    .bg-settings-sheet {
+        left: 50% !important; top: auto !important; bottom: 0;
+        transform: translate(-50%, 100%); transform-origin: bottom center;
+        width: 100%; max-width: 100%; border-radius: 20px 20px 0 0; border-bottom: none;
+        box-shadow: 0 -20px 60px rgba(0,0,0,0.45);
+        padding: 4px 16px 26px;
+    }
+    .bg-settings-sheet.active { transform: translate(-50%, 0); }
+    .bg-settings-sheet .sheet-drag-handle { display: block; }
     .bg-option { width: 80px; height: 80px; }
 }
 

@@ -193,10 +193,14 @@
         <div class="sheet-drag-handle"></div>
         <div class="settings-header">배경 화면 설정</div>
         <div class="bg-tabbar">
-            <button type="button" class="bg-tab active" data-tab="all" onclick="bgSetTab('all')">전원</button>
+            <button type="button" class="bg-tab active" data-tab="default" onclick="bgSetTab('default')">기본</button>
+            <button type="button" class="bg-tab" data-tab="all" onclick="bgSetTab('all')">전원</button>
             <button type="button" class="bg-tab" data-tab="member" onclick="bgSetTab('member')">멤버</button>
         </div>
-        <div class="bg-tab-panel active" data-panel="all">
+        <div class="bg-tab-panel active" data-panel="default">
+            <div class="bg-options-wrap" id="bgOptionsDefault"></div>
+        </div>
+        <div class="bg-tab-panel" data-panel="all">
             <div class="bg-options-wrap" id="bgOptionsAll"></div>
         </div>
         <div class="bg-tab-panel" data-panel="member">
@@ -208,6 +212,7 @@
     <div id="siteCalendarSlot"></div>
     <script>renderCalendarWidgets();</script>
 
+    <script src="js/member_data.js"></script>
     <script src="js/common.js"></script>
     <script src="js/contents_data.js"></script>
     <script src="js/album_content_data.js"></script>

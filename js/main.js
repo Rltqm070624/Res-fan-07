@@ -422,14 +422,29 @@ function playWithRescene() {
     setTimeout(() => { next.classList.add('show'); }, 2200);
 }
 
-function openBgSettings() {
+function openBgSettings(triggerEl) {
     const sheet = document.getElementById('bgSettingsSheet');
     const backdrop = document.getElementById('bgSettingsBackdrop');
-    if (sheet && backdrop) {
-        sheet.classList.add('active');
-        backdrop.classList.add('active');
-        document.body.style.overflow = 'hidden';
+    if (!sheet || !backdrop) return;
+
+    if (window.innerWidth > 700) {
+        const btn = triggerEl || document.querySelector('.nav-left .cal-icon-btn');
+        if (btn) {
+            const rect = btn.getBoundingClientRect();
+            const sheetWidth = Math.min(420, window.innerWidth - 24);
+            let left = rect.left;
+            if (left + sheetWidth > window.innerWidth - 12) left = window.innerWidth - sheetWidth - 12;
+            sheet.style.left = `${Math.max(12, left)}px`;
+            sheet.style.top = `${rect.bottom + 10}px`;
+        }
+    } else {
+        sheet.style.left = '';
+        sheet.style.top = '';
     }
+
+    sheet.classList.add('active');
+    backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
 }
 
 function closeBgSettings() {
@@ -459,14 +474,21 @@ function bgOptionHtml(type, src, label) {
         : `<img src="${src}" alt="${label || ''}" loading="lazy" onerror="this.closest('.bg-option').style.display='none'">`;
     return `<button type="button" class="bg-option" data-type="${type}" data-src="${src}" onclick="setCustomBg('${type}', '${src}')" title="${label || ''}">
         ${thumb}
-        <span class="bg-option-check">적용완료</span>
+        <span class="bg-option-check">적용 중</span>
     </button>`;
+}
+
+function renderBgOptionsDefault() {
+    const wrap = document.getElementById('bgOptionsDefault');
+    if (!wrap) return;
+    wrap.innerHTML = bgOptionHtml('video', BG_DEFAULT.src, '기본 영상');
+    bgMarkActiveOptions();
 }
 
 function renderBgOptionsAll() {
     const wrap = document.getElementById('bgOptionsAll');
     if (!wrap) return;
-    let html = bgOptionHtml('video', BG_DEFAULT.src, '단체 영상');
+    let html = '';
     for (let i = 1; i <= 10; i++) {
         html += bgOptionHtml('image', `images/profile/${i}.jpg`, `프로필 ${i}`);
     }
@@ -541,6 +563,7 @@ function setCustomBg(type, src) {
 }
 
 function initCustomBg() {
+    renderBgOptionsDefault();
     renderBgOptionsAll();
     renderBgMemberTabs();
     renderBgOptionsMember();

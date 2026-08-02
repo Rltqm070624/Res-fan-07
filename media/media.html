@@ -90,6 +90,9 @@
                     <div class="media-grid" id="mediaGrid"></div>
                     <div class="media-scroll-sentinel" id="mediaSentinel"></div>
                     <div class="media-end-message" id="mediaEndMessage" style="display:none;">모든 영상을 다 봤어요.</div>
+
+                    <div id="siteFooterSlot" style="margin-top: 60px;"></div>
+                    <script>renderSiteFooter('../');</script>
                 </main>
             </div>
 
@@ -99,10 +102,10 @@
                     <span class="media-count-badge" id="shMediaCountBadge"></span>
                 </div>
                 <div class="sh-grid" id="shMediaGrid"></div>
-            </div>
 
-            <div id="siteFooterSlot" style="margin-top: 60px;"></div>
-            <script>renderSiteFooter('../');</script>
+                <div id="siteFooterSlotShorts" style="margin-top: 60px;"></div>
+                <script>renderSiteFooter('../', 'siteFooterSlotShorts');</script>
+            </div>
         </div>
     </div>
 

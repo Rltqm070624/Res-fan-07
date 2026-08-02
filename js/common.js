@@ -93,6 +93,26 @@ async function fetchScheduleData() {
     if (typeof scrollTodayMonthColToToday === 'function') scrollTodayMonthColToToday();
 }
 
+function getDayItems(dateKey) {
+    const items = [];
+    if (typeof MEMBER_DATA !== 'undefined' && dateKey) {
+        const parts = dateKey.split('-');
+        const month = parts[1], day = parts[2];
+        MEMBER_DATA.forEach(m => {
+            if (!m.birthday) return;
+            const bParts = m.birthday.split('.');
+            if (bParts[1] === month && bParts[2] === day) {
+                items.push({ title: m.nameKo, color: m.color || 'var(--c-accent)', isBirthday: true });
+            }
+        });
+    }
+    const data = scheduleDB[dateKey];
+    if (data && data.items) {
+        data.items.forEach(item => items.push(Object.assign({}, item)));
+    }
+    return items;
+}
+
 function renderCalendar() {
     renderCalendarInto('calendarDays', 'calendarMonthText');
     renderCalendarInto('homeCalendarDays', 'homeCalendarMonthText');
@@ -108,17 +128,20 @@ function renderCalendarInto(daysElId, monthTextElId) {
     for (let i = 0; i < firstDayIndex; i++) { html += `<div class="day-cell empty"></div>`; }
     for (let i = 1; i <= lastDate; i++) {
         const dateKey = `${currentCalYear}-${String(currentCalMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-        const data = scheduleDB[dateKey]; const hasEvent = data && data.items && data.items.length > 0 ? 'has-event' : '';
+        const items = getDayItems(dateKey);
+        const hasEvent = items.length > 0 ? 'has-event' : '';
         let eventsHtml = '';
-        if (data && data.items) {
-            const MAX_VISIBLE = 2;
-            data.items.slice(0, MAX_VISIBLE).forEach(item => {
+        const MAX_VISIBLE = 2;
+        items.slice(0, MAX_VISIBLE).forEach(item => {
+            if (item.isBirthday) {
+                eventsHtml += `<div class="cal-chip cal-chip-birthday">🎂 ${item.title} 생일 🎉</div>`;
+            } else {
                 let dotColor = item.color ? item.color : 'var(--c-accent)';
                 eventsHtml += `<div class="cal-chip" style="color: ${dotColor};">${item.title}</div>`;
-            });
-            if (data.items.length > MAX_VISIBLE) {
-                eventsHtml += `<div class="cal-event-more">+${data.items.length - MAX_VISIBLE}개 더</div>`;
             }
+        });
+        if (items.length > MAX_VISIBLE) {
+            eventsHtml += `<div class="cal-event-more">+${items.length - MAX_VISIBLE}개 더</div>`;
         }
         html += `<div class="day-cell ${hasEvent}" onclick="openModal('${currentCalYear}', '${currentCalMonth}', '${i}', '${dateKey}')"><span class="day-number">${i}</span><div class="cell-event-list">${eventsHtml}</div></div>`;
     }
@@ -150,16 +173,20 @@ function openModal(year, month, day, dateKey) {
     if (calWrapper && window.innerWidth >= 1050) calWrapper.classList.add('split-active');
 
     const dateTitle = window.tDate ? window.tDate(year, String(month).padStart(2, '0'), String(day).padStart(2, '0')) : `${year}년 ${month}월 ${day}일`;
-    const data = scheduleDB[dateKey];
+    const items = getDayItems(dateKey);
     const typeLabelMap = window.t ? window.t('scheduleTypes') : { broadcast: "방송", fansign: "팬사인회", event: "행사", concert: "공연", radio: "라디오", notice: "공지" };
     const timeLabel = window.t ? window.t('timeLabel') : '시간';
     const timeTbd = window.t ? window.t('timeTbd') : '시간 미정';
 
     let scheduleHtml = `<div class="elegant-date-header">${dateTitle}</div>`;
 
-    if (data && data.items && data.items.length > 0) {
-        data.items.forEach(item => {
+    if (items.length > 0) {
+        items.forEach(item => {
             let dotColor = item.color ? item.color : 'var(--c-accent)';
+            if (item.isBirthday) {
+                scheduleHtml += `<div class="ec-card ec-card-birthday"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">🎂 생일</span><div class="ec-body"><h2 class="ec-title">${item.title} 생일 🎉</h2></div></div>`;
+                return;
+            }
             let label = typeLabelMap[item.type] || item.type || '일정';
             let time = item.time ? item.time : timeTbd;
             scheduleHtml += `<div class="ec-card"><span class="ec-badge" style="background-color: ${dotColor}; box-shadow: 0 4px 12px ${dotColor}40;">${label}</span><div class="ec-body"><div class="ec-meta"><div class="ec-meta-row"><span class="ec-meta-label">${timeLabel}</span><span class="ec-meta-val">${time}</span></div></div><h2 class="ec-title">${item.title}</h2>`;

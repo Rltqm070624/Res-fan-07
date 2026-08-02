@@ -540,7 +540,7 @@ html[data-theme="light"] .media-modal-wrapper { background: #FFFFFF; }
 ========================================= */
 .sh-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
-    width: 92%; max-width: 720px; height: 88vh; max-height: 820px;
+    width: 92%; max-width: 800px; height: 88vh; max-height: 820px;
     background: var(--bg-base); border: 1px solid var(--border-highlight); border-radius: 24px;
     overflow: hidden; z-index: 9950;
     opacity: 0; visibility: hidden; pointer-events: none;
@@ -555,7 +555,7 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
 .sh-modal-body { display: flex; flex: 1; min-height: 0; }
 
 /* 좌측: 영상 컬럼 */
-.sh-modal-video-col { width: 46%; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--border-light); }
+.sh-modal-video-col { width: 54%; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--border-light); }
 .sh-modal-head { padding: 20px 20px 12px; flex-shrink: 0; }
 .sh-modal-title { font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .sh-modal-sub { margin-top: 6px; font-family: var(--font-num); font-size: 11px; color: var(--text-muted); }

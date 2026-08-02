@@ -274,6 +274,7 @@ html[data-theme="dark"] .afd-action-btn.btn-black {
     .ms-item.active { background: var(--text-primary); color: var(--bg-base); border-color: var(--text-primary); }
     
     .media-main { overflow: visible; height: auto; padding-bottom: 20px; }
+    .media-shorts-view { overflow: visible; height: auto; padding-bottom: 20px; }
     
     /* ⭐️ 모바일에서는 아래에서 위로 올라오는 형태 (바텀 시트) */
     .adv-filter-drawer {
@@ -312,6 +313,17 @@ html[data-theme="dark"] .afd-action-btn.btn-black {
 }
 
 /* ── ⭐️ 풀영상 / 쇼츠 탭 ── */
+.media-shorts-view {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-bottom: 60px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-highlight) transparent;
+}
+.media-shorts-view::-webkit-scrollbar { width: 6px; }
+.media-shorts-view::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
+
 .media-view-tabs { display: flex; gap: 6px; margin-bottom: 22px; border-bottom: 1px solid var(--border-light); }
 .mv-tab {
     background: transparent; border: none; cursor: pointer; padding: 10px 4px; margin-right: 22px;

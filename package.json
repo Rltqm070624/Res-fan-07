@@ -2,6 +2,9 @@
   "name": "rescene-chart-bot",
   "version": "1.0.0",
   "type": "module",
+  "scripts": {
+    "scrape:shorts": "node scripts/scrape_shorts.js"
+  },
   "dependencies": {
     "melona": "^1.0.0",
     "cheerio": "^1.0.0"

@@ -32,7 +32,12 @@
             </div>
             <p class="media-hero-sub"><span data-i18n="mediaSub">리센느 유튜브 모아보기</span> <span class="media-count-badge" id="mediaCountBadge"></span></p>
 
-            <div class="media-layout">
+            <div class="media-view-tabs" id="mediaViewTabs">
+                <button type="button" class="mv-tab active" data-view="full" onclick="mediaSetView('full')">풀영상</button>
+                <button type="button" class="mv-tab" data-view="shorts" onclick="mediaSetView('shorts')">쇼츠</button>
+            </div>
+
+            <div class="media-layout" id="mediaFullView">
                 <aside class="media-sidebar">
                     <div class="ms-col">
                         <div class="ms-title">CATEGORY</div>
@@ -85,11 +90,19 @@
                     <div class="media-grid" id="mediaGrid"></div>
                     <div class="media-scroll-sentinel" id="mediaSentinel"></div>
                     <div class="media-end-message" id="mediaEndMessage" style="display:none;">모든 영상을 다 봤어요.</div>
-
-                    <div id="siteFooterSlot" style="margin-top: 60px;"></div>
-                    <script>renderSiteFooter('../');</script>
                 </main>
             </div>
+
+            <div class="media-shorts-view" id="mediaShortsView" style="display:none;">
+                <div class="media-toolbar shorts-toolbar">
+                    <div class="sh-filter-row" id="shMediaFilterRow"></div>
+                    <span class="media-count-badge" id="shMediaCountBadge"></span>
+                </div>
+                <div class="sh-grid" id="shMediaGrid"></div>
+            </div>
+
+            <div id="siteFooterSlot" style="margin-top: 60px;"></div>
+            <script>renderSiteFooter('../');</script>
         </div>
     </div>
 
@@ -164,6 +177,8 @@
     <script src="../js/live_data.js"></script>
     <script src="../js/event_data.js"></script>
     <script src="../js/contents.js"></script>
+    <script src="../js/shorts_data.js"></script>
+    <script src="../js/shorts.js"></script>
     <script src="media.js"></script>
 </body>
 </html>

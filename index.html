@@ -86,14 +86,6 @@
                         <div class="profile-scroll-wrapper" id="albumScroll"></div>
                     </div>
                 </div>
-
-                <div class="archive-media-block">
-                    <div class="archive-media-head">
-                        <div class="archive-sub-header" data-i18n="youtubeCollect">YOUTUBE <span>모아보기</span></div>
-                        <a href="media/media.html" class="archive-media-more" data-i18n="seeMore">더보기 →</a>
-                    </div>
-                    <div class="latest-media-grid" id="latestMediaGrid"></div>
-                </div>
             </div>
         </div>
 
@@ -144,6 +136,40 @@
                         <div class="today-month-count" id="todayMonthCount"></div>
                     </div>
                     <div class="tm-col" id="todayScrollColA"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container reveal full-page-section" id="youtubeSection">
+            <div class="section-inner">
+                <div class="section-header center-header section-header-md">
+                    <div class="section-title" data-i18n="sectionYoutube">YOUTUBE <span>모아보기</span></div>
+                </div>
+                <p class="today-date-sub" data-i18n="youtubeSub">카테고리별 최신 영상을 한눈에 모아봤어요.</p>
+
+                <div class="archive-media-head" style="margin-top:26px;">
+                    <span></span>
+                    <a href="media/media.html" class="archive-media-more" data-i18n="seeMore">더보기 →</a>
+                </div>
+                <div class="latest-media-grid" id="latestMediaGrid"></div>
+            </div>
+        </div>
+
+        <div class="section-container reveal full-page-section" id="youtubeShortsSection">
+            <div class="section-inner">
+                <div class="section-header center-header section-header-md">
+                    <div class="section-title">YOUTUBE <span>SHORTS</span></div>
+                </div>
+                <p class="today-date-sub">멤버 태그로 모아보는 리센느 쇼츠예요.</p>
+
+                <div class="sh-filter-row" id="shHomeFilterRow"></div>
+                <div class="sh-row-wrapper">
+                    <div class="sh-row" id="shHomeGrid"></div>
+                </div>
+
+                <div class="archive-media-head" style="margin-top:22px;">
+                    <span></span>
+                    <a href="media/media.html?tab=shorts" class="archive-media-more">쇼츠 전체보기 →</a>
                 </div>
             </div>
         </div>
@@ -222,6 +248,8 @@
     <script src="js/honors_data.js"></script>
     <script src="js/honors.js"></script>
     <script src="js/contents.js"></script>
+    <script src="js/shorts_data.js"></script>
+    <script src="js/shorts.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

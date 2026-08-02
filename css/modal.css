@@ -555,13 +555,15 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
 .sh-modal-body { display: flex; flex: 1; min-height: 0; }
 
 /* 좌측: 영상 컬럼 */
-.sh-modal-video-col { width: 42%; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--border-light); }
+.sh-modal-video-col { width: 46%; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--border-light); }
 .sh-modal-head { padding: 20px 20px 12px; flex-shrink: 0; }
 .sh-modal-title { font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .sh-modal-sub { margin-top: 6px; font-family: var(--font-num); font-size: 11px; color: var(--text-muted); }
 
-.sh-modal-media { flex: 1; min-height: 0; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0 14px; touch-action: pan-y; }
-.sh-modal-media iframe { width: 100%; aspect-ratio: 9 / 16; max-height: 100%; border: 0; display: block; }
+/* ⭐️ 높이를 100% 꽉 채운 뒤, 그 높이 기준으로 9:16 비율을 계산 (너비 기준이면 세로가 짧아짐) */
+.sh-modal-media { flex: 1; min-height: 0; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; touch-action: pan-y; }
+.sh-modal-media-box { position: relative; height: 100%; aspect-ratio: 9 / 16; max-width: 100%; }
+.sh-modal-media-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
 
 .sh-modal-nav { display: flex; gap: 10px; padding: 14px 20px; flex-shrink: 0; border-top: 1px solid var(--border-light); }
 .sh-modal-nav .mm-nav-btn { flex: 1; justify-content: center; margin-left: 0; }

@@ -112,8 +112,9 @@ function renderSiteNav(activeKey, root, opts) {
     });
 }
 
-function renderSiteFooter(root) {
+function renderSiteFooter(root, slotId) {
     root = root || '';
+    slotId = slotId || 'siteFooterSlot';
     window.__lastFooterArgs = [root];
     const footerHtml = `
     <footer class="global-footer">
@@ -127,7 +128,7 @@ function renderSiteFooter(root) {
         <p class="footer-copyright">&copy; 2024 RESCENE ARCHIVE. All Rights Reserved.</p>
     </footer>`;
 
-    const slot = document.getElementById('siteFooterSlot');
+    const slot = document.getElementById(slotId);
     if (slot) slot.outerHTML = footerHtml;
 }
 

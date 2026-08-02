@@ -28,7 +28,7 @@ function shFilterByTag(list, tagKey) {
 }
 
 /* ---------------------------------------------------
-   필터 칩 렌더링
+   필터 UI — 홈: 상단 칩 / media.html: 좌측 CATEGORY 사이드바(풀영상 탭과 동일한 형태)
 --------------------------------------------------- */
 function shRenderFilterChips(containerId, scope) {
     const el = document.getElementById(containerId);
@@ -41,23 +41,33 @@ function shRenderFilterChips(containerId, scope) {
     `).join('');
 }
 
+function shRenderTagCol(containerId, scope) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = SHORTS_TAG_META.map(t => `
+        <button type="button" class="ms-item${shState[scope] === t.key ? ' active' : ''}" onclick="shSetFilter('${scope}', '${t.key}')">
+            <span>#${shEscapeHtml(t.label)}</span>
+        </button>
+    `).join('');
+}
+
 function shSetFilter(scope, key) {
     shState[scope] = key;
     if (scope === 'home') {
         shRenderFilterChips('shHomeFilterRow', 'home');
         shRenderRow('shHomeGrid', 'home');
     } else if (scope === 'media') {
-        shRenderFilterChips('shMediaFilterRow', 'media');
+        shRenderTagCol('shMediaTagCol', 'media');
         shRenderGrid('shMediaGrid', 'media');
     }
 }
 
 /* ---------------------------------------------------
-   카드 HTML
+   카드 HTML — 클릭하면 인라인 재생이 아니라 세로 모달을 엶
 --------------------------------------------------- */
 function shCardHtml(item, idx, scope) {
     return `
-    <div class="sh-card" data-idx="${idx}" onclick="shPlay('${scope}', this)">
+    <div class="sh-card" data-idx="${idx}" onclick="shModalOpen('${scope}', ${idx})">
         <div class="sh-card-thumb">
             <img src="${shThumb(item.vid)}" alt="${shEscapeAttr(item.title)}" loading="lazy"
                 onerror="this.closest('.sh-card').style.display='none'">
@@ -112,22 +122,60 @@ function shRenderGrid(containerId, scope) {
 }
 
 /* ---------------------------------------------------
-   재생 (썸네일 클릭 시 그 자리에서 바로 임베드)
+   ⭐️ 쇼츠 재생 모달 (세로 9:16) — 홈/미디어 공용
 --------------------------------------------------- */
-function shPlay(scope, el) {
-    if (el.classList.contains('is-playing')) return;
-    const idx = parseInt(el.dataset.idx, 10);
-    const item = shListCache[scope] && shListCache[scope][idx];
-    if (!item) return;
+let shModalScope = null;
+let shModalIndex = -1;
 
-    el.classList.add('is-playing');
-    const thumb = el.querySelector('.sh-card-thumb');
-    if (thumb) {
-        thumb.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1"
+function shModalOpen(scope, idx) {
+    shModalScope = scope;
+    const modal = document.getElementById('shModal');
+    const backdrop = document.getElementById('shModalBackdrop');
+    if (!modal) return;
+    modal.classList.add('active');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    shModalLoad(idx);
+}
+
+function shModalLoad(idx) {
+    const list = shListCache[shModalScope] || [];
+    const item = list[idx];
+    if (!item) return;
+    shModalIndex = idx;
+
+    const media = document.getElementById('shModalMedia');
+    const title = document.getElementById('shModalTitle');
+    const sub = document.getElementById('shModalSub');
+    if (media) {
+        media.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1"
             title="${shEscapeAttr(item.title)}" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>`;
     }
+    if (title) title.textContent = item.title;
+    if (sub) sub.textContent = `${item.channel ? item.channel + ' · ' : ''}${item.date || ''}`;
+
+    const prevBtn = document.getElementById('shModalPrevBtn');
+    const nextBtn = document.getElementById('shModalNextBtn');
+    if (prevBtn) prevBtn.disabled = shModalIndex <= 0;
+    if (nextBtn) nextBtn.disabled = shModalIndex >= list.length - 1;
+}
+
+function shModalPrev() { if (shModalIndex > 0) shModalLoad(shModalIndex - 1); }
+function shModalNext() {
+    const list = shListCache[shModalScope] || [];
+    if (shModalIndex < list.length - 1) shModalLoad(shModalIndex + 1);
+}
+
+function shModalClose() {
+    const modal = document.getElementById('shModal');
+    const backdrop = document.getElementById('shModalBackdrop');
+    const media = document.getElementById('shModalMedia');
+    if (modal) modal.classList.remove('active');
+    if (backdrop) backdrop.classList.remove('active');
+    if (media) media.innerHTML = '';
+    document.body.style.overflow = '';
 }
 
 /* ---------------------------------------------------
@@ -141,7 +189,7 @@ function mediaSetView(view) {
     if (shortsView) shortsView.style.display = view === 'shorts' ? '' : 'none';
 
     if (view === 'shorts') {
-        shRenderFilterChips('shMediaFilterRow', 'media');
+        shRenderTagCol('shMediaTagCol', 'media');
         shRenderGrid('shMediaGrid', 'media');
     }
 }
@@ -160,6 +208,8 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         // media.html에만 존재하는 요소들
         if (document.getElementById('shMediaGrid')) {
+            shRenderTagCol('shMediaTagCol', 'media');
+            shRenderGrid('shMediaGrid', 'media');
             shInitMediaViewFromQuery();
         }
     } catch (e) {

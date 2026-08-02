@@ -535,11 +535,12 @@ html[data-theme="light"] .media-modal-wrapper { background: #FFFFFF; }
 .mm-drag-handle:active { cursor: grabbing; }
 
 /* =========================================
-   ⭐️ 쇼츠 재생 모달 (세로 9:16) — 홈 화면 + media.html 쇼츠 탭 공용
+   ⭐️ 쇼츠 재생 모달 — 풀영상 모달(.media-modal-wrapper)과 동일한 전체 크기.
+   좌: 세로(9:16) 영상 / 우: 다음 재생목록
 ========================================= */
 .sh-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
-    width: 92%; max-width: 380px; height: 88vh; max-height: 780px;
+    width: 92%; max-width: 720px; height: 88vh; max-height: 820px;
     background: var(--bg-base); border: 1px solid var(--border-highlight); border-radius: 24px;
     overflow: hidden; z-index: 9950;
     opacity: 0; visibility: hidden; pointer-events: none;
@@ -551,18 +552,35 @@ html[data-theme="light"] .media-modal-wrapper { background: #FFFFFF; }
 .sh-modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; z-index: 9999; transform: translate(-50%, -50%) scale(1); }
 html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
 
-.sh-modal-head { padding: 18px 56px 12px 20px; flex-shrink: 0; }
-.sh-modal-title { font-family: var(--font-body); font-size: 14.5px; font-weight: 700; color: var(--text-primary); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.sh-modal-sub { margin-top: 6px; font-family: var(--font-num); font-size: 11.5px; color: var(--text-muted); }
+.sh-modal-body { display: flex; flex: 1; min-height: 0; }
 
-.sh-modal-media { width: 100%; flex: 1; min-height: 0; background: #000; }
-.sh-modal-media iframe { width: 100%; height: 100%; border: 0; display: block; }
+/* 좌측: 영상 컬럼 */
+.sh-modal-video-col { width: 42%; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--border-light); }
+.sh-modal-head { padding: 20px 20px 12px; flex-shrink: 0; }
+.sh-modal-title { font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.sh-modal-sub { margin-top: 6px; font-family: var(--font-num); font-size: 11px; color: var(--text-muted); }
 
-.sh-modal-nav { display: flex; align-items: center; gap: 10px; padding: 12px 16px; flex-shrink: 0; border-top: 1px solid var(--border-light); }
-.sh-modal-nav .mm-nav-btn { flex: 1; justify-content: center; }
+.sh-modal-media { flex: 1; min-height: 0; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0 14px; touch-action: pan-y; }
+.sh-modal-media iframe { width: 100%; aspect-ratio: 9 / 16; max-height: 100%; border: 0; display: block; }
 
-@media (max-width: 640px) {
-    .sh-modal-wrapper { max-width: 320px; width: 90%; height: 82vh; }
+.sh-modal-nav { display: flex; gap: 10px; padding: 14px 20px; flex-shrink: 0; border-top: 1px solid var(--border-light); }
+.sh-modal-nav .mm-nav-btn { flex: 1; justify-content: center; margin-left: 0; }
+
+/* 우측: 다음 재생목록 */
+.sh-modal-playlist { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--bg-surface); }
+.sh-modal-playlist-head { padding: 18px 20px 10px; font-family: var(--font-head); font-size: 12px; font-weight: 800; letter-spacing: 0.05em; color: var(--text-muted); flex-shrink: 0; }
+.sh-modal-playlist-head b { color: var(--c-accent); }
+.sh-modal-playlist .sh-modal-playlist-list { flex: 1; min-height: 0; max-height: none; padding: 0 14px 14px; }
+.sh-modal-playlist-thumb { width: 46px; aspect-ratio: 9 / 16; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #000; }
+.sh-modal-playlist-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+@media (max-width: 900px) {
+    .sh-modal-wrapper { width: 94%; height: 86vh; }
+    .sh-modal-body { flex-direction: column; }
+    .sh-modal-video-col { width: 100%; border-right: none; border-bottom: 1px solid var(--border-light); flex: 1 1 auto; }
+    .sh-modal-media { padding: 0; }
+    .sh-modal-playlist { flex: 0 0 auto; max-height: 30%; }
+    .sh-modal-playlist .sh-modal-playlist-list { max-height: none; }
 }
 .mm-drag-handle::before { content: ''; width: 36px; height: 4px; border-radius: 999px; background: var(--border-highlight); }
 .mm-drag-label { font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }

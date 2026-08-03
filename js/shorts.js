@@ -155,6 +155,43 @@ function shMediaClearSearch() {
 --------------------------------------------------- */
 let shModalScope = null;
 let shModalIndex = -1;
+let shPlayer = null;
+let shYtApiReady = false;
+let shYtApiLoading = false;
+let shYtApiCallbacks = [];
+
+function shEnsureYouTubeApi(cb) {
+    if (shYtApiReady && window.YT && window.YT.Player) { cb(); return; }
+    shYtApiCallbacks.push(cb);
+    if (shYtApiLoading) return;
+    shYtApiLoading = true;
+    const prevReadyFn = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () {
+        if (typeof prevReadyFn === 'function') prevReadyFn();
+        shYtApiReady = true;
+        shYtApiCallbacks.forEach(fn => fn());
+        shYtApiCallbacks = [];
+    };
+    if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+    }
+}
+
+function shDestroyPlayer() {
+    if (shPlayer && typeof shPlayer.destroy === 'function') {
+        try { shPlayer.destroy(); } catch (e) { }
+    }
+    shPlayer = null;
+}
+
+function shTogglePlayPause() {
+    if (!shPlayer || typeof shPlayer.getPlayerState !== 'function') return;
+    const state = shPlayer.getPlayerState();
+    if (state === 1) shPlayer.pauseVideo();
+    else shPlayer.playVideo();
+}
 
 function shModalOpen(scope, idx) {
     shModalScope = scope;
@@ -204,12 +241,25 @@ function shModalLoad(idx) {
     const media = document.getElementById('shModalMediaBox');
     const title = document.getElementById('shModalTitle');
     const sub = document.getElementById('shModalSub');
+
+    shDestroyPlayer();
     if (media) {
-        media.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1"
-            title="${shEscapeAttr(item.title)}" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>`;
+        media.innerHTML = '<div id="shYtPlayer"></div><div class="sh-swipe-catcher" id="shSwipeCatcher"></div>';
+        shAttachSwipeCatcher();
     }
+
+    shEnsureYouTubeApi(() => {
+        const modal = document.getElementById('shModal');
+        if (!modal || !modal.classList.contains('active')) return;
+        if (!document.getElementById('shYtPlayer')) return;
+        const currentList = shListCache[shModalScope] || [];
+        if (currentList[shModalIndex] !== item) return;
+        shPlayer = new YT.Player('shYtPlayer', {
+            videoId: item.vid,
+            playerVars: { autoplay: 1, playsinline: 1, rel: 0, modestbranding: 1 }
+        });
+    });
+
     if (title) title.textContent = item.title;
     if (sub) sub.textContent = `${item.channel ? item.channel + ' · ' : ''}${item.date || ''}`;
 
@@ -229,33 +279,70 @@ function shModalNext() {
 function shModalClose() {
     const modal = document.getElementById('shModal');
     const backdrop = document.getElementById('shModalBackdrop');
-    const media = document.getElementById('shModalMediaBox');
     if (modal) modal.classList.remove('active');
     if (backdrop) backdrop.classList.remove('active');
+    shDestroyPlayer();
+    const media = document.getElementById('shModalMediaBox');
     if (media) media.innerHTML = '';
     document.body.style.overflow = '';
 }
 
-// 모바일: 영상 위에서 위/아래로 드래그(스와이프)하면 다음/이전 쇼츠로 이동
-(function initShModalSwipe() {
-    let startY = 0, dragging = false;
+// 모바일: 영상 위에서 위/아래로 드래그(스와이프)하면 다음/이전 쇼츠로 이동, 탭하면 재생/일시정지
+// (iframe이 cross-origin이라 터치가 iframe 안으로 들어가면 부모로 안 올라오므로,
+//  iframe 위에 투명 오버레이를 깔아서 직접 캡처함 — YT Player API로 탭 시 재생/정지 제어)
+function shAttachSwipeCatcher() {
+    const catcher = document.getElementById('shSwipeCatcher');
+    if (!catcher) return;
+    let startX = 0, startY = 0, dragging = false, moved = false;
+    const TAP_THRESHOLD = 10;
+    const SWIPE_THRESHOLD = 60;
+
+    function pointX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
     function pointY(e) { return e.touches ? e.touches[0].clientY : e.clientY; }
-    function onStart(e) { dragging = true; startY = pointY(e); }
-    function onEnd(e) {
+
+    function onDown(e) {
+        dragging = true;
+        moved = false;
+        startX = pointX(e);
+        startY = pointY(e);
+        const box = document.getElementById('shModalMediaBox');
+        if (box) box.style.transition = 'none';
+    }
+
+    function onMove(e) {
+        if (!dragging) return;
+        const dx = pointX(e) - startX;
+        const dy = pointY(e) - startY;
+        if (Math.abs(dx) > TAP_THRESHOLD || Math.abs(dy) > TAP_THRESHOLD) moved = true;
+        const box = document.getElementById('shModalMediaBox');
+        if (box && Math.abs(dy) > Math.abs(dx)) {
+            const clamped = Math.max(-120, Math.min(120, dy));
+            box.style.transform = `translateY(${clamped * 0.4}px)`;
+        }
+    }
+
+    function onUp(e) {
         if (!dragging) return;
         dragging = false;
         const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
-        const delta = startY - endY; // 양수 = 위로 스와이프
-        if (Math.abs(delta) < 40) return; // 살짝 스크롤/탭한 건 무시
-        if (delta > 0) shModalNext(); else shModalPrev();
+        const dy = endY - startY;
+        const box = document.getElementById('shModalMediaBox');
+        if (box) {
+            box.style.transition = 'transform 0.3s cubic-bezier(0.22,1,0.36,1)';
+            box.style.transform = '';
+        }
+        if (!moved) { shTogglePlayPause(); return; }
+        if (dy < -SWIPE_THRESHOLD) shModalNext();
+        else if (dy > SWIPE_THRESHOLD) shModalPrev();
     }
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.sh-modal-media').forEach(el => {
-            el.addEventListener('touchstart', onStart, { passive: true });
-            el.addEventListener('touchend', onEnd);
-        });
-    });
-})();
+
+    catcher.addEventListener('touchstart', onDown, { passive: true });
+    catcher.addEventListener('touchmove', onMove, { passive: true });
+    catcher.addEventListener('touchend', onUp);
+    catcher.addEventListener('mousedown', onDown);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+}
 
 /* ---------------------------------------------------
    media.html 전용: 풀영상 / 쇼츠 탭 전환

@@ -270,10 +270,45 @@ function shModalLoad(idx) {
     shModalHighlightPlaylistActive();
 }
 
-function shModalPrev() { if (shModalIndex > 0) shModalLoad(shModalIndex - 1); }
+let shModalTransitioning = false;
+
+function shModalPrev() {
+    if (shModalIndex > 0) shModalTransitionTo(shModalIndex - 1, 'down');
+}
 function shModalNext() {
     const list = shListCache[shModalScope] || [];
-    if (shModalIndex < list.length - 1) shModalLoad(shModalIndex + 1);
+    if (shModalIndex < list.length - 1) shModalTransitionTo(shModalIndex + 1, 'up');
+}
+
+function shModalTransitionTo(idx, direction) {
+    if (shModalTransitioning) return;
+    const box = document.getElementById('shModalMediaBox');
+    if (!box) { shModalLoad(idx); return; }
+    shModalTransitioning = true;
+
+    const outY = direction === 'up' ? '-100%' : '100%';
+    const inY = direction === 'up' ? '100%' : '-100%';
+
+    box.style.transition = 'transform 0.26s cubic-bezier(0.4,0,1,1), opacity 0.22s ease';
+    box.style.transform = `translateY(${outY})`;
+    box.style.opacity = '0';
+
+    setTimeout(() => {
+        shModalLoad(idx);
+        const newBox = document.getElementById('shModalMediaBox');
+        if (!newBox) { shModalTransitioning = false; return; }
+        newBox.style.transition = 'none';
+        newBox.style.transform = `translateY(${inY})`;
+        newBox.style.opacity = '0';
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                newBox.style.transition = 'transform 0.34s cubic-bezier(0.16,1,0.3,1), opacity 0.28s ease';
+                newBox.style.transform = 'translateY(0)';
+                newBox.style.opacity = '1';
+                setTimeout(() => { shModalTransitioning = false; }, 340);
+            });
+        });
+    }, 260);
 }
 
 function shModalClose() {
@@ -301,6 +336,7 @@ function shAttachSwipeCatcher() {
     function pointY(e) { return e.touches ? e.touches[0].clientY : e.clientY; }
 
     function onDown(e) {
+        if (shModalTransitioning) return;
         dragging = true;
         moved = false;
         startX = pointX(e);
@@ -327,13 +363,20 @@ function shAttachSwipeCatcher() {
         const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
         const dy = endY - startY;
         const box = document.getElementById('shModalMediaBox');
-        if (box) {
+
+        if (!moved) {
+            if (box) { box.style.transition = 'transform 0.25s cubic-bezier(0.22,1,0.36,1)'; box.style.transform = ''; }
+            shTogglePlayPause();
+            return;
+        }
+        if (dy < -SWIPE_THRESHOLD) {
+            shModalNext();
+        } else if (dy > SWIPE_THRESHOLD) {
+            shModalPrev();
+        } else if (box) {
             box.style.transition = 'transform 0.3s cubic-bezier(0.22,1,0.36,1)';
             box.style.transform = '';
         }
-        if (!moved) { shTogglePlayPause(); return; }
-        if (dy < -SWIPE_THRESHOLD) shModalNext();
-        else if (dy > SWIPE_THRESHOLD) shModalPrev();
     }
 
     catcher.addEventListener('touchstart', onDown, { passive: true });

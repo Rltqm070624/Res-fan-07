@@ -484,43 +484,6 @@ function mediaSetupInfiniteScroll() {
 let mmPlaylist = [];
 let mmIndex = -1;
 let mmExpanded = false;
-let mmPlayer = null;
-let mmYtApiReady = false;
-let mmYtApiLoading = false;
-let mmYtApiCallbacks = [];
-
-function ensureYouTubeApi(cb) {
-    if (mmYtApiReady && window.YT && window.YT.Player) { cb(); return; }
-    mmYtApiCallbacks.push(cb);
-    if (mmYtApiLoading) return;
-    mmYtApiLoading = true;
-    const prevReadyFn = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = function () {
-        if (typeof prevReadyFn === 'function') prevReadyFn();
-        mmYtApiReady = true;
-        mmYtApiCallbacks.forEach(fn => fn());
-        mmYtApiCallbacks = [];
-    };
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
-}
-
-function mmDestroyPlayer() {
-    if (mmPlayer && typeof mmPlayer.destroy === 'function') {
-        try { mmPlayer.destroy(); } catch (e) { }
-    }
-    mmPlayer = null;
-    const leftover = document.getElementById('mmYtPlayer');
-    if (leftover) leftover.remove();
-}
-
-function mmTogglePlayPause() {
-    if (!mmPlayer || typeof mmPlayer.getPlayerState !== 'function') return;
-    const state = mmPlayer.getPlayerState();
-    if (state === 1) mmPlayer.pauseVideo();
-    else mmPlayer.playVideo();
-}
 
 function mediaPlayCard(el) {
     const idx = parseInt(el.dataset.index, 10);
@@ -544,31 +507,13 @@ function loadMmVideo(index) {
     const item = mmPlaylist[index];
     if (!item) return;
     mmIndex = index;
+    const modalMedia = document.getElementById('mediaModalMedia');
     const modalTitle = document.getElementById('mediaModalTitle');
     const modalDate = document.getElementById('mediaModalDate');
     const title = mediaCardTitle(item);
+    if (modalMedia) modalMedia.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1" title="${safeEscape(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     if (modalTitle) modalTitle.textContent = title;
     if (modalDate) modalDate.textContent = item.sub ? `${safeEscape(item.sub)} · ${item.date}` : (item.date || '');
-
-    mmDestroyPlayer();
-    const holder = document.getElementById('mediaModalMedia');
-    if (holder) {
-        const playerDiv = document.createElement('div');
-        playerDiv.id = 'mmYtPlayer';
-        holder.prepend(playerDiv);
-    }
-
-    ensureYouTubeApi(() => {
-        const modal = document.getElementById('mediaModal');
-        if (!modal || !modal.classList.contains('active')) return;
-        if (!document.getElementById('mmYtPlayer')) return;
-        if (mmPlaylist[mmIndex] !== item) return;
-        mmPlayer = new YT.Player('mmYtPlayer', {
-            videoId: item.vid,
-            playerVars: { autoplay: 1, playsinline: 1, rel: 0, modestbranding: 1 }
-        });
-    });
-
     updateMmNavButtons();
     highlightMmPlaylistActive();
 }
@@ -621,67 +566,12 @@ function mmToggleExpanded() { mmSetExpanded(!mmExpanded); }
 function mediaClosePlayer() {
     const modal = document.getElementById('mediaModal');
     const backdrop = document.getElementById('mediaModalBackdrop');
+    const modalMedia = document.getElementById('mediaModalMedia');
     if (modal) modal.classList.remove('active');
     if (backdrop) backdrop.classList.remove('active');
-    mmDestroyPlayer();
+    if (modalMedia) modalMedia.innerHTML = '';
     document.body.style.overflow = '';
 }
-
-(function initMmSwipeNav() {
-    let startX = 0, startY = 0, dragging = false, moved = false;
-    const TAP_THRESHOLD = 10;
-    const SWIPE_THRESHOLD = 60;
-
-    function pointX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
-    function pointY(e) { return e.touches ? e.touches[0].clientY : e.clientY; }
-
-    function onDown(e) {
-        dragging = true;
-        moved = false;
-        startX = pointX(e);
-        startY = pointY(e);
-        const media = document.getElementById('mediaModalMedia');
-        if (media) media.style.transition = 'none';
-    }
-
-    function onMove(e) {
-        if (!dragging) return;
-        const dx = pointX(e) - startX;
-        const dy = pointY(e) - startY;
-        if (Math.abs(dx) > TAP_THRESHOLD || Math.abs(dy) > TAP_THRESHOLD) moved = true;
-        const media = document.getElementById('mediaModalMedia');
-        if (media && Math.abs(dy) > Math.abs(dx)) {
-            const clamped = Math.max(-120, Math.min(120, dy));
-            media.style.transform = `translateY(${clamped * 0.4}px)`;
-        }
-    }
-
-    function onUp(e) {
-        if (!dragging) return;
-        dragging = false;
-        const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
-        const dy = endY - startY;
-        const media = document.getElementById('mediaModalMedia');
-        if (media) {
-            media.style.transition = 'transform 0.3s cubic-bezier(0.22,1,0.36,1)';
-            media.style.transform = '';
-        }
-        if (!moved) { mmTogglePlayPause(); return; }
-        if (dy < -SWIPE_THRESHOLD) mediaNext();
-        else if (dy > SWIPE_THRESHOLD) mediaPrev();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const catcher = document.getElementById('mmSwipeCatcher');
-        if (!catcher) return;
-        catcher.addEventListener('touchstart', onDown, { passive: true });
-        catcher.addEventListener('touchmove', onMove, { passive: true });
-        catcher.addEventListener('touchend', onUp);
-        catcher.addEventListener('mousedown', onDown);
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onUp);
-    });
-})();
 
 // 영상 플레이리스트 드래그 로직
 (function initMmDrag() {

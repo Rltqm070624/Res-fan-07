@@ -34,7 +34,7 @@ function resolveChromePath() {
  * @returns {Promise<string>} 렌더링된 HTML
  */
 export async function fetchHtmlViaHeadlessBrowser(url, opts = {}) {
-    const challengeWaitMs = opts.challengeWaitMs ?? 15000;
+    const challengeWaitMs = opts.challengeWaitMs ?? 20000;
     const executablePath = resolveChromePath();
 
     const browser = await puppeteer.launch({
@@ -55,22 +55,26 @@ export async function fetchHtmlViaHeadlessBrowser(url, opts = {}) {
 
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 45000 });
 
-        // Cloudflare 챌린지 페이지("Just a moment...")면, 통과될 때까지 폴링
-        const start = Date.now();
-        while (Date.now() - start < challengeWaitMs) {
-            const title = await page.title();
-            if (!title.includes('Just a moment')) break;
+        // 챌린지 제목은 Accept-Language에 따라 "Just a moment..." / "잠시만 기다리십시오…" 등으로
+        // 언어가 바뀌므로 제목 문자열로 판정하지 않는다. 대신 실제 위키 콘텐츠(표)가
+        // DOM에 나타났는지를 기준으로, 나타날 때까지 폴링한다.
+        const deadline = Date.now() + challengeWaitMs;
+        let hasContent = false;
+        while (Date.now() < deadline) {
+            hasContent = await page.evaluate(() => document.querySelector('table') !== null);
+            if (hasContent) break;
             await new Promise(r => setTimeout(r, 1000));
         }
 
         const finalTitle = await page.title();
         const html = await page.content();
 
-        if (finalTitle.includes('Just a moment')) {
+        if (!hasContent) {
             const snippet = html.slice(0, 500).replace(/\s+/g, ' ');
             throw new Error(
-                `${challengeWaitMs}ms 동안 기다렸지만 Cloudflare 챌린지를 통과하지 못했습니다. ` +
-                `(체크박스 클릭이 필요한 인터랙티브 Turnstile일 가능성) 응답 미리보기: ${snippet}`
+                `${challengeWaitMs}ms 동안 기다렸지만 실제 콘텐츠(표)가 나타나지 않았습니다. ` +
+                `(체크박스 클릭이 필요한 인터랙티브 Turnstile이거나, 그 외 차단 페이지일 가능성) ` +
+                `최종 제목: "${finalTitle}" / 응답 미리보기: ${snippet}`
             );
         }
 

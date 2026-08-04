@@ -1,5 +1,6 @@
 import fs from 'fs';
 import * as cheerio from 'cheerio';
+import { fetchHtmlViaCurlCffi } from './lib/fetchWithCurlCffi.js';
 
 const SOURCE_URL = 'https://namu.wiki/w/RESCENE/%EC%BD%98%ED%85%90%EC%B8%A0';
 const ALBUM_CONTENT_OUTPUT = 'js/album_content_data.js';
@@ -17,14 +18,9 @@ function ytIdFromUrl(url) {
 }
 
 async function fetchHtml(url) {
-    const res = await fetch(url, {
-        headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
-            'Accept-Language': 'ko-KR,ko;q=0.9'
-        }
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status} while fetching ${url}`);
-    return await res.text();
+    // namu.wiki가 Node의 기본 fetch를 TLS 지문 단계에서 차단하는 경우가 있어
+    // Chrome의 TLS/JA3 지문을 흉내 내는 curl_cffi(Python)를 서브프로세스로 호출한다.
+    return await fetchHtmlViaCurlCffi(url);
 }
 
 function parseContentsPage(html) {

@@ -19,7 +19,13 @@
     min-height: 0; 
     padding-bottom: 24px; 
 }
-@media (max-width: 900px) { .fc-layout { grid-template-columns: 1fr; min-height: auto; overflow-y: auto; } }
+@media (max-width: 900px) { 
+    .fc-layout { 
+        grid-template-columns: 1fr; 
+        grid-template-rows: auto minmax(0, 1fr); /* 곡 목록: 내용만큼, 상세영역: 남은 공간 전부 (여기서 내부 스크롤이 실제로 작동함) */
+        min-height: 0; /* auto로 두면 mainWrapper의 고정 높이를 벗어나 스크롤이 깨짐 */
+    } 
+}
 
 /* --- 1. 좌측 곡 리스트 --- */
 .fc-song-list { 
@@ -104,7 +110,19 @@
 .fc-lyrics strong { color: var(--c-accent); font-weight: 800; background: var(--c-accent-glow); padding: 0 4px; border-radius: 4px; }
 
 
+@media (max-width: 900px) {
+    .fc-song-list { max-height: 160px; }
+    .fc-detail { padding: 20px 18px; }
+    .fc-detail-song { font-size: 21px; }
+    .fc-detail-head { margin-bottom: 16px; padding-bottom: 12px; }
+}
+
 @media (max-width: 1100px) {
-    .fc-detail-content { grid-template-columns: 1fr; gap: 24px; }
+    .fc-detail-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(0, 1fr); /* 영상: 16:9 비율만큼, 가사: 남은 공간 전부 + 그 안에서만 스크롤 */
+        gap: 20px;
+    }
+    .fc-video-wrap { align-self: start; } /* 남은 세로 공간을 다 차지하지 않고 16:9 비율만 유지 (안 그러면 영상이 늘어나 잘려 보임) */
     .fc-lyrics-scroll { padding-right: 8px; }
 }

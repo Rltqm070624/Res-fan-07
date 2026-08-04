@@ -98,7 +98,7 @@ async function searchShortsForTag(tag) {
     }
 
     return detailItems
-        .filter(v => parseISODuration(v.contentDetails.duration) <= 60)
+        .filter(v => parseISODuration(v.contentDetails.duration) <= 120) // 2분 이하
         .filter(v => containsRescene(v.snippet.title) || containsRescene(v.snippet.description))
         .filter(v => !containsExcluded(v.snippet.title) && !containsExcluded(v.snippet.description))
         .map(v => {

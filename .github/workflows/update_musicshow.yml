@@ -1,0 +1,39 @@
+name: Music Show Updater Bot
+
+on:
+  schedule:
+    - cron: '15 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: import
+        uses: actions/checkout@v3
+
+      - name: settings
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: install
+        run: npm install
+
+      - name: start
+        run: node scripts/scrape_musicshow.js
+
+      - name: save
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add js/music_show_data.js
+          git commit -m "Auto update js/music_show_data.js" || exit 0
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push && break
+            echo "Push rejected, retrying in 5s... (attempt $i)"
+            sleep 5
+          done

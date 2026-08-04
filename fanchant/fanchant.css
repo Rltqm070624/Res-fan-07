@@ -28,10 +28,10 @@
 }
 
 /* --- 1. 좌측 곡 리스트 --- */
-.fc-song-list { 
-    background: var(--bg-surface); 
-    border: 1px solid var(--border-light); 
-    border-radius: 18px; 
+.fc-song-list {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
     padding: 10px; 
     overflow-y: auto; 
     min-height: 0; 
@@ -50,12 +50,12 @@
 .fc-empty-list p { margin: 0; font-family: var(--font-body); font-size: 12.5px; line-height: 1.6; }
 
 /* --- 2. 우측 상세 패널 전체 --- */
-.fc-detail { 
-    display: flex; 
-    flex-direction: column; 
-    background: var(--bg-surface); 
-    border: 1px solid var(--border-light); 
-    border-radius: 20px; 
+.fc-detail {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
     padding: 32px 36px; /* 답답하지 않게 패딩 확보 */
     min-height: 0; 
     overflow: hidden; 

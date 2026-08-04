@@ -21,8 +21,8 @@
 .news-item:hover .news-item-thumb img { transform: scale(1.04); }
 .news-item-thumb-fallback {
     width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-head); font-size: 26px; font-weight: 800; color: #fff;
-    background: linear-gradient(135deg, var(--c-accent), color-mix(in srgb, var(--c-accent) 55%, #7B5CF0));
+    font-family: var(--font-head); font-size: 26px; font-weight: 700; color: #1b1815;
+    background: var(--accent-gradient);
 }
 
 .news-item-body { min-width: 0; flex: 1; }

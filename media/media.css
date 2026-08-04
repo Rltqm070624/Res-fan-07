@@ -191,7 +191,7 @@
 /* PC: 왼쪽에서 열리는 Drawer 형식 유지 */
 .adv-filter-drawer {
     position: fixed; top: 0; left: -420px; width: 380px; height: 100vh;
-    background: var(--bg-base); box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+    background: var(--bg-base); border-right: 1px solid var(--border-light); box-shadow: var(--shadow-lift);
     z-index: 99999; display: flex; flex-direction: column;
     transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -225,7 +225,7 @@
     cursor: pointer; transition: 0.2s ease;
 }
 .afd-chip:hover { border-color: var(--border-highlight); color: var(--text-primary); }
-.afd-chip.active { border-color: #3b82f6; color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+.afd-chip.active { border-color: var(--c-accent); color: var(--c-accent); background: var(--c-accent-glow); }
 .afd-chip svg { width: 14px; height: 14px; }
 .afd-chip.closeable { padding-right: 10px; }
 .afd-chip.closeable:hover svg { color: #ef4444; }
@@ -237,10 +237,7 @@
     transition: 0.2s ease;
 }
 .afd-action-btn.btn-black {
-    background: #111; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-html[data-theme="dark"] .afd-action-btn.btn-black {
-    background: #eee; color: #111;
+    background: var(--text-primary); color: var(--bg-base); box-shadow: var(--shadow-soft);
 }
 .afd-action-btn.btn-black:hover { transform: translateY(-1px); opacity: 0.9; }
 
@@ -248,8 +245,8 @@ html[data-theme="dark"] .afd-action-btn.btn-black {
 .media-card { display: flex; flex-direction: column; animation: mediaCardIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
 @keyframes mediaCardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
-.media-card-thumb { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 16px; overflow: hidden; background: var(--bg-surface); border: 1px solid var(--border-light); cursor: pointer; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
-.media-card-thumb:hover { border-color: var(--c-accent); box-shadow: 0 16px 32px rgba(0,0,0,0.32); transform: translateY(-3px); }
+.media-card-thumb { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: var(--bg-surface); border: 1px solid var(--border-light); cursor: pointer; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
+.media-card-thumb:hover { border-color: var(--c-accent); box-shadow: var(--shadow-lift); transform: translateY(-3px); }
 .media-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
 .media-card-thumb:hover img { transform: scale(1.06); }
 .media-card-thumb .mc-play { position: absolute; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0); border: none; padding: 0; cursor: pointer; transition: background 0.3s ease; }
@@ -287,7 +284,7 @@ html[data-theme="dark"] .afd-action-btn.btn-black {
         bottom: -100%; /* 처음에는 아래에 숨김 */
         height: auto;
         max-height: 85vh; /* 화면의 85%까지만 덮어 답답함 해소 */
-        border-radius: 24px 24px 0 0;
+        border-radius: 18px 18px 0 0;
         transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease;
     }
     .adv-filter-drawer.active {

@@ -27,6 +27,7 @@ jobs:
         run: node scripts/scrape_shorts.js
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          EXCLUDED_KEYWORDS: ${{ secrets.EXCLUDED_KEYWORDS }}
 
       - name: Commit and Push
         run: |

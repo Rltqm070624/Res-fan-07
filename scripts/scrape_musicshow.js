@@ -1,7 +1,5 @@
 import fs from 'fs';
 import * as cheerio from 'cheerio';
-import { fetchHtmlViaWayback } from './lib/fetchWithWayback.js';
-import { fetchHtmlViaHeadlessBrowser } from './lib/fetchWithHeadlessBrowser.js';
 
 const OUTPUT_PATH = 'js/music_show_data.js';
 const SOURCE_URL = 'https://namu.wiki/w/RESCENE/%EC%9D%8C%EC%95%85%20%EB%B0%A9%EC%86%A1';
@@ -17,14 +15,14 @@ function ytIdFromUrl(url) {
 }
 
 async function fetchHtml(url) {
-    // 1순위: Wayback Machine 경유 (namu.wiki를 직접 안 건드려서 Cloudflare 챌린지 자체가 없음)
-    try {
-        return await fetchHtmlViaWayback(url);
-    } catch (e) {
-        console.warn(`[fetchHtml] Wayback 경유 실패, 헤드리스 브라우저로 재시도합니다: ${e.message}`);
-    }
-    // 2순위(폴백): 헤드리스 Chrome으로 직접 시도
-    return await fetchHtmlViaHeadlessBrowser(url);
+    const res = await fetch(url, {
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
+            'Accept-Language': 'ko-KR,ko;q=0.9'
+        }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} while fetching ${url}`);
+    return await res.text();
 }
 
 function parseMusicShowPage(html) {
@@ -76,21 +74,6 @@ function parseMusicShowPage(html) {
     return rows;
 }
 
-function debugDumpTables(html) {
-    const $ = cheerio.load(html);
-    const title = $('title').first().text();
-    const bodyLen = $('body').text().trim().length;
-    const tables = $('table');
-    console.error(`[진단] <title>: "${title}" / <body> 텍스트 길이: ${bodyLen} / <table> 개수: ${tables.length}`);
-    tables.each((i, el) => {
-        const headerText = $(el).find('tr').first().text().replace(/\s+/g, ' ').trim().slice(0, 120);
-        console.error(`[진단] table[${i}] 첫 행: "${headerText}"`);
-    });
-    if (tables.length === 0 && bodyLen < 500) {
-        console.error(`[진단] body 내용 미리보기: ${$('body').text().replace(/\s+/g, ' ').trim().slice(0, 500)}`);
-    }
-}
-
 function loadExisting() {
     try {
         const raw = fs.readFileSync(OUTPUT_PATH, 'utf8');
@@ -115,7 +98,6 @@ async function main() {
     console.log(`파싱된 항목: ${scraped.length}개`);
     if (scraped.length === 0) {
         console.error('❌ 파싱된 데이터가 없습니다. 페이지 구조가 바뀌었을 수 있습니다.');
-        debugDumpTables(html);
         process.exit(1);
     }
 

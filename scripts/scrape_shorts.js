@@ -21,6 +21,17 @@ const MEMBER_ALIASES = {
 
 const REQUIRED_KEYWORDS = ['리센느', 'rescene', 'RESCENE'];
 
+// 제외 키워드는 레포에 노출되지 않도록 GitHub Secrets(EXCLUDED_KEYWORDS)에서 읽어온다.
+// 콤마(,)로 구분된 문자열로 등록: 예) "일진,학폭,루머,조국,이준석"
+// 로컬 실행 시엔 .env에 EXCLUDED_KEYWORDS=... 를 추가하면 됨. 값이 없으면 빈 배열(필터 없음).
+const EXCLUDED_KEYWORDS = (process.env.EXCLUDED_KEYWORDS || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+
+// 한 태그당 몇 페이지(최대 50건씩)를 더 가져올지. 페이지당 search.list 100 unit 소모.
+const PAGES_PER_TAG = 3;
+
 function parseISODuration(iso) {
     const m = String(iso || '').match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
     if (!m) return 9999;
@@ -35,6 +46,11 @@ function containsRescene(text) {
     return REQUIRED_KEYWORDS.some(kw => t.toLowerCase().includes(kw.toLowerCase()));
 }
 
+function containsExcluded(text) {
+    const t = String(text || '');
+    return EXCLUDED_KEYWORDS.some(kw => t.includes(kw));
+}
+
 async function fetchJson(url) {
     const res = await fetch(url);
     const data = await res.json();
@@ -46,29 +62,45 @@ async function fetchJson(url) {
 }
 
 async function searchShortsForTag(tag) {
-    const searchUrl =
-        `https://www.googleapis.com/youtube/v3/search` +
-        `?part=snippet&type=video&videoDuration=short&order=date&maxResults=20` +
-        `&q=${encodeURIComponent(tag.query)}&key=${YOUTUBE_API_KEY}`;
+    let allItems = [];
+    let pageToken = '';
 
-    const searchData = await fetchJson(searchUrl);
-    if (!searchData || !searchData.items || !searchData.items.length) return [];
+    for (let page = 0; page < PAGES_PER_TAG; page++) {
+        const searchUrl =
+            `https://www.googleapis.com/youtube/v3/search` +
+            `?part=snippet&type=video&videoDuration=short&order=date&maxResults=50` +
+            `&q=${encodeURIComponent(tag.query)}&key=${YOUTUBE_API_KEY}` +
+            (pageToken ? `&pageToken=${pageToken}` : '');
 
-    const ids = searchData.items.map(i => i.id && i.id.videoId).filter(Boolean);
+        const searchData = await fetchJson(searchUrl);
+        if (!searchData || !searchData.items || !searchData.items.length) break;
+
+        allItems = allItems.concat(searchData.items);
+
+        if (!searchData.nextPageToken) break;
+        pageToken = searchData.nextPageToken;
+        await new Promise(r => setTimeout(r, 150));
+    }
+
+    const ids = allItems.map(i => i.id && i.id.videoId).filter(Boolean);
     if (!ids.length) return [];
 
-    // search.list의 videoDuration=short는 "4분 미만"만 보장하므로,
-    // videos.list로 실제 재생시간(60초 이하)까지 재확인한다.
-    const detailUrl =
-        `https://www.googleapis.com/youtube/v3/videos` +
-        `?part=contentDetails,snippet&id=${ids.join(',')}&key=${YOUTUBE_API_KEY}`;
+    // videos.list는 한 번에 최대 50개 id까지만 조회 가능하므로 50개씩 나눠서 호출
+    const detailItems = [];
+    for (let i = 0; i < ids.length; i += 50) {
+        const chunk = ids.slice(i, i + 50);
+        const detailUrl =
+            `https://www.googleapis.com/youtube/v3/videos` +
+            `?part=contentDetails,snippet&id=${chunk.join(',')}&key=${YOUTUBE_API_KEY}`;
+        const detailData = await fetchJson(detailUrl);
+        if (detailData && detailData.items) detailItems.push(...detailData.items);
+        await new Promise(r => setTimeout(r, 150));
+    }
 
-    const detailData = await fetchJson(detailUrl);
-    if (!detailData || !detailData.items) return [];
-
-    return detailData.items
+    return detailItems
         .filter(v => parseISODuration(v.contentDetails.duration) <= 60)
         .filter(v => containsRescene(v.snippet.title) || containsRescene(v.snippet.description))
+        .filter(v => !containsExcluded(v.snippet.title) && !containsExcluded(v.snippet.description))
         .map(v => {
             const text = `${v.snippet.title} ${v.snippet.description}`;
             const tagSet = new Set([tag.key]);
@@ -104,6 +136,11 @@ async function main() {
         console.error('   로컬: 프로젝트 루트에 .env 파일을 만들고 YOUTUBE_API_KEY=발급받은키 를 적어주세요.');
         console.error('   GitHub Actions: 레포 Settings > Secrets and variables > Actions 에서 YOUTUBE_API_KEY를 등록해주세요.');
         process.exit(1);
+    }
+    if (EXCLUDED_KEYWORDS.length === 0) {
+        console.warn('⚠️ EXCLUDED_KEYWORDS가 비어있습니다. 제외 키워드 필터 없이 진행합니다.');
+    } else {
+        console.log(`제외 키워드 ${EXCLUDED_KEYWORDS.length}개 적용 중 (값은 로그에 노출하지 않음)`);
     }
 
     let all = [];

@@ -91,6 +91,21 @@ function parseContentsPage(html) {
     return { albumRows, contentRows };
 }
 
+function debugDumpTables(html) {
+    const $ = cheerio.load(html);
+    const title = $('title').first().text();
+    const bodyLen = $('body').text().trim().length;
+    const tables = $('table');
+    console.error(`[진단] <title>: "${title}" / <body> 텍스트 길이: ${bodyLen} / <table> 개수: ${tables.length}`);
+    tables.each((i, el) => {
+        const headerText = $(el).find('tr').first().text().replace(/\s+/g, ' ').trim().slice(0, 120);
+        console.error(`[진단] table[${i}] 첫 행: "${headerText}"`);
+    });
+    if (tables.length === 0 && bodyLen < 500) {
+        console.error(`[진단] body 내용 미리보기: ${$('body').text().replace(/\s+/g, ' ').trim().slice(0, 500)}`);
+    }
+}
+
 function loadExistingArray(path, varName) {
     try {
         const raw = fs.readFileSync(path, 'utf8');
@@ -129,6 +144,7 @@ async function main() {
     console.log(`음반 활동 콘텐츠: ${albumRows.length}개, 기타 콘텐츠: ${contentRows.length}개`);
     if (albumRows.length === 0 && contentRows.length === 0) {
         console.error('❌ 파싱된 데이터가 없습니다. 페이지 구조가 바뀌었을 수 있습니다.');
+        debugDumpTables(html);
         process.exit(1);
     }
 

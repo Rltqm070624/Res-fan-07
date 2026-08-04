@@ -1,26 +1,80 @@
 {
     "remini": {
-        "price": "₩ 29,900",
-        "withmuu": "soldout"
+        "shops": [
+            {
+                "shop": "withmuu",
+                "label": "WITHMUU",
+                "url": "https://withmuu.com/goods/goods_view.php?goodsNo=1000014598",
+                "priceNum": 29900,
+                "price": "₩ 29,900",
+                "stock": "soldout"
+            }
+        ],
+        "cheapest": "withmuu"
     },
     "jota": {
-        "price": "₩ 45,000",
-        "kream": "available"
+        "shops": [
+            {
+                "shop": "kream",
+                "label": "KREAM",
+                "url": "https://kream.co.kr/products/985255",
+                "priceNum": 45000,
+                "price": "₩ 45,000",
+                "stock": "available"
+            }
+        ],
+        "cheapest": "kream"
     },
     "ming": {
-        "price": "₩ 45,000",
-        "kream": "available"
+        "shops": [
+            {
+                "shop": "kream",
+                "label": "KREAM",
+                "url": "https://kream.co.kr/products/985257",
+                "priceNum": 45000,
+                "price": "₩ 45,000",
+                "stock": "available"
+            }
+        ],
+        "cheapest": "kream"
     },
     "ribbu": {
-        "price": "₩ 45,000",
-        "kream": "available"
+        "shops": [
+            {
+                "shop": "kream",
+                "label": "KREAM",
+                "url": "https://kream.co.kr/products/985256",
+                "priceNum": 45000,
+                "price": "₩ 45,000",
+                "stock": "available"
+            }
+        ],
+        "cheapest": "kream"
     },
     "jjaero": {
-        "price": "₩ 45,000",
-        "kream": "available"
+        "shops": [
+            {
+                "shop": "kream",
+                "label": "KREAM",
+                "url": "https://kream.co.kr/products/985259",
+                "priceNum": 45000,
+                "price": "₩ 45,000",
+                "stock": "available"
+            }
+        ],
+        "cheapest": "kream"
     },
     "yam": {
-        "price": "₩ 45,000",
-        "kream": "available"
+        "shops": [
+            {
+                "shop": "kream",
+                "label": "KREAM",
+                "url": "https://kream.co.kr/products/985258",
+                "priceNum": 45000,
+                "price": "₩ 45,000",
+                "stock": "available"
+            }
+        ],
+        "cheapest": "kream"
     }
 }

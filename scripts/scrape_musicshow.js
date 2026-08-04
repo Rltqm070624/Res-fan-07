@@ -1,6 +1,6 @@
 import fs from 'fs';
 import * as cheerio from 'cheerio';
-import { fetchHtmlViaCurlCffi } from './lib/fetchWithCurlCffi.js';
+import { fetchHtmlViaHeadlessBrowser } from './lib/fetchWithHeadlessBrowser.js';
 
 const OUTPUT_PATH = 'js/music_show_data.js';
 const SOURCE_URL = 'https://namu.wiki/w/RESCENE/%EC%9D%8C%EC%95%85%20%EB%B0%A9%EC%86%A1';
@@ -16,9 +16,9 @@ function ytIdFromUrl(url) {
 }
 
 async function fetchHtml(url) {
-    // namu.wiki가 Node의 기본 fetch를 TLS 지문 단계에서 차단하는 경우가 있어
-    // Chrome의 TLS/JA3 지문을 흉내 내는 curl_cffi(Python)를 서브프로세스로 호출한다.
-    return await fetchHtmlViaCurlCffi(url);
+    // namu.wiki는 Cloudflare의 인터랙티브 JS 챌린지("Just a moment...")로 막는 경우가 있어
+    // 실제 JS를 실행할 수 있는 헤드리스 Chrome으로 렌더링해서 챌린지를 통과시킨다.
+    return await fetchHtmlViaHeadlessBrowser(url);
 }
 
 function parseMusicShowPage(html) {

@@ -6,7 +6,10 @@
     "scrape:shorts": "node scripts/scrape_shorts.js"
   },
   "dependencies": {
+    "cheerio": "^1.0.0",
     "melona": "^1.0.0",
-    "cheerio": "^1.0.0"
+    "puppeteer-core": "^25.4.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }

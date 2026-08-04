@@ -20,16 +20,18 @@ jobs:
         with:
           node-version: '20'
 
-      - name: python settings
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - name: install
         run: npm install
 
-      - name: install curl_cffi
-        run: pip install curl_cffi
+      - name: locate system chrome
+        run: |
+          for p in /usr/bin/google-chrome-stable /usr/bin/google-chrome /usr/bin/chromium-browser /usr/bin/chromium; do
+            if [ -x "$p" ]; then
+              echo "CHROME_PATH=$p" >> "$GITHUB_ENV"
+              echo "찾은 Chrome 경로: $p"
+              break
+            fi
+          done
 
       - name: start
         run: node scripts/scrape_contents.js

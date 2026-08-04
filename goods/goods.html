@@ -25,36 +25,36 @@
                 <div style="font-size:12px; color:var(--text-muted);">실시간 재고 상태 자동 확인중...</div>
             </div>
             
-            <div class="goods-grid-v2">
-                <div class="goods-item">
+            <div class="goods-grid-v2" id="goodsGrid">
+                <div class="goods-item" data-item="remini">
                     <div class="goods-img" id="remini-img-wrap"><img src="../images/goods/REMINI.jpg" alt="REMINI Set"><div class="soldout-stamp"><span>SOLD</span></div></div>
                     <div class="goods-price-text" id="remini-price">가격 확인중...</div>
-                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">WITHMUU <span class="stock-num" id="remini-weverse-status"></span></span><a href="https://withmuu.com/goods/goods_view.php?goodsNo=1000014598" target="_blank" class="buy-btn" id="remini-weverse-btn">바로가기</a></div></div>
+                    <div class="goods-stock-list" id="remini-stock-list"></div>
                 </div>
-                <div class="goods-item">
+                <div class="goods-item" data-item="jota">
                     <div class="goods-img" id="jota-img-wrap"><img src="../images/goods/jota.jpg" alt="Jota"><div class="soldout-stamp"><span>SOLD</span></div></div>
                     <div class="goods-price-text" id="jota-price">가격 확인중...</div>
-                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="jota-weverse-status"></span></span><a href="https://kream.co.kr/products/985255" target="_blank" class="buy-btn" id="jota-weverse-btn">바로가기</a></div></div>
+                    <div class="goods-stock-list" id="jota-stock-list"></div>
                 </div>
-                <div class="goods-item">
+                <div class="goods-item" data-item="ming">
                     <div class="goods-img" id="ming-img-wrap"><img src="../images/goods/ming.jpg" alt="Ming"><div class="soldout-stamp"><span>SOLD</span></div></div>
                     <div class="goods-price-text" id="ming-price">가격 확인중...</div>
-                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="ming-weverse-status"></span></span><a href="https://kream.co.kr/products/985257" target="_blank" class="buy-btn" id="ming-weverse-btn">바로가기</a></div></div>
+                    <div class="goods-stock-list" id="ming-stock-list"></div>
                 </div>
-                <div class="goods-item">
+                <div class="goods-item" data-item="ribbu">
                     <div class="goods-img" id="ribbu-img-wrap"><img src="../images/goods/ribbu.jpg" alt="Ribbu"><div class="soldout-stamp"><span>SOLD</span></div></div>
                     <div class="goods-price-text" id="ribbu-price">가격 확인중...</div>
-                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="ribbu-weverse-status"></span></span><a href="https://kream.co.kr/products/985256" target="_blank" class="buy-btn" id="ribbu-weverse-btn">바로가기</a></div></div>
+                    <div class="goods-stock-list" id="ribbu-stock-list"></div>
                 </div>
-                <div class="goods-item">
+                <div class="goods-item" data-item="jjaero">
                     <div class="goods-img" id="jjaero-img-wrap"><img src="../images/goods/jjaero.jpg" alt="Jjaero"><div class="soldout-stamp"><span>SOLD</span></div></div>
                     <div class="goods-price-text" id="jjaero-price">가격 확인중...</div>
-                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="jjaero-weverse-status"></span></span><a href="https://kream.co.kr/products/985259" target="_blank" class="buy-btn" id="jjaero-weverse-btn">바로가기</a></div></div>
+                    <div class="goods-stock-list" id="jjaero-stock-list"></div>
                 </div>
-                <div class="goods-item">
+                <div class="goods-item" data-item="yam">
                     <div class="goods-img" id="yam-img-wrap"><img src="../images/goods/yam.jpg" alt="Yam"><div class="soldout-stamp"><span>SOLD</span></div></div>
                     <div class="goods-price-text" id="yam-price">가격 확인중...</div>
-                    <div class="goods-stock-list"><div class="stock-row"><span class="shop-name">Kream <span class="stock-num" id="yam-weverse-status"></span></span><a href="https://kream.co.kr/products/985258" target="_blank" class="buy-btn" id="yam-weverse-btn">바로가기</a></div></div>
+                    <div class="goods-stock-list" id="yam-stock-list"></div>
                 </div>
             </div>
         </div>
@@ -70,29 +70,53 @@
     <script src="../js/member_data.js"></script>
     <script src="../js/common.js"></script>
     <script>
+        function escapeHtmlGoods(str) {
+            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
         async function fetchGoodsInventory() {
             try {
                 const response = await fetch('goods_data.json?t=' + new Date().getTime());
                 const data = await response.json();
-                const itemShopMap = { remini: 'withmuu', jota: 'kream', ming: 'kream', ribbu: 'kream', jjaero: 'kream', yam: 'kream' };
                 const items = ['remini', 'jota', 'ming', 'ribbu', 'jjaero', 'yam'];
+
                 items.forEach(item => {
-                    if (data[item]) {
-                        if (data[item].price) document.getElementById(`${item}-price`).innerText = data[item].price;
-                        const status = data[item][itemShopMap[item]];
-                        const statusElem = document.getElementById(`${item}-weverse-status`);
-                        const btnElem = document.getElementById(`${item}-weverse-btn`);
-                        const imgWrapper = document.getElementById(`${item}-img-wrap`);
-                        if (status !== undefined && statusElem && btnElem) {
-                            if (status === "soldout") {
-                                statusElem.innerText = "(품절)"; btnElem.innerText = "품절"; btnElem.classList.add("sold-out");
-                                if (imgWrapper) imgWrapper.classList.add('is-soldout');
-                            } else {
-                                statusElem.innerText = "(재고: 여유)"; btnElem.innerText = "바로가기"; btnElem.classList.remove("sold-out");
-                                if (imgWrapper) imgWrapper.classList.remove('is-soldout');
-                            }
-                        }
-                    }
+                    const entry = data[item];
+                    const listEl = document.getElementById(`${item}-stock-list`);
+                    const priceEl = document.getElementById(`${item}-price`);
+                    const imgWrapper = document.getElementById(`${item}-img-wrap`);
+                    if (!entry || !Array.isArray(entry.shops) || !listEl) return;
+
+                    const shops = entry.shops.slice().sort((a, b) => {
+                        // 가격 낮은 순, 가격 모르는 건 뒤로
+                        if (a.priceNum == null) return 1;
+                        if (b.priceNum == null) return -1;
+                        return a.priceNum - b.priceNum;
+                    });
+
+                    // 대표 가격 표시: 최저가 쇼핑몰 기준
+                    const cheapestShop = shops.find(s => s.shop === entry.cheapest) || shops[0];
+                    priceEl.innerText = (cheapestShop && cheapestShop.price) ? cheapestShop.price : '가격 확인 필요';
+
+                    // 전부 품절이면 이미지에 SOLD 도장
+                    const allSoldOut = shops.length > 0 && shops.every(s => s.stock === 'soldout');
+                    if (imgWrapper) imgWrapper.classList.toggle('is-soldout', allSoldOut);
+
+                    listEl.innerHTML = shops.map(s => {
+                        const isCheapest = s.shop === entry.cheapest && shops.length > 1;
+                        const isSoldOut = s.stock === 'soldout';
+                        const statusText = isSoldOut ? '(품절)' : (s.stock === 'unknown' ? '(확인중)' : '(재고 있음)');
+                        return `
+                            <div class="stock-row${isCheapest ? ' is-cheapest' : ''}">
+                                <span class="shop-name">
+                                    ${isCheapest ? '<span class="cheapest-badge">최저가</span>' : ''}
+                                    ${escapeHtmlGoods(s.label)}
+                                    <span class="stock-num">${statusText}</span>
+                                    ${s.price ? `<span class="shop-price">${escapeHtmlGoods(s.price)}</span>` : ''}
+                                </span>
+                                <a href="${s.url}" target="_blank" class="buy-btn${isSoldOut ? ' sold-out' : ''}">${isSoldOut ? '품절' : '바로가기'}</a>
+                            </div>`;
+                    }).join('');
                 });
             } catch (e) { console.log("굿즈 데이터 JSON 대기중..."); }
         }

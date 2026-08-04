@@ -74,6 +74,9 @@ export async function fetchHtmlViaHeadlessBrowser(url, opts = {}) {
             );
         }
 
+        // 진단 로그: 파싱이 0건일 때 뭘 받았는지 바로 확인할 수 있도록 항상 남긴다
+        console.log(`[headless] 최종 페이지 제목: "${finalTitle}", HTML 길이: ${html.length}`);
+
         return html;
     } finally {
         await browser.close();

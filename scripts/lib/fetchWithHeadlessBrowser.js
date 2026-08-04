@@ -1,86 +1,88 @@
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
+import fs from 'fs';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
-/**
- * Wayback Machine의 "Save Page Now"로 지금 시점 스냅샷을 새로 요청한다.
- * 인증(API 키) 없이도 되는 공개 엔드포인트지만, 과도한 요청 시 제한될 수 있다.
- * @returns {Promise<string|null>} 성공 시 타임스탬프(YYYYMMDDhhmmss), 실패 시 null
- */
-async function triggerSave(targetUrl, timeoutMs) {
-    const saveUrl = `https://web.archive.org/save/${targetUrl}`;
-    const res = await fetch(saveUrl, {
-        method: 'GET',
-        redirect: 'follow',
-        headers: { 'User-Agent': UA },
-        signal: AbortSignal.timeout(timeoutMs),
-    });
+puppeteer.use(StealthPlugin());
 
-    if (!res.ok) {
-        throw new Error(`Save Page Now 요청 실패: HTTP ${res.status}`);
+// GitHub Actions ubuntu-latest 러너에는 Google Chrome이 기본 설치되어 있음.
+// puppeteer-core는 자체 Chromium을 받지 않으므로, 시스템에 이미 있는 Chrome을 찾아 쓴다.
+const CANDIDATE_PATHS = [
+    process.env.CHROME_PATH, // 워크플로에서 명시적으로 지정 가능
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium',
+].filter(Boolean);
+
+function resolveChromePath() {
+    for (const p of CANDIDATE_PATHS) {
+        if (fs.existsSync(p)) return p;
     }
-
-    // Content-Location 헤더에 새 스냅샷 경로가 오는 경우가 많고,
-    // 없으면 최종적으로 리다이렉트된 res.url에서 타임스탬프를 뽑는다.
-    const contentLocation = res.headers.get('content-location');
-    const candidate = contentLocation || res.url;
-    const m = candidate.match(/\/web\/(\d{1,14})\b/);
-    return m ? m[1] : null;
+    throw new Error(
+        `Chrome 실행 파일을 찾을 수 없습니다. 확인한 경로: ${CANDIDATE_PATHS.join(', ')}\n` +
+        `CHROME_PATH 환경변수로 직접 지정해주세요.`
+    );
 }
 
 /**
- * 기존에 이미 저장돼 있는 가장 최근 스냅샷의 타임스탬프를 가져온다 (폴백용).
- * @returns {Promise<string|null>}
- */
-async function getLatestSnapshotTimestamp(targetUrl, timeoutMs) {
-    const apiUrl = `https://archive.org/wayback/available?url=${encodeURIComponent(targetUrl)}`;
-    const res = await fetch(apiUrl, {
-        headers: { 'User-Agent': UA },
-        signal: AbortSignal.timeout(timeoutMs),
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data?.archived_snapshots?.closest?.timestamp || null;
-}
-
-/**
- * Wayback Machine을 경유해 HTML을 가져온다.
- * namu.wiki를 직접 건드리지 않고 Internet Archive의 크롤러가 대신 접속하게 만들어,
- * GitHub Actions IP에 대한 Cloudflare 챌린지를 우회한다.
+ * 헤드리스 Chrome(스텔스 패치)으로 페이지를 렌더링해 HTML을 가져온다.
+ * Cloudflare의 "Just a moment..." 같은 인터랙티브 JS 챌린지를 실제로 통과시키기 위함.
  *
- * @param {string} targetUrl - 원본(namu.wiki) URL
+ * @param {string} url
  * @param {object} opts
- * @param {number} opts.timeoutMs - 각 요청 타임아웃 (기본 60초)
- * @returns {Promise<string>} HTML 본문
+ * @param {number} opts.challengeWaitMs - 챌린지 통과 대기 시간 (기본 15초)
+ * @returns {Promise<string>} 렌더링된 HTML
  */
-export async function fetchHtmlViaWayback(targetUrl, opts = {}) {
-    const timeoutMs = opts.timeoutMs ?? 60000;
+export async function fetchHtmlViaHeadlessBrowser(url, opts = {}) {
+    const challengeWaitMs = opts.challengeWaitMs ?? 20000;
+    const executablePath = resolveChromePath();
 
-    let timestamp = null;
-    try {
-        timestamp = await triggerSave(targetUrl, timeoutMs);
-        if (timestamp) console.log(`[wayback] 새 아카이빙 성공: ${timestamp}`);
-    } catch (e) {
-        console.warn(`[wayback] 새 아카이빙 요청 실패 (${e.message}), 기존 스냅샷으로 대체 시도합니다.`);
-    }
-
-    if (!timestamp) {
-        timestamp = await getLatestSnapshotTimestamp(targetUrl, timeoutMs);
-        if (timestamp) console.log(`[wayback] 기존 스냅샷 사용: ${timestamp}`);
-    }
-
-    if (!timestamp) {
-        throw new Error('Wayback Machine에서 스냅샷을 얻지 못했습니다 (새 저장/기존 스냅샷 모두 없음).');
-    }
-
-    // "id_" 접미사: Wayback 툴바/링크 재작성이 없는 원본 그대로의 HTML
-    const rawUrl = `https://web.archive.org/web/${timestamp}id_/${targetUrl}`;
-    const res = await fetch(rawUrl, {
-        headers: { 'User-Agent': UA },
-        signal: AbortSignal.timeout(timeoutMs),
+    const browser = await puppeteer.launch({
+        executablePath,
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-blink-features=AutomationControlled',
+            '--lang=ko-KR',
+        ],
     });
 
-    if (!res.ok) {
-        throw new Error(`Wayback 원본 페이지 요청 실패: HTTP ${res.status} (${rawUrl})`);
-    }
+    try {
+        const page = await browser.newPage();
+        await page.setExtraHTTPHeaders({ 'Accept-Language': 'ko-KR,ko;q=0.9' });
+        await page.setViewport({ width: 1366, height: 900 });
 
-    return await res.text();
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 45000 });
+
+        // 챌린지 제목은 Accept-Language에 따라 "Just a moment..." / "잠시만 기다리십시오…" 등으로
+        // 언어가 바뀌므로 제목 문자열로 판정하지 않는다. 대신 실제 위키 콘텐츠(표)가
+        // DOM에 나타났는지를 기준으로, 나타날 때까지 폴링한다.
+        const deadline = Date.now() + challengeWaitMs;
+        let hasContent = false;
+        while (Date.now() < deadline) {
+            hasContent = await page.evaluate(() => document.querySelector('table') !== null);
+            if (hasContent) break;
+            await new Promise(r => setTimeout(r, 1000));
+        }
+
+        const finalTitle = await page.title();
+        const html = await page.content();
+
+        if (!hasContent) {
+            const snippet = html.slice(0, 500).replace(/\s+/g, ' ');
+            throw new Error(
+                `${challengeWaitMs}ms 동안 기다렸지만 실제 콘텐츠(표)가 나타나지 않았습니다. ` +
+                `(체크박스 클릭이 필요한 인터랙티브 Turnstile이거나, 그 외 차단 페이지일 가능성) ` +
+                `최종 제목: "${finalTitle}" / 응답 미리보기: ${snippet}`
+            );
+        }
+
+        // 진단 로그: 파싱이 0건일 때 뭘 받았는지 바로 확인할 수 있도록 항상 남긴다
+        console.log(`[headless] 최종 페이지 제목: "${finalTitle}", HTML 길이: ${html.length}`);
+
+        return html;
+    } finally {
+        await browser.close();
+    }
 }

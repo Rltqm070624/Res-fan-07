@@ -1,5 +1,6 @@
 import fs from 'fs';
 import * as cheerio from 'cheerio';
+import { fetchHtmlViaWayback } from './lib/fetchWithWayback.js';
 import { fetchHtmlViaHeadlessBrowser } from './lib/fetchWithHeadlessBrowser.js';
 
 const OUTPUT_PATH = 'js/music_show_data.js';
@@ -16,8 +17,13 @@ function ytIdFromUrl(url) {
 }
 
 async function fetchHtml(url) {
-    // namu.wiki는 Cloudflare의 인터랙티브 JS 챌린지("Just a moment...")로 막는 경우가 있어
-    // 실제 JS를 실행할 수 있는 헤드리스 Chrome으로 렌더링해서 챌린지를 통과시킨다.
+    // 1순위: Wayback Machine 경유 (namu.wiki를 직접 안 건드려서 Cloudflare 챌린지 자체가 없음)
+    try {
+        return await fetchHtmlViaWayback(url);
+    } catch (e) {
+        console.warn(`[fetchHtml] Wayback 경유 실패, 헤드리스 브라우저로 재시도합니다: ${e.message}`);
+    }
+    // 2순위(폴백): 헤드리스 Chrome으로 직접 시도
     return await fetchHtmlViaHeadlessBrowser(url);
 }
 

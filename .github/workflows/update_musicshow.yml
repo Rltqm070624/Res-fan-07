@@ -35,6 +35,9 @@ jobs:
 
       - name: start
         run: node scripts/scrape_musicshow.js
+        env:
+          ARCHIVE_ORG_ACCESS_KEY: ${{ secrets.ARCHIVE_ORG_ACCESS_KEY }}
+          ARCHIVE_ORG_SECRET_KEY: ${{ secrets.ARCHIVE_ORG_SECRET_KEY }}
 
       - name: save
         run: |

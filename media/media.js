@@ -295,7 +295,8 @@ function mediaRenderDrawer() {
         const counted = rawOptions.map(opt => ({
             label: opt,
             count: mediaCountForDetail(itemsInYear, opt),
-            cho: mediaGetChosungKey(opt)
+            cho: mediaGetChosungKey(opt),
+            en: mediaGetEnKey(opt)
         }));
 
         const showToolbarAndIndex = counted.length > 8;
@@ -303,19 +304,24 @@ function mediaRenderDrawer() {
 
         if (mediaTopicSortMode === 'alpha') {
             counted.sort((a, b) => a.label.localeCompare(b.label, 'ko'));
+        } else if (mediaTopicSortMode === 'en') {
+            counted.sort((a, b) => a.label.localeCompare(b.label, 'en'));
         } else {
             counted.sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, 'ko'));
         }
 
-        // 자음 인덱스 바 (가나다순일 때만 노출) — CSS 로드 실패 대비, style.display도 직접 지정
+        // 인덱스 바 (가나다순=ㄱㄴㄷ, 영문순=A-Z) — CSS 로드 실패 대비, style.display도 직접 지정
+        const indexField = mediaTopicSortMode === 'en' ? 'en' : 'cho';
+        const indexKeyList = mediaTopicSortMode === 'en' ? MEDIA_EN_KEYS : MEDIA_CHOSUNG_KEYS;
         if (chosungRow) {
-            if (showToolbarAndIndex && mediaTopicSortMode === 'alpha') {
-                const presentKeys = new Set(counted.map(o => o.cho));
-                const keys = ['전체'].concat(MEDIA_CHOSUNG_KEYS.filter(k => presentKeys.has(k)));
+            if (showToolbarAndIndex && (mediaTopicSortMode === 'alpha' || mediaTopicSortMode === 'en')) {
+                const presentKeys = new Set(counted.map(o => o[indexField]));
+                const keys = ['전체'].concat(indexKeyList.filter(k => presentKeys.has(k)));
                 chosungRow.innerHTML = keys.map(k => {
                     const isActive = k === mediaTopicChosungFilter;
+                    const displayLabel = k === '#' ? '기타' : k;
                     const style = `height:34px;min-width:34px;padding:0 10px;border-radius:8px;border:1px solid ${isActive ? 'var(--c-accent)' : 'rgba(120,120,120,0.28)'};font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;background:${isActive ? 'var(--c-accent)' : 'transparent'};color:${isActive ? '#fff' : '#666'};`;
-                    return `<button type="button" class="afd-cho-btn ${isActive ? 'active' : ''}" onclick="mediaSetTopicChosung('${k}')" style="${style}">${k}</button>`;
+                    return `<button type="button" class="afd-cho-btn ${isActive ? 'active' : ''}" onclick="mediaSetTopicChosung('${k}')" style="${style}">${displayLabel}</button>`;
                 }).join('');
                 chosungRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;';
                 chosungRow.classList.remove('is-hidden');
@@ -327,8 +333,8 @@ function mediaRenderDrawer() {
         }
 
         let visible = counted;
-        if (mediaTopicSortMode === 'alpha' && mediaTopicChosungFilter !== '전체') {
-            visible = counted.filter(o => o.cho === mediaTopicChosungFilter);
+        if ((mediaTopicSortMode === 'alpha' || mediaTopicSortMode === 'en') && mediaTopicChosungFilter !== '전체') {
+            visible = counted.filter(o => o[indexField] === mediaTopicChosungFilter);
         }
 
         topicBox.innerHTML = visible.length ? visible.map(o => `
@@ -375,6 +381,14 @@ function mediaGetChosungKey(str) {
     return '#';
 }
 
+// ⭐️ 영문순 정렬용: 첫 글자가 알파벳이면 대문자로, 아니면(한글/숫자/기호 등) '#'(=기타)
+function mediaGetEnKey(str) {
+    if (!str) return '#';
+    const ch = str.trim().charAt(0).toUpperCase();
+    return (ch >= 'A' && ch <= 'Z') ? ch : '#';
+}
+const MEDIA_EN_KEYS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#'];
+
 let mediaTopicSortMode = 'popular'; // 'popular' | 'alpha'
 let mediaTopicChosungFilter = '전체';
 
@@ -383,12 +397,10 @@ function mediaSetTopicSortMode(mode) {
     mediaTopicChosungFilter = '전체';
     const popBtn = document.getElementById('afdSortPopular');
     const alphaBtn = document.getElementById('afdSortAlpha');
-    if (popBtn) {
-        popBtn.classList.toggle('active', mode === 'popular');
-    }
-    if (alphaBtn) {
-        alphaBtn.classList.toggle('active', mode === 'alpha');
-    }
+    const enBtn = document.getElementById('afdSortEn');
+    if (popBtn) popBtn.classList.toggle('active', mode === 'popular');
+    if (alphaBtn) alphaBtn.classList.toggle('active', mode === 'alpha');
+    if (enBtn) enBtn.classList.toggle('active', mode === 'en');
     mediaRenderDrawer();
 }
 
@@ -691,6 +703,50 @@ function mediaClosePlayer() {
         window.addEventListener('touchmove', onMove, { passive: true });
         window.addEventListener('mouseup', onUp);
         window.addEventListener('touchend', onUp);
+    });
+})();
+
+// ⭐️ 필터 드로어 가로 폭 조절 (오른쪽 테두리 전체 어디서든 드래그 가능, PC 전용) ⭐️
+(function initFilterDrawerResize() {
+    document.addEventListener('DOMContentLoaded', () => {
+        const drawer = document.getElementById('advFilterDrawer');
+        const handle = document.getElementById('afdResizeHandle');
+        if (!drawer || !handle) return;
+
+        const MIN_W = 320, MAX_W = 640;
+        let startX = 0, startWidth = 0, resizing = false;
+
+        function pointX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
+
+        function onStart(e) {
+            if (window.innerWidth <= 1000) return; // 모바일(바텀시트)에서는 동작 안 함
+            resizing = true;
+            startX = pointX(e);
+            startWidth = drawer.getBoundingClientRect().width;
+            handle.classList.add('is-dragging');
+            document.body.style.userSelect = 'none';
+        }
+
+        function onMove(e) {
+            if (!resizing) return;
+            const dx = pointX(e) - startX;
+            const newWidth = Math.min(MAX_W, Math.max(MIN_W, startWidth + dx));
+            drawer.style.width = newWidth + 'px';
+        }
+
+        function onEnd() {
+            if (!resizing) return;
+            resizing = false;
+            handle.classList.remove('is-dragging');
+            document.body.style.userSelect = '';
+        }
+
+        handle.addEventListener('mousedown', onStart);
+        handle.addEventListener('touchstart', onStart, { passive: true });
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('touchmove', onMove, { passive: true });
+        window.addEventListener('mouseup', onEnd);
+        window.addEventListener('touchend', onEnd);
     });
 })();
 

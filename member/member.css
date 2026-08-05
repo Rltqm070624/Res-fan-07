@@ -57,7 +57,7 @@
 .mem-hero .mem-era-preview-label { position: absolute; left: 26px; bottom: 20px; font-family: var(--font-num); font-size: 13px; font-weight: 700; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7); z-index: 2; }
 .mem-hero .mem-era-zoom-hint {
     position: absolute; right: 20px; top: 20px; width: 34px; height: 34px; border-radius: 4px;
-    background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center;
     color: #fff; opacity: 0; transition: opacity 0.25s ease; z-index: 2;
 }
 .mem-hero .mem-era-zoom-hint svg { width: 16px; height: 16px; }

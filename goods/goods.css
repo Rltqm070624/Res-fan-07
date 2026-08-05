@@ -2,6 +2,11 @@
 .goods-page-container { max-width: 100%; width: 100%; padding-left: 56px; padding-right: 56px; box-sizing: border-box; margin: 0 auto; }
 @media (max-width: 800px) { .goods-page-container { padding-left: 20px; padding-right: 20px; } }
 
+/* 카테고리별 그룹 */
+.goods-category-group { margin-bottom: 50px; }
+.goods-category-group:last-child { margin-bottom: 0; }
+.goods-category-title { font-family: var(--font-head); font-size: 13px; font-weight: 800; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 22px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); }
+
 /* 굿즈 그리드 */
 .goods-grid-v2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px 20px; }
 .goods-item { display: flex; flex-direction: column; align-items: center; }
@@ -16,6 +21,7 @@
 .goods-img.is-soldout .soldout-stamp { opacity: 1; }
 
 /* 굿즈 텍스트 및 재고 리스트 */
+.goods-name { font-family: var(--font-body); font-size: 13.5px; font-weight: 600; color: var(--text-secondary); text-align: center; margin-bottom: 8px; line-height: 1.4; min-height: 18px; }
 .goods-price-text { font-family: var(--font-num); font-size: 17px; font-weight: 600; color: var(--text-primary); margin-bottom: 15px; }
 .goods-stock-list { width: 100%; max-width: 260px; display: flex; flex-direction: column; gap: 12px; }
 .stock-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-secondary); padding-bottom: 8px; border-bottom: 1px dashed rgba(255, 255, 255, 0.05); }

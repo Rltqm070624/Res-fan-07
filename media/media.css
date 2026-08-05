@@ -190,10 +190,11 @@
 
 /* PC: 왼쪽에서 열리는 Drawer 형식 유지 */
 .adv-filter-drawer {
-    position: fixed; top: 0; left: -420px; width: 380px; height: 100vh;
+    position: fixed; top: 0; left: -420px; width: 380px; min-width: 320px; max-width: 640px; height: 100vh;
     background: var(--bg-base); box-shadow: 10px 0 30px rgba(0,0,0,0.1);
     z-index: 99999; display: flex; flex-direction: column;
     transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    resize: horizontal; overflow: hidden;
 }
 .adv-filter-drawer.active { left: 0; }
 /* PC에서는 드래그 핸들 숨김 */
@@ -234,6 +235,7 @@ html[data-theme="dark"] .afd-sm-btn.active { background: #eee; color: #111; }
     min-width: 28px; height: 28px; padding: 0 8px; border-radius: 2px;
     border: 1px solid var(--border-light); background: transparent; color: var(--text-secondary);
     font-family: var(--font-body); font-size: 12.5px; font-weight: 700; cursor: pointer;
+    white-space: nowrap; flex-shrink: 0;
     transition: 0.2s ease;
 }
 .afd-cho-btn:hover { border-color: var(--border-highlight); color: var(--text-primary); }

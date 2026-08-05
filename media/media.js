@@ -313,17 +313,21 @@ function mediaRenderDrawer() {
             counted.sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, 'ko'));
         }
 
-        // 자음 인덱스 바 (가나다순일 때만 노출)
+        // 자음 인덱스 바 (가나다순일 때만 노출) — CSS 로드 실패 대비, style.display도 직접 지정
         if (chosungRow) {
             if (showToolbarAndIndex && mediaTopicSortMode === 'alpha') {
                 const presentKeys = new Set(counted.map(o => o.cho));
                 const keys = ['전체'].concat(MEDIA_CHOSUNG_KEYS.filter(k => presentKeys.has(k)));
-                chosungRow.innerHTML = keys.map(k => `
-                    <button type="button" class="afd-cho-btn ${k === mediaTopicChosungFilter ? 'active' : ''}" onclick="mediaSetTopicChosung('${k}')">${k}</button>
-                `).join('');
+                chosungRow.innerHTML = keys.map(k => {
+                    const isActive = k === mediaTopicChosungFilter;
+                    const style = `height:34px;min-width:34px;padding:0 10px;border-radius:8px;border:1px solid ${isActive ? '#3b82f6' : 'rgba(120,120,120,0.28)'};font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;background:${isActive ? '#3b82f6' : 'transparent'};color:${isActive ? '#fff' : '#666'};`;
+                    return `<button type="button" class="afd-cho-btn ${isActive ? 'active' : ''}" onclick="mediaSetTopicChosung('${k}')" style="${style}">${k}</button>`;
+                }).join('');
+                chosungRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;';
                 chosungRow.classList.remove('is-hidden');
             } else {
                 chosungRow.classList.add('is-hidden');
+                chosungRow.style.display = 'none';
                 chosungRow.innerHTML = '';
             }
         }
@@ -335,7 +339,7 @@ function mediaRenderDrawer() {
 
         topicBox.innerHTML = visible.length ? visible.map(o => `
             <button class="afd-chip ${mediaActiveDetails.has(o.label) ? 'active' : ''}" onclick="mediaToggleDetail('${safeEscape(o.label)}'); mediaRenderDrawer();">
-                ${mediaActiveDetails.has(o.label) ? checkSVG : ''} ${safeEscape(o.label)} <span class="afd-chip-count">${o.count}</span>
+                ${mediaActiveDetails.has(o.label) ? checkSVG : ''} ${safeEscape(o.label)} <span class="afd-chip-count" style="font-size:11px;font-weight:700;color:#8a8a8a;background:rgba(120,120,120,0.14);border-radius:999px;padding:1px 7px;margin-left:2px;">${o.count}</span>
             </button>
         `).join('') : '<span style="font-size:13px; color:var(--text-muted);">해당 자음으로 시작하는 항목이 없습니다.</span>';
 
@@ -383,8 +387,18 @@ let mediaTopicChosungFilter = '전체';
 function mediaSetTopicSortMode(mode) {
     mediaTopicSortMode = mode;
     mediaTopicChosungFilter = '전체';
-    document.getElementById('afdSortPopular').classList.toggle('active', mode === 'popular');
-    document.getElementById('afdSortAlpha').classList.toggle('active', mode === 'alpha');
+    const popBtn = document.getElementById('afdSortPopular');
+    const alphaBtn = document.getElementById('afdSortAlpha');
+    if (popBtn) {
+        popBtn.classList.toggle('active', mode === 'popular');
+        popBtn.style.background = mode === 'popular' ? '#111' : 'transparent';
+        popBtn.style.color = mode === 'popular' ? '#fff' : '#8a8a8a';
+    }
+    if (alphaBtn) {
+        alphaBtn.classList.toggle('active', mode === 'alpha');
+        alphaBtn.style.background = mode === 'alpha' ? '#111' : 'transparent';
+        alphaBtn.style.color = mode === 'alpha' ? '#fff' : '#8a8a8a';
+    }
     mediaRenderDrawer();
 }
 

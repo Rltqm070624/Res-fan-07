@@ -4,6 +4,7 @@
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
+    padding-top: 120px;
 }
 
 #mainWrapper .media-page-container { 
@@ -218,12 +219,12 @@
 
 .afd-topic-toolbar { display: flex; align-items: center; }
 .afd-topic-sortmode {
-    display: inline-flex; padding: 3px; border-radius: 3px;
-    background: var(--bg-secondary, rgba(120,120,120,0.08)); border: 1px solid var(--border-light);
+    display: inline-flex; padding: 3px; border-radius: 999px;
+    background: rgba(120,120,120,0.10); border: 1px solid rgba(120,120,120,0.22);
 }
 .afd-sm-btn {
-    padding: 6px 14px; border-radius: 3px; border: none; background: transparent;
-    font-family: var(--font-body); font-size: 12.5px; font-weight: 600; color: var(--text-muted);
+    padding: 6px 14px; border-radius: 999px; border: none; background: transparent;
+    font-family: inherit; font-size: 12.5px; font-weight: 700; color: #8a8a8a;
     cursor: pointer; transition: 0.2s ease;
 }
 .afd-sm-btn.active { background: #111; color: #fff; }

@@ -41,8 +41,8 @@ function renderMemberDetail() {
     }
     document.getElementById('memberPosition').textContent = m.position;
     document.getElementById('memberMbti').textContent = m.mbti;
-    document.getElementById('memberSpecialty').textContent = m.specialty;
-    document.getElementById('memberHobby').textContent = m.hobby;
+    document.getElementById('member별명').textContent = m.별명;
+    document.getElementById('memberSNS').textContent = m.SNS;
 
     // 멤버 고유 색상 CSS 변수 주입
     const panel = document.querySelector('.mem-detail-panel');

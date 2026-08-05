@@ -127,7 +127,7 @@
 .chart-dot-row { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: auto; }
 .chart-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-highlight); display: inline-block; }
 .chart-dot.on { box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 20%, transparent); }
-.chart-charted-count { flex: 0 0 auto; font-family: var(--font-num); font-size: 11px; font-weight: 700; color: var(--text-muted); min-width: 62px; text-align: right; margin-left: auto; }
+.chart-charted-count { flex: 0 0 auto; font-family: var(--font-num); font-size: 11px; font-weight: 700; color: var(--text-muted); min-width: 62px; text-align: right; }
 
 /* 개별 플랫폼 탭 — 순위 변동 표시 (곡 제목 옆에 간격을 두고 배치) */
 .chart-delta { flex-shrink: 0; font-family: var(--font-num); font-size: 11.5px; font-weight: 800; padding: 2px 7px; border-radius: 3px; background: var(--bg-surface-hover); }
@@ -146,5 +146,5 @@
     .chart-row { gap: 10px; }
     .chart-row-artist { display: none; }
     .chart-dot-row { display: none; }
-    .chart-charted-count { min-width: auto; }
+    .chart-charted-count { min-width: auto; margin-left: auto; }
 }

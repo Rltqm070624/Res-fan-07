@@ -267,7 +267,7 @@ function mediaRenderDrawer() {
             ${cat === mediaActiveTag ? checkSVG : ''} ${safeEscape(cat)}
         </button>
     `).join('');
-    catCount.textContent = `${categories.length}개 항목`;
+    catCount.textContent = `${categories.length}${window.t ? window.t('itemsCountSuffix') : '개 항목'}`;
 
     const activeBox = document.getElementById('afdActiveChips');
     let actives = [];
@@ -279,7 +279,7 @@ function mediaRenderDrawer() {
         <button class="afd-chip closeable" onclick="mediaRemoveActiveFilter('${a.type}', '${safeEscape(a.val || '')}')">
             ${safeEscape(a.label)} ${closeSVG}
         </button>
-    `).join('') : '<span style="font-size:13px; color:var(--text-muted);">활성화된 필터 없음</span>';
+    `).join('') : `<span style="font-size:13px; color:var(--text-muted);">${window.t ? window.t('noActiveFilters') : '활성화된 필터 없음'}</span>`;
 
     const topicBox = document.getElementById('afdTopicChips');
     const topicCount = document.getElementById('afdTopicCount');
@@ -323,7 +323,7 @@ function mediaRenderDrawer() {
                     const style = `height:34px;min-width:34px;padding:0 10px;border-radius:8px;border:1px solid ${isActive ? 'var(--c-accent)' : 'rgba(120,120,120,0.28)'};font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;background:${isActive ? 'var(--c-accent)' : 'transparent'};color:${isActive ? '#fff' : '#666'};`;
                     return `<button type="button" class="afd-cho-btn ${isActive ? 'active' : ''}" onclick="mediaSetTopicChosung('${k}')" style="${style}">${k}</button>`;
                 }).join('');
-                chosungRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;';
+                chosungRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;';
                 chosungRow.classList.remove('is-hidden');
             } else {
                 chosungRow.classList.add('is-hidden');
@@ -341,13 +341,13 @@ function mediaRenderDrawer() {
             <button class="afd-chip ${mediaActiveDetails.has(o.label) ? 'active' : ''}" onclick="mediaToggleDetail('${safeEscape(o.label)}'); mediaRenderDrawer();">
                 ${mediaActiveDetails.has(o.label) ? checkSVG : ''} ${safeEscape(o.label)} <span class="afd-chip-count" style="font-size:11px;font-weight:700;color:#8a8a8a;background:rgba(120,120,120,0.14);border-radius:999px;padding:1px 7px;margin-left:2px;">${o.count}</span>
             </button>
-        `).join('') : '<span style="font-size:13px; color:var(--text-muted);">해당 자음으로 시작하는 항목이 없습니다.</span>';
+        `).join('') : `<span style="font-size:13px; color:var(--text-muted);">${window.t ? window.t('noChosungResults') : '해당 자음으로 시작하는 항목이 없습니다.'}</span>`;
 
-        topicCount.innerHTML = `선택됨 <b style="color:var(--c-accent);">${mediaActiveDetails.size}</b> / ${rawOptions.length}`;
+        topicCount.innerHTML = `${window.t ? window.t('selectedCountLabel') : '선택됨'} <b style="color:var(--c-accent);">${mediaActiveDetails.size}</b> / ${rawOptions.length}`;
     } else {
         if (topicToolbar) topicToolbar.style.display = 'none';
         if (chosungRow) { chosungRow.classList.add('is-hidden'); chosungRow.innerHTML = ''; }
-        topicBox.innerHTML = '<span style="font-size:13px; color:var(--text-muted);">해당 카테고리에는 관련 주제가 없습니다.</span>';
+        topicBox.innerHTML = `<span style="font-size:13px; color:var(--text-muted);">${window.t ? window.t('noRelatedTopics') : '해당 카테고리에는 관련 주제가 없습니다.'}</span>`;
         topicCount.textContent = '';
     }
 }
@@ -543,10 +543,10 @@ function mediaRenderGrid(reset) {
 
     const filtered = mediaGetFiltered();
     const countBadge = document.getElementById('mediaCountBadge');
-    if (countBadge) countBadge.innerHTML = `검색결과 <b>${filtered.length}</b>개`;
+    if (countBadge) countBadge.innerHTML = `${window.t ? window.t('searchResultsLabel') : '검색결과'} <b>${filtered.length}</b>${window.t ? window.t('itemsCountSuffix') : '개'}`;
 
     if (!filtered.length) {
-        grid.innerHTML = '<div class="media-empty">검색 결과가 없어요.</div>';
+        grid.innerHTML = `<div class="media-empty">${window.t ? window.t('noSearchResults') : '검색 결과가 없어요.'}</div>`;
         if (endMsg) endMsg.style.display = 'none';
         return;
     }

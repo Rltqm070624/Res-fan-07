@@ -1,3 +1,6 @@
+// ⭐️ 홈 버튼은 항상 정식 도메인(github.io)의 홈으로 이동해야 하므로 절대경로 사용
+const SITE_HOME_URL = 'https://senarchive.github.io/sen-archive/index.html';
+
 function renderSiteNav(activeKey, root, opts) {
     root = root || '';
     opts = opts || {};
@@ -5,7 +8,7 @@ function renderSiteNav(activeKey, root, opts) {
 
     const tr = (typeof window.t === 'function') ? window.t : function (k) { return null; };
     const NAV_LINKS = [
-        { key: 'home', label: tr('navHome') || 'HOME', href: root + 'index.html' },
+        { key: 'home', label: tr('navHome') || 'HOME', href: SITE_HOME_URL },
         { key: 'members', label: tr('navMembers') || 'MEMBERS', href: root + 'member/member.html' },
         { key: 'charts', label: tr('navCharts') || 'CHARTS', href: root + 'chart/chart.html' },
         { key: 'schedule', label: tr('navSchedule') || 'SCHEDULE',
@@ -65,7 +68,7 @@ function renderSiteNav(activeKey, root, opts) {
     const navHtml = `
     <nav class="top-nav">
         <div class="nav-left">
-            <a href="${root}index.html" class="nav-home-btn" title="홈" aria-label="홈"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg></a>
+            <a href="${SITE_HOME_URL}" class="nav-home-btn" title="홈" aria-label="홈"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg></a>
             ${isHome ? `<button class="cal-icon-btn desktop-only-utils" onclick="openBgSettings(this)" title="배경 설정" aria-label="배경 설정">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             </button>` : ''}
@@ -81,11 +84,6 @@ function renderSiteNav(activeKey, root, opts) {
     <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="toggleMobileMenu()"></div>
     <div class="mobile-menu-panel" id="mobileMenuPanel">
         <div class="mobile-top-utils">${mobileSettingsBtnHtml}${mobileCalBtnHtml}
-            <div class="mobile-sns-box">
-                <a href="https://twitter.com/RESCENEofficial" target="_blank"><img src="${root}images/x.png" alt="X" onerror="this.style.display='none'"></a>
-                <a href="https://www.instagram.com/rescene_official" target="_blank"><img src="${root}images/instagram.png" alt="IG" onerror="this.style.display='none'"></a>
-                <a href="https://www.youtube.com/@RESCENE_official" target="_blank"><img src="${root}images/youtube.png" alt="YT" onerror="this.style.display='none'"></a>
-            </div>
         </div>
         <ul class="mobile-menu-list">${mobileLinks}</ul>
         ${opts.lang ? `<div class="lang-globe-wrap-mobile">

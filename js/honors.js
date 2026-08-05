@@ -1,236 +1,87 @@
-function logoImg(key, size) {
-    size = size || 22;
-    const file = AWARDS_LOGOS[key];
-    if (!file) return '';
-    return `<img src="${AWARDS_LOGO_PATH}${file}" alt="" class="honors-logo" style="height:${size}px;" onerror="this.style.display='none'">`;
-}
+const AWARDS_LOGO_PATH = 'images/awards/';
+// 파일명 매핑 — 없으면 null (JS에서 로고 대신 텍스트로 표시)
+const AWARDS_LOGOS = {
+    asiamodel: 'asiamodel.webp',
+    firstbrand: 'firtst.webp',
+    inkigayo: null, // 제공된 파일명이 불명확해서 텍스트로 대체
+    kbs2: 'KBS2.svg',
+    kexpo: 'kexpo.webp',
+    mbcm: 'MBCM.svg',
+    mcount: 'mcount.webp',
+    mnet: 'mnet.svg',
+    musicbank: 'musicbank.webp',
+    sbs: 'SBS.svg',
+    sbslife: 'sbslife.svg',
+    showchampion: 'showchampion.webp',
+    theshow: 'theshow.svg',
+    umc: 'um.svg'
+};
 
-/* 곡 제목으로 실제 앨범 커버 이미지를 찾아 미리보기에 사용 (main.js의 ALBUMS 배열 재사용) */
-function findAlbumCover(songName) {
-    if (typeof ALBUMS === 'undefined' || !songName) return null;
-    const target = songName.trim().toLowerCase();
-    for (const album of ALBUMS) {
-        if (album.tracks && album.tracks.some(t => t.name && t.name.trim().toLowerCase() === target)) {
-            return album.image;
-        }
-    }
-    return null;
-}
+// 음악방송 1위 — 날짜별 상세 (2026년, 총 3관왕)
+const MUSIC_SHOW_WINS = [
+    { date: '2026-07-14', logo: 'theshow', program: '더 쇼', song: 'Pretty Girl', crown: '2관왕',
+      notes: ['데뷔 첫 1위 (데뷔 841일 / 2년 3개월 19일 만)', '케이블 음악방송 첫 1위', '더 쇼 첫 1위'] },
+    { date: '2026-07-25', logo: 'umc', program: '쇼! 음악중심', song: 'Pretty Girl', crown: '2관왕',
+      notes: ['데뷔 첫 지상파 음악방송 1위 (데뷔 852일 / 2년 4개월 만)', '쇼! 음악중심 첫 1위'] },
+    { date: '2026-07-26', logo: 'sbs', program: '인기가요', song: 'LOVE ATTACK', crown: '1관왕',
+      notes: ['SBS 인기가요 첫 1위 (발매 699일 / 1년 11개월 만)'] }
+];
 
-const AD_TYPE_COLOR = { '홍보대사': '#9AA6FF', '화보': '#ec407a', '콜라보': '#26c6da', '광고': '#66bb6a' };
+// 음악방송 1위 — 누적 (프로그램별)
+const MUSIC_SHOW_CUMULATIVE = [
+    { logo: 'sbslife', program: '더 쇼', wins: 1 },
+    { logo: 'showchampion', program: '쇼챔피언', wins: 0 },
+    { logo: 'mcount', program: '엠 카운트다운', wins: 0 },
+    { logo: 'musicbank', program: '뮤직뱅크', wins: 0 },
+    { logo: 'umc', program: '쇼! 음악중심', wins: 1 },
+    { logo: 'sbs', program: '인기가요', wins: 1 }
+];
 
-/* 패널 상단의 장황한 문구("○○ 히스토리 (총 N건)") 대신 쓰는 절제된 스탯 배지 */
-function panelStat(value, label) {
-    return `<div class="honors-panel-top"><span class="honors-stat-pill"><span class="stat-num">${value}</span><span class="stat-label">${label}</span></span></div>`;
-}
+// 시상식
+const CEREMONY_AWARDS = [
+    { date: '2024-11-02', logo: null, name: '아시아 모델 어워즈', award: '라이징스타상', note: '기타 시상식/상으로 분류' },
+    { date: '2025-08-28', logo: 'kexpo', name: '제7회 뉴시스 한류엑스포', award: '한류특별상', note: '' },
+    { date: '2026-01-06', logo: 'firstbrand', name: '2026 대한민국 퍼스트브랜드 대상', award: '여자아이돌(라이징스타)', note: '' }
+];
 
-/* 문자열 끝의 괄호를 분리해 배지로 쓰기 위한 파서 — "타이틀 (카테고리)" -> { main, tag } */
-function splitTrailingParen(str) {
-    if (!str) return { main: '', tag: null };
-    const m = str.trim().match(/^(.*?)\s*\(([^)]+)\)\s*$/);
-    if (m) return { main: m[1].trim(), tag: m[2].trim() };
-    return { main: str.trim(), tag: null };
-}
-/* "~2028.05.21" / "2025.12.31" 같은 기간/기한 표기인지 판별 */
-function isPeriodLike(str) {
-    return /^~?\d{4}[.\-]\d{2}([.\-]\d{2})?/.test((str || '').trim());
-}
-function bindHonorsTabs(root) {
-    const tabs = root.querySelectorAll('.honors-tab');
-    const panels = root.querySelectorAll('.honors-tab-panel');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            panels.forEach(p => p.classList.remove('active'));
-            tab.classList.add('active');
-            const panel = root.querySelector(`.honors-tab-panel[data-panel="${tab.dataset.target}"]`);
-            if (panel) panel.classList.add('active');
-        });
-    });
-}
+// 광고 · 콜라보 · 화보 · 홍보대사 타임라인 (RESCENE_ads_and_photoshoots.md 전체 반영 + 브랜드 이미지)
+const AD_TIMELINE = [
+    // 홍보대사
+    { date: '2026-07-23', type: '홍보대사', title: 'MBC 아시안게임 중계방송', note: '', img: 'asiangame.webp' },
+    { date: '2026-07-21', type: '홍보대사', title: '전남광주통합특별시 섬의 날', note: '행정안전부 주최', img: '섬의날.webp' },
+    { date: '2026-07-14', type: '홍보대사', title: '저스트 메이크업 IN TOKYO 2027', note: '', img: 'justmakeup.webp' },
+    { date: '2026-07-02', type: '홍보대사', title: '경기도 고양시', note: '메이의 고향', img: '고양시.webp' },
+    { date: '2026-06-29', type: '홍보대사', title: '경상북도 경주시', note: '제나의 고향', img: '경주시.webp' },
+    { date: '2026-06-24', type: '홍보대사', title: '경기도 수원시', note: '리브의 고향', img: '수원시.webp' },
+    { date: '2026-05-22', type: '홍보대사', title: '경상남도 거제시', note: '원이의 고향 (~2028.05.21)', img: '거제시.webp' },
+    { date: '2026-01-01', type: '홍보대사', title: '2026 캐릭터 라이선싱 페어', note: '', img: '캐릭터라이선싱.webp' },
+    { date: '2025-02-11', type: '홍보대사', title: '한국청소년연맹', note: '~2025.12.31', img: '한국청소년연맹.webp' },
+    { date: '2025-01-01', type: '홍보대사', title: '2025 캐릭터 라이선싱 페어', note: '', img: '캐릭터라이선싱_2025.webp' },
 
-function renderHonorsPreview() {
-    const list = document.getElementById('awardsPreviewList');
-    if (list) {
-        list.innerHTML = MUSIC_SHOW_WINS.slice(-3).reverse().map((w, i) => {
-            return `
-            <li>
-                <span class="h-rank">0${i + 1}</span>
-                <div class="h-thumb-wrap">${logoImg(w.logo, 28)}</div>
-                <div class="h-info">
-                    <span class="h-name">${w.program} · ${w.song}</span>
-                    <span class="h-badge">${w.notes[0].split(' (')[0]}</span>
-                </div>
-                <span class="h-date">${w.date}</span>
-            </li>`;
-        }).join('');
-    }
+    // 화보
+    { date: '2026-01-01', type: '화보', title: '하퍼스 바자 코리아 (디지털)', note: '랑방 협찬', img: 'rang.webp' },
+    { date: '2026-08-01', type: '화보', title: '하퍼스 바자 코리아 (8월호)', note: '디스커버리 협찬', img: 'harper.webp' },
+    { date: '2026-01-01', type: '화보', title: 'MIIM · 원이, 미나미', note: '', img: 'miim.webp' },
+    { date: '2026-06-01', type: '화보', title: '앳스타일 (6월호)', note: '헬씨올리고팝 협찬', img: 'style.webp' },
+    { date: '2025-05-01', type: '화보', title: 'BEAUTY+ (5월호)', note: '', img: 'beautyplus.webp' },
+    { date: '2024-05-01', type: '화보', title: '코스모폴리탄 코리아 (5월호)', note: 'Clean 협찬', img: 'cosmo.webp' },
 
-    const adsWrap = document.getElementById('adsPreviewChips');
-    if (adsWrap) {
-        const latestAds = AD_TIMELINE.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
-        adsWrap.innerHTML = latestAds.map((a, i) => `
-            <li>
-                <span class="h-rank">0${i + 1}</span>
-                ${a.img
-                    ? `<div class="h-thumb-wrap"><img class="h-thumb" src="images/ad/${a.img}" alt="" onerror="this.parentElement.outerHTML='<div class=\\'h-type-wrap\\'><span class=\\'h-type-tile\\' style=\\'background:${AD_TYPE_COLOR[a.type]};\\'>${a.type}</span></div>'"></div>`
-                    : `<div class="h-type-wrap"><span class="h-type-tile" style="background:${AD_TYPE_COLOR[a.type]};">${a.type}</span></div>`}
-                <div class="h-info">
-                    <span class="h-name">${a.title}</span>
-                    ${a.note ? `<span class="h-note">${a.note.split(' (')[0]}</span>` : ''}
-                </div>
-                <span class="h-date">${a.date}</span>
-            </li>`).join('');
-    }
-}
+    // 콜라보레이션
+    { date: '2026-07-07', type: '콜라보', title: '티오더 (IT)', note: '', img: 'torder.webp' },
+    { date: '2026-01-01', type: '콜라보', title: 'KREAM (굿즈)', note: '', img: 'kream.webp' },
+    { date: '2026-01-01', type: '콜라보', title: '김씨네과일 (의류)', note: '', img: 'kim.webp' },
+    { date: '2026-07-30', type: '콜라보', title: '서든어택 (게임)', note: '', img: 'suddenattack.webp' },
 
-/* ⭐️ 히스토리 모달 상단 헤더 — 배너 이미지가 있으면 이미지를 헤더 자체로 쓰고 제목을 그 위에 오버레이 */
-function setHonorsHistoryHead(titleText, bannerSrc) {
-    const head = document.querySelector('.honors-history-head');
-    if (!head) return;
-    if (bannerSrc) {
-        head.classList.add('has-banner');
-        head.innerHTML = `
-            <img class="honors-history-head-bg" src="${bannerSrc}" alt="" onerror="this.style.display='none'; this.closest('.honors-history-head').classList.add('banner-failed');">
-            <span class="honors-history-head-title" id="honorsHistoryTitle">${titleText}</span>`;
-    } else {
-        head.classList.remove('has-banner', 'banner-failed');
-        head.innerHTML = `<span class="honors-history-head-title" id="honorsHistoryTitle">${titleText}</span>`;
-    }
-}
-
-function openAwardsHistoryModal() {
-    setHonorsHistoryHead('음악방송 1위 히스토리', null);
-    const body = document.getElementById('awardsHistoryBody');
-    if (body) {
-        let html = `<div class="honors-tabbar">
-            <button class="honors-tab active" data-target="cum">프로그램별 순위</button>
-            <button class="honors-tab" data-target="dated">날짜별 히스토리</button>
-            <button class="honors-tab" data-target="ceremony">시상식</button>
-        </div>
-        <div class="honors-tab-panels">
-            <div class="honors-tab-panel active" data-panel="cum">
-                <div class="honors-cum-list">`;
-        const maxWins = Math.max(1, ...MUSIC_SHOW_CUMULATIVE.map(c => c.wins));
-        MUSIC_SHOW_CUMULATIVE.slice().sort((a, b) => b.wins - a.wins).forEach((c, i) => {
-            html += `<div class="cum-row">
-                <span class="cum-rank">${String(i + 1).padStart(2, '0')}</span>
-                <span class="cum-logo-wrap">${logoImg(c.logo, 20)}</span>
-                <span class="cum-program">${c.program}</span>
-                <span class="cum-bar-track"><span class="cum-bar-fill" style="width:${(c.wins / maxWins) * 100}%;"></span></span>
-                <span class="cum-wins">${c.wins}<em>회</em></span>
-            </div>`;
-        });
-        html += `</div>
-            </div>
-            <div class="honors-tab-panel" data-panel="dated">
-                <ul class="honors-timeline honors-timeline-song">`;
-        MUSIC_SHOW_WINS.slice().reverse().forEach((w, i) => {
-            html += `<li>
-                <span class="ht-index">${String(i + 1).padStart(2, '0')}</span>
-                <div class="ht-body">
-                    <div class="ht-head">
-                        <span class="ht-logo-wrap">${logoImg(w.logo, 22)}</span>
-                        <span class="ht-program">${w.program}</span>
-                        <span class="ht-divider">|</span>
-                        <span class="ht-song-inline">${w.song}</span>
-                        <span class="h-tag">${w.crown}</span>
-                        <span class="ht-date">${w.date}</span>
-                    </div>
-                    <ul class="ht-notes">${w.notes.map(n => `<li>${n}</li>`).join('')}</ul>
-                </div>
-            </li>`;
-        });
-        html += `</ul>
-            </div>
-            <div class="honors-tab-panel" data-panel="ceremony">
-                <ul class="honors-timeline">`;
-        CEREMONY_AWARDS.slice().reverse().forEach((c, i) => {
-            html += `<li>
-                <span class="ht-index">${String(i + 1).padStart(2, '0')}</span>
-                <div class="ht-body">
-                    <div class="ht-head">${logoImg(c.logo, 24)}<span class="ht-program">${c.name}</span><span class="ht-date">${c.date}</span></div>
-                    <div class="ht-song">${c.award}</div>
-                    ${c.note ? `<ul class="ht-notes"><li>${c.note}</li></ul>` : ''}
-                </div>
-            </li>`;
-        });
-        html += '</ul></div></div>';
-        body.innerHTML = html;
-        bindHonorsTabs(body);
-    }
-    openGenericHistoryModal();
-}
-
-function openAdsHistoryModal() {
-    setHonorsHistoryHead('광고 · 화보 · 홍보대사 · 콜라보', null);
-    const body = document.getElementById('awardsHistoryBody');
-    if (body) {
-        const categories = ['광고', '화보', '홍보대사', '콜라보'];
-        const fmtDate = d => `${d.slice(0,4)}.${d.slice(5,7)}`;
-
-        let html = '<div class="honors-tabbar">';
-        categories.forEach((cat, i) => {
-            html += `<button class="honors-tab${i === 0 ? ' active' : ''}" data-target="cat${i}">${cat}</button>`;
-        });
-        html += '</div><div class="honors-tab-panels">';
-        categories.forEach((cat, i) => {
-            const items = AD_TIMELINE.filter(a => a.type === cat).slice().sort((a, b) => b.date.localeCompare(a.date));
-            html += `<div class="honors-tab-panel${i === 0 ? ' active' : ''}" data-panel="cat${i}">
-                <ul class="ad-timeline">`;
-            items.forEach((a, idx) => {
-                const titleParts = splitTrailingParen(a.title);
-                const noteParts = splitTrailingParen(a.note);
-                let notePart = '';
-                let periodPart = '';
-                if (noteParts.tag) {
-                    notePart = noteParts.main;
-                    periodPart = noteParts.tag;
-                } else if (isPeriodLike(noteParts.main)) {
-                    periodPart = noteParts.main;
-                } else {
-                    notePart = noteParts.main;
-                }
-                const side = idx % 2 === 0 ? 'side-left' : 'side-right';
-                const thumbHtml = a.img ? `<div class="ad-tl-thumb"><img src="images/ad/${a.img}" alt="" onerror="this.parentElement.style.display='none'"></div>` : '';
-                html += `<li class="ad-tl-item ${side}">
-                    <div class="ad-tl-node"></div>
-                    <div class="ad-tl-card${thumbHtml ? ' has-thumb' : ''}">
-                        <div class="ad-tl-body">
-                            <span class="ad-tl-date">${fmtDate(a.date)}</span>
-                            <div class="ad-tl-title">${titleParts.main}${titleParts.tag ? `<span class="ad-tl-tag">${titleParts.tag}</span>` : ''}</div>
-                            ${notePart ? `<div class="ad-tl-note">${notePart}</div>` : ''}
-                            ${periodPart ? `<div class="ad-tl-period">${periodPart}</div>` : ''}
-                        </div>
-                        ${thumbHtml}
-                    </div>
-                </li>`;
-            });
-            html += '</ul></div>';
-        });
-        html += '</div>';
-        body.innerHTML = html;
-        bindHonorsTabs(body);
-    }
-    openGenericHistoryModal();
-}
-
-function openGenericHistoryModal() {
-    const modal = document.getElementById('honorsHistoryModal');
-    const backdrop = document.getElementById('honorsHistoryBackdrop');
-    if (modal && backdrop) {
-        modal.classList.add('active'); backdrop.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-}
-function closeHonorsHistoryModal() {
-    const modal = document.getElementById('honorsHistoryModal');
-    const backdrop = document.getElementById('honorsHistoryBackdrop');
-    if (modal) modal.classList.remove('active');
-    if (backdrop) backdrop.classList.remove('active');
-    document.body.style.overflow = 'auto';
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-    try { renderHonorsPreview(); } catch (e) { console.error(e); }
-});
+    // 광고 — 2026년
+    { date: '2026-07-21', type: '광고', title: '동아오츠카 · 나랑드 사이다 (음료)', note: '', img: 'narang.webp' },
+    { date: '2026-07-16', type: '광고', title: '청오DPK · 도미노피자 (식품)', note: '', img: 'domino.webp' },
+    { date: '2026-07-01', type: '광고', title: 'BGF리테일 · CU (편의점)', note: '업계 최초 전속 모델 제안 발탁', img: 'cu.webp' },
+    { date: '2026-06-30', type: '광고', title: '형지엘리트 · 엘리트 (교복)', note: '', img: 'elite.webp' },
+    { date: '2026-06-26', type: '광고', title: '그레인온 · 카사베르디 (식품)', note: '', img: null },
+    { date: '2026-06-11', type: '광고', title: '넥슨 · FC 모바일 (게임)', note: '', img: 'fc.webp' },
+    { date: '2026-01-01', type: '광고', title: 'WINDANDSEA (의류)', note: '', img: 'windandsea.webp' },
+    { date: '2026-01-01', type: '광고', title: 'I-SHA · Wish I-GIRL (렌즈)', note: '', img: 'isha.webp' },
+    // 광고 — 2025년
+    { date: '2025-01-01', type: '광고', title: '형지엘리트 · 엘리트 (교복)', note: '', img: 'elite.webp' },
+    { date: '2025-01-01', type: '광고', title: '프리티스킨 (화장품)', note: '', img: 'prettyskin.webp' }
+];

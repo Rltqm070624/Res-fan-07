@@ -6,7 +6,7 @@
 .popup-close-btn svg { width:13px; height:13px; }
 
 /* 공통 백드롭 */
-.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 9998; opacity: 0; pointer-events: none; transition: 0.4s ease; }
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 9998; opacity: 0; pointer-events: none; transition: 0.4s ease; }
 .modal-backdrop.active { opacity: 1; pointer-events: auto; }
 .modal-backdrop.cal-backdrop { z-index: 8900; } 
 
@@ -18,7 +18,7 @@
     width: 90% !important; max-width: 720px !important; 
     height: 85vh !important; max-height: 750px !important; min-height: 750px !important; 
     display: flex; flex-direction: column; background: var(--bg-base); 
-    border: 1px solid var(--border-light); border-radius: 20px; z-index: 8910; 
+    border: 1px solid var(--border-light); border-radius: 12px; z-index: 8910; 
     padding: 30px; box-sizing: border-box; box-shadow: 0 20px 80px rgba(0,0,0,0.9); 
     opacity: 0; visibility: hidden; pointer-events: none; 
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s; overflow: hidden; 
@@ -59,7 +59,7 @@ html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05
 .legend-item { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 11.5px; color: var(--text-secondary); }
 .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-#modalBackdrop { background: rgba(0,0,0,0.55); backdrop-filter: blur(6px); z-index: 8905; }
+#modalBackdrop { background: rgba(0,0,0,0.55); backdrop-filter: blur(4px); z-index: 8905; }
 
 /* =========================================
    ⭐️ 우측 디테일 창 (세로 쪼그라듬 완전 방어 & 너비 꽉 채움)
@@ -72,7 +72,7 @@ html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05
     max-height: 750px !important; 
     min-height: 750px !important; 
     background: var(--bg-base); border: 1px solid var(--border-light); 
-    border-radius: 20px; box-sizing: border-box; box-shadow: 0 30px 80px rgba(0,0,0,0.6); 
+    border-radius: 12px; box-sizing: border-box; box-shadow: 0 30px 80px rgba(0,0,0,0.6); 
     transform: translate(150%, -50%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s; 
     opacity: 0; visibility: hidden; pointer-events: none; overflow: hidden; display: flex; flex-direction: column;
 }
@@ -159,7 +159,7 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 }
 
 .bg-tabbar { display: flex; gap: 8px; justify-content: center; }
-.bg-tab { appearance: none; border: 1px solid var(--border-light); background: var(--bg-surface); color: var(--text-secondary); font-family: var(--font-head); font-size: 12.5px; font-weight: 700; padding: 8px 22px; border-radius: 999px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+.bg-tab { appearance: none; border: 1px solid var(--border-light); background: var(--bg-surface); color: var(--text-secondary); font-family: var(--font-head); font-size: 12.5px; font-weight: 700; padding: 8px 22px; border-radius: 8px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
 .bg-tab:hover { color: var(--text-primary); }
 .bg-tab.active { background: var(--c-accent); border-color: var(--c-accent); color: #fff; }
 
@@ -168,12 +168,12 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 
 .bg-member-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; flex-shrink: 0; }
 .bg-member-row::-webkit-scrollbar { display: none; }
-.bg-member-chip { flex-shrink: 0; appearance: none; border: 1px solid var(--border-light); background: var(--bg-surface); color: var(--text-secondary); font-family: var(--font-body); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 999px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+.bg-member-chip { flex-shrink: 0; appearance: none; border: 1px solid var(--border-light); background: var(--bg-surface); color: var(--text-secondary); font-family: var(--font-body); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
 .bg-member-chip.active { background: var(--text-primary); border-color: var(--text-primary); color: var(--bg-base); }
 
 .bg-options-wrap { display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px 10px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
 .bg-options-wrap::-webkit-scrollbar { height: 6px; }
-.bg-options-wrap::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
+.bg-options-wrap::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 8px; }
 
 .bg-option { position: relative; flex-shrink: 0; width: 96px; height: 96px; border-radius: 16px; overflow: hidden; border: 2px solid var(--border-light); background: var(--bg-surface); padding: 0; cursor: pointer; transition: border-color 0.25s ease, transform 0.25s ease; }
 .bg-option:hover { border-color: var(--c-accent); transform: translateY(-2px); }
@@ -186,7 +186,7 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
     .bg-settings-sheet {
         left: 50% !important; top: auto !important; bottom: 0;
         transform: translate(-50%, 100%); transform-origin: bottom center;
-        width: 100%; max-width: 100%; border-radius: 20px 20px 0 0; border-bottom: none;
+        width: 100%; max-width: 100%; border-radius: 16px 16px 0 0; border-bottom: none;
         box-shadow: 0 -20px 60px rgba(0,0,0,0.45);
         padding: 4px 16px 26px;
     }
@@ -199,7 +199,7 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 @media (max-width: 1049px) {
     .calendar-popup-wrapper.active.split-active { transform: translate(-50%, -50%); }
     .calendar-popup-wrapper { width: 95% !important; height: 90vh !important; max-height: none !important; min-height: 0 !important; padding: 45px 12px 20px !important; }
-    .modal-wrapper { top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important; transform: translateY(100%) !important; width: 100% !important; height: 80vh !important; min-height: 0 !important; border-radius: 20px 20px 0 0 !important; max-width: 100% !important; }
+    .modal-wrapper { top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important; transform: translateY(100%) !important; width: 100% !important; height: 80vh !important; min-height: 0 !important; border-radius: 16px 16px 0 0 !important; max-width: 100% !important; }
     .modal-wrapper.active { transform: translateY(0) !important; z-index: 9999 !important; }
     .sheet-drag-handle { display: block; }
     #calendarPopupModal .close-btn { top: 8px !important; right: 8px !important; padding: 5px !important; }
@@ -219,11 +219,11 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 .album-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
     width: 92%; max-width: 1080px; height: 82vh; max-height: 720px;
-    background: var(--bg-base); border: 1px solid var(--border-highlight); border-radius: 24px;
+    background: var(--bg-base); border: 1px solid var(--border-highlight); border-radius: 14px;
     display: flex; flex-direction: row; overflow: hidden; z-index: 9950;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 40px 120px rgba(0,0,0,0.65), 0 0 0 1px rgba(154,166,255,0.08), 0 1px 0 rgba(255,255,255,0.06) inset;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,77,148,0.08), 0 1px 0 rgba(255,255,255,0.06) inset;
     box-sizing: border-box;
 }
 /* 모달 배경(.modal-backdrop, z-index 9998)의 blur 레이어보다 항상 위에 오도록 active 시 z-index를 끌어올림 */
@@ -276,7 +276,7 @@ html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
     content: none !important;
 }
 
-.album-audio-btn { position: relative; z-index: 20; background: transparent; border: 1px solid var(--border-highlight); color: rgba(255,255,255,0.55); padding: 12px 24px; border-radius: 999px; font-family: var(--font-head); font-weight: 600; font-size: 12.5px; text-decoration: none; letter-spacing: 1px; transition: 0.3s; white-space: nowrap; }
+.album-audio-btn { position: relative; z-index: 20; background: transparent; border: 1px solid var(--border-highlight); color: rgba(255,255,255,0.55); padding: 12px 24px; border-radius: 8px; font-family: var(--font-head); font-weight: 600; font-size: 12.5px; text-decoration: none; letter-spacing: 1px; transition: 0.3s; white-space: nowrap; }
 .album-audio-btn-disabled { cursor: default; }
 
 .album-modal-info { flex: 1; display: flex; flex-direction: column; padding: 48px 40px; box-sizing: border-box; overflow-y: auto; min-width: 0; }
@@ -308,7 +308,7 @@ html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
 .honors-history-modal {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
     width: 94%; max-width: 980px; height: 88vh; max-height: 860px;
-    background: var(--bg-base); border: 1px solid var(--border-light); border-radius: 20px;
+    background: var(--bg-base); border: 1px solid var(--border-light); border-radius: 12px;
     overflow: hidden; z-index: 9950;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -370,7 +370,7 @@ html[data-theme="light"] .honors-tabbar { background: #ffffff; }
 
 .honors-history-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 0 0 40px; box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
 .honors-history-body::-webkit-scrollbar { width: 6px; }
-.honors-history-body::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
+.honors-history-body::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 8px; }
 .honors-tab-panels { padding: 0 44px; box-sizing: border-box; }
 
 .honors-tab-panel { display: none; }
@@ -383,10 +383,10 @@ html[data-theme="light"] .honors-tabbar { background: #ffffff; }
 .honors-panel-top { display: flex; justify-content: flex-end; margin: 26px 0 2px; }
 .honors-stat-pill {
     display: inline-flex; align-items: baseline; gap: 6px;
-    padding: 7px 16px; border-radius: 999px;
-    background: var(--c-accent-glow); border: 1px solid rgba(154,166,255,0.28);
+    padding: 7px 16px; border-radius: 8px;
+    background: var(--c-accent-glow); border: 1px solid rgba(255,77,148,0.28);
 }
-html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22); }
+html[data-theme="light"] .honors-stat-pill { border-color: rgba(227,28,107,0.22); }
 .honors-stat-pill .stat-num { font-family: var(--font-num); font-size: 16px; font-weight: 800; color: var(--c-accent); letter-spacing: -0.2px; }
 .honors-stat-pill .stat-label { font-family: var(--font-head); font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; color: var(--text-secondary); }
 
@@ -423,7 +423,7 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22)
 .ht-head .h-tag {
     font-family: var(--font-num); font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
     color: var(--c-accent); background: var(--c-accent-glow); border: 1px solid transparent;
-    padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+    padding: 3px 10px; border-radius: 8px; white-space: nowrap;
 }
 
 /* 프로그램별 순위 — 카드 그리드 대신 막대 비교가 있는 랭킹 리스트 */
@@ -466,9 +466,9 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22)
 .ad-tl-item.side-right { justify-content: flex-end; }
 .ad-tl-date { font-family: var(--font-num); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--c-accent); margin-bottom: 6px; display: block; }
 .ad-tl-title { font-family: var(--font-body); font-size: 14.5px; font-weight: 700; color: var(--text-primary); line-height: 1.4; }
-.ad-tl-tag { display: inline-block; margin-left: 6px; font-family: var(--font-num); font-size: 10px; font-weight: 700; color: var(--c-accent); background: var(--c-accent-glow); padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
+.ad-tl-tag { display: inline-block; margin-left: 6px; font-family: var(--font-num); font-size: 10px; font-weight: 700; color: var(--c-accent); background: var(--c-accent-glow); padding: 2px 8px; border-radius: 8px; vertical-align: middle; }
 .ad-tl-note { margin-top: 6px; font-family: var(--font-body); font-size: 12.5px; color: var(--text-muted); }
-.ad-tl-period { display: inline-block; margin-top: 8px; font-family: var(--font-num); font-size: 10.5px; font-weight: 600; color: var(--text-muted); border: 1px solid var(--border-highlight); padding: 2.5px 10px; border-radius: 999px; }
+.ad-tl-period { display: inline-block; margin-top: 8px; font-family: var(--font-num); font-size: 10.5px; font-weight: 600; color: var(--text-muted); border: 1px solid var(--border-highlight); padding: 2.5px 10px; border-radius: 8px; }
 
 @media (max-width: 700px) {
     .honors-history-modal { width: 95%; height: 90vh; }
@@ -505,11 +505,11 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(99,102,241,0.22)
 .media-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
     width: 92%; max-width: 720px; height: 88vh; max-height: 820px;
-    background: var(--bg-base); border: 1px solid var(--border-highlight); border-radius: 24px;
+    background: var(--bg-base); border: 1px solid var(--border-highlight); border-radius: 14px;
     overflow: hidden; z-index: 9950;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 40px 120px rgba(0,0,0,0.65), 0 0 0 1px rgba(154,166,255,0.08);
+    box-shadow: 0 40px 120px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,77,148,0.08);
     box-sizing: border-box;
     display: flex; flex-direction: column;
 }
@@ -524,7 +524,7 @@ html[data-theme="light"] .media-modal-wrapper { background: #FFFFFF; }
 .media-modal-media iframe { width: 100%; height: 100%; border: 0; display: block; }
 
 .media-modal-nav { display: flex; align-items: center; gap: 10px; padding: 14px 20px; flex-shrink: 0; border-bottom: 1px solid var(--border-light); }
-.mm-nav-btn { display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border-light); color: var(--text-secondary); font-family: var(--font-head); font-size: 12px; font-weight: 700; padding: 9px 16px; border-radius: 999px; cursor: pointer; transition: 0.25s ease; }
+.mm-nav-btn { display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border-light); color: var(--text-secondary); font-family: var(--font-head); font-size: 12px; font-weight: 700; padding: 9px 16px; border-radius: 8px; cursor: pointer; transition: 0.25s ease; }
 .mm-nav-btn:hover:not(:disabled) { border-color: var(--c-accent); color: var(--c-accent); }
 .mm-nav-btn:disabled { opacity: 0.35; cursor: default; }
 .mm-nav-btn svg { width: 14px; height: 14px; }
@@ -541,11 +541,11 @@ html[data-theme="light"] .media-modal-wrapper { background: #FFFFFF; }
 .sh-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
     width: 92%; max-width: 800px; height: 88vh; max-height: 820px;
-    background: var(--bg-base); border: 1px solid var(--border-highlight); border-radius: 24px;
+    background: var(--bg-base); border: 1px solid var(--border-highlight); border-radius: 14px;
     overflow: hidden; z-index: 9950;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 40px 120px rgba(0,0,0,0.65), 0 0 0 1px rgba(154,166,255,0.08);
+    box-shadow: 0 40px 120px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,77,148,0.08);
     box-sizing: border-box;
     display: flex; flex-direction: column;
 }
@@ -596,13 +596,13 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
     .sh-modal-video-col { border-bottom: none; }
     .sh-modal-nav, .sh-modal-playlist { display: none; }
 }
-.mm-drag-handle::before { content: ''; width: 36px; height: 4px; border-radius: 999px; background: var(--border-highlight); }
+.mm-drag-handle::before { content: ''; width: 36px; height: 4px; border-radius: 8px; background: var(--border-highlight); }
 .mm-drag-label { font-family: var(--font-head); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
 .mm-drag-label b { color: var(--text-primary); font-weight: 800; }
 
 .mm-playlist-list { list-style: none; margin: 0; padding: 0 14px 14px; overflow-y: auto; max-height: 120px; transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1); scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent; }
 .mm-playlist-list::-webkit-scrollbar { width: 6px; }
-.mm-playlist-list::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 999px; }
+.mm-playlist-list::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 8px; }
 .media-modal-playlist.expanded .mm-playlist-list { max-height: 340px; }
 
 .mm-playlist-item { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 12px; cursor: pointer; transition: background 0.25s ease; }

@@ -357,7 +357,7 @@ function openAlbumModal(idx) {
         listEl.innerHTML = album.tracks.map((t, i) => `
             <div class="album-track-row${t.isTitle ? ' title-track' : ''}" data-idx="${i}" onclick="playAlbumTrack(${i})">
                 <span class="album-track-num">${String(i + 1).padStart(2, '0')}</span>
-                <span class="album-track-name">${t.name}${t.isTitle ? ' <span class="title-star">★</span>' : ''}</span>
+                <span class="album-track-name">${t.name}${t.isTitle ? ' <span class="title-star">TITLE</span>' : ''}</span>
             </div>`).join('');
     }
     playAlbumTrack(pickTrack(album));

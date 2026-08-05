@@ -4890,6 +4890,7 @@ const SHORTS_DATA = [
         "channel": "도미노피자",
         "date": "2026-07-16",
         "tags": [
+            "rescene",
             "woni",
             "liv",
             "minami",

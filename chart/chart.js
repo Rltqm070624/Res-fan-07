@@ -1,12 +1,12 @@
 const CHART_PLATFORMS = [
     { key: 'all', label: '종합' },
-    { key: 'melon', label: '멜론' },
-    { key: 'genie', label: '지니' },
-    { key: 'vibe', label: '바이브' },
-    { key: 'bugs', label: '벅스' },
+    { key: 'melon', label: 'Melon' },
+    { key: 'genie', label: 'Geinie' },
+    { key: 'vibe', label: 'VIBE' },
+    { key: 'bugs', label: 'BUGS' },
     { key: 'flo', label: 'FLO' },
-    { key: 'youtube_music', label: '유튜브뮤직' },
-    { key: 'spotify', label: '스포티파이' }
+    { key: 'youtube_music', label: 'YOUTUBE MUSIC' },
+    { key: 'spotify', label: 'SPOTIFTY' }
 ];
 function renderChartWave() {
     const wave = document.getElementById('chartWave');
@@ -30,11 +30,6 @@ const CHART_PLATFORM_DOT_COLOR = {
 let chartActivePlatform = 'all';
 let CHART_DATA = { songs: [] };
 
-function chartEsc(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
 function renderChartTabs() {
     const el = document.getElementById('chartTabbar');
     if (!el) return;
@@ -52,7 +47,7 @@ function chartSetPlatform(key) {
 /* 종합 탭 — 곡마다 순위 대신 '몇 개 플랫폼에 차트인했는지'를 점으로 보여주는 개요 뷰 */
 function chartOverviewRowHtml(song, idx) {
     const noThumb = '<div class="chart-thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>';
-    const thumb = song.albumImageUrl ? `<img class="chart-thumb" src="${chartEsc(song.albumImageUrl)}" alt="" loading="lazy">` : noThumb;
+    const thumb = song.albumImageUrl ? `<img class="chart-thumb" src="${escapeHtml(song.albumImageUrl)}" alt="" loading="lazy">` : noThumb;
     const ranks = song.ranks || {};
     const dots = CHART_PLATFORMS.filter(p => p.key !== 'all').map(p => {
         const on = ranks[p.key] && ranks[p.key].rank != null;
@@ -63,8 +58,8 @@ function chartOverviewRowHtml(song, idx) {
         <span class="chart-row-idx">${String(idx + 1).padStart(2, '0')}</span>
         ${thumb}
         <div class="chart-row-info">
-            <div class="chart-row-title">${chartEsc(song.songName)}</div>
-            <div class="chart-row-artist">${chartEsc(song.artistName)}</div>
+            <div class="chart-row-title">${escapeHtml(song.songName)}</div>
+            <div class="chart-row-artist">${escapeHtml(song.artistName)}</div>
         </div>
         <div class="chart-dot-row">${dots}</div>
         <span class="chart-charted-count">${chartedCount}개 플랫폼</span>
@@ -74,7 +69,7 @@ function chartOverviewRowHtml(song, idx) {
 /* 개별 플랫폼 탭 — 그 플랫폼 기준 순위로 정렬한 클린한 랭킹 리스트 */
 function chartPlatformRowHtml(song, rankInfo) {
     const noThumb = '<div class="chart-thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>';
-    const thumb = song.albumImageUrl ? `<img class="chart-thumb" src="${chartEsc(song.albumImageUrl)}" alt="" loading="lazy">` : noThumb;
+    const thumb = song.albumImageUrl ? `<img class="chart-thumb" src="${escapeHtml(song.albumImageUrl)}" alt="" loading="lazy">` : noThumb;
     const rank = rankInfo.rank;
     const prev = rankInfo.previousRank;
     let deltaHtml;
@@ -88,10 +83,10 @@ function chartPlatformRowHtml(song, rankInfo) {
         ${thumb}
         <div class="chart-row-info">
             <div class="chart-row-title-line">
-                <span class="chart-row-title">${chartEsc(song.songName)}</span>
+                <span class="chart-row-title">${escapeHtml(song.songName)}</span>
                 ${deltaHtml}
             </div>
-            <div class="chart-row-artist">${chartEsc(song.artistName)}</div>
+            <div class="chart-row-artist">${escapeHtml(song.artistName)}</div>
         </div>
         <div class="chart-share-wrap">
             <button type="button" class="chart-share-btn" title="공유하기" aria-label="공유하기" onclick="chartToggleShare(event, '${shareId}', ${JSON.stringify(song.songName)}, ${JSON.stringify(song.artistName)})">

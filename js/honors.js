@@ -163,7 +163,7 @@ function openAwardsHistoryModal() {
 }
 
 function openAdsHistoryModal() {
-    setHonorsHistoryHead('광고 · 콜라보 · 화보 히스토리', 'images/ad/ber.webp');
+    setHonorsHistoryHead('', 'images/ad/ber.webp');
     const body = document.getElementById('awardsHistoryBody');
     if (body) {
         const categories = ['광고', '화보', '홍보대사', '콜라보'];

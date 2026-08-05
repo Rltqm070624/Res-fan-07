@@ -127,3 +127,28 @@
     .fc-video-wrap { align-self: start; } /* 남은 세로 공간을 다 차지하지 않고 16:9 비율만 유지 (안 그러면 영상이 늘어나 잘려 보임) */
     .fc-lyrics-scroll { padding-right: 8px; }
 }
+@media (max-width: 900px) {
+    #mainWrapper { height: auto !important; overflow: visible !important; }
+    .fc-layout { grid-template-rows: auto auto; min-height: auto; padding-bottom: 12px; }
+    .fc-detail { overflow: visible; min-height: auto; }
+    .fc-detail-body { min-height: auto; }
+    .fc-detail-content { grid-template-rows: auto auto; }
+    .fc-lyrics-scroll { height: auto; overflow-y: visible; padding-bottom: 24px; }
+
+    .fc-song-list {
+        display: flex; flex-direction: row; align-items: center; gap: 8px;
+        max-height: none; overflow-x: auto; overflow-y: hidden; white-space: nowrap;
+        padding: 8px 10px; scrollbar-width: thin; scrollbar-color: var(--border-highlight) transparent;
+    }
+    .fc-song-list::-webkit-scrollbar { height: 4px; }
+    .fc-song-list::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 3px; }
+    .fc-album-group { display: flex; align-items: center; gap: 8px; margin-bottom: 0; flex-shrink: 0; }
+    .fc-album-title { display: none; } /* 앨범명은 곡 선택 시 상세 영역 상단(fc-detail-album)에 이미 표시됨 */
+    .fc-song-items { display: flex; flex-direction: row; gap: 8px; }
+    .fc-song-item {
+        flex-shrink: 0; white-space: nowrap; padding: 9px 16px; border-radius: 999px;
+        background: var(--bg-surface-hover); border: 1px solid var(--border-light);
+        font-size: 13px;
+    }
+    .fc-song-item.active { background: var(--c-accent-glow); color: var(--c-accent); border-color: var(--c-accent); }
+}

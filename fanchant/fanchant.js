@@ -1,9 +1,5 @@
-function fcEscape(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
 function fcRenderLyrics(text) {
-    return fcEscape(text)
+    return escapeHtml(text)
         .split('\n')
         .map(line => line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'))
         .join('<br>');
@@ -35,10 +31,10 @@ function renderFcList() {
     let html = '';
     Object.keys(groups).forEach(album => {
         html += `<div class="fc-album-group">
-            <div class="fc-album-title">${fcEscape(album)}</div>
+            <div class="fc-album-title">${escapeHtml(album)}</div>
             <ul class="fc-song-items">`;
         groups[album].forEach(s => {
-            html += `<li class="fc-song-item" data-index="${s._index}" onclick="showFcSong(${s._index})">${fcEscape(s.song)}</li>`;
+            html += `<li class="fc-song-item" data-index="${s._index}" onclick="showFcSong(${s._index})">${escapeHtml(s.song)}</li>`;
         });
         html += `</ul></div>`;
     });
@@ -62,7 +58,7 @@ function showFcSong(index) {
     const videoWrap = document.getElementById('fcVideoWrap');
     if (s.vid) {
         videoWrap.style.display = '';
-        videoWrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${s.vid}" title="${fcEscape(s.song)} 응원법" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        videoWrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${s.vid}" title="${escapeHtml(s.song)} 응원법" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     } else {
         videoWrap.style.display = 'none';
         videoWrap.innerHTML = '';

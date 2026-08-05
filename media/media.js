@@ -182,6 +182,7 @@ function mediaSetTag(label) {
         mediaActiveSub = '전체';
         mediaYearClicked = false;
     }
+    mediaTopicChosungFilter = '전체';
     mediaRenderTagRow();
     mediaApplyFilters();
     if(typeof mediaRenderDrawer === 'function') mediaRenderDrawer();
@@ -282,6 +283,8 @@ function mediaRenderDrawer() {
 
     const topicBox = document.getElementById('afdTopicChips');
     const topicCount = document.getElementById('afdTopicCount');
+    const topicToolbar = document.getElementById('afdTopicToolbar');
+    const chosungRow = document.getElementById('afdChosungRow');
     const cfg = MEDIA_SUBFILTERS[mediaActiveTag];
     
     if (cfg && cfg.sub) {
@@ -292,18 +295,102 @@ function mediaRenderDrawer() {
         if (mediaActiveSub !== '전체') {
             itemsInYear = itemsInYear.filter(i => (i.date||'').slice(0, 4) === mediaActiveSub);
         }
-        const options = cfg.sub.getOptions(itemsInYear);
-        
-        topicBox.innerHTML = options.map(opt => `
-            <button class="afd-chip ${mediaActiveDetails.has(opt) ? 'active' : ''}" onclick="mediaToggleDetail('${safeEscape(opt)}'); mediaRenderDrawer();">
-                ${mediaActiveDetails.has(opt) ? checkSVG : ''} ${safeEscape(opt)}
+        const rawOptions = cfg.sub.getOptions(itemsInYear);
+
+        // ⭐️ 이름을 몰라도 훑어볼 수 있도록: 항목별 영상 개수를 세어 "많이 나온순"을 기본값으로 제공
+        const counted = rawOptions.map(opt => ({
+            label: opt,
+            count: mediaCountForDetail(itemsInYear, opt),
+            cho: mediaGetChosungKey(opt)
+        }));
+
+        const showToolbarAndIndex = counted.length > 8;
+        if (topicToolbar) topicToolbar.style.display = showToolbarAndIndex ? '' : 'none';
+
+        if (mediaTopicSortMode === 'alpha') {
+            counted.sort((a, b) => a.label.localeCompare(b.label, 'ko'));
+        } else {
+            counted.sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, 'ko'));
+        }
+
+        // 자음 인덱스 바 (가나다순일 때만 노출)
+        if (chosungRow) {
+            if (showToolbarAndIndex && mediaTopicSortMode === 'alpha') {
+                const presentKeys = new Set(counted.map(o => o.cho));
+                const keys = ['전체'].concat(MEDIA_CHOSUNG_KEYS.filter(k => presentKeys.has(k)));
+                chosungRow.innerHTML = keys.map(k => `
+                    <button type="button" class="afd-cho-btn ${k === mediaTopicChosungFilter ? 'active' : ''}" onclick="mediaSetTopicChosung('${k}')">${k}</button>
+                `).join('');
+                chosungRow.classList.remove('is-hidden');
+            } else {
+                chosungRow.classList.add('is-hidden');
+                chosungRow.innerHTML = '';
+            }
+        }
+
+        let visible = counted;
+        if (mediaTopicSortMode === 'alpha' && mediaTopicChosungFilter !== '전체') {
+            visible = counted.filter(o => o.cho === mediaTopicChosungFilter);
+        }
+
+        topicBox.innerHTML = visible.length ? visible.map(o => `
+            <button class="afd-chip ${mediaActiveDetails.has(o.label) ? 'active' : ''}" onclick="mediaToggleDetail('${safeEscape(o.label)}'); mediaRenderDrawer();">
+                ${mediaActiveDetails.has(o.label) ? checkSVG : ''} ${safeEscape(o.label)} <span class="afd-chip-count">${o.count}</span>
             </button>
-        `).join('');
-        topicCount.innerHTML = `선택됨 <b style="color:#3b82f6;">${mediaActiveDetails.size}</b> / ${options.length}`;
+        `).join('') : '<span style="font-size:13px; color:var(--text-muted);">해당 자음으로 시작하는 항목이 없습니다.</span>';
+
+        topicCount.innerHTML = `선택됨 <b style="color:#3b82f6;">${mediaActiveDetails.size}</b> / ${rawOptions.length}`;
     } else {
+        if (topicToolbar) topicToolbar.style.display = 'none';
+        if (chosungRow) { chosungRow.classList.add('is-hidden'); chosungRow.innerHTML = ''; }
         topicBox.innerHTML = '<span style="font-size:13px; color:var(--text-muted);">해당 카테고리에는 관련 주제가 없습니다.</span>';
         topicCount.textContent = '';
     }
+}
+
+// ⭐️ mediaApplyFilters와 동일한 매칭 로직으로 항목별 영상 개수를 계산 (검색 없이도 "인기순"으로 훑어보기 위함)
+function mediaCountForDetail(items, d) {
+    const lowerD = (d || '').toLowerCase();
+    return items.filter(i => {
+        const brand = mediaGetContentBrand(i);
+        const prog = i.program || '';
+        const text = ((i.title || '') + ' ' + (i.sub || '')).toLowerCase();
+        let matched = brand === d || prog === d || text.includes(lowerD);
+        if (!matched && memberAlias[d]) matched = memberAlias[d].some(alias => text.includes(alias));
+        return matched;
+    }).length;
+}
+
+// ⭐️ 자음 인덱스(연락처 앱 방식): 이름을 몰라도 초성만 보고 눌러서 바로 좁혀볼 수 있게 함
+const MEDIA_CHO_LIST = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+const MEDIA_CHO_BASE_MAP = { 'ㄲ':'ㄱ', 'ㄸ':'ㄷ', 'ㅃ':'ㅂ', 'ㅆ':'ㅅ', 'ㅉ':'ㅈ' };
+const MEDIA_CHOSUNG_KEYS = ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ','#'];
+
+function mediaGetChosungKey(str) {
+    if (!str) return '#';
+    const ch = str.trim().charAt(0);
+    const code = ch.charCodeAt(0) - 0xAC00;
+    if (code >= 0 && code <= 11171) {
+        const cho = MEDIA_CHO_LIST[Math.floor(code / 588)];
+        return MEDIA_CHO_BASE_MAP[cho] || cho;
+    }
+    return '#';
+}
+
+let mediaTopicSortMode = 'popular'; // 'popular' | 'alpha'
+let mediaTopicChosungFilter = '전체';
+
+function mediaSetTopicSortMode(mode) {
+    mediaTopicSortMode = mode;
+    mediaTopicChosungFilter = '전체';
+    document.getElementById('afdSortPopular').classList.toggle('active', mode === 'popular');
+    document.getElementById('afdSortAlpha').classList.toggle('active', mode === 'alpha');
+    mediaRenderDrawer();
+}
+
+function mediaSetTopicChosung(key) {
+    mediaTopicChosungFilter = key;
+    mediaRenderDrawer();
 }
 
 function mediaRemoveActiveFilter(type, val) {

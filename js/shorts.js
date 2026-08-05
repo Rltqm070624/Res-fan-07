@@ -154,6 +154,11 @@ let shPlayer = null;
 let shYtApiReady = false;
 let shYtApiLoading = false;
 let shYtApiCallbacks = [];
+/* ⭐️ 영상이 로드된 직후의 첫 탭은 재생/정지를 토글하지 않고 그냥 흘려보냄.
+   (controls:0으로 유튜브 자체 UI는 없앴지만, 그것과 별개로 "탭 한 번에 바로 정지"되는 게
+   사용자 입장에서 의도치 않게 눌리는 느낌이 있어서, 영상이 바뀔 때마다 첫 탭은 무시하고
+   두 번째 탭부터 정상적으로 토글되게 함) */
+let shSkipNextTapToggle = false;
 
 function shEnsureYouTubeApi(cb) {
     if (shYtApiReady && window.YT && window.YT.Player) { cb(); return; }
@@ -232,6 +237,7 @@ function shModalLoad(idx) {
     const item = list[idx];
     if (!item) return;
     shModalIndex = idx;
+    shSkipNextTapToggle = true;
 
     const media = document.getElementById('shModalMediaBox');
     const title = document.getElementById('shModalTitle');
@@ -361,6 +367,7 @@ function shAttachSwipeCatcher() {
 
         if (!moved) {
             if (box) { box.style.transition = 'transform 0.25s cubic-bezier(0.22,1,0.36,1)'; box.style.transform = ''; }
+            if (shSkipNextTapToggle) { shSkipNextTapToggle = false; return; }
             shTogglePlayPause();
             return;
         }
@@ -416,6 +423,15 @@ window.addEventListener('DOMContentLoaded', () => {
             shRenderGrid('shMediaGrid', 'media');
             shInitMediaViewFromQuery();
         }
+        // ⭐️ 쇼츠 가로 스크롤 영역 — 마우스 휠(세로)로도 가로 스크롤되게
+        document.querySelectorAll('.sh-row-wrapper').forEach(wrapper => {
+            wrapper.addEventListener('wheel', (e) => {
+                if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // 이미 가로 휠이면 기본 동작 유지
+                if (wrapper.scrollWidth <= wrapper.clientWidth) return; // 스크롤할 게 없으면 그냥 통과
+                e.preventDefault();
+                wrapper.scrollLeft += e.deltaY;
+            }, { passive: false });
+        });
     } catch (e) {
         console.error('쇼츠 렌더링 실패:', e);
     }

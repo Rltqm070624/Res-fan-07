@@ -114,12 +114,12 @@
     word-break: keep-all;
 }
 
-/* ⭐️ MBTI 텍스트 - 다른 스탯과 통일하되 고유 색상 및 영문 폰트 적용 */
+/* ⭐️ MBTI 텍스트 - 다른 스탯과 완전히 동일한 색상으로 통일 (예전엔 멤버별 고유색이 들어갔었음) */
 .mbti-val {
     font-family: var(--font-num);
     font-weight: 700;
     letter-spacing: 0.05em;
-    color: var(--mem-active-color, var(--text-primary));
+    color: var(--text-primary);
 }
 
 /* ==============================================================

@@ -55,7 +55,7 @@ function showFcSong(index) {
     });
 
     document.getElementById('fcEmpty').style.display = 'none';
-    document.getElementById('fcDetailBody').style.display = 'block';
+    document.getElementById('fcDetailBody').style.display = 'flex';
     document.getElementById('fcAlbum').textContent = s.album || '';
     document.getElementById('fcSong').textContent = s.song || '';
 

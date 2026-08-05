@@ -1,4 +1,3 @@
-// ⭐️ 홈 버튼은 항상 정식 도메인(github.io)의 홈으로 이동해야 하므로 절대경로 사용
 const SITE_HOME_URL = 'https://senarchive.github.io/sen-archive/index.html';
 
 function renderSiteNav(activeKey, root, opts) {

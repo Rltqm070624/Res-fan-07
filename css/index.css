@@ -237,8 +237,11 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 @media (max-width: 600px) {
     .honors-linear-group { padding: 26px 20px 6px; border-radius: 4px; }
     .honors-list li { flex-wrap: wrap; align-items: flex-start; gap: 4px 10px; padding: 16px 6px; }
-    .honors-list .h-info { flex: 1 1 auto; min-width: 0; width: auto; }
-    .honors-list .h-date { width: 100%; text-align: left; padding-left: 66px; font-size: 12px; color: var(--text-secondary); }
+    .honors-list .h-info { flex: 1 1 auto; min-width: 0; width: auto; flex-direction: column; align-items: flex-start; gap: 4px; }
+    .honors-list .h-badge, .honors-list .h-note, .honors-list .h-tag { margin-left: 0; }
+    /* ⭐️ 순위(20px) + 간격(10px) + 썸네일(42px) + 간격(10px) = 82px — 제목이 시작하는 위치와 정확히 맞춰서
+       날짜가 제목 바로 아래에 어긋남 없이 정렬되도록 함 (기존 66px는 실제 레이아웃과 안 맞아 날짜가 밀려 보였음) */
+    .honors-list .h-date { width: 100%; text-align: left; padding-left: 82px; font-size: 12px; color: var(--text-secondary); }
 }
 
 .latest-media-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:32px 24px; width:100%; align-items:start; }

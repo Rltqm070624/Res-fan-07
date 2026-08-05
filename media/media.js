@@ -1,9 +1,3 @@
-function safeEscape(str) {
-    if (!str) return '';
-    return String(str).replace(/[&<>'"]/g, match => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-    })[match]);
-}
 function safeThumb(vid) {
     return typeof ytThumb === 'function' ? ytThumb(vid) : `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
 }
@@ -102,8 +96,8 @@ function mediaRenderTagRow() {
     const all = ['전체', '멤버'].concat(MEDIA_CATEGORIES.map(c => c.label));
     row.innerHTML = all.map(label => {
         const active = label === mediaActiveTag;
-        return `<button type="button" class="ms-item${active ? ' active' : ''}" onclick="mediaSetTag('${safeEscape(label)}')">
-            <span>${safeEscape(label)}</span>
+        return `<button type="button" class="ms-item${active ? ' active' : ''}" onclick="mediaSetTag('${escapeHtml(label)}')">
+            <span>${escapeHtml(label)}</span>
         </button>`;
     }).join('');
     
@@ -131,8 +125,8 @@ function mediaRenderYearCol() {
     wrap.classList.remove('is-hidden');
     
     col.innerHTML = options.map(opt =>
-        `<button type="button" class="ms-item${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${safeEscape(opt)}')">
-            <span>${opt === '전체' ? '전체' : safeEscape(opt) + '년'}</span>
+        `<button type="button" class="ms-item${opt === mediaActiveSub ? ' active' : ''}" onclick="mediaSetSub('${escapeHtml(opt)}')">
+            <span>${opt === '전체' ? '전체' : escapeHtml(opt) + '년'}</span>
         </button>`
     ).join('');
     
@@ -164,8 +158,8 @@ function mediaRenderSubCol() {
     
     col.innerHTML = options.map(opt => {
         const isActive = (opt === '전체' && mediaActiveDetails.size === 0) || mediaActiveDetails.has(opt);
-        return `<button type="button" class="ms-item${isActive ? ' active' : ''}" onclick="mediaSetDetailFromSidebar('${safeEscape(opt)}')">
-            <span>${safeEscape(opt)}</span>
+        return `<button type="button" class="ms-item${isActive ? ' active' : ''}" onclick="mediaSetDetailFromSidebar('${escapeHtml(opt)}')">
+            <span>${escapeHtml(opt)}</span>
         </button>`;
     }).join('');
 }
@@ -263,8 +257,8 @@ function mediaRenderDrawer() {
     const categories = ['전체', '멤버'].concat(MEDIA_CATEGORIES.map(c => c.label));
     
     catBox.innerHTML = categories.map(cat => `
-        <button class="afd-chip ${cat === mediaActiveTag ? 'active' : ''}" onclick="mediaSetTag('${safeEscape(cat)}'); mediaRenderDrawer();">
-            ${cat === mediaActiveTag ? checkSVG : ''} ${safeEscape(cat)}
+        <button class="afd-chip ${cat === mediaActiveTag ? 'active' : ''}" onclick="mediaSetTag('${escapeHtml(cat)}'); mediaRenderDrawer();">
+            ${cat === mediaActiveTag ? checkSVG : ''} ${escapeHtml(cat)}
         </button>
     `).join('');
     catCount.textContent = `${categories.length}${window.t ? window.t('itemsCountSuffix') : '개 항목'}`;
@@ -276,8 +270,8 @@ function mediaRenderDrawer() {
     mediaActiveDetails.forEach(d => actives.push({ type: 'detail', label: d, val: d }));
     
     activeBox.innerHTML = actives.length ? actives.map(a => `
-        <button class="afd-chip closeable" onclick="mediaRemoveActiveFilter('${a.type}', '${safeEscape(a.val || '')}')">
-            ${safeEscape(a.label)} ${closeSVG}
+        <button class="afd-chip closeable" onclick="mediaRemoveActiveFilter('${a.type}', '${escapeHtml(a.val || '')}')">
+            ${escapeHtml(a.label)} ${closeSVG}
         </button>
     `).join('') : `<span style="font-size:13px; color:var(--text-muted);">${window.t ? window.t('noActiveFilters') : '활성화된 필터 없음'}</span>`;
 
@@ -338,8 +332,8 @@ function mediaRenderDrawer() {
         }
 
         topicBox.innerHTML = visible.length ? visible.map(o => `
-            <button class="afd-chip ${mediaActiveDetails.has(o.label) ? 'active' : ''}" onclick="mediaToggleDetail('${safeEscape(o.label)}'); mediaRenderDrawer();">
-                ${mediaActiveDetails.has(o.label) ? checkSVG : ''} ${safeEscape(o.label)} <span class="afd-chip-count" style="font-size:11px;font-weight:700;color:#8a8a8a;background:rgba(120,120,120,0.14);border-radius:999px;padding:1px 7px;margin-left:2px;">${o.count}</span>
+            <button class="afd-chip ${mediaActiveDetails.has(o.label) ? 'active' : ''}" onclick="mediaToggleDetail('${escapeHtml(o.label)}'); mediaRenderDrawer();">
+                ${mediaActiveDetails.has(o.label) ? checkSVG : ''} ${escapeHtml(o.label)} <span class="afd-chip-count" style="font-size:11px;font-weight:700;color:#8a8a8a;background:rgba(120,120,120,0.14);border-radius:999px;padding:1px 7px;margin-left:2px;">${o.count}</span>
             </button>
         `).join('') : `<span style="font-size:13px; color:var(--text-muted);">${window.t ? window.t('noChosungResults') : '해당 자음으로 시작하는 항목이 없습니다.'}</span>`;
 
@@ -391,13 +385,9 @@ function mediaSetTopicSortMode(mode) {
     const alphaBtn = document.getElementById('afdSortAlpha');
     if (popBtn) {
         popBtn.classList.toggle('active', mode === 'popular');
-        popBtn.style.background = mode === 'popular' ? '#111' : 'transparent';
-        popBtn.style.color = mode === 'popular' ? '#fff' : '#8a8a8a';
     }
     if (alphaBtn) {
         alphaBtn.classList.toggle('active', mode === 'alpha');
-        alphaBtn.style.background = mode === 'alpha' ? '#111' : 'transparent';
-        alphaBtn.style.color = mode === 'alpha' ? '#fff' : '#8a8a8a';
     }
     mediaRenderDrawer();
 }
@@ -525,13 +515,13 @@ function mediaCardHtml(item, idx) {
     
     return `<div class="media-card">
         <div class="media-card-thumb" data-index="${idx}" onclick="mediaPlayCard(this)">
-            <img src="${safeThumb(item.vid)}" alt="${safeEscape(title)}" loading="lazy" onerror="this.closest('.media-card').style.display='none'">
+            <img src="${safeThumb(item.vid)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.closest('.media-card').style.display='none'">
             <button type="button" class="mc-play" aria-label="재생"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-            <span class="media-card-tag" style="background:${badgeColor};">${safeEscape(item.tagLabel)}</span>
+            <span class="media-card-tag" style="background:${badgeColor};">${escapeHtml(item.tagLabel)}</span>
         </div>
         <div class="media-card-info">
-            <div class="mc-title">${safeEscape(title)}</div>
-            <div class="mc-sub">${item.sub ? safeEscape(item.sub) + ' · ' : ''}${item.date}</div>
+            <div class="mc-title">${escapeHtml(title)}</div>
+            <div class="mc-sub">${item.sub ? escapeHtml(item.sub) + ' · ' : ''}${item.date}</div>
         </div>
     </div>`;
 }
@@ -612,9 +602,9 @@ function loadMmVideo(index) {
     const modalTitle = document.getElementById('mediaModalTitle');
     const modalDate = document.getElementById('mediaModalDate');
     const title = mediaCardTitle(item);
-    if (modalMedia) modalMedia.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1" title="${safeEscape(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    if (modalMedia) modalMedia.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.vid}?autoplay=1" title="${escapeHtml(title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     if (modalTitle) modalTitle.textContent = title;
-    if (modalDate) modalDate.textContent = item.sub ? `${safeEscape(item.sub)} · ${item.date}` : (item.date || '');
+    if (modalDate) modalDate.textContent = item.sub ? `${escapeHtml(item.sub)} · ${item.date}` : (item.date || '');
     updateMmNavButtons();
     highlightMmPlaylistActive();
 }
@@ -640,8 +630,8 @@ function renderMmPlaylist() {
             <span class="mm-playlist-index">${i + 1}</span>
             <div class="mm-playlist-thumb"><img src="${safeThumb(item.vid)}" alt="" loading="lazy"></div>
             <div class="mm-playlist-info">
-                <div class="mm-playlist-title">${safeEscape(title)}</div>
-                <div class="mm-playlist-date">${item.sub ? safeEscape(item.sub) + ' · ' : ''}${item.date}</div>
+                <div class="mm-playlist-title">${escapeHtml(title)}</div>
+                <div class="mm-playlist-date">${item.sub ? escapeHtml(item.sub) + ' · ' : ''}${item.date}</div>
             </div>
         </li>`;
     }).join('');

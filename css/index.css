@@ -76,7 +76,7 @@ html, body { scroll-snap-type: y proximity; overflow-x: hidden; width: 100%; pos
 .profile-item:hover img { transform: scale(1.08); }
 .profile-item .pf-index { position: absolute; left: 10px; bottom: 9px; font-family: var(--font-num); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7); }
 .profile-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 40%); pointer-events: none; }
-.profile-item.archive-more-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: var(--text-secondary); font-family: var(--font-head); font-size: 12.5px; font-weight: 700; border: 1px dashed var(--border-highlight); background: var(--bg-surface); }
+.profile-item.archive-more-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: var(--text-secondary); font-family: var(--font-head); font-size: 12.5px; font-weight: 700; border: 1px solid var(--border-highlight); background: var(--bg-surface); }
 .profile-item.archive-more-tile:hover { color: var(--c-accent); border-color: var(--c-accent); }
 .profile-item.archive-more-tile::after { display: none; }
 #profileSection.section-container,

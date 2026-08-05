@@ -87,7 +87,7 @@ function renderSiteNav(activeKey, root, opts) {
         </div>
         <ul class="mobile-menu-list">${mobileLinks}</ul>
         ${opts.lang ? `<div class="lang-globe-wrap-mobile">
-            <div class="lang-switcher lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" id="langAccordionMobile">
+            <div class="lang-switcher-mobile notranslate" translate="no" role="group" aria-label="Language" id="langAccordionMobile">
                 <button type="button" class="lang-btn" data-lang="ko" onclick="setLang('ko'); toggleLangAccordion(false, 'mobile');">KOR</button>
                 <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en'); toggleLangAccordion(false, 'mobile');">ENG</button>
                 <button type="button" class="lang-btn" data-lang="ja" onclick="setLang('ja'); toggleLangAccordion(false, 'mobile');">日本語</button>
@@ -107,7 +107,7 @@ function renderSiteNav(activeKey, root, opts) {
     if (typeof updateThemeIcon === 'function') updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
     if (typeof window.setLang === 'function' || true) window.__lastNavArgs = [activeKey, root, opts];
     if (typeof updateButtonsAfterNavRender === 'function') updateButtonsAfterNavRender();
-    document.querySelectorAll('.lang-switcher button, .lang-accordion-item').forEach(function (b) {
+    document.querySelectorAll('.lang-switcher-mobile button, .lang-accordion-item').forEach(function (b) {
         var cur = localStorage.getItem('rescene-lang') || 'ko';
         b.classList.toggle('active', b.getAttribute('data-lang') === cur);
     });

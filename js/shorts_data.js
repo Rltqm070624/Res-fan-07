@@ -4838,5 +4838,63 @@ const SHORTS_DATA = [
             "minami",
             "zena"
         ]
+    },
+        {
+        "vid": "oSqpWyEdxtc",
+        "title": "도미노 무슈스 피자 출시 (원이편)",
+        "channel": "도미노피자",
+        "date": "2026-07-16",
+        "tags": [
+            "woni"
+        ]
+    },        
+        {
+        "vid": "DD3jJIyrFe4",
+        "title": "도미노 무슈스 피자 출시 (리브편)",
+        "channel": "도미노피자",
+        "date": "2026-07-16",
+        "tags": [
+            "liv"
+        ]
+    },
+        {
+        "vid": "RA_MzUSzSb8",
+        "title": "도미노 무슈스 피자 출시 (미나미편)",
+        "channel": "도미노피자",
+        "date": "2026-07-16",
+        "tags": [
+            "minami"
+        ]
+    },
+        {
+        "vid": "2F-GUn8uxns",
+        "title": "도미노 무슈스 피자 출시 (메이편)",
+        "channel": "도미노피자",
+        "date": "2026-07-16",
+        "tags": [
+            "may"
+        ]
+    },
+        {
+        "vid": "25zXP7m89sM",
+        "title": "도미노 무슈스 피자 출시 (제나편)",
+        "channel": "도미노피자",
+        "date": "2026-07-16",
+        "tags": [
+            "zena"
+        ]
+    },
+        {
+        "vid": "7VHpptJokGA",
+        "title": "[도미노피자 x 무신사] 무진장 슈림프 스테이크 피자 출시!",
+        "channel": "도미노피자",
+        "date": "2026-07-16",
+        "tags": [
+            "woni",
+            "liv",
+            "minami",
+            "may",
+            "zena"
+        ]
     }
 ];

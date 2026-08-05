@@ -320,7 +320,7 @@ function mediaRenderDrawer() {
                 const keys = ['전체'].concat(MEDIA_CHOSUNG_KEYS.filter(k => presentKeys.has(k)));
                 chosungRow.innerHTML = keys.map(k => {
                     const isActive = k === mediaTopicChosungFilter;
-                    const style = `height:34px;min-width:34px;padding:0 10px;border-radius:8px;border:1px solid ${isActive ? '#3b82f6' : 'rgba(120,120,120,0.28)'};font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;background:${isActive ? '#3b82f6' : 'transparent'};color:${isActive ? '#fff' : '#666'};`;
+                    const style = `height:34px;min-width:34px;padding:0 10px;border-radius:8px;border:1px solid ${isActive ? 'var(--c-accent)' : 'rgba(120,120,120,0.28)'};font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;background:${isActive ? 'var(--c-accent)' : 'transparent'};color:${isActive ? '#fff' : '#666'};`;
                     return `<button type="button" class="afd-cho-btn ${isActive ? 'active' : ''}" onclick="mediaSetTopicChosung('${k}')" style="${style}">${k}</button>`;
                 }).join('');
                 chosungRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:6px;';
@@ -343,7 +343,7 @@ function mediaRenderDrawer() {
             </button>
         `).join('') : '<span style="font-size:13px; color:var(--text-muted);">해당 자음으로 시작하는 항목이 없습니다.</span>';
 
-        topicCount.innerHTML = `선택됨 <b style="color:#3b82f6;">${mediaActiveDetails.size}</b> / ${rawOptions.length}`;
+        topicCount.innerHTML = `선택됨 <b style="color:var(--c-accent);">${mediaActiveDetails.size}</b> / ${rawOptions.length}`;
     } else {
         if (topicToolbar) topicToolbar.style.display = 'none';
         if (chosungRow) { chosungRow.classList.add('is-hidden'); chosungRow.innerHTML = ''; }

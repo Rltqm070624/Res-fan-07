@@ -31,7 +31,7 @@
 .fc-song-list { 
     background: var(--bg-surface); 
     border: 1px solid var(--border-light); 
-    border-radius: 18px; 
+    border-radius: 4px; 
     padding: 10px; 
     overflow-y: auto; 
     min-height: 0; 
@@ -41,7 +41,7 @@
 .fc-album-group { margin-bottom: 14px; }
 .fc-album-title { font-family: var(--font-head); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: var(--text-muted); padding: 10px 12px 6px; text-transform: uppercase; }
 .fc-song-items { list-style: none; margin: 0; padding: 0; }
-.fc-song-item { padding: 10px 14px; border-radius: 10px; font-family: var(--font-body); font-size: 14px; color: var(--text-secondary); cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+.fc-song-item { padding: 10px 14px; border-radius: 3px; font-family: var(--font-body); font-size: 14px; color: var(--text-secondary); cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
 .fc-song-item:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
 .fc-song-item.active { background: var(--c-accent-glow); color: var(--c-accent); font-weight: 700; }
 
@@ -55,7 +55,7 @@
     flex-direction: column; 
     background: var(--bg-surface); 
     border: 1px solid var(--border-light); 
-    border-radius: 20px; 
+    border-radius: 4px; 
     padding: 32px 36px; /* 답답하지 않게 패딩 확보 */
     min-height: 0; 
     overflow: hidden; 
@@ -84,7 +84,7 @@
     position: relative; 
     width: 100%; 
     aspect-ratio: 16/9; 
-    border-radius: 14px; 
+    border-radius: 4px; 
     overflow: hidden; 
     background: #000;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -102,12 +102,12 @@
     scrollbar-color: var(--border-highlight) transparent; 
 }
 .fc-lyrics-scroll::-webkit-scrollbar { width: 6px; }
-.fc-lyrics-scroll::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 8px; }
+.fc-lyrics-scroll::-webkit-scrollbar-thumb { background: var(--border-highlight); border-radius: 3px; }
 
-.fc-photo { display: block; max-width: 100%; width: 100%; height: auto; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-light); }
+.fc-photo { display: block; max-width: 100%; width: 100%; height: auto; border-radius: 4px; margin-bottom: 20px; border: 1px solid var(--border-light); }
 
 .fc-lyrics { font-family: var(--font-body); font-size: 15px; line-height: 1.85; color: var(--text-secondary); white-space: normal; }
-.fc-lyrics strong { color: var(--c-accent); font-weight: 800; background: var(--c-accent-glow); padding: 0 4px; border-radius: 4px; }
+.fc-lyrics strong { color: var(--c-accent); font-weight: 800; background: var(--c-accent-glow); padding: 0 4px; border-radius: 2px; }
 
 
 @media (max-width: 900px) {

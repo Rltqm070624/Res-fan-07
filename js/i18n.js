@@ -59,7 +59,15 @@
             searchPlaceholder: "제목 · 채널 검색",
             sortNewest: "최신순", sortOldest: "오래된순", sortNameAsc: "가나다순", sortNameDesc: "역순",
             mediaAllDone: "모든 영상을 다 봤어요.",
-            prevVideo: "이전 영상", nextVideo: "다음 영상", playlist: "재생목록"
+            prevVideo: "이전 영상", nextVideo: "다음 영상", playlist: "재생목록",
+
+            filterLabel: "필터", categoryFilter: "카테고리 필터", itemsCountSuffix: "개 항목",
+            detailSearch: "상세 검색", deselectable: "선택 해제 가능", relatedTopics: "관련 주제 선택",
+            selectedCountLabel: "선택됨", popularSort: "많이 나온순", alphaSort: "가나다순",
+            resetBtn: "초기화", resetAllBtn: "전체 초기화", applyBtn: "적용하기", noActiveFilters: "활성화된 필터 없음",
+            noRelatedTopics: "해당 카테고리에는 관련 주제가 없습니다.", noChosungResults: "해당 자음으로 시작하는 항목이 없습니다.",
+            searchResultsLabel: "검색결과", noSearchResults: "검색 결과가 없어요.",
+            liveNow: "LIVE", subtitlesLabel: "자막", categoryAll: "전체"
         },
         en: {
             weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -113,7 +121,15 @@
             searchPlaceholder: "Search title · channel",
             sortNewest: "Newest", sortOldest: "Oldest", sortNameAsc: "A–Z", sortNameDesc: "Z–A",
             mediaAllDone: "You've watched everything.",
-            prevVideo: "Previous", nextVideo: "Next", playlist: "Playlist"
+            prevVideo: "Previous", nextVideo: "Next", playlist: "Playlist",
+
+            filterLabel: "Filter", categoryFilter: "Category Filter", itemsCountSuffix: " items",
+            detailSearch: "Detail Search", deselectable: "Deselectable", relatedTopics: "Related Topics",
+            selectedCountLabel: "Selected", popularSort: "Most Videos", alphaSort: "A–Z",
+            resetBtn: "Reset", resetAllBtn: "Clear All", applyBtn: "Apply", noActiveFilters: "No active filters",
+            noRelatedTopics: "No related topics for this category.", noChosungResults: "No items start with this letter.",
+            searchResultsLabel: "Results", noSearchResults: "No results found.",
+            liveNow: "LIVE", subtitlesLabel: "Subtitles", categoryAll: "All"
         },
         ja: {
             weekdays: ["日", "月", "火", "水", "木", "金", "土"],
@@ -167,7 +183,15 @@
             searchPlaceholder: "タイトル・チャンネル検索",
             sortNewest: "新しい順", sortOldest: "古い順", sortNameAsc: "あいうえお順", sortNameDesc: "逆順",
             mediaAllDone: "すべての動画を見終わりました。",
-            prevVideo: "前の動画", nextVideo: "次の動画", playlist: "再生リスト"
+            prevVideo: "前の動画", nextVideo: "次の動画", playlist: "再生リスト",
+
+            filterLabel: "フィルター", categoryFilter: "カテゴリーフィルター", itemsCountSuffix: "件",
+            detailSearch: "詳細検索", deselectable: "選択解除可能", relatedTopics: "関連トピック選択",
+            selectedCountLabel: "選択済み", popularSort: "投稿数順", alphaSort: "五十音順",
+            resetBtn: "リセット", resetAllBtn: "全てリセット", applyBtn: "適用する", noActiveFilters: "適用中のフィルターはありません",
+            noRelatedTopics: "このカテゴリーには関連トピックがありません。", noChosungResults: "この文字で始まる項目はありません。",
+            searchResultsLabel: "検索結果", noSearchResults: "検索結果がありません。",
+            liveNow: "LIVE", subtitlesLabel: "字幕", categoryAll: "すべて"
         },
         zh: {
             weekdays: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
@@ -221,7 +245,15 @@
             searchPlaceholder: "搜索标题 · 频道",
             sortNewest: "最新", sortOldest: "最早", sortNameAsc: "A-Z", sortNameDesc: "Z-A",
             mediaAllDone: "已浏览全部视频。",
-            prevVideo: "上一个", nextVideo: "下一个", playlist: "播放列表"
+            prevVideo: "上一个", nextVideo: "下一个", playlist: "播放列表",
+
+            filterLabel: "筛选", categoryFilter: "分类筛选", itemsCountSuffix: "项",
+            detailSearch: "详细搜索", deselectable: "可取消选择", relatedTopics: "选择相关主题",
+            selectedCountLabel: "已选择", popularSort: "按数量排序", alphaSort: "按字母排序",
+            resetBtn: "重置", resetAllBtn: "全部重置", applyBtn: "应用", noActiveFilters: "没有已启用的筛选",
+            noRelatedTopics: "该分类下没有相关主题。", noChosungResults: "没有以该字母开头的项目。",
+            searchResultsLabel: "搜索结果", noSearchResults: "没有搜索结果。",
+            liveNow: "LIVE", subtitlesLabel: "字幕", categoryAll: "全部"
         }
     };
 
@@ -260,6 +292,11 @@
             var val = window.t(key);
             if (val !== undefined) el.setAttribute('placeholder', val);
         });
+        document.querySelectorAll('[data-i18n-aria-label]').forEach(function (el) {
+            var key = el.getAttribute('data-i18n-aria-label');
+            var val = window.t(key);
+            if (val !== undefined) el.setAttribute('aria-label', val);
+        });
         updateWeekdayHeaders();
 
         // 네비게이션/푸터는 JS로 매번 새로 그려지므로, 렌더 함수가 있으면 다시 호출해서 반영
@@ -295,15 +332,9 @@
         refreshDynamicSections();
     };
 
-    // ⭐️ 예전엔 여기서 언어 스위처가 없는 페이지에 자동으로 하나 만들어 붙였는데,
-    // js/layout.js의 renderSiteNav(..., { lang: true/false }) 옵션과 충돌해서
-    // lang:false로 꺼둔 페이지(goods/chart/member/media)에도 계속 떠 있었음.
-    // → 자동 생성 없애고, nav 안에 있는 스위처(lang:true인 페이지)만 사용하도록 정리.
-
     window.addEventListener('DOMContentLoaded', function () {
         document.documentElement.setAttribute('lang', current);
         updateButtons();
         applyStaticTexts();
-        // 최초 로드시 동적 영역은 각 페이지 스크립트가 로드된 뒤 알아서 window.t를 읽어가므로 별도 호출 불필요
     });
 })();

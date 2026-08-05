@@ -80,7 +80,7 @@ function chartOverviewRowHtml(song, idx) {
         <div class="chart-dot-row">${dots}</div>
         <span class="chart-charted-count">${chartedCount}개 플랫폼</span>
         <div class="chart-platform-wrap">
-            <button type="button" class="chart-platform-btn" title="플랫폼 바로가기" aria-label="플랫폼 바로가기" onclick="chartTogglePlatformLinks(event, '${linksId}', ${JSON.stringify(song.songName)}, ${JSON.stringify(song.artistName)})">
+            <button type="button" class="chart-platform-btn" title="플랫폼 바로가기" aria-label="플랫폼 바로가기" onclick="chartTogglePlatformLinks(event, '${linksId}', ${escapeHtml(JSON.stringify(song.songName))}, ${escapeHtml(JSON.stringify(song.artistName))})">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
             </button>
             <div class="chart-platform-pop" id="${linksId}"></div>
@@ -111,7 +111,7 @@ function chartPlatformRowHtml(song, rankInfo) {
             <div class="chart-row-artist">${escapeHtml(song.artistName)}</div>
         </div>
         <div class="chart-share-wrap">
-            <button type="button" class="chart-share-btn" title="공유하기" aria-label="공유하기" onclick="chartToggleShare(event, '${shareId}', ${JSON.stringify(song.songName)}, ${JSON.stringify(song.artistName)})">
+            <button type="button" class="chart-share-btn" title="공유하기" aria-label="공유하기" onclick="chartToggleShare(event, '${shareId}', ${escapeHtml(JSON.stringify(song.songName))}, ${escapeHtml(JSON.stringify(song.artistName))})">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"></line></svg>
             </button>
             <div class="chart-share-pop" id="${shareId}"></div>

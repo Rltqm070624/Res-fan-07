@@ -27,6 +27,21 @@ const CHART_PLATFORM_DOT_COLOR = {
     flo: '#6A3FE0', youtube_music: '#FF3B3B', spotify: '#1DB954'
 };
 
+// ⭐️ 곡별 플랫폼 전용 링크는 따로 없어서, 각 플랫폼 검색 결과로 연결 (항상 유효한 방식)
+function chartPlatformSearchUrl(key, query) {
+    const q = encodeURIComponent(query);
+    const urls = {
+        melon: `https://www.melon.com/search/total/index.htm?q=${q}`,
+        genie: `https://www.genie.co.kr/search/searchMain?query=${q}`,
+        vibe: `https://vibe.naver.com/search?query=${q}`,
+        bugs: `https://music.bugs.co.kr/search/integrated?q=${q}`,
+        flo: `https://www.music-flo.com/search/more/track?keyword=${q}`,
+        youtube_music: `https://music.youtube.com/search?q=${q}`,
+        spotify: `https://open.spotify.com/search/${q}`
+    };
+    return urls[key] || '#';
+}
+
 let chartActivePlatform = 'all';
 let CHART_DATA = { songs: [] };
 
@@ -54,6 +69,7 @@ function chartOverviewRowHtml(song, idx) {
         return `<span class="chart-dot${on ? ' on' : ''}" style="${on ? `background:${CHART_PLATFORM_DOT_COLOR[p.key]};` : ''}" title="${p.label}${on ? ' ' + ranks[p.key].rank + '위' : ''}"></span>`;
     }).join('');
     const chartedCount = Object.values(ranks).filter(r => r && r.rank != null).length;
+    const linksId = `plinks-${song.songId || idx}`.replace(/[^a-zA-Z0-9_-]/g, '');
     return `<div class="chart-row">
         <span class="chart-row-idx">${String(idx + 1).padStart(2, '0')}</span>
         ${thumb}
@@ -63,6 +79,12 @@ function chartOverviewRowHtml(song, idx) {
         </div>
         <div class="chart-dot-row">${dots}</div>
         <span class="chart-charted-count">${chartedCount}개 플랫폼</span>
+        <div class="chart-platform-wrap">
+            <button type="button" class="chart-platform-btn" title="플랫폼 바로가기" aria-label="플랫폼 바로가기" onclick="chartTogglePlatformLinks(event, '${linksId}', ${JSON.stringify(song.songName)}, ${JSON.stringify(song.artistName)})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </button>
+            <div class="chart-platform-pop" id="${linksId}"></div>
+        </div>
     </div>`;
 }
 
@@ -141,6 +163,28 @@ function chartToggleShare(evt, id, songName, artistName) {
     pop.classList.add('open');
 }
 
+// ⭐️ 플랫폼 아이콘 바로가기 팝오버 — 공유버튼과 동일하게, 평소엔 숨겨두고 버튼 눌렀을 때만 펼침
+let chartPlatformLinksOpenId = null;
+
+function chartTogglePlatformLinks(evt, id, songName, artistName) {
+    evt.stopPropagation();
+    const pop = document.getElementById(id);
+    if (!pop) return;
+    const willOpen = chartPlatformLinksOpenId !== id;
+    document.querySelectorAll('.chart-platform-pop.open').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.chart-share-pop.open').forEach(el => el.classList.remove('open'));
+    chartPlatformLinksOpenId = willOpen ? id : null;
+    if (!willOpen) return;
+
+    const query = `${songName} ${artistName}`;
+    pop.innerHTML = CHART_PLATFORMS.filter(p => p.key !== 'all').map(p => `
+        <a href="${chartPlatformSearchUrl(p.key, query)}" target="_blank" rel="noopener" title="${p.label}에서 찾아보기">
+            <img src="../images/music/${p.key}.png" alt="${p.label}" loading="lazy">
+        </a>
+    `).join('');
+    pop.classList.add('open');
+}
+
 function chartShareKakao(songName, artistName) {
     const info = chartShare(songName, artistName);
     // 카카오 JS SDK가 연결돼 있으면(Kakao.init 완료) 정식 카카오톡 공유 카드로 전송
@@ -186,6 +230,14 @@ document.addEventListener('click', (e) => {
     if (openPop && !openPop.contains(e.target) && !e.target.closest('.chart-share-btn')) {
         openPop.classList.remove('open');
         chartShareOpenId = null;
+    }
+});
+document.addEventListener('click', (e) => {
+    if (!chartPlatformLinksOpenId) return;
+    const openPop = document.getElementById(chartPlatformLinksOpenId);
+    if (openPop && !openPop.contains(e.target) && !e.target.closest('.chart-platform-btn')) {
+        openPop.classList.remove('open');
+        chartPlatformLinksOpenId = null;
     }
 });
 

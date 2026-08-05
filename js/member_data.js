@@ -14,7 +14,7 @@ const MEMBER_DATA = [
     {
         key: 'minami', nameKo: '미나미', nameEn: 'MINAMI', color: '#2b99c4',
         birthday: '2006.11.29', position: '보컬',
-        mbti: 'ENFP', nickname: '갸루귀신', sns: '안무 창작 · 스티치 성대모사',
+        mbti: 'ENFP', nickname: '갸루귀신', sns: '-',
         intro: '야호~'
     },
     {

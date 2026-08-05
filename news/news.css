@@ -1,4 +1,5 @@
-.news-page-container { max-width: 900px; padding-left: 20px; padding-right: 20px; box-sizing: border-box; margin: 0 auto; }
+.news-page-container { max-width: 100%; width: 100%; padding-left: 56px; padding-right: 56px; box-sizing: border-box; margin: 0 auto; }
+@media (max-width: 800px) { .news-page-container { padding-left: 20px; padding-right: 20px; } }
 
 .news-hero-sub { font-family: var(--font-body); font-size: 13.5px; color: var(--text-muted); margin: 0 0 30px; }
 

@@ -92,7 +92,7 @@
 .chart-thumb-placeholder { width: 50px; height: 50px; border-radius: 3px; background: var(--bg-surface-hover); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text-muted); }
 .chart-thumb-placeholder svg { width: 20px; height: 20px; opacity: 0.4; }
 
-.chart-row-info { min-width: 0; flex: 1 1 auto; }
+.chart-row-info { min-width: 0; flex: 1 1 auto; max-width: 320px; }
 .chart-row-title-line { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .chart-row-title { flex: 1 1 auto; min-width: 0; font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chart-row-artist { font-family: var(--font-body); font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }

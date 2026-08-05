@@ -111,6 +111,7 @@ html[data-theme="light"] body{ background:#ffffff; }
     border-radius: 4px; overflow: hidden; border: 1px solid var(--border-light); background: var(--bg-surface);
 }
 .today-cal-banner {
+    display: none;
     position: relative; flex-shrink: 0; padding: 22px 24px 18px; text-align: center;
     background: linear-gradient(135deg, var(--c-accent), color-mix(in srgb, var(--c-accent) 60%, #7B5CF0));
     color: #fff;
@@ -153,7 +154,7 @@ html[data-theme="light"] .today-empty-card{ background:transparent; border:none;
 .today-empty-card button:hover{ color:var(--text-primary); border-color:var(--text-primary); }
 @media (prefers-reduced-motion:reduce){ .today-card, .today-status .live-dot{ animation:none !important; } .today-card{ transition:none; } }
 
-.today-month-head { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin: 0 0 20px; }
+.today-month-head { display: none; align-items: baseline; justify-content: center; gap: 12px; margin: 0 0 20px; }
 .today-month-title { font-family: var(--font-head); font-size: 20px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px; }
 .today-month-count { font-family: var(--font-num); font-size: 12px; color: var(--text-muted); }
 

@@ -1,13 +1,18 @@
 /* 기사에 썸네일(image 필드)이 없으면, 출처 이름 첫 글자로 만든 컬러 블록을 대신 보여줌 */
 function nwThumbHtml(n) {
     if (n.image) {
-        return `<img src="${escapeHtml(n.image)}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='${nwFallbackInitial(n.source)}'">`;
+        return `<img src="${escapeHtml(n.image)}" alt="" loading="lazy" onerror="nwThumbError(this, ${escapeHtml(JSON.stringify(n.source || ''))})">`;
     }
     return nwFallbackInitial(n.source);
 }
 function nwFallbackInitial(source) {
     const ch = (source || 'N').trim().charAt(0);
     return `<div class="news-item-thumb-fallback">${escapeHtml(ch)}</div>`;
+}
+function nwThumbError(imgEl, source) {
+    if (imgEl && imgEl.parentElement) {
+        imgEl.parentElement.innerHTML = nwFallbackInitial(source);
+    }
 }
 
 function renderNewsGrid() {

@@ -2,33 +2,33 @@
 const MEMBER_DATA = [
     {
         key: 'woni', nameKo: '원이', nameEn: 'WONI', color: '#f4c95d',
-        birthday: '2004.05.25', position: '리더 · 보컬',
-        mbti: 'ENFJ', hobby: '식물 가꾸기', specialty: '작사 · 작곡',
-        intro: '팀을 다정하게 이끄는 리더. 안정적인 음색으로 무대의 중심을 잡아줘요.'
+        birthday: '2004.05.25', position: '리더',
+        mbti: 'ESFP', 별명: '파이리', SNS: '-',
+        intro: '오이쉬'
     },
     {
         key: 'liv', nameKo: '리브', nameEn: 'LIV', color: '#6ec6ff',
         birthday: '2006.10.11', position: '보컬',
-        mbti: 'INFP', hobby: '필름 사진', specialty: '피아노 연주',
-        intro: '감성적인 음색을 지닌 무드메이커. 조용히 팀의 분위기를 채워줘요.'
+        mbti: 'ESFP', 별명: '리트, 무리브', SNS: '-',
+        intro: '너도? 나도!'
     },
     {
         key: 'minami', nameKo: '미나미', nameEn: 'MINAMI', color: '#2b99c4',
-        birthday: '2006.11.29', position: '보컬 · 댄스 · 랩',
-        mbti: 'ENFP', hobby: '아사이볼 만들기', specialty: '안무 창작 · 스티치 성대모사',
-        intro: '보컬, 댄스, 랩까지 다 되는 올라운더. 아사이볼 사랑이 남다른 미식가이기도 해요.'
+        birthday: '2006.11.29', position: '보컬',
+        mbti: 'ENFP', 별명: '갸루귀신', SNS: '안무 창작 · 스티치 성대모사',
+        intro: '야호~'
     },
     {
         key: 'may', nameKo: '메이', nameEn: 'MAY', color: '#ecd25b',
         birthday: '2008.08.19', position: '보컬',
-        mbti: 'INTP', hobby: '모동숲', specialty: '킬링파트 보컬',
-        intro: '가늘고 여린 음색으로 인트로 · 프리코러스의 킬링파트를 책임져요. 웃을 때 드러나는 토끼 앞니가 매력 포인트.'
+        mbti: 'INTP', 별명: '메트, 메라디오', SNS: '-',
+        intro: '그립감이 좋다!'
     },
     {
         key: 'zena', nameKo: '제나', nameEn: 'ZENA', color: '#ff6b6b',
         birthday: '2008.11.27', position: '보컬 · 댄스',
-        mbti: 'ISFP', hobby: '그림 그리기', specialty: '왁킹',
-        intro: '리센느의 황금막내. 어린 나이에도 무대를 압도하는 존재감을 가졌어요.'
+        mbti: 'INFP', 별명: '신라공주, 까엉이', SNS: '-',
+        intro: '그뤠여?'
     }
 ];
 

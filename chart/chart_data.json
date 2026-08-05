@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-04T21:03:51.304Z",
+  "updatedAt": "2026-08-05T06:14:48.927Z",
   "platforms": [
     "melon",
     "genie",
@@ -20,8 +20,8 @@
           "previousRank": 1
         },
         "genie": {
-          "rank": 16,
-          "previousRank": 1
+          "rank": 2,
+          "previousRank": 2
         },
         "vibe": {
           "rank": 2,
@@ -46,6 +46,41 @@
       }
     },
     {
+      "songName": "Deja Vu",
+      "artistName": "RESCENE (리센느)",
+      "albumImageUrl": "https://cdnimg.melon.co.kr/cm2/album/images/118/75/116/11875116_20250701165641_500.jpg?86da3088c776a346e926b1b4052f227c/melon/resize/144/optimize/90",
+      "ranks": {
+        "melon": {
+          "rank": 9,
+          "previousRank": 9
+        },
+        "genie": {
+          "rank": 33,
+          "previousRank": 35
+        },
+        "vibe": {
+          "rank": 33,
+          "previousRank": 33
+        },
+        "bugs": {
+          "rank": 3,
+          "previousRank": 2
+        },
+        "flo": {
+          "rank": 8,
+          "previousRank": 8
+        },
+        "youtube_music": {
+          "rank": 10,
+          "previousRank": 9
+        },
+        "spotify": {
+          "rank": 12,
+          "previousRank": 15
+        }
+      }
+    },
+    {
       "songName": "Pretty Girl",
       "artistName": "RESCENE (리센느)",
       "albumImageUrl": "https://cdnimg.melon.co.kr/cm2/album/images/137/88/545/13788545_20260707111659_500.jpg?3ef0f9e6af1ea09e3f919c7cb69065ed/melon/resize/144/optimize/90",
@@ -55,15 +90,15 @@
           "previousRank": 6
         },
         "genie": {
-          "rank": 23,
-          "previousRank": 20
+          "rank": 7,
+          "previousRank": 8
         },
         "vibe": {
           "rank": 5,
           "previousRank": 5
         },
         "bugs": {
-          "rank": 9,
+          "rank": 7,
           "previousRank": 8
         },
         "flo": {
@@ -81,56 +116,21 @@
       }
     },
     {
-      "songName": "Deja Vu",
-      "artistName": "RESCENE (리센느)",
-      "albumImageUrl": "https://cdnimg.melon.co.kr/cm2/album/images/118/75/116/11875116_20250701165641_500.jpg?86da3088c776a346e926b1b4052f227c/melon/resize/144/optimize/90",
-      "ranks": {
-        "melon": {
-          "rank": 10,
-          "previousRank": 10
-        },
-        "genie": {
-          "rank": 40,
-          "previousRank": 38
-        },
-        "vibe": {
-          "rank": 33,
-          "previousRank": 32
-        },
-        "bugs": {
-          "rank": 10,
-          "previousRank": 7
-        },
-        "flo": {
-          "rank": 11,
-          "previousRank": 9
-        },
-        "youtube_music": {
-          "rank": 10,
-          "previousRank": 9
-        },
-        "spotify": {
-          "rank": 12,
-          "previousRank": 15
-        }
-      }
-    },
-    {
       "songName": "Runaway",
       "artistName": "RESCENE (리센느)",
       "albumImageUrl": "https://cdnimg.melon.co.kr/cm2/album/images/133/12/413/13312413_20260406143448_500.jpg?0d1b1aec895dbf60aa601748ddf64dd9/melon/resize/144/optimize/90",
       "ranks": {
         "melon": {
-          "rank": 70,
-          "previousRank": 70
+          "rank": 59,
+          "previousRank": 59
         },
         "bugs": {
           "rank": 38,
-          "previousRank": 31
+          "previousRank": 47
         },
         "flo": {
-          "rank": 71,
-          "previousRank": 71
+          "rank": 74,
+          "previousRank": 73
         },
         "youtube_music": {
           "rank": 44,
@@ -144,9 +144,13 @@
     },
     {
       "songName": "Pinball",
-      "artistName": "RESCENE",
-      "albumImageUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/43/0b/4c/430b4c8e-3cb8-da27-648f-435ec3b391a6/8804775334160.jpg/600x600bb.jpg",
+      "artistName": "RESCENE (리센느)",
+      "albumImageUrl": "https://image.bugsm.co.kr/album/images/350/41063/4106349.jpg",
       "ranks": {
+        "bugs": {
+          "rank": 98,
+          "previousRank": 100
+        },
         "youtube_music": {
           "rank": 36,
           "previousRank": 33

@@ -54,7 +54,7 @@
             merchTitle: "OFFICIAL <span>MERCH</span>",
 
             memberBirthday: "BIRTHDAY", memberPosition: "POSITION", memberMbti: "MBTI",
-            memberSpecialty: "SPECIALTY", memberHobby: "HOBBY", memberPhotoArchive: "PHOTO <span>ARCHIVE</span>",
+            memberSpecialty: "NICKNAME", memberHobby: "SNS", memberPhotoArchive: "PHOTO <span>ARCHIVE</span>",
 
             searchPlaceholder: "제목 · 채널 검색",
             sortNewest: "최신순", sortOldest: "오래된순", sortNameAsc: "가나다순", sortNameDesc: "역순",
@@ -116,7 +116,7 @@
             merchTitle: "OFFICIAL <span>MERCH</span>",
 
             memberBirthday: "BIRTHDAY", memberPosition: "POSITION", memberMbti: "MBTI",
-            memberSpecialty: "SPECIALTY", memberHobby: "HOBBY", memberPhotoArchive: "PHOTO <span>ARCHIVE</span>",
+            memberSpecialty: "NICKNAME", memberHobby: "SNS", memberPhotoArchive: "PHOTO <span>ARCHIVE</span>",
 
             searchPlaceholder: "Search title · channel",
             sortNewest: "Newest", sortOldest: "Oldest", sortNameAsc: "A–Z", sortNameDesc: "Z–A",
@@ -178,7 +178,7 @@
             merchTitle: "OFFICIAL <span>MERCH</span>",
 
             memberBirthday: "BIRTHDAY", memberPosition: "POSITION", memberMbti: "MBTI",
-            memberSpecialty: "SPECIALTY", memberHobby: "HOBBY", memberPhotoArchive: "PHOTO <span>ARCHIVE</span>",
+            memberSpecialty: "NICKNAME", memberHobby: "SNS", memberPhotoArchive: "PHOTO <span>ARCHIVE</span>",
 
             searchPlaceholder: "タイトル・チャンネル検索",
             sortNewest: "新しい順", sortOldest: "古い順", sortNameAsc: "あいうえお順", sortNameDesc: "逆順",
@@ -240,7 +240,7 @@
             merchTitle: "官方 <span>周边</span>",
 
             memberBirthday: "生日", memberPosition: "位置", memberMbti: "MBTI",
-            memberSpecialty: "特长", memberHobby: "爱好", memberPhotoArchive: "照片 <span>档案</span>",
+            memberSpecialty: "昵称", memberHobby: "SNS", memberPhotoArchive: "照片 <span>档案</span>",
 
             searchPlaceholder: "搜索标题 · 频道",
             sortNewest: "最新", sortOldest: "最早", sortNameAsc: "A-Z", sortNameDesc: "Z-A",

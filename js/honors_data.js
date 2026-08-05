@@ -73,9 +73,9 @@ const AD_TIMELINE = [
     { date: '2026-07-30', type: '콜라보', title: '서든어택 (게임)', note: '', img: 'suddenattack.webp' },
 
     // 광고 — 2026년
-    { date: '2026-01-01', type: '광고', title: '동아오츠카 · 나랑드 사이다 (음료)', note: '', img: 'narang.webp' },
-    { date: '2026-01-01', type: '광고', title: '청오DPK · 도미노피자 (식품)', note: '', img: 'domino.webp' },
-    { date: '2026-01-01', type: '광고', title: 'BGF리테일 · CU (편의점)', note: '업계 최초 전속 모델 제안 발탁', img: 'cu.webp' },
+    { date: '2026-07-21', type: '광고', title: '동아오츠카 · 나랑드 사이다 (음료)', note: '', img: 'narang.webp' },
+    { date: '2026-07-16', type: '광고', title: '청오DPK · 도미노피자 (식품)', note: '', img: 'domino.webp' },
+    { date: '2026-07-01', type: '광고', title: 'BGF리테일 · CU (편의점)', note: '업계 최초 전속 모델 제안 발탁', img: 'cu.webp' },
     { date: '2026-06-30', type: '광고', title: '형지엘리트 · 엘리트 (교복)', note: '', img: 'elite.webp' },
     { date: '2026-06-26', type: '광고', title: '그레인온 · 카사베르디 (식품)', note: '', img: null },
     { date: '2026-06-09', type: '광고', title: '넥슨 · FC 모바일 (게임)', note: '', img: 'fc.webp' },

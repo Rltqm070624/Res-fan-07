@@ -317,7 +317,7 @@
     }
 
     function updateButtons() {
-        document.querySelectorAll('.lang-switcher button, .lang-accordion-item').forEach(function (b) {
+        document.querySelectorAll('.lang-switcher-mobile button, .lang-accordion-item').forEach(function (b) {
             b.classList.toggle('active', b.getAttribute('data-lang') === current);
         });
     }

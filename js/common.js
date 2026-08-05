@@ -1,5 +1,13 @@
 if (typeof SITE_ROOT === 'undefined') { var SITE_ROOT = ''; }
 
+/* ---- 공통 HTML 이스케이프 (media/news/fanchant/chart 페이지에서 공용으로 사용) ---- */
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>'"]/g, match => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    })[match]);
+}
+
 /* ---- 모바일 햄버거 메뉴 ---- */
 function toggleMobileMenu() {
     document.getElementById('hamburgerBtn').classList.toggle('active');

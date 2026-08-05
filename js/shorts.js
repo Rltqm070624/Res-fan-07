@@ -1,8 +1,3 @@
-/* ⭐️ RESCENE SHORTS 렌더링 & 필터 & 모달 로직
-   - 홈(index.html) 하단 "YOUTUBE SHORTS" 섹션 (가로 스크롤 + 상단 필터 칩)
-   - media.html "쇼츠" 탭 (풀영상 탭과 동일하게 좌측 CATEGORY 사이드바 + 그리드)
-   두 화면 모두 클릭 시 세로(9:16) 모달로 재생됩니다. */
-
 const SHORTS_TAG_META = [
     { key: 'all',     label: '전체',   color: 'var(--c-accent)' },
     { key: 'rescene', label: '리센느', color: 'var(--c-accent)' },
@@ -159,6 +154,11 @@ let shPlayer = null;
 let shYtApiReady = false;
 let shYtApiLoading = false;
 let shYtApiCallbacks = [];
+/* ⭐️ 영상이 로드되면 유튜브 자체 컨트롤(정지 버튼 등)이 잠깐 자동으로 떴다가 사라지는데,
+   그 타이밍에 탭하면 바로 일시정지가 걸려버리는 문제가 있었음.
+   영상이 새로 로드될 때마다 true로 켜두고, 그 다음 첫 번째 탭은 재생/정지를 건드리지 않고
+   그냥 흘려보내서(=컨트롤만 사라지게) 두 번째 탭부터 정상적으로 토글되게 함. */
+let shSkipNextTapToggle = false;
 
 function shEnsureYouTubeApi(cb) {
     if (shYtApiReady && window.YT && window.YT.Player) { cb(); return; }
@@ -237,6 +237,7 @@ function shModalLoad(idx) {
     const item = list[idx];
     if (!item) return;
     shModalIndex = idx;
+    shSkipNextTapToggle = true; // 새 영상 로드 → 유튜브 자체 컨트롤이 잠깐 뜨므로 다음 탭 1회는 무시
 
     const media = document.getElementById('shModalMediaBox');
     const title = document.getElementById('shModalTitle');
@@ -366,6 +367,10 @@ function shAttachSwipeCatcher() {
 
         if (!moved) {
             if (box) { box.style.transition = 'transform 0.25s cubic-bezier(0.22,1,0.36,1)'; box.style.transform = ''; }
+            if (shSkipNextTapToggle) {
+                shSkipNextTapToggle = false; // 이번 탭은 유튜브 자체 컨트롤을 없애는 용도로만 소비, 다음 탭부터 정상 토글
+                return;
+            }
             shTogglePlayPause();
             return;
         }

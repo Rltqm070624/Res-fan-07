@@ -41,17 +41,17 @@ function renderMemberDetail() {
     }
     document.getElementById('memberPosition').textContent = m.position;
     document.getElementById('memberMbti').textContent = m.mbti;
-    document.getElementById('member별명').textContent = m.별명;
-    document.getElementById('memberSNS').textContent = m.SNS;
+    document.getElementById('memberSpecialty').textContent = m.nickname;
+    document.getElementById('memberHobby').textContent = m.sns;
 
     // 멤버 고유 색상 CSS 변수 주입
     const panel = document.querySelector('.mem-detail-panel');
     if (panel) panel.style.setProperty('--mem-active-color', m.color);
 
-    // 포토 아카이브 렌더링
+    // 포토 아카이브 렌더링 — ⭐️ 왼쪽이 가장 최신 이미지가 오도록 최신순으로 뒤집어서 렌더링
     const eraRow = document.getElementById('memberEraRow');
     if (eraRow) {
-        eraRow.innerHTML = MEMBER_ERAS.map(e => `
+        eraRow.innerHTML = MEMBER_ERAS.slice().reverse().map(e => `
             <div class="mem-era-item${e.key === memberActiveEra ? ' active' : ''}" data-era="${e.key}" onclick="setActiveEra('${e.key}')">
                 <div class="mem-era-thumb"><img src="../images/profile/${m.key}/${e.key}.webp" alt="${e.label}" loading="lazy" onerror="this.closest('.mem-era-item').style.display='none'"></div>
                 <span class="mem-era-label">${e.label}</span>
@@ -80,7 +80,7 @@ function updateEraPreview() {
             heroImg.classList.remove('is-switching');
         }, 150);
     }
-    if (previewLabel) previewLabel.textContent = era.label;
+    // ⭐️ 메인 이미지 위 곡명 캡션은 표시하지 않음 (요청에 따라 제거)
 }
 
 function setActiveEra(eraKey) {

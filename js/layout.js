@@ -100,7 +100,10 @@ function renderSiteNav(activeKey, root, opts) {
     </div>`;
 
     const slot = document.getElementById('siteNavSlot');
-    if (slot) slot.outerHTML = navHtml;
+    // ⭐️ outerHTML로 교체하면 #siteNavSlot 자체가 사라져서, 언어 변경 시 재렌더링 호출이
+    //    document.getElementById('siteNavSlot')를 못 찾아 조용히 실패하는 버그가 있었음.
+    //    innerHTML로 바꿔서 #siteNavSlot 껍데기는 항상 유지되게 함.
+    if (slot) slot.innerHTML = navHtml;
     if (typeof updateThemeIcon === 'function') updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
     if (typeof window.setLang === 'function' || true) window.__lastNavArgs = [activeKey, root, opts];
     if (typeof updateButtonsAfterNavRender === 'function') updateButtonsAfterNavRender();
@@ -127,7 +130,7 @@ function renderSiteFooter(root, slotId) {
     </footer>`;
 
     const slot = document.getElementById(slotId);
-    if (slot) slot.outerHTML = footerHtml;
+    if (slot) slot.innerHTML = footerHtml;
 }
 
 function renderCalendarWidgets() {

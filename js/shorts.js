@@ -644,6 +644,17 @@ function shSwitchSideTab(tab) {
     }
 }
 
+function shOpenMobileSheet() {
+    const panel = document.querySelector('.sh-modal-playlist');
+    if (panel) panel.classList.add('mobile-open');
+    shSwitchSideTab('comments');
+}
+
+function shCloseMobileSheet() {
+    const panel = document.querySelector('.sh-modal-playlist');
+    if (panel) panel.classList.remove('mobile-open');
+}
+
 function shCommentEscapeHtml(str) {
     return String(str || '').replace(/[&<>'"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[m]));
 }
@@ -652,16 +663,22 @@ async function shFetchComments(vid) {
     shCommentsLoadedForVid = vid;
     const listEl = document.getElementById('shCommentList');
     const countEl = document.getElementById('shModalCommentCount');
+    const fabCountEl = document.getElementById('shMobileCommentCount');
     if (!listEl) return;
+
+    const setCount = (val) => {
+        if (countEl) countEl.textContent = val;
+        if (fabCountEl) fabCountEl.textContent = val;
+    };
 
     if (typeof YOUTUBE_API_KEY === 'undefined' || !YOUTUBE_API_KEY) {
         listEl.innerHTML = `<div class="sh-comment-error">아직 댓글창 연동이 준비 중이에요.<br><a href="https://www.youtube.com/watch?v=${encodeURIComponent(vid)}" target="_blank" rel="noopener">유튜브에서 댓글 보기 →</a></div>`;
-        if (countEl) countEl.textContent = '';
+        setCount('');
         return;
     }
 
     listEl.innerHTML = `<div class="sh-comment-loading">댓글 불러오는 중...</div>`;
-    if (countEl) countEl.textContent = '';
+    setCount('');
 
     try {
         const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${encodeURIComponent(vid)}&maxResults=50&order=relevance&textFormat=plainText&key=${YOUTUBE_API_KEY}`;
@@ -684,6 +701,7 @@ async function shFetchComments(vid) {
         }
 
         if (countEl) countEl.textContent = items.length;
+        setCount(items.length);
         listEl.innerHTML = items.map(c => `
             <div class="sh-comment-item">
                 <img class="sh-comment-avatar" src="${shCommentEscapeHtml(c.authorProfileImageUrl)}" alt="" loading="lazy">

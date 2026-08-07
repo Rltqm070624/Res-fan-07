@@ -29,11 +29,18 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           EXCLUDED_KEYWORDS: ${{ secrets.EXCLUDED_KEYWORDS }}
 
+      - name: Write public client-side key file (for comment widget)
+        run: |
+          echo "// ⚠️ 이 파일은 GitHub Actions가 자동으로 생성합니다 (secrets.YOUTUBE_API_KEY). 직접 수정하지 마세요." > js/youtube_public_key.js
+          echo "// 브라우저에서 유튜브 댓글을 불러오기 위한 용도라 공개될 수밖에 없는 키입니다." >> js/youtube_public_key.js
+          echo "// 반드시 Google Cloud Console에서 이 키에 'HTTP 리퍼러' 제한을 걸어두세요." >> js/youtube_public_key.js
+          echo "const YOUTUBE_API_KEY = \"${{ secrets.YOUTUBE_API_KEY }}\";" >> js/youtube_public_key.js
+
       - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add js/shorts_data.js
+          git add js/shorts_data.js js/youtube_public_key.js
           git commit -m "Auto update js/shorts_data.js" || exit 0
           for i in 1 2 3 4 5; do
             git pull --rebase origin main && git push && break

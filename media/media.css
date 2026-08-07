@@ -377,6 +377,8 @@ html[data-theme="dark"] .afd-action-btn.btn-black {
 .mv-tab.active::after { background: var(--c-accent); }
 
 /* 쇼츠 탭 툴바는 풀영상 탭과 동일한 media-toolbar 기본 정렬(space-between)을 그대로 사용 */
+/* 개수 배지가 화면 오른쪽 끝에 딱 붙지 않도록 살짝 안쪽으로 */
+.shorts-toolbar .media-count-badge { margin-right: 6px; }
 
 .sh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 24px 16px; width: 100%; }
 

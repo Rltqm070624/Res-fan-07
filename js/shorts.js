@@ -111,6 +111,10 @@ function shRenderGrid(containerId, scope) {
     const all = shGetAll().slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
     let filtered = shFilterByTag(all, shState[scope]);
 
+    if (scope === 'media' && shChannelFilters.size) {
+        filtered = filtered.filter(item => shChannelFilters.has(item.channel || '기타'));
+    }
+
     if (scope === 'media' && shMediaSearchTerm) {
         const term = shMediaSearchTerm.toLowerCase();
         filtered = filtered.filter(item =>
@@ -436,3 +440,170 @@ window.addEventListener('DOMContentLoaded', () => {
         console.error('쇼츠 렌더링 실패:', e);
     }
 });
+
+/* ---------------------------------------------------
+   ⭐️ media.html 쇼츠 탭 전용 필터 서랍 — 풀영상 탭과 동일한 형태(카테고리+상세검색+관련 채널)
+   쇼츠 데이터는 멤버 태그밖에 없어서, 풀영상의 "관련 주제" 자리를 "관련 채널"로 대체해
+   #전체 #원이 #미나미 정도였던 기존 좌측 태그보다 훨씬 세밀하게 정리할 수 있게 함
+--------------------------------------------------- */
+let shChannelFilters = new Set();
+let shChannelSortMode = 'popular'; // 'popular' | 'alpha' | 'en'
+let shChannelChosung = '전체';
+
+const SH_CHO_LIST = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+const SH_CHO_BASE_MAP = { 'ㄲ':'ㄱ', 'ㄸ':'ㄷ', 'ㅃ':'ㅂ', 'ㅆ':'ㅅ', 'ㅉ':'ㅈ' };
+const SH_CHOSUNG_KEYS = ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ','#'];
+const SH_EN_KEYS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#'];
+
+function shGetChosungKey(str) {
+    if (!str) return '#';
+    const ch = str.trim().charAt(0);
+    const code = ch.charCodeAt(0) - 0xAC00;
+    if (code >= 0 && code <= 11171) {
+        const cho = SH_CHO_LIST[Math.floor(code / 588)];
+        return SH_CHO_BASE_MAP[cho] || cho;
+    }
+    return '#';
+}
+function shGetEnKey(str) {
+    if (!str) return '#';
+    const ch = str.trim().charAt(0).toUpperCase();
+    return (ch >= 'A' && ch <= 'Z') ? ch : '#';
+}
+
+function shOpenAdvFilter() {
+    const drawer = document.getElementById('shAdvFilterDrawer');
+    const backdrop = document.getElementById('shAdvFilterBackdrop');
+    if (!drawer) return;
+    drawer.classList.add('active');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    shRenderDrawer();
+}
+
+function shCloseAdvFilter() {
+    const drawer = document.getElementById('shAdvFilterDrawer');
+    if (drawer) {
+        drawer.classList.remove('active');
+        setTimeout(() => { drawer.style.transform = ''; }, 400);
+    }
+    const backdrop = document.getElementById('shAdvFilterBackdrop');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function shRenderDrawer() {
+    // 1) 카테고리(멤버) 칩
+    const catBox = document.getElementById('shAfdCategoryChips');
+    const catCount = document.getElementById('shAfdCatCount');
+    if (catBox) {
+        catBox.innerHTML = SHORTS_TAG_META.map(t => `
+            <button class="afd-chip ${shState.media === t.key ? 'active' : ''}" onclick="shSetFilter('media','${t.key}'); shRenderDrawer();">
+                ${shState.media === t.key ? checkSVG : ''} #${shEscapeHtml(t.label)}
+            </button>
+        `).join('');
+    }
+    if (catCount) catCount.textContent = `${SHORTS_TAG_META.length}${window.t ? window.t('itemsCountSuffix') : '개 항목'}`;
+
+    // 2) 활성 필터(선택 해제 가능)
+    const activeBox = document.getElementById('shAfdActiveChips');
+    let actives = [];
+    if (shState.media !== 'all') {
+        const meta = SHORTS_TAG_META.find(t => t.key === shState.media);
+        if (meta) actives.push({ type: 'tag', label: '#' + meta.label, val: meta.key });
+    }
+    shChannelFilters.forEach(c => actives.push({ type: 'channel', label: c, val: c }));
+    if (activeBox) {
+        activeBox.innerHTML = actives.length ? actives.map(a => `
+            <button class="afd-chip closeable" onclick="shRemoveActiveFilter('${a.type}', '${shEscapeAttr(a.val)}')">
+                ${shEscapeHtml(a.label)} ${closeSVG}
+            </button>
+        `).join('') : `<span style="font-size:13px; color:var(--text-muted);">활성화된 필터 없음</span>`;
+    }
+
+    // 3) 관련 채널 (많이 나온순 / 가나다순 / 영문순 + 초성·영문 인덱스)
+    const topicBox = document.getElementById('shAfdChannelChips');
+    const topicCount = document.getElementById('shAfdChannelCount');
+    const toolbar = document.getElementById('shAfdChannelToolbar');
+    const chosungRow = document.getElementById('shAfdChosungRow');
+
+    const base = shFilterByTag(shGetAll(), shState.media);
+    const channelCounts = {};
+    base.forEach(item => { const c = item.channel || '기타'; channelCounts[c] = (channelCounts[c] || 0) + 1; });
+    let counted = Object.keys(channelCounts).map(c => ({ label: c, count: channelCounts[c], cho: shGetChosungKey(c), en: shGetEnKey(c) }));
+
+    const showToolbarAndIndex = counted.length > 8;
+    if (toolbar) toolbar.style.display = showToolbarAndIndex ? '' : 'none';
+
+    if (shChannelSortMode === 'alpha') counted.sort((a, b) => a.label.localeCompare(b.label, 'ko'));
+    else if (shChannelSortMode === 'en') counted.sort((a, b) => a.label.localeCompare(b.label, 'en'));
+    else counted.sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, 'ko'));
+
+    const indexField = shChannelSortMode === 'en' ? 'en' : 'cho';
+    const indexKeyList = shChannelSortMode === 'en' ? SH_EN_KEYS : SH_CHOSUNG_KEYS;
+    if (chosungRow) {
+        if (showToolbarAndIndex && (shChannelSortMode === 'alpha' || shChannelSortMode === 'en')) {
+            const presentKeys = new Set(counted.map(o => o[indexField]));
+            const keys = ['전체'].concat(indexKeyList.filter(k => presentKeys.has(k)));
+            chosungRow.innerHTML = keys.map(k => {
+                const isActive = k === shChannelChosung;
+                const displayLabel = k === '#' ? '기타' : k;
+                return `<button type="button" class="afd-cho-btn ${isActive ? 'active' : ''}" onclick="shSetChannelChosung('${k}')">${displayLabel}</button>`;
+            }).join('');
+            chosungRow.classList.remove('is-hidden');
+            chosungRow.style.display = 'flex';
+        } else {
+            chosungRow.classList.add('is-hidden');
+            chosungRow.style.display = 'none';
+            chosungRow.innerHTML = '';
+        }
+    }
+
+    let visible = counted;
+    if ((shChannelSortMode === 'alpha' || shChannelSortMode === 'en') && shChannelChosung !== '전체') {
+        visible = counted.filter(o => o[indexField] === shChannelChosung);
+    }
+
+    if (topicBox) {
+        topicBox.innerHTML = visible.length ? visible.map(o => `
+            <button class="afd-chip ${shChannelFilters.has(o.label) ? 'active' : ''}" onclick="shToggleChannel('${shEscapeAttr(o.label)}'); shRenderDrawer(); shRenderGrid('shMediaGrid','media');">
+                ${shChannelFilters.has(o.label) ? checkSVG : ''} ${shEscapeHtml(o.label)} <span class="afd-chip-count">${o.count}</span>
+            </button>
+        `).join('') : `<span style="font-size:13px; color:var(--text-muted);">해당 자음/영문으로 시작하는 채널이 없습니다.</span>`;
+    }
+    if (topicCount) topicCount.innerHTML = `선택됨 <b style="color:var(--c-accent);">${shChannelFilters.size}</b> / ${counted.length}`;
+}
+
+function shSetChannelSortMode(mode) {
+    shChannelSortMode = mode;
+    shChannelChosung = '전체';
+    const popBtn = document.getElementById('shAfdSortPopular');
+    const alphaBtn = document.getElementById('shAfdSortAlpha');
+    const enBtn = document.getElementById('shAfdSortEn');
+    if (popBtn) popBtn.classList.toggle('active', mode === 'popular');
+    if (alphaBtn) alphaBtn.classList.toggle('active', mode === 'alpha');
+    if (enBtn) enBtn.classList.toggle('active', mode === 'en');
+    shRenderDrawer();
+}
+function shSetChannelChosung(key) { shChannelChosung = key; shRenderDrawer(); }
+
+function shToggleChannel(channel) {
+    if (shChannelFilters.has(channel)) shChannelFilters.delete(channel);
+    else shChannelFilters.add(channel);
+}
+
+function shRemoveActiveFilter(type, val) {
+    if (type === 'tag') shSetFilter('media', 'all');
+    else if (type === 'channel') shToggleChannel(val);
+    shRenderDrawer();
+    shRenderGrid('shMediaGrid', 'media');
+}
+
+function shClearAllFilters() {
+    shState.media = 'all';
+    shChannelFilters.clear();
+    shChannelChosung = '전체';
+    shRenderTagCol('shMediaTagCol', 'media');
+    shRenderDrawer();
+    shRenderGrid('shMediaGrid', 'media');
+}

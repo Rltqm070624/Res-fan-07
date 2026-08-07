@@ -17,6 +17,7 @@ function renderSiteNav(activeKey, root, opts) {
         { key: 'news', label: tr('navNews') || 'NEWS', href: root + 'news/news.html' },
         { key: 'fanchant', label: tr('navFanchant') || '응원법', href: root + 'fanchant/fanchant.html' },
         { key: 'media', label: tr('navMedia') || '영상 모음', href: root + 'media/media.html' },
+        { key: 'todo', label: tr('navTodo') || '오늘의 할 일', href: root + 'todo/todo.html' },
     ];
 
     function linkHtml(link, extraClass) {

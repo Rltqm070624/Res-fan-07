@@ -123,7 +123,8 @@ function renderSiteFooter(root, slotId) {
             <span class="footer-links-label" data-i18n="officialSites">공식 사이트</span> :
             <a href="https://www.youtube.com/@RESCENE_official" target="_blank" rel="noopener">Youtube</a>,
             <a href="https://www.instagram.com/rescene_official" target="_blank" rel="noopener">Instagram</a>,
-            <a href="https://twitter.com/RESCENEofficial" target="_blank" rel="noopener">X</a>
+            <a href="https://twitter.com/RESCENEofficial" target="_blank" rel="noopener">X</a>,
+            <a href="https://artist.mnetplus.world/main/stg/rescene-official/home" target="_blank" rel="noopener">Mnet+</a>
         </p>
         <p class="footer-copyright">&copy; 2024 RESCENE ARCHIVE. All Rights Reserved.</p>
     </footer>`;

@@ -508,7 +508,7 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(227,28,107,0.22)
 ========================================= */
 .media-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
-    width: 92%; max-width: 720px; height: 88vh; max-height: 820px;
+    width: 94%; max-width: 1120px; height: 86vh; max-height: 780px;
     background: var(--bg-base); border: 1px solid var(--border-highlight); border-radius: 4px;
     overflow: hidden; z-index: 9950;
     opacity: 0; visibility: hidden; pointer-events: none;
@@ -520,23 +520,41 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(227,28,107,0.22)
 .media-modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; z-index: 9999; transform: translate(-50%, -50%) scale(1); }
 html[data-theme="light"] .media-modal-wrapper { background: #FFFFFF; }
 
+/* 본문: 좌측 영상 컬럼 + 우측 재생목록 컬럼 (데스크톱 기준) */
+.media-modal-body { display: flex; flex: 1; min-height: 0; }
+
+.media-modal-video-col { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--border-light); }
+
 .media-modal-head { padding: 22px 56px 14px 26px; flex-shrink: 0; }
 .media-modal-title { font-family: var(--font-body); font-size: 16px; font-weight: 700; color: var(--text-primary); line-height: 1.5; }
 .media-modal-date { margin-top: 6px; font-family: var(--font-num); font-size: 12px; color: var(--text-muted); letter-spacing: 0.5px; }
 
-.media-modal-media { width: 100%; aspect-ratio: 16/9; background: #000; flex-shrink: 0; }
+.media-modal-media { width: 100%; flex: 1; min-height: 0; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .media-modal-media iframe { width: 100%; height: 100%; border: 0; display: block; }
 
-.media-modal-nav { display: flex; align-items: center; gap: 10px; padding: 14px 20px; flex-shrink: 0; border-bottom: 1px solid var(--border-light); }
+.media-modal-nav { display: flex; align-items: center; gap: 10px; padding: 14px 20px; flex-shrink: 0; border-top: 1px solid var(--border-light); }
 .mm-nav-btn { display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border-light); color: var(--text-secondary); font-family: var(--font-head); font-size: 12px; font-weight: 700; padding: 9px 16px; border-radius: 3px; cursor: pointer; transition: 0.25s ease; }
 .mm-nav-btn:hover:not(:disabled) { border-color: var(--c-accent); color: var(--c-accent); }
 .mm-nav-btn:disabled { opacity: 0.35; cursor: default; }
 .mm-nav-btn svg { width: 14px; height: 14px; }
 .mm-nav-next { margin-left: auto; }
 
-.media-modal-playlist { display: flex; flex-direction: column; min-height: 0; flex: 1; background: var(--bg-surface); border-top: 1px solid var(--border-light); }
+/* 우측 재생목록 컬럼 */
+.media-modal-playlist { width: 360px; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; background: var(--bg-surface); }
 .mm-drag-handle { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 10px 0 8px; cursor: grab; flex-shrink: 0; user-select: none; touch-action: none; }
 .mm-drag-handle:active { cursor: grabbing; }
+
+@media (min-width: 701px) {
+    .media-modal-playlist { border-top: none; }
+    .mm-drag-handle { cursor: default; padding: 18px 20px 10px; align-items: flex-start; }
+    .mm-drag-handle::before { display: none; }
+    .mm-playlist-list { max-height: none !important; flex: 1; }
+}
+
+@media (max-width: 900px) {
+    .media-modal-wrapper { max-width: 640px; }
+    .media-modal-playlist { width: 300px; }
+}
 
 /* =========================================
    ⭐️ 쇼츠 재생 모달 — 풀영상 모달(.media-modal-wrapper)과 동일한 전체 크기.
@@ -622,8 +640,14 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
 .mm-playlist-date { margin-top: 3px; font-family: var(--font-num); font-size: 11px; color: var(--text-muted); }
 
 @media (max-width: 700px) {
-    .media-modal-wrapper { width: 94%; height: 86vh; }
+    .media-modal-wrapper { width: 94%; height: 86vh; max-width: 94%; }
+    .media-modal-body { flex-direction: column; min-height: 0; }
+    .media-modal-video-col { border-right: none; }
+    .media-modal-playlist { width: 100%; border-top: 1px solid var(--border-light); }
     .media-modal-head { padding: 18px 50px 12px 20px; }
     .media-modal-nav { padding: 12px 16px; }
-    .media-modal-playlist.expanded .mm-playlist-list { max-height: 42vh; }
+    .mm-drag-handle { cursor: grab; padding: 10px 0 8px; align-items: center; }
+    .mm-drag-handle::before { display: block; }
+    .mm-playlist-list { max-height: 120px !important; flex: none; }
+    .media-modal-playlist.expanded .mm-playlist-list { max-height: 42vh !important; }
 }

@@ -273,6 +273,10 @@ function shModalLoad(idx) {
     if (prevBtn) prevBtn.disabled = shModalIndex <= 0;
     if (nextBtn) nextBtn.disabled = shModalIndex >= list.length - 1;
     shModalHighlightPlaylistActive();
+
+    // 영상이 바뀌면 댓글 패널은 다시 "재생목록" 탭으로 돌아가고, 댓글은 새로 불러오도록 초기화
+    shCommentsLoadedForVid = null;
+    shSwitchSideTab('playlist');
 }
 
 let shModalTransitioning = false;
@@ -606,4 +610,96 @@ function shClearAllFilters() {
     shRenderTagCol('shMediaTagCol', 'media');
     shRenderDrawer();
     shRenderGrid('shMediaGrid', 'media');
+}
+
+/* ---------------------------------------------------
+   ⭐️ 쇼츠 모달 — 유튜브 댓글 패널 (카톡풍 말풍선)
+   YouTube Data API v3 (commentThreads)를 씁니다.
+   YOUTUBE_API_KEY는 이 파일에 직접 넣지 않고, GitHub Actions가
+   .github/workflows/update_shorts.yml 실행할 때마다 secrets.YOUTUBE_API_KEY
+   값으로 js/youtube_public_key.js 를 자동 생성해서 채워줍니다.
+   (media.html에서 이 스크립트보다 먼저 로드됨)
+--------------------------------------------------- */
+
+let shActiveSideTab = 'playlist';
+let shCommentsLoadedForVid = null;
+
+function shSwitchSideTab(tab) {
+    shActiveSideTab = tab;
+    const playlistBtn = document.getElementById('shTabPlaylistBtn');
+    const commentsBtn = document.getElementById('shTabCommentsBtn');
+    const playlistList = document.getElementById('shModalPlaylistList');
+    const commentPanel = document.getElementById('shCommentPanel');
+    if (playlistBtn) playlistBtn.classList.toggle('active', tab === 'playlist');
+    if (commentsBtn) commentsBtn.classList.toggle('active', tab === 'comments');
+    if (playlistList) playlistList.style.display = tab === 'playlist' ? '' : 'none';
+    if (commentPanel) commentPanel.style.display = tab === 'comments' ? 'flex' : 'none';
+
+    if (tab === 'comments') {
+        const list = shListCache[shModalScope] || [];
+        const item = list[shModalIndex];
+        if (item && shCommentsLoadedForVid !== item.vid) {
+            shFetchComments(item.vid);
+        }
+    }
+}
+
+function shCommentEscapeHtml(str) {
+    return String(str || '').replace(/[&<>'"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[m]));
+}
+
+async function shFetchComments(vid) {
+    shCommentsLoadedForVid = vid;
+    const listEl = document.getElementById('shCommentList');
+    const countEl = document.getElementById('shModalCommentCount');
+    if (!listEl) return;
+
+    if (typeof YOUTUBE_API_KEY === 'undefined' || !YOUTUBE_API_KEY) {
+        listEl.innerHTML = `<div class="sh-comment-error">아직 댓글창 연동이 준비 중이에요.<br><a href="https://www.youtube.com/watch?v=${encodeURIComponent(vid)}" target="_blank" rel="noopener">유튜브에서 댓글 보기 →</a></div>`;
+        if (countEl) countEl.textContent = '';
+        return;
+    }
+
+    listEl.innerHTML = `<div class="sh-comment-loading">댓글 불러오는 중...</div>`;
+    if (countEl) countEl.textContent = '';
+
+    try {
+        const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${encodeURIComponent(vid)}&maxResults=50&order=relevance&textFormat=plainText&key=${YOUTUBE_API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!res.ok) {
+            const reason = data && data.error && data.error.errors && data.error.errors[0] && data.error.errors[0].reason;
+            let msg = '댓글을 불러오지 못했어요.';
+            if (reason === 'commentsDisabled') msg = '이 영상은 댓글 기능이 꺼져 있어요.';
+            else if (reason === 'quotaExceeded') msg = '오늘 댓글 조회 가능 횟수를 다 썼어요. 내일 다시 시도해주세요.';
+            listEl.innerHTML = `<div class="sh-comment-error">${shCommentEscapeHtml(msg)}<br><a href="https://www.youtube.com/watch?v=${encodeURIComponent(vid)}" target="_blank" rel="noopener">유튜브에서 보기 →</a></div>`;
+            return;
+        }
+
+        const items = (data.items || []).map(it => it.snippet.topLevelComment.snippet);
+        if (!items.length) {
+            listEl.innerHTML = `<div class="sh-comment-empty">아직 댓글이 없어요.</div>`;
+            return;
+        }
+
+        if (countEl) countEl.textContent = items.length;
+        listEl.innerHTML = items.map(c => `
+            <div class="sh-comment-item">
+                <img class="sh-comment-avatar" src="${shCommentEscapeHtml(c.authorProfileImageUrl)}" alt="" loading="lazy">
+                <div class="sh-comment-body">
+                    <span class="sh-comment-author">${shCommentEscapeHtml(c.authorDisplayName)}</span>
+                    <div class="sh-comment-bubble">${shCommentEscapeHtml(c.textOriginal || c.textDisplay)}</div>
+                    <div class="sh-comment-meta">
+                        <span class="sh-comment-like">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 21h4V9H2v12zm19-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L12.17 1 6.59 6.59C6.22 6.95 6 7.45 6 8v11c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                            ${c.likeCount || 0}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } catch (e) {
+        listEl.innerHTML = `<div class="sh-comment-error">댓글을 불러오는 중 오류가 났어요.<br><a href="https://www.youtube.com/watch?v=${encodeURIComponent(vid)}" target="_blank" rel="noopener">유튜브에서 보기 →</a></div>`;
+    }
 }

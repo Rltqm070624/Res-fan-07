@@ -245,6 +245,10 @@
                     <div class="sh-modal-sub" id="shModalSub"></div>
                 </div>
                 <div class="sh-modal-media" id="shModalMedia"><div class="sh-modal-media-box" id="shModalMediaBox"></div></div>
+                <button type="button" class="sh-mobile-comment-fab" id="shMobileCommentFab" onclick="shOpenMobileSheet()" aria-label="댓글 보기">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    <span id="shMobileCommentCount"></span>
+                </button>
                 <div class="sh-modal-nav">
                     <button type="button" class="mm-nav-btn" id="shModalPrevBtn" onclick="shModalPrev()">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
@@ -260,6 +264,9 @@
                 <div class="sh-modal-side-tabs">
                     <button type="button" class="sh-side-tab active" id="shTabPlaylistBtn" onclick="shSwitchSideTab('playlist')">재생목록 <b id="shModalPlaylistCount">0</b></button>
                     <button type="button" class="sh-side-tab" id="shTabCommentsBtn" onclick="shSwitchSideTab('comments')">💬 댓글 <b id="shModalCommentCount"></b></button>
+                    <button type="button" class="sh-mobile-sheet-close" onclick="shCloseMobileSheet()" aria-label="닫기">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
                 </div>
                 <ul class="mm-playlist-list sh-modal-playlist-list" id="shModalPlaylistList"></ul>
                 <div class="sh-comment-panel" id="shCommentPanel" style="display:none;">

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESCENE ARCHIVE | 오늘의 할 일</title>
+    <meta name="description" content="리센느 팬이라면 오늘 이만큼만 챙겨보세요.">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;800;900&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/i18n.css">
+    <link rel="stylesheet" href="todo.css">
+
+    <script src="../js/theme-init.js"></script>
+</head>
+<body>
+
+    <div id="siteNavSlot"></div>
+    <script src="../js/layout.js"></script>
+    <script>renderSiteNav('todo', '../', { calendar: true, lang: true });</script>
+
+    <div id="mainWrapper" class="todo-wrapper-locked">
+        <div class="section-container todo-page-container">
+            <div class="section-header todo-hero">
+                <div class="section-title">오늘의 <span>할 일</span></div>
+            </div>
+            <p class="todo-hero-sub">
+                하루 5분, 이 정도만 챙겨도 충분해요
+                <span class="todo-updated" id="todoUpdated"></span>
+            </p>
+
+            <div class="todo-progress-wrap">
+                <div class="todo-progress-track">
+                    <div class="todo-progress-fill" id="todoProgressFill"></div>
+                </div>
+                <div class="todo-progress-label">
+                    <span id="todoProgressCount">0 / 0</span> 완료
+                    <button type="button" class="todo-reset-btn" id="todoResetBtn" onclick="todoResetChecks()">전체 초기화</button>
+                </div>
+            </div>
+
+            <div id="todoCategoryList" class="todo-category-list"></div>
+
+            <p class="todo-footnote">
+                매일 자정(KST) 기준으로 체크 목록이 새로 시작돼요. 오늘 할 일은 내일 다시 채워질 거예요.
+            </p>
+        </div>
+    </div>
+
+    <div id="siteFooterSlot"></div>
+    <script>renderSiteFooter('../');</script>
+
+    <script>var SITE_ROOT = '../';</script>
+    <script src="../js/i18n.js"></script>
+    <script src="../js/member_data.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="todo.js"></script>
+
+    <div id="siteCalendarSlot"></div>
+    <script>renderCalendarWidgets();</script>
+</body>
+</html>

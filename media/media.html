@@ -257,8 +257,14 @@
                 </div>
             </div>
             <div class="sh-modal-playlist">
-                <div class="sh-modal-playlist-head">재생목록 <b id="shModalPlaylistCount">0</b></div>
+                <div class="sh-modal-side-tabs">
+                    <button type="button" class="sh-side-tab active" id="shTabPlaylistBtn" onclick="shSwitchSideTab('playlist')">재생목록 <b id="shModalPlaylistCount">0</b></button>
+                    <button type="button" class="sh-side-tab" id="shTabCommentsBtn" onclick="shSwitchSideTab('comments')">💬 댓글 <b id="shModalCommentCount"></b></button>
+                </div>
                 <ul class="mm-playlist-list sh-modal-playlist-list" id="shModalPlaylistList"></ul>
+                <div class="sh-comment-panel" id="shCommentPanel" style="display:none;">
+                    <div class="sh-comment-list" id="shCommentList"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -277,6 +283,7 @@
     <script src="../js/event_data.js"></script>
     <script src="../js/contents.js"></script>
     <script src="../js/shorts_data.js"></script>
+    <script src="../js/youtube_public_key.js"></script>
     <script src="../js/shorts.js"></script>
     <script src="media.js"></script>
 </body>

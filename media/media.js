@@ -707,10 +707,10 @@ function mediaClosePlayer() {
 })();
 
 // ⭐️ 필터 드로어 가로 폭 조절 (오른쪽 테두리 전체 어디서든 드래그 가능, PC 전용) ⭐️
-(function initFilterDrawerResize() {
+function initFilterDrawerResize(drawerId, handleId) {
     document.addEventListener('DOMContentLoaded', () => {
-        const drawer = document.getElementById('advFilterDrawer');
-        const handle = document.getElementById('afdResizeHandle');
+        const drawer = document.getElementById(drawerId);
+        const handle = document.getElementById(handleId);
         if (!drawer || !handle) return;
 
         const MIN_W = 320, MAX_W = 640;
@@ -748,12 +748,14 @@ function mediaClosePlayer() {
         window.addEventListener('mouseup', onEnd);
         window.addEventListener('touchend', onEnd);
     });
-})();
+}
+initFilterDrawerResize('advFilterDrawer', 'afdResizeHandle');
+initFilterDrawerResize('shAdvFilterDrawer', 'shAfdResizeHandle');
 
 // ⭐️ 모바일 바텀시트(Drawer) 스와이프 다운 닫기 로직 ⭐️
-(function initFilterDrawerDrag() {
+function initFilterDrawerDrag(drawerId, closeFn) {
     document.addEventListener('DOMContentLoaded', () => {
-        const drawer = document.getElementById('advFilterDrawer');
+        const drawer = document.getElementById(drawerId);
         // 사용자가 터치할 수 있는 넓은 영역 (헤더 전체)
         const handleArea = drawer ? drawer.querySelector('.afd-header') : null; 
         if (!drawer || !handleArea) return;
@@ -791,7 +793,7 @@ function mediaClosePlayer() {
             const diff = currentY - startY;
             // 80px 이상 끌어내렸으면 닫기 함수 호출
             if (diff > 80) { 
-                closeAdvFilter();
+                closeFn();
             } else { 
                 // 조금 끌다 말았으면 원위치
                 drawer.style.transform = `translateY(0)`;
@@ -803,7 +805,9 @@ function mediaClosePlayer() {
         window.addEventListener('touchmove', onMove, { passive: true });
         window.addEventListener('touchend', onEnd);
     });
-})();
+}
+initFilterDrawerDrag('advFilterDrawer', closeAdvFilter);
+initFilterDrawerDrag('shAdvFilterDrawer', typeof shCloseAdvFilter === 'function' ? shCloseAdvFilter : function(){});
 
 window.addEventListener('DOMContentLoaded', () => {
     try {

@@ -22,9 +22,9 @@ async function fetchSchedules() {
 
         // rawData가 { events: [...] } 형태면 그대로 사용,
         // 아니면(날짜를 key로 갖는 옛날 형태면) 그 해만 걸러서 사용
-        let output;
+        let fetchedEvents;
         if (rawData && Array.isArray(rawData.events)) {
-            output = rawData;
+            fetchedEvents = rawData.events;
         } else {
             const currentYear = new Date().getFullYear().toString();
             let filteredDB = {};
@@ -33,11 +33,40 @@ async function fetchSchedules() {
                     filteredDB[dateKey] = rawData[dateKey];
                 }
             }
-            output = Object.keys(filteredDB).length > 0 ? filteredDB : rawData;
+            const output = Object.keys(filteredDB).length > 0 ? filteredDB : rawData;
+            // 옛날 형태({날짜: {...}})는 이벤트 배열로 변환
+            fetchedEvents = Object.keys(output).map(dateKey => Object.assign({ date: dateKey }, output[dateKey]));
         }
 
+
+        let existingEvents = [];
+        try {
+            const existingRaw = fs.readFileSync(filePath, 'utf-8');
+            const existingJson = JSON.parse(existingRaw);
+            if (existingJson && Array.isArray(existingJson.events)) existingEvents = existingJson.events;
+        } catch (e) {
+            // 기존 파일이 없거나 파싱 실패해도 무시하고 새 데이터로 진행
+        }
+
+        const todayKey = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const pastEvents = existingEvents.filter(ev => ev.date && ev.date < todayKey);
+
+        // 오늘/이후 구간은 새로 받아온 데이터로 교체하되, 혹시 겹치는 항목은 제목+날짜 기준으로 중복 제거
+        const seen = new Set(pastEvents.map(ev => `${ev.date}__${ev.title}`));
+        const mergedFuture = [];
+        fetchedEvents.forEach(ev => {
+            if (!ev || !ev.date) return;
+            const key = `${ev.date}__${ev.title}`;
+            if (seen.has(key)) return;
+            seen.add(key);
+            mergedFuture.push(ev);
+        });
+
+        const mergedEvents = pastEvents.concat(mergedFuture).sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+        const output = { updated: new Date().toISOString(), events: mergedEvents };
+
         fs.writeFileSync(filePath, JSON.stringify(output, null, 2), 'utf-8');
-        console.log(`✅ 스케줄 데이터 연동 완료! (${filePath})`);
+        console.log(`✅ 스케줄 데이터 연동 완료! (${filePath}) — 과거 ${pastEvents.length}건 보존, 신규/예정 ${mergedFuture.length}건 갱신`);
 
     } catch (error) {
         console.error("데이터 가져오기 실패:", error.message);

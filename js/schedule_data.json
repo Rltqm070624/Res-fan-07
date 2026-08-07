@@ -2,6 +2,38 @@
   "updated": "2026-08-04T03:05:28Z",
   "events": [
     {
+      "date": "2026-07-25",
+      "time": "12:45",
+      "title": "2026 원 유니버스 페스티벌",
+      "detail": "",
+      "type": "concert",
+      "source": "manual-archive"
+    },
+    {
+      "date": "2026-07-25",
+      "time": "16:45",
+      "title": "보령 KBS 슈퍼라이브",
+      "detail": "",
+      "type": "broadcast",
+      "source": "manual-archive"
+    },
+    {
+      "date": "2026-07-26",
+      "time": "14:00",
+      "title": "2026 캐리비안베이 워터뮤직풀파티",
+      "detail": "",
+      "type": "event",
+      "source": "manual-archive"
+    },
+    {
+      "date": "2026-07-26",
+      "time": "19:00",
+      "title": "별방수련회",
+      "detail": "",
+      "type": "event",
+      "source": "manual-archive"
+    },
+    {
       "date": "2026-08-02",
       "time": "21:00",
       "title": "2026 영주 시원나잇 페스타",
@@ -18,12 +50,124 @@
       "source": "mnetplus"
     },
     {
+      "date": "2026-08-07",
+      "time": "",
+      "title": "에이페 광고 공개",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-07",
+      "time": "",
+      "title": "나랑드 사이다 TV CF 공개",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-07",
+      "time": "11:00",
+      "title": "리센느 포카 이벤트 VOL.2 (카사베르디 콜라보)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-07",
+      "time": "19:00",
+      "title": "안원잘부 시즌2 ep.1",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-08",
+      "time": "",
+      "title": "경희대 국제캠퍼스 체대입시 전국연합테스트 축하공연",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-08",
+      "time": "",
+      "title": "메이 생일카페 (디어마이플라워, 캔디로그, 메가라운지)",
+      "detail": "",
+      "type": "notice",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-08",
+      "time": "",
+      "title": "메이 생일꽃집 (홍대 멜랑쥬)",
+      "detail": "",
+      "type": "notice",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-08",
+      "time": "23:10",
+      "title": "전지적 참견시점 ep.410 단독게스트 (MBC)",
+      "detail": "",
+      "type": "broadcast",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-09",
+      "time": "",
+      "title": "메이 생일카페 (디어마이플라워, 캔디로그, 메가라운지)",
+      "detail": "",
+      "type": "notice",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-09",
+      "time": "",
+      "title": "메이 생일꽃집 (홍대 멜랑쥬)",
+      "detail": "",
+      "type": "notice",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-09",
+      "time": "",
+      "title": "메이 생일카페 (카페 아히)",
+      "detail": "",
+      "type": "notice",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-09",
+      "time": "",
+      "title": "뉴욕 타임스퀘어 광고 - 인기가요 투표 1위 혜택",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-09",
+      "time": "18:30",
+      "title": "맨시티 vs AT.마드리드 - 프리뷰 쇼 (쿠팡플레이, 원이)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
       "date": "2026-08-09",
       "time": "20:00",
       "title": "<2026 쿠팡플레이 시리즈> 하프타임 쇼",
       "detail": "",
       "type": "event",
       "source": "mnetplus"
+    },
+    {
+      "date": "2026-08-10",
+      "time": "",
+      "title": "메이 생일카페 (카페 아히)",
+      "detail": "",
+      "type": "notice",
+      "source": "fan-schedule"
     },
     {
       "date": "2026-08-14",
@@ -50,6 +194,62 @@
       "source": "mnetplus"
     },
     {
+      "date": "2026-08-16",
+      "time": "04:00",
+      "title": "KCON LA 8/15(현지 12:00 PDT) 러닝타임 50분",
+      "detail": "",
+      "type": "concert",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-17",
+      "time": "05:50",
+      "title": "KCON LA 8/16(현지 13:50 PDT) 러닝타임 1시간",
+      "detail": "",
+      "type": "concert",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-17",
+      "time": "05:50",
+      "title": "KCON LA 공연 생중계 (앱넷플릭스, 라이브권 유료)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-17",
+      "time": "07:00",
+      "title": "KCON 올영 걸즈 에듀케이션 (현지 8/16 15:00 PDT)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-19",
+      "time": "",
+      "title": "이예빈(메이) 생일",
+      "detail": "",
+      "type": "notice",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-08-27",
+      "time": "",
+      "title": "KWDA 케이 월드 드림 어워즈 (고양시 킨텍스)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-09-01",
+      "time": "",
+      "title": "CU 아이스크림 스페셜 에디션 출시 (콜라보, 9월 초 예정)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
       "date": "2026-09-02",
       "time": "",
       "title": "2026 천안 K-컬처 박람회",
@@ -58,12 +258,100 @@
       "source": "mnetplus"
     },
     {
+      "date": "2026-09-03",
+      "time": "19:00",
+      "title": "일일치 117 - 사나의 냉터뷰 (미나미)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-09-05",
+      "time": "19:30",
+      "title": "원 썸머 나잇 위드 케이팝 시즌2 (제천 예술의전당)",
+      "detail": "",
+      "type": "concert",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-09-06",
+      "time": "",
+      "title": "SKA 스포타비 케이팝 어워즈 (일산 킨텍스)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-09-19",
+      "time": "",
+      "title": "TFMA 더팩트 뮤직 어워즈 (부산 아시아드 주경기장)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
       "date": "2026-09-27",
       "time": "19:00",
       "title": "Objet K-pop Festa 2026",
       "detail": "",
       "type": "concert",
       "source": "mnetplus"
+    },
+    {
+      "date": "2026-10-03",
+      "time": "",
+      "title": "IBK 잉크 페스티벌 (일산 킨텍스)",
+      "detail": "",
+      "type": "concert",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-10-03",
+      "time": "18:30",
+      "title": "공주 백제 문화제 개막식 (공주 금강신관공원)",
+      "detail": "",
+      "type": "concert",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-10-11",
+      "time": "",
+      "title": "GHOST FESTIVAL (파주 임진각)",
+      "detail": "",
+      "type": "concert",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-10-17",
+      "time": "",
+      "title": "NOL FESTIVAL (일산 킨텍스)",
+      "detail": "",
+      "type": "concert",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-11-07",
+      "time": "",
+      "title": "KGMA 코리아 그랜드 뮤직 어워즈 - MC 원이 (서울 고척스카이돔)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-12-05",
+      "time": "",
+      "title": "AAA 아시아 아티스트 어워즈 (대만 가오슝)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
+    },
+    {
+      "date": "2026-12-06",
+      "time": "",
+      "title": "AAA 아시아 아티스트 어워즈 (대만 가오슝)",
+      "detail": "",
+      "type": "event",
+      "source": "fan-schedule"
     }
   ]
 }

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/i18n.css">
     <link rel="stylesheet" href="media.css">
 
     <script src="../js/theme-init.js"></script>
@@ -29,8 +30,6 @@
             <div class="section-header media-hero">
                 <div class="section-title" data-i18n="mediaTitle">MEDIA <span>ARCHIVE</span></div>
             </div>
-            <p class="media-hero-sub"><span data-i18n="mediaSub">리센느 유튜브 모아보기</span> <span class="media-count-badge" id="mediaCountBadge"></span></p>
-
             <div class="media-view-tabs" id="mediaViewTabs">
                 <button type="button" class="mv-tab active" data-view="full" onclick="mediaSetView('full')">풀영상</button>
                 <button type="button" class="mv-tab" data-view="shorts" onclick="mediaSetView('shorts')">쇼츠</button>
@@ -102,6 +101,9 @@
                 <main class="media-main">
                     <div class="media-toolbar shorts-toolbar">
                         <div class="media-toolbar-left">
+                            <button type="button" class="adv-filter-btn" aria-label="필터" onclick="shOpenAdvFilter()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                            </button>
                             <div class="media-search-wrap">
                                 <svg class="msw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                 <input type="text" id="shMediaSearch" placeholder="제목 · 채널 검색" data-i18n-placeholder="searchPlaceholder" oninput="shMediaApplyFilters()" autocomplete="off">
@@ -159,32 +161,74 @@
         </div>
     </div>
 
+    <!-- ⭐️ 쇼츠 탭 전용 필터 서랍 (풀영상 탭과 동일한 형태: 카테고리 + 상세검색 + 관련 채널) -->
+    <div class="drawer-backdrop" id="shAdvFilterBackdrop" onclick="shCloseAdvFilter()"></div>
+    <div class="adv-filter-drawer" id="shAdvFilterDrawer">
+        <div class="afd-resize-handle" id="shAfdResizeHandle"></div>
+        <div class="afd-drag-handle"></div>
+        <div class="afd-header">
+            <h3>필터</h3>
+            <button class="afd-close" onclick="shCloseAdvFilter()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="afd-body">
+            <div class="afd-section">
+                <div class="afd-sec-title"><span>카테고리 필터</span> <span id="shAfdCatCount">0개 항목</span></div>
+                <div class="afd-chips" id="shAfdCategoryChips"></div>
+            </div>
+
+            <div class="afd-section">
+                <div class="afd-sec-title"><span>상세 검색</span> <span>선택 해제 가능</span></div>
+                <div class="afd-chips" id="shAfdActiveChips"></div>
+                <button class="afd-action-btn btn-black" onclick="shClearAllFilters()">전체 초기화</button>
+            </div>
+
+            <div class="afd-section">
+                <div class="afd-sec-title"><span>관련 채널</span> <span id="shAfdChannelCount">선택됨 0</span></div>
+                <div class="afd-topic-toolbar" id="shAfdChannelToolbar">
+                    <div class="afd-topic-sortmode" role="group" aria-label="정렬 방식">
+                        <button type="button" class="afd-sm-btn active" id="shAfdSortPopular" onclick="shSetChannelSortMode('popular')">많이 나온순</button>
+                        <button type="button" class="afd-sm-btn" id="shAfdSortAlpha" onclick="shSetChannelSortMode('alpha')">가나다순</button>
+                        <button type="button" class="afd-sm-btn" id="shAfdSortEn" onclick="shSetChannelSortMode('en')">영문순</button>
+                    </div>
+                </div>
+                <div class="afd-chosung-row is-hidden" id="shAfdChosungRow" style="display:none;"></div>
+                <div class="afd-chips-scroll">
+                    <div class="afd-chips" id="shAfdChannelChips"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 영상 재생 모달 -->
     <div class="modal-backdrop" id="mediaModalBackdrop" onclick="mediaClosePlayer()"></div>
     <div class="media-modal-wrapper" id="mediaModal">
         <button class="popup-close-btn" onclick="mediaClosePlayer()" aria-label="닫기">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
-        <div class="media-modal-head">
-            <div class="media-modal-title" id="mediaModalTitle"></div>
-            <div class="media-modal-date" id="mediaModalDate"></div>
-        </div>
-        <div class="media-modal-media" id="mediaModalMedia"></div>
-        <div class="media-modal-nav">
-            <button type="button" class="mm-nav-btn" id="mediaPrevBtn" onclick="mediaPrev()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                <span>이전 영상</span>
-            </button>
-            <button type="button" class="mm-nav-btn mm-nav-next" id="mediaNextBtn" onclick="mediaNext()">
-                <span>다음 영상</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
-        </div>
-        <div class="media-modal-playlist" id="mediaModalPlaylist">
-            <div class="mm-drag-handle" id="mmDragHandle">
-                <span class="mm-drag-label"><span>재생목록</span> <b id="mmPlaylistCount">0</b></span>
+        <div class="media-modal-body">
+            <div class="media-modal-video-col">
+                <div class="media-modal-head">
+                    <div class="media-modal-title" id="mediaModalTitle"></div>
+                    <div class="media-modal-date" id="mediaModalDate"></div>
+                </div>
+                <div class="media-modal-media" id="mediaModalMedia"></div>
+                <div class="media-modal-nav">
+                    <button type="button" class="mm-nav-btn" id="mediaPrevBtn" onclick="mediaPrev()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                        <span>이전 영상</span>
+                    </button>
+                    <button type="button" class="mm-nav-btn mm-nav-next" id="mediaNextBtn" onclick="mediaNext()">
+                        <span>다음 영상</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                </div>
             </div>
-            <ul class="mm-playlist-list" id="mmPlaylistList"></ul>
+            <div class="media-modal-playlist" id="mediaModalPlaylist">
+                <div class="mm-drag-handle" id="mmDragHandle">
+                    <span class="mm-drag-label"><span>재생목록</span> <b id="mmPlaylistCount">0</b></span>
+                </div>
+                <ul class="mm-playlist-list" id="mmPlaylistList"></ul>
+            </div>
         </div>
     </div>
 

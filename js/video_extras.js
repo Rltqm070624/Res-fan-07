@@ -11,6 +11,7 @@ function veWatchUrl(vid) {
 }
 
 const veCommentState = {};
+const veCommentTotalCache = {};
 
 function veGetCommentOrder(panelId) {
     return (veCommentState[panelId] && veCommentState[panelId].order) || 'relevance';
@@ -18,6 +19,25 @@ function veGetCommentOrder(panelId) {
 
 function veResetComments(panelId) {
     if (veCommentState[panelId]) veCommentState[panelId].vid = null;
+}
+
+// commentThreads API는 한 번에 최대 50개까지만 내려주기 때문에,
+// 유튜브 페이지와 동일한 "총 댓글 수"는 videos.statistics.commentCount에서 별도로 가져와야 한다.
+async function veGetCommentTotal(vid) {
+    if (vid in veCommentTotalCache) return veCommentTotalCache[vid];
+    if (typeof YOUTUBE_API_KEY === 'undefined' || !YOUTUBE_API_KEY) return null;
+    try {
+        const url = `https://www.googleapis.com/youtube/v3/videos`
+            + `?part=statistics&id=${encodeURIComponent(vid)}&key=${YOUTUBE_API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const item = (data.items || [])[0];
+        const raw = item && item.statistics && item.statistics.commentCount;
+        veCommentTotalCache[vid] = (raw !== undefined && raw !== null) ? parseInt(raw, 10) : null;
+    } catch (e) {
+        veCommentTotalCache[vid] = null;
+    }
+    return veCommentTotalCache[vid];
 }
 
 function veCommentSortBarHtml(panelId, onChange) {
@@ -59,33 +79,40 @@ async function veLoadComments(opts) {
     listEl.innerHTML = `<div class="sh-comment-loading">댓글 불러오는 중...</div>`;
     setCount('');
 
+    const commentUrl = `https://www.googleapis.com/youtube/v3/commentThreads`
+        + `?part=snippet&videoId=${encodeURIComponent(vid)}`
+        + `&maxResults=50&order=${order}&textFormat=plainText&key=${YOUTUBE_API_KEY}`;
+
     try {
-        const url = `https://www.googleapis.com/youtube/v3/commentThreads`
-            + `?part=snippet&videoId=${encodeURIComponent(vid)}`
-            + `&maxResults=50&order=${order}&textFormat=plainText&key=${YOUTUBE_API_KEY}`;
-        const res = await fetch(url);
-        const data = await res.json();
+        const [commentRes, total] = await Promise.all([
+            fetch(commentUrl).then(res => res.json().then(data => ({ ok: res.ok, data }))),
+            veGetCommentTotal(vid)
+        ]);
 
         const now = veCommentState[listId];
         if (!now || now.vid !== vid || now.order !== order) return;
 
-        if (!res.ok) {
+        const { ok, data } = commentRes;
+        if (!ok) {
             const reason = data && data.error && data.error.errors && data.error.errors[0] && data.error.errors[0].reason;
             let msg = '댓글을 불러오지 못했어요.';
             if (reason === 'commentsDisabled') msg = '이 영상은 댓글 기능이 꺼져 있어요.';
             else if (reason === 'quotaExceeded') msg = '오늘 댓글 조회 가능 횟수를 다 썼어요. 내일 다시 시도해주세요.';
             listEl.innerHTML = `<div class="sh-comment-error">${veEscape(msg)}<br>${openLink}</div>`;
+            setCount(total != null ? total : '');
             return;
         }
 
         const items = (data.items || []).map(it => it.snippet.topLevelComment.snippet);
+        // 배지에는 (commentThreads가 아니라) 유튜브 페이지와 같은 실제 총 댓글 수를 표시.
+        // 총 개수 조회에 실패했을 때만 받아온 목록 개수로 대체.
+        setCount(total != null ? total : items.length);
+
         if (!items.length) {
             listEl.innerHTML = `<div class="sh-comment-empty">아직 댓글이 없어요.</div>`;
-            setCount(0);
             return;
         }
 
-        setCount(items.length);
         listEl.innerHTML = items.map(c => `
             <div class="sh-comment-item">
                 <img class="sh-comment-avatar" src="${veEscape(c.authorProfileImageUrl)}" alt="" loading="lazy">
@@ -227,7 +254,8 @@ async function veCheckLive(vid, fallbackIsLive) {
         const res = await fetch(url);
         const data = await res.json();
         const item = (data.items || [])[0];
-        veLiveCache[vid] = !!(item && item.liveStreamingDetails);
+        const details = item && item.liveStreamingDetails;
+        veLiveCache[vid] = !!(details && details.activeLiveChatId);
     } catch (e) {
         veLiveCache[vid] = !!fallbackIsLive;
     }

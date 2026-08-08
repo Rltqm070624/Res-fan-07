@@ -18,58 +18,31 @@
     <script>renderSiteNav('goods', '../', { calendar: true, lang: true });</script>
 
     <div id="mainWrapper" style="padding-top: 120px; min-height: 100vh; display: flex; flex-direction: column;">
-        <div class="section-container goods-page-container reveal active" style="flex: 1;">
+        <div class="section-container goods-page-container reveal active" id="goodsTop" style="flex: 1;">
             <div class="section-header">
                 <div class="section-title" data-i18n="merchTitle">OFFICIAL <span>MERCH</span></div>
+                <div class="goods-subtitle">WITHMUU · KTOWN4U · KREAM 판매가/재고를 비교해서 모아봤습니다. 6시간마다 자동 갱신됩니다.</div>
             </div>
 
-            <div class="goods-category-group">
-                <div class="goods-category-title">인형</div>
-                <div class="goods-grid-v2">
-                    <div class="goods-item" data-item="remini">
-                        <div class="goods-img" id="remini-img-wrap"><img src="../images/goods/REMINI.jpg" alt="REMINI Set"><div class="soldout-stamp"><span>SOLD</span></div></div>
-                        <div class="goods-name" id="remini-name"></div>
-                        <div class="goods-price-text" id="remini-price">가격 확인중...</div>
-                        <div class="goods-stock-list" id="remini-stock-list"></div>
+            <div class="goods-layout">
+                <aside class="goods-sidebar" id="goodsSidebar">
+                    <!-- JS 렌더 -->
+                </aside>
+
+                <div class="goods-main">
+                    <div class="goods-toolbar">
+                        <div id="goodsResultCount" class="goods-result-count">상품을 불러오는 중...</div>
                     </div>
+
+                    <div class="goods-grid-v2" id="goodsGrid">
+                        <!-- JS 렌더 -->
+                    </div>
+
+                    <div id="goodsEndedToggle" class="goods-ended-toggle" style="display:none;"></div>
                 </div>
             </div>
 
-            <div class="goods-category-group">
-                <div class="goods-category-title">키링</div>
-                <div class="goods-grid-v2">
-                    <div class="goods-item" data-item="jota">
-                        <div class="goods-img" id="jota-img-wrap"><img src="../images/goods/jota.jpg" alt="Jota"><div class="soldout-stamp"><span>SOLD</span></div></div>
-                        <div class="goods-name" id="jota-name"></div>
-                        <div class="goods-price-text" id="jota-price">가격 확인중...</div>
-                        <div class="goods-stock-list" id="jota-stock-list"></div>
-                    </div>
-                    <div class="goods-item" data-item="ming">
-                        <div class="goods-img" id="ming-img-wrap"><img src="../images/goods/ming.jpg" alt="Ming"><div class="soldout-stamp"><span>SOLD</span></div></div>
-                        <div class="goods-name" id="ming-name"></div>
-                        <div class="goods-price-text" id="ming-price">가격 확인중...</div>
-                        <div class="goods-stock-list" id="ming-stock-list"></div>
-                    </div>
-                    <div class="goods-item" data-item="ribbu">
-                        <div class="goods-img" id="ribbu-img-wrap"><img src="../images/goods/ribbu.jpg" alt="Ribbu"><div class="soldout-stamp"><span>SOLD</span></div></div>
-                        <div class="goods-name" id="ribbu-name"></div>
-                        <div class="goods-price-text" id="ribbu-price">가격 확인중...</div>
-                        <div class="goods-stock-list" id="ribbu-stock-list"></div>
-                    </div>
-                    <div class="goods-item" data-item="jjaero">
-                        <div class="goods-img" id="jjaero-img-wrap"><img src="../images/goods/jjaero.jpg" alt="Jjaero"><div class="soldout-stamp"><span>SOLD</span></div></div>
-                        <div class="goods-name" id="jjaero-name"></div>
-                        <div class="goods-price-text" id="jjaero-price">가격 확인중...</div>
-                        <div class="goods-stock-list" id="jjaero-stock-list"></div>
-                    </div>
-                    <div class="goods-item" data-item="yam">
-                        <div class="goods-img" id="yam-img-wrap"><img src="../images/goods/yam.jpg" alt="Yam"><div class="soldout-stamp"><span>SOLD</span></div></div>
-                        <div class="goods-name" id="yam-name"></div>
-                        <div class="goods-price-text" id="yam-price">가격 확인중...</div>
-                        <div class="goods-stock-list" id="yam-stock-list"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="stock-refresh-note">가격/재고 정보는 각 쇼핑몰 자동 수집 기준이며 실제와 다를 수 있습니다. 구매 전 반드시 판매처에서 최종 확인해 주세요.<br>해당 정보는 판매/중개 목적이 아니며, 각 링크를 통해 공식 판매처로 이동합니다.</div>
         </div>
         <div id="siteFooterSlot"></div>
         <script>renderSiteFooter('../');</script>
@@ -79,71 +52,7 @@
         // 하위 폴더(goods/)에서 실행되므로 이미지/스크립트 경로 앞에 ../ 를 붙여야 함
         var SITE_ROOT = '../';
     </script>
-    <script src="../js/i18n.js"></script>
-    <script src="../js/member_data.js"></script>
     <script src="../js/common.js"></script>
-    <script>
-        function escapeHtmlGoods(str) {
-            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
-        async function fetchGoodsInventory() {
-            try {
-                const response = await fetch('goods_data.json?t=' + new Date().getTime());
-                const data = await response.json();
-                const items = ['remini', 'jota', 'ming', 'ribbu', 'jjaero', 'yam'];
-
-                items.forEach(item => {
-                    const entry = data[item];
-                    const listEl = document.getElementById(`${item}-stock-list`);
-                    const priceEl = document.getElementById(`${item}-price`);
-                    const nameEl = document.getElementById(`${item}-name`);
-                    const imgWrapper = document.getElementById(`${item}-img-wrap`);
-                    if (!entry || !Array.isArray(entry.shops) || !listEl) return;
-
-                    if (nameEl) nameEl.innerText = entry.name || '';
-
-                    const shops = entry.shops.slice().sort((a, b) => {
-                        // 가격 낮은 순, 가격 모르는 건 뒤로
-                        if (a.priceNum == null) return 1;
-                        if (b.priceNum == null) return -1;
-                        return a.priceNum - b.priceNum;
-                    });
-
-                    // 대표 가격 표시: 최저가 쇼핑몰 기준
-                    const cheapestShop = shops.find(s => s.shop === entry.cheapest) || shops[0];
-                    priceEl.innerText = (cheapestShop && cheapestShop.price) ? cheapestShop.price : '가격 확인 필요';
-
-                    // 전부 품절이면 이미지에 SOLD 도장
-                    const allSoldOut = shops.length > 0 && shops.every(s => s.stock === 'soldout');
-                    if (imgWrapper) imgWrapper.classList.toggle('is-soldout', allSoldOut);
-
-                    listEl.innerHTML = shops.map(s => {
-                        const isCheapest = s.shop === entry.cheapest && shops.length > 1;
-                        const isSoldOut = s.stock === 'soldout';
-                        const statusText = isSoldOut ? '(품절)' : (s.stock === 'unknown' ? '(확인중)' : '(재고 있음)');
-                        return `
-                            <div class="stock-row${isCheapest ? ' is-cheapest' : ''}">
-                                <span class="shop-name">
-                                    ${isCheapest ? '<span class="cheapest-badge">최저가</span>' : ''}
-                                    ${escapeHtmlGoods(s.label)}
-                                    <span class="stock-num">${statusText}</span>
-                                    ${s.price ? `<span class="shop-price">${escapeHtmlGoods(s.price)}</span>` : ''}
-                                </span>
-                                <a href="${s.url}" target="_blank" class="buy-btn${isSoldOut ? ' sold-out' : ''}">${isSoldOut ? '품절' : '바로가기'}</a>
-                            </div>`;
-                    }).join('');
-                });
-            } catch (e) { console.log("굿즈 데이터 JSON 대기중..."); }
-        }
-    </script>
-
-    <!-- 캘린더 팝업 + 세부 일정 모달 (공용 컴포넌트) -->
-    <div id="siteCalendarSlot"></div>
-    <script>renderCalendarWidgets();</script>
-
-    <script>
-        fetchGoodsInventory();
-    </script>
+    <script src="goods.js"></script>
 </body>
 </html>

@@ -60,3 +60,45 @@ html[data-theme="light"] .buy-btn { color: #17181C; background: rgba(0,0,0,0.06)
 /* ⭐️ 굿즈 로딩 스켈레톤 카드 */
 .goods-skeleton-img { border-radius: 16px !important; }
 .goods-skeleton-line { border-radius: 2px; }
+
+/* ==========================================================================
+   ⭐️ 굿즈 페이지 전면 개편 (2026-08) — 사이드바 카테고리 + 멀티 쇼핑몰 가격비교
+   ========================================================================== */
+.goods-subtitle { margin-left: 16px; font-size: 12.5px; color: var(--text-muted); font-weight: 400; }
+@media (max-width: 700px) { .goods-subtitle { display: none; } }
+
+.goods-layout { display: flex; gap: 40px; align-items: flex-start; }
+.goods-sidebar { flex: 0 0 160px; position: sticky; top: 130px; display: flex; flex-direction: column; gap: 4px; }
+.goods-cat-btn { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: none; border: none; text-align: left; font-family: var(--font-body); font-size: 13.5px; font-weight: 500; color: var(--text-secondary); padding: 9px 10px; border-radius: 4px; cursor: pointer; transition: 0.2s ease; }
+.goods-cat-btn:hover { background: var(--bg-surface); color: var(--text-primary); }
+.goods-cat-btn.active { background: var(--c-accent); color: var(--bg-base); font-weight: 700; }
+.goods-cat-count { font-size: 11px; opacity: 0.7; font-family: var(--font-num); }
+
+.goods-main { flex: 1; min-width: 0; }
+.goods-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+.goods-result-count { font-size: 13px; color: var(--text-muted); }
+.goods-result-count strong { color: var(--text-primary); font-family: var(--font-num); }
+
+.goods-empty { padding: 80px 0; text-align: center; color: var(--text-muted); font-size: 14px; }
+
+.goods-badge-row { position: absolute; top: 8px; left: 8px; z-index: 5; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 16px); }
+.goods-badge { font-size: 9.5px; font-weight: 800; letter-spacing: 0.02em; padding: 3px 7px; border-radius: 3px; color: #fff; text-transform: uppercase; background: rgba(0,0,0,0.55); backdrop-filter: blur(2px); }
+.goods-badge-luckydraw { background: #2563eb; }
+.goods-badge-event { background: #059669; }
+.goods-badge-2ea1set { background: #f59e0b; color: #111; }
+.goods-badge-가격비교 { background: var(--c-accent); color: var(--bg-base); }
+
+.goods-img.no-img { background: var(--bg-surface); border: 1px dashed var(--border-light); }
+
+.goods-ended-toggle { text-align: center; margin-top: 40px; }
+.goods-ended-toggle button { background: none; border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 12.5px; padding: 10px 20px; border-radius: 30px; cursor: pointer; transition: 0.2s ease; }
+.goods-ended-toggle button:hover { border-color: var(--c-accent); color: var(--text-primary); }
+
+.skeleton-block { background: linear-gradient(90deg, var(--bg-surface) 25%, var(--border-light) 50%, var(--bg-surface) 75%); background-size: 200% 100%; animation: goods-shimmer 1.4s infinite; }
+@keyframes goods-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+@media (max-width: 900px) {
+    .goods-layout { flex-direction: column; }
+    .goods-sidebar { position: static; flex-direction: row; flex-wrap: wrap; width: 100%; overflow-x: auto; }
+    .goods-cat-btn { flex: 0 0 auto; white-space: nowrap; }
+}

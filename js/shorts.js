@@ -8,7 +8,6 @@ const SHORTS_TAG_META = [
     { key: 'zena',    label: '제나',   color: '#ff6b6b' }
 ];
 
-// 화면(홈/미디어탭)별로 현재 선택된 필터와, 필터링된 목록을 각각 기억해둠
 const shState = { home: 'all', media: 'all' };
 const shListCache = { home: [], media: [] };
 let shMediaSearchTerm = '';
@@ -28,9 +27,6 @@ function shFilterByTag(list, tagKey) {
     return list.filter(item => Array.isArray(item.tags) && item.tags.includes(tagKey));
 }
 
-/* ---------------------------------------------------
-   필터 UI — 홈: 상단 칩 / media.html: 좌측 CATEGORY 사이드바(풀영상 탭과 동일한 형태)
---------------------------------------------------- */
 function shRenderFilterChips(containerId, scope) {
     const el = document.getElementById(containerId);
     if (!el) return;
@@ -63,9 +59,6 @@ function shSetFilter(scope, key) {
     }
 }
 
-/* ---------------------------------------------------
-   카드 HTML — 클릭하면 인라인 재생이 아니라 세로 모달을 엶
---------------------------------------------------- */
 function shCardHtml(item, idx, scope) {
     return `
     <div class="sh-card" data-idx="${idx}" onclick="shModalOpen('${scope}', ${idx})">
@@ -83,9 +76,6 @@ function shCardHtml(item, idx, scope) {
     </div>`;
 }
 
-/* ---------------------------------------------------
-   홈 화면: 가로 스크롤 줄 (최신순 최대 16개)
---------------------------------------------------- */
 function shRenderRow(containerId, scope) {
     const grid = document.getElementById(containerId);
     if (!grid) return;
@@ -101,9 +91,6 @@ function shRenderRow(containerId, scope) {
     grid.innerHTML = filtered.map((item, i) => shCardHtml(item, i, scope)).join('');
 }
 
-/* ---------------------------------------------------
-   media.html 쇼츠 탭: 전체 그리드
---------------------------------------------------- */
 function shRenderGrid(containerId, scope) {
     const grid = document.getElementById(containerId);
     if (!grid) return;
@@ -149,19 +136,13 @@ function shMediaClearSearch() {
     shMediaApplyFilters();
 }
 
-/* ---------------------------------------------------
-   ⭐️ 쇼츠 재생 모달 (풀영상 모달과 동일 크기, 좌: 영상 / 우: 재생목록) — 홈/미디어 공용
---------------------------------------------------- */
 let shModalScope = null;
 let shModalIndex = -1;
 let shPlayer = null;
 let shYtApiReady = false;
 let shYtApiLoading = false;
 let shYtApiCallbacks = [];
-/* ⭐️ 영상이 로드된 직후의 첫 탭은 재생/정지를 토글하지 않고 그냥 흘려보냄.
-   (controls:0으로 유튜브 자체 UI는 없앴지만, 그것과 별개로 "탭 한 번에 바로 정지"되는 게
-   사용자 입장에서 의도치 않게 눌리는 느낌이 있어서, 영상이 바뀔 때마다 첫 탭은 무시하고
-   두 번째 탭부터 정상적으로 토글되게 함) */
+
 let shSkipNextTapToggle = false;
 
 function shEnsureYouTubeApi(cb) {
@@ -274,8 +255,8 @@ function shModalLoad(idx) {
     if (nextBtn) nextBtn.disabled = shModalIndex >= list.length - 1;
     shModalHighlightPlaylistActive();
 
-    // 영상이 바뀌면 댓글 패널은 다시 "재생목록" 탭으로 돌아가고, 댓글은 새로 불러오도록 초기화
     shCommentsLoadedForVid = null;
+    shSetupExtras(item);
     shSwitchSideTab('playlist');
 }
 
@@ -328,12 +309,10 @@ function shModalClose() {
     shDestroyPlayer();
     const media = document.getElementById('shModalMediaBox');
     if (media) media.innerHTML = '';
+    if (typeof veClearLiveChat === 'function') veClearLiveChat('shLiveChatPanel');
     document.body.style.overflow = '';
 }
 
-// 모바일: 영상 위에서 위/아래로 드래그(스와이프)하면 다음/이전 쇼츠로 이동, 탭하면 재생/일시정지
-// (iframe이 cross-origin이라 터치가 iframe 안으로 들어가면 부모로 안 올라오므로,
-//  iframe 위에 투명 오버레이를 깔아서 직접 캡처함 — YT Player API로 탭 시 재생/정지 제어)
 function shAttachSwipeCatcher() {
     const catcher = document.getElementById('shSwipeCatcher');
     if (!catcher) return;
@@ -397,9 +376,6 @@ function shAttachSwipeCatcher() {
     window.addEventListener('mouseup', onUp);
 }
 
-/* ---------------------------------------------------
-   media.html 전용: 풀영상 / 쇼츠 탭 전환
---------------------------------------------------- */
 function mediaSetView(view) {
     document.querySelectorAll('.mv-tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
     const fullView = document.getElementById('mediaFullView');
@@ -420,22 +396,22 @@ function shInitMediaViewFromQuery() {
 
 window.addEventListener('DOMContentLoaded', () => {
     try {
-        // 홈 화면(index.html)에만 존재하는 요소들
+
         if (document.getElementById('shHomeGrid')) {
             shRenderFilterChips('shHomeFilterRow', 'home');
             shRenderRow('shHomeGrid', 'home');
         }
-        // media.html에만 존재하는 요소들
+
         if (document.getElementById('shMediaGrid')) {
             shRenderTagCol('shMediaTagCol', 'media');
             shRenderGrid('shMediaGrid', 'media');
             shInitMediaViewFromQuery();
         }
-        // ⭐️ 쇼츠 가로 스크롤 영역 — 마우스 휠(세로)로도 가로 스크롤되게
+
         document.querySelectorAll('.sh-row-wrapper').forEach(wrapper => {
             wrapper.addEventListener('wheel', (e) => {
-                if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // 이미 가로 휠이면 기본 동작 유지
-                if (wrapper.scrollWidth <= wrapper.clientWidth) return; // 스크롤할 게 없으면 그냥 통과
+                if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+                if (wrapper.scrollWidth <= wrapper.clientWidth) return;
                 e.preventDefault();
                 wrapper.scrollLeft += e.deltaY;
             }, { passive: false });
@@ -445,13 +421,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/* ---------------------------------------------------
-   ⭐️ media.html 쇼츠 탭 전용 필터 서랍 — 풀영상 탭과 동일한 형태(카테고리+상세검색+관련 채널)
-   쇼츠 데이터는 멤버 태그밖에 없어서, 풀영상의 "관련 주제" 자리를 "관련 채널"로 대체해
-   #전체 #원이 #미나미 정도였던 기존 좌측 태그보다 훨씬 세밀하게 정리할 수 있게 함
---------------------------------------------------- */
 let shChannelFilters = new Set();
-let shChannelSortMode = 'popular'; // 'popular' | 'alpha' | 'en'
+let shChannelSortMode = 'popular';
 let shChannelChosung = '전체';
 
 const SH_CHO_LIST = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
@@ -497,7 +468,7 @@ function shCloseAdvFilter() {
 }
 
 function shRenderDrawer() {
-    // 1) 카테고리(멤버) 칩
+
     const catBox = document.getElementById('shAfdCategoryChips');
     const catCount = document.getElementById('shAfdCatCount');
     if (catBox) {
@@ -509,7 +480,6 @@ function shRenderDrawer() {
     }
     if (catCount) catCount.textContent = `${SHORTS_TAG_META.length}${window.t ? window.t('itemsCountSuffix') : '개 항목'}`;
 
-    // 2) 활성 필터(선택 해제 가능)
     const activeBox = document.getElementById('shAfdActiveChips');
     let actives = [];
     if (shState.media !== 'all') {
@@ -525,7 +495,6 @@ function shRenderDrawer() {
         `).join('') : `<span style="font-size:13px; color:var(--text-muted);">활성화된 필터 없음</span>`;
     }
 
-    // 3) 관련 채널 (많이 나온순 / 가나다순 / 영문순 + 초성·영문 인덱스)
     const topicBox = document.getElementById('shAfdChannelChips');
     const topicCount = document.getElementById('shAfdChannelCount');
     const toolbar = document.getElementById('shAfdChannelToolbar');
@@ -612,36 +581,34 @@ function shClearAllFilters() {
     shRenderGrid('shMediaGrid', 'media');
 }
 
-/* ---------------------------------------------------
-   ⭐️ 쇼츠 모달 — 유튜브 댓글 패널 (카톡풍 말풍선)
-   YouTube Data API v3 (commentThreads)를 씁니다.
-   YOUTUBE_API_KEY는 이 파일에 직접 넣지 않고, GitHub Actions가
-   .github/workflows/update_shorts.yml 실행할 때마다 secrets.YOUTUBE_API_KEY
-   값으로 js/youtube_public_key.js 를 자동 생성해서 채워줍니다.
-   (media.html에서 이 스크립트보다 먼저 로드됨)
---------------------------------------------------- */
-
 let shActiveSideTab = 'playlist';
 let shCommentsLoadedForVid = null;
 
 function shSwitchSideTab(tab) {
     shActiveSideTab = tab;
-    const playlistBtn = document.getElementById('shTabPlaylistBtn');
-    const commentsBtn = document.getElementById('shTabCommentsBtn');
-    const playlistList = document.getElementById('shModalPlaylistList');
-    const commentPanel = document.getElementById('shCommentPanel');
-    if (playlistBtn) playlistBtn.classList.toggle('active', tab === 'playlist');
-    if (commentsBtn) commentsBtn.classList.toggle('active', tab === 'comments');
-    if (playlistList) playlistList.style.display = tab === 'playlist' ? '' : 'none';
-    if (commentPanel) commentPanel.style.display = tab === 'comments' ? 'flex' : 'none';
+    const map = {
+        playlist: ['shTabPlaylistBtn', 'shModalPlaylistList'],
+        comments: ['shTabCommentsBtn', 'shCommentPanel'],
+        chat:     ['shTabChatBtn', 'shLiveChatPanel']
+    };
+    Object.keys(map).forEach(key => {
+        const [btnId, panelId] = map[key];
+        const btn = document.getElementById(btnId);
+        const panel = document.getElementById(panelId);
+        if (btn) btn.classList.toggle('active', key === tab);
+        if (panel) panel.style.display = (key === tab) ? (key === 'playlist' ? '' : 'flex') : 'none';
+    });
 
-    if (tab === 'comments') {
-        const list = shListCache[shModalScope] || [];
-        const item = list[shModalIndex];
-        if (item && shCommentsLoadedForVid !== item.vid) {
-            shFetchComments(item.vid);
-        }
-    }
+    const item = shCurrentItem();
+    if (!item) return;
+
+    if (tab === 'comments') shLoadComments(shGetCommentOrder());
+    if (tab === 'chat' && typeof veRenderLiveChat === 'function') veRenderLiveChat('shLiveChatPanel', item.vid);
+}
+
+function shCurrentItem() {
+    const list = shListCache[shModalScope] || [];
+    return list[shModalIndex] || null;
 }
 
 function shOpenMobileSheet() {
@@ -659,65 +626,61 @@ function shCommentEscapeHtml(str) {
     return String(str || '').replace(/[&<>'"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[m]));
 }
 
-async function shFetchComments(vid) {
-    shCommentsLoadedForVid = vid;
-    const listEl = document.getElementById('shCommentList');
-    const countEl = document.getElementById('shModalCommentCount');
-    const fabCountEl = document.getElementById('shMobileCommentCount');
-    if (!listEl) return;
+function shGetCommentOrder() {
+    return typeof veGetCommentOrder === 'function' ? veGetCommentOrder('shCommentList') : 'relevance';
+}
 
-    const setCount = (val) => {
-        if (countEl) countEl.textContent = val;
-        if (fabCountEl) fabCountEl.textContent = val;
-    };
+function shLoadComments(order) {
+    const item = shCurrentItem();
+    if (!item || typeof veLoadComments !== 'function') return;
 
-    if (typeof YOUTUBE_API_KEY === 'undefined' || !YOUTUBE_API_KEY) {
-        listEl.innerHTML = `<div class="sh-comment-error">아직 댓글창 연동이 준비 중이에요.<br><a href="https://www.youtube.com/watch?v=${encodeURIComponent(vid)}" target="_blank" rel="noopener">유튜브에서 댓글 보기 →</a></div>`;
-        setCount('');
-        return;
+    const bar = document.getElementById('shCommentSortBar');
+    if (bar) {
+        if (!bar.querySelector('.ve-comment-sortbar')) {
+            bar.innerHTML = veCommentSortBarHtml('shCommentList', 'shSetCommentOrder');
+        }
+        veUpdateSortBar(bar, order);
     }
 
-    listEl.innerHTML = `<div class="sh-comment-loading">댓글 불러오는 중...</div>`;
-    setCount('');
-
-    try {
-        const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${encodeURIComponent(vid)}&maxResults=50&order=relevance&textFormat=plainText&key=${YOUTUBE_API_KEY}`;
-        const res = await fetch(url);
-        const data = await res.json();
-
-        if (!res.ok) {
-            const reason = data && data.error && data.error.errors && data.error.errors[0] && data.error.errors[0].reason;
-            let msg = '댓글을 불러오지 못했어요.';
-            if (reason === 'commentsDisabled') msg = '이 영상은 댓글 기능이 꺼져 있어요.';
-            else if (reason === 'quotaExceeded') msg = '오늘 댓글 조회 가능 횟수를 다 썼어요. 내일 다시 시도해주세요.';
-            listEl.innerHTML = `<div class="sh-comment-error">${shCommentEscapeHtml(msg)}<br><a href="https://www.youtube.com/watch?v=${encodeURIComponent(vid)}" target="_blank" rel="noopener">유튜브에서 보기 →</a></div>`;
-            return;
+    veLoadComments({
+        vid: item.vid,
+        listId: 'shCommentList',
+        order: order,
+        onCount: (n) => {
+            const countEl = document.getElementById('shModalCommentCount');
+            const fabCountEl = document.getElementById('shMobileCommentCount');
+            if (countEl) countEl.textContent = n;
+            if (fabCountEl) fabCountEl.textContent = n;
         }
+    });
+}
 
-        const items = (data.items || []).map(it => it.snippet.topLevelComment.snippet);
-        if (!items.length) {
-            listEl.innerHTML = `<div class="sh-comment-empty">아직 댓글이 없어요.</div>`;
-            return;
+function shSetCommentOrder(order) {
+    shLoadComments(order);
+}
+
+function shFetchComments(vid) {
+    shLoadComments(shGetCommentOrder());
+}
+
+function shSetupExtras(item) {
+    const bar = document.getElementById('shModalActions');
+    if (bar && typeof veRenderActionBar === 'function') {
+        bar.dataset.title = item.title || '';
+        veRenderActionBar('shModalActions', item.vid, item.title);
+    }
+    if (typeof veResetComments === 'function') veResetComments('shCommentList');
+    if (typeof veClearLiveChat === 'function') veClearLiveChat('shLiveChatPanel');
+
+    const chatBtn = document.getElementById('shTabChatBtn');
+    if (chatBtn) {
+        chatBtn.classList.add('is-hidden');
+        if (typeof veCheckLive === 'function') {
+            veCheckLive(item.vid, false).then(isLive => {
+                const cur = shCurrentItem();
+                if (!cur || cur.vid !== item.vid) return;
+                chatBtn.classList.toggle('is-hidden', !isLive);
+            });
         }
-
-        if (countEl) countEl.textContent = items.length;
-        setCount(items.length);
-        listEl.innerHTML = items.map(c => `
-            <div class="sh-comment-item">
-                <img class="sh-comment-avatar" src="${shCommentEscapeHtml(c.authorProfileImageUrl)}" alt="" loading="lazy">
-                <div class="sh-comment-body">
-                    <span class="sh-comment-author">${shCommentEscapeHtml(c.authorDisplayName)}</span>
-                    <div class="sh-comment-bubble">${shCommentEscapeHtml(c.textOriginal || c.textDisplay)}</div>
-                    <div class="sh-comment-meta">
-                        <span class="sh-comment-like">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 21h4V9H2v12zm19-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L12.17 1 6.59 6.59C6.22 6.95 6 7.45 6 8v11c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-                            ${c.likeCount || 0}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    } catch (e) {
-        listEl.innerHTML = `<div class="sh-comment-error">댓글을 불러오는 중 오류가 났어요.<br><a href="https://www.youtube.com/watch?v=${encodeURIComponent(vid)}" target="_blank" rel="noopener">유튜브에서 보기 →</a></div>`;
     }
 }

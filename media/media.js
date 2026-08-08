@@ -721,7 +721,9 @@ function mediaNext() { if (mmIndex < mmPlaylist.length - 1) loadMmVideo(mmIndex 
 function renderMmPlaylist() {
     const listEl = document.getElementById('mmPlaylistList');
     const countEl = document.getElementById('mmPlaylistCount');
+    const countTabEl = document.getElementById('mmPlaylistCountTab');
     if (countEl) countEl.textContent = mmPlaylist.length;
+    if (countTabEl) countTabEl.textContent = mmPlaylist.length;
     if (!listEl) return;
     listEl.innerHTML = mmPlaylist.map((item, i) => {
         const title = mediaCardTitle(item);

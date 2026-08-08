@@ -21,8 +21,6 @@ function veResetComments(panelId) {
     if (veCommentState[panelId]) veCommentState[panelId].vid = null;
 }
 
-// commentThreads API는 한 번에 최대 50개까지만 내려주기 때문에,
-// 유튜브 페이지와 동일한 "총 댓글 수"는 videos.statistics.commentCount에서 별도로 가져와야 한다.
 async function veGetCommentTotal(vid) {
     if (vid in veCommentTotalCache) return veCommentTotalCache[vid];
     if (typeof YOUTUBE_API_KEY === 'undefined' || !YOUTUBE_API_KEY) return null;
@@ -57,6 +55,49 @@ function veUpdateSortBar(barEl, order) {
     });
 }
 
+// 댓글 페이지네이션 안전장치: 공유 API 키 쿼터 보호 및 브라우저 행 방지를 위해
+// 한 영상당 최대 이만큼(약 3,000개)까지만 이어서 불러온다.
+const VE_COMMENT_MAX_PAGES = 30;
+const VE_COMMENT_PAGE_SIZE = 100;
+
+// commentThreads.list를 nextPageToken으로 계속 이어서 호출해 "전체" 댓글을 가져온다.
+async function veFetchAllComments(vid, order, listId, onProgress) {
+    let items = [];
+    let pageToken = '';
+    for (let page = 0; page < VE_COMMENT_MAX_PAGES; page++) {
+        const url = `https://www.googleapis.com/youtube/v3/commentThreads`
+            + `?part=snippet&videoId=${encodeURIComponent(vid)}`
+            + `&maxResults=${VE_COMMENT_PAGE_SIZE}&order=${order}&textFormat=plainText&key=${YOUTUBE_API_KEY}`
+            + (pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : '');
+
+        let res, data;
+        try {
+            res = await fetch(url);
+            data = await res.json();
+        } catch (e) {
+            return { ok: items.length > 0, error: e, items };
+        }
+
+        // 로딩 도중 다른 영상으로 바뀌거나 정렬이 바뀌면 중단
+        const now = veCommentState[listId];
+        if (!now || now.vid !== vid || now.order !== order) {
+            return { ok: true, aborted: true, items };
+        }
+
+        if (!res.ok) {
+            if (items.length > 0) return { ok: true, items }; // 이미 받아온 만큼은 살린다
+            return { ok: false, data, items };
+        }
+
+        items = items.concat((data.items || []).map(it => it.snippet.topLevelComment.snippet));
+        if (typeof onProgress === 'function') onProgress(items.length);
+
+        if (!data.nextPageToken) break;
+        pageToken = data.nextPageToken;
+    }
+    return { ok: true, items };
+}
+
 async function veLoadComments(opts) {
     const { vid, listId, onCount } = opts;
     const order = opts.order || 'relevance';
@@ -79,21 +120,32 @@ async function veLoadComments(opts) {
     listEl.innerHTML = `<div class="sh-comment-loading">댓글 불러오는 중...</div>`;
     setCount('');
 
-    const commentUrl = `https://www.googleapis.com/youtube/v3/commentThreads`
-        + `?part=snippet&videoId=${encodeURIComponent(vid)}`
-        + `&maxResults=50&order=${order}&textFormat=plainText&key=${YOUTUBE_API_KEY}`;
+    // 총 댓글 수는 배지에 바로 반영, 목록은 그 사이 계속 이어서 불러온다.
+    veGetCommentTotal(vid).then(total => {
+        const now = veCommentState[listId];
+        if (!now || now.vid !== vid) return;
+        if (total != null) setCount(total);
+    });
+
+    const onProgress = (n) => {
+        const now = veCommentState[listId];
+        if (!now || now.vid !== vid || now.order !== order) return;
+        listEl.innerHTML = `<div class="sh-comment-loading">댓글 불러오는 중... (${n.toLocaleString('ko-KR')}개)</div>`;
+    };
 
     try {
-        const [commentRes, total] = await Promise.all([
-            fetch(commentUrl).then(res => res.json().then(data => ({ ok: res.ok, data }))),
+        const [result, total] = await Promise.all([
+            veFetchAllComments(vid, order, listId, onProgress),
             veGetCommentTotal(vid)
         ]);
 
         const now = veCommentState[listId];
         if (!now || now.vid !== vid || now.order !== order) return;
+        if (result.aborted) return;
 
-        const { ok, data } = commentRes;
-        if (!ok) {
+        const { ok, items } = result;
+        if (!ok && !items.length) {
+            const data = result.data;
             const reason = data && data.error && data.error.errors && data.error.errors[0] && data.error.errors[0].reason;
             let msg = '댓글을 불러오지 못했어요.';
             if (reason === 'commentsDisabled') msg = '이 영상은 댓글 기능이 꺼져 있어요.';
@@ -102,16 +154,16 @@ async function veLoadComments(opts) {
             setCount(total != null ? total : '');
             return;
         }
-
-        const items = (data.items || []).map(it => it.snippet.topLevelComment.snippet);
-        // 배지에는 (commentThreads가 아니라) 유튜브 페이지와 같은 실제 총 댓글 수를 표시.
-        // 총 개수 조회에 실패했을 때만 받아온 목록 개수로 대체.
         setCount(total != null ? total : items.length);
 
         if (!items.length) {
             listEl.innerHTML = `<div class="sh-comment-empty">아직 댓글이 없어요.</div>`;
             return;
         }
+
+        const capNotice = (items.length >= VE_COMMENT_MAX_PAGES * VE_COMMENT_PAGE_SIZE)
+            ? `<div class="sh-comment-cap-notice">댓글이 너무 많아 최근/추천 상위 ${items.length.toLocaleString('ko-KR')}개까지만 불러왔어요. 전체는 ${openLink}</div>`
+            : '';
 
         listEl.innerHTML = items.map(c => `
             <div class="sh-comment-item">
@@ -128,7 +180,7 @@ async function veLoadComments(opts) {
                     </div>
                 </div>
             </div>
-        `).join('');
+        `).join('') + capNotice;
         listEl.scrollTop = 0;
     } catch (e) {
         listEl.innerHTML = `<div class="sh-comment-error">댓글을 불러오는 중 오류가 났어요.<br>${openLink}</div>`;
@@ -254,8 +306,7 @@ async function veCheckLive(vid, fallbackIsLive) {
         const res = await fetch(url);
         const data = await res.json();
         const item = (data.items || [])[0];
-        const details = item && item.liveStreamingDetails;
-        veLiveCache[vid] = !!(details && details.activeLiveChatId);
+        veLiveCache[vid] = !!(item && item.liveStreamingDetails);
     } catch (e) {
         veLiveCache[vid] = !!fallbackIsLive;
     }

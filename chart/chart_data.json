@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-08T09:14:14.380Z",
+  "updatedAt": "2026-08-08T09:59:46.325Z",
   "platforms": [
     "melon",
     "genie",
@@ -90,7 +90,7 @@
           "previousRank": 9
         },
         "genie": {
-          "rank": 30,
+          "rank": 29,
           "previousRank": 30
         },
         "vibe": {

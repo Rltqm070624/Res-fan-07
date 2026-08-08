@@ -1,9 +1,12 @@
 @charset "UTF-8";
 
 .todo-wrapper-locked { min-height: 100vh; }
-.todo-page-container { padding-top: 48px; padding-bottom: 100px; }
+
+.todo-page-container { padding-top: 120px; padding-bottom: 100px; }
 
 .todo-hero { border-bottom: none; margin-bottom: 8px; }
+
+.todo-hero .section-title { line-height: 1.4; padding: 2px 0; }
 .todo-hero-sub {
     font-family: var(--font-body); font-size: 13.5px; color: var(--text-muted);
     margin: 0 0 28px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
@@ -13,7 +16,6 @@
     color: var(--c-accent); background: var(--c-accent-glow); padding: 3px 10px; border-radius: 3px;
 }
 
-/* 진행률 바 */
 .todo-progress-wrap { margin-bottom: 36px; }
 .todo-progress-track {
     width: 100%; height: 8px; border-radius: 4px; background: var(--bg-surface);
@@ -35,7 +37,6 @@
 }
 .todo-reset-btn:hover { border-color: var(--c-accent); color: var(--c-accent); }
 
-/* 카테고리 블록 */
 .todo-category-list { display: flex; flex-direction: column; gap: 36px; }
 .todo-category { }
 .todo-category-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); }
@@ -98,7 +99,7 @@
 }
 
 @media (max-width: 700px) {
-    .todo-page-container { padding-top: 30px; }
+    .todo-page-container { padding-top: 102px; }
     .todo-item { padding: 14px; gap: 12px; }
     .todo-item-title { font-size: 13.5px; }
 }

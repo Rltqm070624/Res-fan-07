@@ -1,32 +1,26 @@
 @charset "UTF-8";
 
-/* 공통 팝업 닫기 버튼 */
 .popup-close-btn { position:absolute; top:20px; right:20px; z-index:10; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:transparent; border:1px solid var(--border-light); color:var(--text-secondary); cursor:pointer; padding:0; transition:background .3s ease, color .3s ease, border-color .3s ease; }
 .popup-close-btn:hover { background:var(--bg-surface); color:var(--c-accent); border-color:var(--c-accent); }
 .popup-close-btn svg { width:13px; height:13px; }
 
-/* 공통 백드롭 */
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 9998; opacity: 0; pointer-events: none; transition: 0.4s ease; }
 .modal-backdrop.active { opacity: 1; pointer-events: auto; }
-.modal-backdrop.cal-backdrop { z-index: 8900; } 
+.modal-backdrop.cal-backdrop { z-index: 8900; }
 
-/* =========================================
-   ⭐️ 캘린더 스플릿 팝업 (좌측)
-========================================= */
-.calendar-popup-wrapper { 
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%); 
-    width: 90% !important; max-width: 720px !important; 
-    height: 85vh !important; max-height: 750px !important; min-height: 750px !important; 
-    display: flex; flex-direction: column; background: var(--bg-base); 
-    border: 1px solid var(--border-light); border-radius: 4px; z-index: 8910; 
-    padding: 30px; box-sizing: border-box; box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
-    opacity: 0; visibility: hidden; pointer-events: none; 
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s; overflow: hidden; 
+.calendar-popup-wrapper {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%);
+    width: 90% !important; max-width: 720px !important;
+    height: 85vh !important; max-height: 750px !important; min-height: 750px !important;
+    display: flex; flex-direction: column; background: var(--bg-base);
+    border: 1px solid var(--border-light); border-radius: 4px; z-index: 8910;
+    padding: 30px; box-sizing: border-box; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s; overflow: hidden;
 }
 html[data-theme="light"] .calendar-popup-wrapper { box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
 .calendar-popup-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, -50%); }
 
-/* 스플릿 간격: 캘린더를 왼쪽으로 이동 */
 @media (min-width: 1050px) {
     .calendar-popup-wrapper.active.split-active { transform: translate(calc(-50% - 260px), -50%); }
 }
@@ -61,25 +55,21 @@ html[data-theme="light"] .day-cell.has-event:hover { background: rgba(0,0,0,0.05
 
 #modalBackdrop { background: rgba(0,0,0,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 8905; }
 
-/* =========================================
-   ⭐️ 우측 디테일 창 (세로 쪼그라듬 완전 방어 & 너비 꽉 채움)
-========================================= */
-.modal-wrapper { 
-    position: fixed; z-index: 9910; top: 50%; left: 50%; 
-    width: 100% !important; max-width: 480px !important; 
-    /* 🚨 JS가 높이를 맘대로 줄이지 못하도록 캘린더와 동일한 높이로 무조건 강제 고정 🚨 */
-    height: 85vh !important; 
-    max-height: 750px !important; 
-    min-height: 750px !important; 
-    background: var(--bg-base); border: 1px solid var(--border-light); 
-    border-radius: 4px; box-sizing: border-box; box-shadow: 0 12px 32px rgba(0,0,0,0.35); 
-    transform: translate(150%, -50%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s; 
+.modal-wrapper {
+    position: fixed; z-index: 9910; top: 50%; left: 50%;
+    width: 100% !important; max-width: 480px !important;
+
+    height: 85vh !important;
+    max-height: 750px !important;
+    min-height: 750px !important;
+    background: var(--bg-base); border: 1px solid var(--border-light);
+    border-radius: 4px; box-sizing: border-box; box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    transform: translate(150%, -50%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s;
     opacity: 0; visibility: hidden; pointer-events: none; overflow: hidden; display: flex; flex-direction: column;
 }
 html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
 .modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; }
 
-/* 우측 모달 위치 */
 @media (min-width: 1050px) {
     .modal-wrapper.active { transform: translate(calc(-50% + 360px), -50%); }
 }
@@ -88,40 +78,39 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 #modalScheduleText::-webkit-scrollbar { width: 6px; }
 #modalScheduleText::-webkit-scrollbar-thumb { background: rgba(150,150,150,0.3); border-radius: 3px; }
 
-/* 우측 모달 가운데 정렬 */
-.elegant-date-header { 
-    font-family: var(--font-num); font-size: 15px; font-weight: 700; 
-    color: var(--text-primary); margin-bottom: 6px; padding-bottom: 14px; 
-    border-bottom: 1px solid var(--border-light); letter-spacing: 0.3px; text-align: left; 
+.elegant-date-header {
+    font-family: var(--font-num); font-size: 15px; font-weight: 700;
+    color: var(--text-primary); margin-bottom: 6px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-light); letter-spacing: 0.3px; text-align: left;
     display: block; width: 100%; flex-shrink: 0;
 }
 
-.ec-card { 
-    margin: 0; 
-    padding: 16px 2px; 
-    background: transparent; 
+.ec-card {
+    margin: 0;
+    padding: 16px 2px;
+    background: transparent;
     border: none;
     border-bottom: 1px solid var(--border-light);
     border-radius: 0;
-    display: flex; 
-    flex-direction: column; 
-    align-items: stretch; 
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     gap: 8px;
     width: 100%;
     box-sizing: border-box;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
 .ec-card:last-child { border-bottom: none; }
 
 .ec-badge { flex-shrink: 0; align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; padding: 3px 10px; border-radius: 2px; color: #000; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; margin-top: 0; font-family: var(--font-body); }
-.tag-broadcast { background: #f0ebf8; color: #7b52ab; } 
-.tag-radio { background: #fff3e0; color: #e65100; } 
+.tag-broadcast { background: #f0ebf8; color: #7b52ab; }
+.tag-radio { background: #fff3e0; color: #e65100; }
 
 .ec-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
-.ec-title { 
-    font-family: var(--font-head); font-size: 14px; font-weight: 600; 
-    color: var(--text-primary); margin: 0; line-height: 1.4; 
-    word-break: keep-all; text-align: left; 
+.ec-title {
+    font-family: var(--font-head); font-size: 14px; font-weight: 600;
+    color: var(--text-primary); margin: 0; line-height: 1.4;
+    word-break: keep-all; text-align: left;
 }
 .ec-meta { display: flex; flex-direction: row; align-items: center; gap: 8px; margin-bottom: 0; width: 100%; }
 .ec-meta-row { display: flex; justify-content: flex-start; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 12px; width: 100%; }
@@ -130,16 +119,13 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
 
 .ec-img-wrapper img { width: 100%; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); object-fit: contain; }
 
-/* 일정이 없을 때 세로 정렬 중앙 고정 */
 .schedule-detail-empty { text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 300; margin: auto 0; padding: 0; flex: 1; display: flex; align-items: center; justify-content: center; }
 
-/* 모바일 바텀시트 드래그 핸들 (모바일에서만 노출) */
 .sheet-drag-handle { display: none; width: 100%; padding: 10px 0 4px; flex-shrink: 0; cursor: grab; touch-action: none; }
 .sheet-drag-handle::before { content: ''; display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--border-highlight); margin: 0 auto; }
 .modal-wrapper.active.dragging { transition: none !important; transform: translateY(var(--drag-y, 0px)) !important; }
 .modal-wrapper.active.sheet-snap { transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1) !important; transform: translateY(var(--drag-y, 0px)) !important; }
 
-/* 배경 화면 설정 — 데스크톱: 톱니바퀴 바로 아래에 뜨는 드롭다운 / 모바일: 하단 바텀시트 */
 .bg-settings-sheet {
     position: fixed; top: 84px; left: 48px; z-index: 9999;
     width: 420px; max-width: calc(100vw - 24px); max-height: 78vh; box-sizing: border-box;
@@ -195,7 +181,6 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
     .bg-option { width: 72px; height: 108px; }
 }
 
-/* 모바일 모달 바텀시트 유지 (모바일에서는 높이 고정 해제) */
 @media (max-width: 1049px) {
     .calendar-popup-wrapper.active.split-active { transform: translate(-50%, -50%); }
     .calendar-popup-wrapper { width: 95% !important; height: 90vh !important; max-height: none !important; min-height: 0 !important; padding: 45px 12px 20px !important; }
@@ -213,9 +198,6 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
     .legend-item { font-size: 10px; }
 }
 
-/* =========================================
-   ⭐️ 앨범 상세 모달 (MV + 트랙리스트, 가로형)
-========================================= */
 .album-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
     width: 92%; max-width: 1080px; height: 82vh; max-height: 720px;
@@ -226,7 +208,7 @@ html[data-theme="light"] .modal-wrapper { background: #FFFFFF; box-shadow: 0 30p
     box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,77,148,0.1);
     box-sizing: border-box;
 }
-/* 모달 배경(.modal-backdrop, z-index 9998)의 blur 레이어보다 항상 위에 오도록 active 시 z-index를 끌어올림 */
+
 .album-modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; z-index: 9999; transform: translate(-50%, -50%) scale(1); }
 html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
 
@@ -251,28 +233,25 @@ html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
 
 .album-modal-media { flex: 1.3; background: #000; position: relative; min-width: 0; z-index: 1; }
 
-/* 🚨 모자이크/블러 원천 차단: 영상이 항상 최상단에 오도록 z-index 부여 🚨 */
 .album-modal-media iframe,
-.album-modal-media video { 
-    width: 100%; height: 100%; border: 0; display: block; 
-    position: relative; z-index: 10 !important; filter: none !important; 
+.album-modal-media video {
+    width: 100%; height: 100%; border: 0; display: block;
+    position: relative; z-index: 10 !important; filter: none !important;
 }
 
-/* 🚨 화면을 흐리게 만들던 주범인 오버레이 완벽 파괴 🚨 */
-.album-cover-fallback { 
+.album-cover-fallback {
     position: absolute !important; inset: 0; z-index: 0 !important;
-    background-size: contain !important; 
+    background-size: contain !important;
     background-repeat: no-repeat !important;
-    background-position: center !important; 
+    background-position: center !important;
     filter: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
 
-/* 문제의 원흉이었던 블러 처리 가짜 배경 삭제 */
 .album-cover-fallback::before,
-.album-cover-fallback::after { 
-    display: none !important; 
+.album-cover-fallback::after {
+    display: none !important;
     content: none !important;
 }
 
@@ -303,9 +282,6 @@ html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
     .album-modal-title { font-size: 22px; margin-bottom: 16px; }
 }
 
-/* =========================================
-   ⭐️ 수상/광고 히스토리 모달 — 리디자인 v3 (에디토리얼 레이아웃으로 정리)
-========================================= */
 .honors-history-modal {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
     width: 94%; max-width: 980px; height: auto; max-height: min(88vh, 860px);
@@ -320,7 +296,6 @@ html[data-theme="light"] .album-modal-wrapper { background: #FFFFFF; }
 .honors-history-modal.active { opacity: 1; visibility: visible; pointer-events: auto; z-index: 9999; transform: translate(-50%, -50%) scale(1); }
 html[data-theme="light"] .honors-history-modal { background: #FFFFFF; }
 
-/* 상단 고정 헤더 — 그라데이션 워시 제거, 담백하게 */
 .honors-history-head {
     flex-shrink: 0; position: relative; padding: 36px 64px 0 44px; box-sizing: border-box;
     display: flex; flex-direction: column; gap: 5px;
@@ -330,7 +305,6 @@ html[data-theme="light"] .honors-history-modal { background: #FFFFFF; }
 .honors-history-head-title { font-family: var(--font-head); font-size: 23px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; margin-bottom: 24px; }
 .honors-history-modal .popup-close-btn { top: 28px; right: 28px; z-index: 5; }
 
-/* ⭐️ 배너 이미지를 헤더 자체로 사용 — 이미지 전체가 보이도록 letterbox, 모든 배너 동일 사이즈 */
 .honors-history-head.has-banner {
     padding: 0; height: 230px; overflow: hidden; justify-content: flex-end;
 }
@@ -348,9 +322,6 @@ html[data-theme="light"] .honors-history-modal { background: #FFFFFF; }
 .honors-history-head.banner-failed .honors-history-head-title { position: static; color: var(--text-primary); padding: 0; margin-bottom: 24px; text-shadow: none; font-family: var(--font-head); font-size: 23px; font-weight: 700; }
 .honors-history-head.banner-failed::before { display: none; }
 
-/* 탭 바 — 도형 없이 문구 + 밑줄로만, 스크롤 시 우측 상단에 고정.
-   ⭐️ body 자체엔 좌우 패딩을 안 주고(아래) 탭바가 폭 100%를 그대로 채우게 해서
-   음수 마진으로 폭을 맞추다 생기던 미세한 틈/이음선을 원천적으로 없앰. */
 .honors-tabbar {
     display: flex; gap: 26px; flex-wrap: wrap; justify-content: center;
     width: 100%; box-sizing: border-box; margin: 0 0 14px;
@@ -380,7 +351,6 @@ html[data-theme="light"] .honors-tabbar { background: #ffffff; }
 
 .honors-panel-subtitle { font-family: var(--font-num); font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin: 28px 0 4px; }
 
-/* 장황한 안내문 대신 절제된 스탯 배지 하나로 총 건수를 표시 */
 .honors-panel-top { display: flex; justify-content: flex-end; margin: 26px 0 2px; }
 .honors-stat-pill {
     display: inline-flex; align-items: baseline; gap: 6px;
@@ -393,7 +363,6 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(227,28,107,0.22)
 
 .honors-logo { width: auto; object-fit: contain; vertical-align: middle; flex-shrink: 0; filter: grayscale(0.15); }
 
-/* 타임라인 — 점/연결선/떠 있는 카드 대신 인덱스 번호 + 가로줄 구분의 에디토리얼 리스트 */
 .honors-timeline { list-style: none; margin: 0; padding: 0; }
 .honors-timeline li { display: flex; align-items: flex-start; gap: 22px; padding: 18px 14px; border-top: 1px solid var(--border-light); border-radius: 4px; transition: background 0.3s ease, padding 0.3s ease, margin 0.3s ease; }
 .honors-timeline li:first-child { border-top: none; padding-top: 6px; }
@@ -420,14 +389,12 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(227,28,107,0.22)
 .ht-notes li { font-family: var(--font-body); font-size: 12.5px; color: var(--text-muted); position: relative; padding-left: 14px; line-height: 1.4; }
 .ht-notes li::before { content: '—'; position: absolute; left: 0; color: var(--border-highlight); font-weight: 600; }
 
-/* 관왕 뱃지 — 채워진 필 대신 얇은 아웃라인 칩으로, 톤을 한 단계 낮춤 */
 .ht-head .h-tag {
     font-family: var(--font-num); font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
     color: var(--c-accent); background: var(--c-accent-glow); border: 1px solid transparent;
     padding: 3px 10px; border-radius: 3px; white-space: nowrap;
 }
 
-/* 프로그램별 순위 — 카드 그리드 대신 막대 비교가 있는 랭킹 리스트 */
 .honors-cum-list { display: flex; flex-direction: column; padding-bottom: 30px; }
 .cum-row { display: flex; align-items: center; gap: 18px; padding: 18px 0; border-top: 1px solid var(--border-light); }
 .cum-row:first-child { border-top: none; padding-top: 10px; }
@@ -442,7 +409,6 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(227,28,107,0.22)
 .cum-wins { flex: 0 0 46px; text-align: right; font-family: var(--font-num); font-size: 16px; font-weight: 700; color: var(--text-primary); }
 .cum-wins em { font-style: normal; font-size: 11px; color: var(--text-muted); margin-left: 2px; font-weight: 500; }
 
-/* 광고·콜라보·화보·홍보대사 — 가운데 세로선을 기준으로 좌우 번갈아 배치되는 연대기형 타임라인 (4개 탭 공통) */
 .ad-timeline { position: relative; list-style: none; margin: 4px 0 0; padding: 8px 0 4px; }
 .ad-timeline::before {
     content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
@@ -490,7 +456,6 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(227,28,107,0.22)
     .ht-date { margin-left: 0; flex-basis: 100%; order: 5; }
     .ht-song-inline { font-size: 15px; }
 
-    /* 좁은 화면에서는 타임라인을 왼쪽 정렬 단일 컬럼으로 축소 */
     .honors-history-head.has-banner { height: 130px; padding: 0; }
     .honors-history-head.has-banner .honors-history-head-title {
         font-size: 19px !important; font-weight: 700 !important; font-family: var(--font-head) !important;
@@ -502,10 +467,6 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(227,28,107,0.22)
     .ad-tl-card { width: 100%; }
 }
 
-/* =========================================
-   ⭐️ 영상(미디어) 재생 모달 — 제목 / 날짜 / 유튜브 영상 / 이전·다음 / 재생목록
-   모바일·데스크탑 공통으로 화면 중앙에 모달로 뜸 (인라인 재생 X)
-========================================= */
 .media-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
     width: 94%; max-width: 1120px; height: 86vh; max-height: 780px;
@@ -520,7 +481,6 @@ html[data-theme="light"] .honors-stat-pill { border-color: rgba(227,28,107,0.22)
 .media-modal-wrapper.active { opacity: 1; visibility: visible; pointer-events: auto; z-index: 9999; transform: translate(-50%, -50%) scale(1); }
 html[data-theme="light"] .media-modal-wrapper { background: #FFFFFF; }
 
-/* 본문: 좌측 영상 컬럼 + 우측 재생목록 컬럼 (데스크톱 기준) */
 .media-modal-body { display: flex; flex: 1; min-height: 0; }
 
 .media-modal-video-col { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--border-light); }
@@ -539,7 +499,6 @@ html[data-theme="light"] .media-modal-wrapper { background: #FFFFFF; }
 .mm-nav-btn svg { width: 14px; height: 14px; }
 .mm-nav-next { margin-left: auto; }
 
-/* 우측 재생목록 컬럼 */
 .media-modal-playlist { width: 360px; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; background: var(--bg-surface); }
 .mm-drag-handle { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 10px 0 8px; cursor: grab; flex-shrink: 0; user-select: none; touch-action: none; }
 .mm-drag-handle:active { cursor: grabbing; }
@@ -556,10 +515,6 @@ html[data-theme="light"] .media-modal-wrapper { background: #FFFFFF; }
     .media-modal-playlist { width: 300px; }
 }
 
-/* =========================================
-   ⭐️ 쇼츠 재생 모달 — 풀영상 모달(.media-modal-wrapper)과 동일한 전체 크기.
-   좌: 세로(9:16) 영상 / 우: 다음 재생목록
-========================================= */
 .sh-modal-wrapper {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
     width: 92%; max-width: 800px; height: 88vh; max-height: 820px;
@@ -576,13 +531,11 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
 
 .sh-modal-body { display: flex; flex: 1; min-height: 0; }
 
-/* 좌측: 영상 컬럼 */
 .sh-modal-video-col { width: 54%; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--border-light); }
 .sh-modal-head { padding: 20px 20px 12px; flex-shrink: 0; }
 .sh-modal-title { font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--text-primary); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .sh-modal-sub { margin-top: 6px; font-family: var(--font-num); font-size: 11px; color: var(--text-muted); }
 
-/* ⭐️ 높이를 100% 꽉 채운 뒤, 그 높이 기준으로 9:16 비율을 계산 (너비 기준이면 세로가 짧아짐) */
 .sh-modal-media { flex: 1; min-height: 0; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; touch-action: pan-y; }
 .sh-modal-media-box { position: relative; height: 100%; aspect-ratio: 9 / 16; max-width: 100%; }
 .sh-modal-media-box iframe, .sh-modal-media-box #shYtPlayer { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
@@ -592,7 +545,6 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
 .sh-modal-nav { display: flex; gap: 10px; padding: 14px 20px; flex-shrink: 0; border-top: 1px solid var(--border-light); }
 .sh-modal-nav .mm-nav-btn { flex: 1; justify-content: center; margin-left: 0; }
 
-/* 우측: 다음 재생목록 */
 .sh-modal-playlist { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--bg-surface); }
 .sh-modal-side-tabs { display: flex; align-items: center; gap: 4px; padding: 14px 14px 10px; flex-shrink: 0; border-bottom: 1px solid var(--border-light); }
 .sh-side-tab { appearance: none; background: transparent; border: none; cursor: pointer; padding: 7px 10px; border-radius: 4px; font-family: var(--font-head); font-size: 11.5px; font-weight: 800; letter-spacing: 0.03em; color: var(--text-muted); display: flex; align-items: center; gap: 5px; transition: color 0.2s ease, background 0.2s ease; }
@@ -603,7 +555,6 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
 .sh-modal-playlist-thumb { width: 46px; aspect-ratio: 9 / 16; border-radius: 3px; overflow: hidden; flex-shrink: 0; background: #000; }
 .sh-modal-playlist-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* 댓글 패널 — 카톡풍 말풍선 */
 .sh-comment-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .sh-comment-list { flex: 1; min-height: 0; overflow-y: auto; padding: 16px 14px 20px; display: flex; flex-direction: column; gap: 14px; }
 .sh-comment-item { display: flex; gap: 9px; align-items: flex-start; }
@@ -647,7 +598,6 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
     .sh-modal-video-col { border-bottom: none; position: relative; }
     .sh-modal-nav { display: none; }
 
-    /* 재생목록/댓글 패널을 완전히 숨기지 않고, 아래에서 올라오는 바텀시트로 전환 */
     .sh-modal-playlist {
         display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
         height: 68vh; max-height: 68vh; border-radius: 16px 16px 0 0;
@@ -706,4 +656,113 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
     .mm-drag-handle::before { display: block; }
     .mm-playlist-list { max-height: 120px !important; flex: none; }
     .media-modal-playlist.expanded .mm-playlist-list { max-height: 42vh !important; }
+}
+
+.ve-comment-sortbar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 14px; flex-shrink: 0;
+    border-bottom: 1px solid var(--border-light);
+}
+.ve-sort-btn {
+    appearance: none; background: transparent; cursor: pointer;
+    border: 1px solid var(--border-light); border-radius: 999px;
+    padding: 5px 13px; font-family: var(--font-head); font-size: 11px; font-weight: 700;
+    color: var(--text-muted); transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.ve-sort-btn:hover { color: var(--text-secondary); border-color: var(--border-highlight); }
+.ve-sort-btn.active { color: var(--c-accent); border-color: var(--c-accent); background: var(--c-accent-glow); }
+
+.ve-comment-date { font-family: var(--font-num); font-size: 10px; color: var(--text-muted); }
+
+.ve-action-bar {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 12px 20px; flex-shrink: 0;
+    border-top: 1px solid var(--border-light);
+}
+.ve-action-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: transparent; border: 1px solid var(--border-light); border-radius: 3px;
+    color: var(--text-secondary); text-decoration: none; cursor: pointer;
+    font-family: var(--font-head); font-size: 12px; font-weight: 700;
+    padding: 8px 14px; transition: color 0.25s ease, border-color 0.25s ease;
+}
+.ve-action-btn:hover { color: var(--c-accent); border-color: var(--c-accent); }
+.ve-action-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.ve-origin-btn svg { color: #ff0000; }
+
+.ve-share-group { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
+.ve-share-label {
+    font-family: var(--font-head); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.05em; color: var(--text-muted); margin-right: 2px;
+}
+.ve-share-btn {
+    width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+    background: var(--bg-surface); border: 1px solid var(--border-light);
+    display: inline-flex; align-items: center; justify-content: center; padding: 0;
+    color: var(--text-secondary);
+    transition: border-color 0.25s ease, transform 0.2s ease, color 0.25s ease;
+}
+.ve-share-btn:hover { border-color: var(--c-accent); transform: translateY(-2px); color: var(--c-accent); }
+.ve-share-btn img { width: 17px; height: 17px; object-fit: contain; display: block; }
+.ve-share-btn svg { width: 15px; height: 15px; }
+html[data-theme="dark"] .ve-share-btn[data-share="x"] img { filter: invert(1); }
+
+.ve-livechat-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--bg-base); }
+.ve-livechat-frame { flex: 1; width: 100%; min-height: 0; border: 0; display: block; }
+.ve-livechat-fallback {
+    flex-shrink: 0; padding: 10px 14px; text-align: center;
+    font-family: var(--font-body); font-size: 11.5px; color: var(--text-muted);
+    border-top: 1px solid var(--border-light);
+}
+.ve-livechat-fallback a { color: var(--c-accent); }
+.ve-livechat-none {
+    padding: 40px 16px; text-align: center;
+    font-family: var(--font-body); font-size: 12.5px; line-height: 1.7; color: var(--text-muted);
+}
+
+.ve-toast {
+    position: fixed; left: 50%; bottom: 40px; transform: translate(-50%, 12px);
+    z-index: 99999; pointer-events: none; opacity: 0;
+    background: rgba(24,24,27,0.94); color: #fff; border-radius: 4px;
+    padding: 11px 18px; font-family: var(--font-body); font-size: 12.5px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.ve-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+.mm-side-tabs {
+    display: flex; align-items: center; gap: 4px; padding: 14px 14px 10px;
+    flex-shrink: 0; border-bottom: 1px solid var(--border-light);
+}
+.mm-side-tab {
+    appearance: none; background: transparent; border: none; cursor: pointer;
+    padding: 7px 10px; border-radius: 4px;
+    font-family: var(--font-head); font-size: 11.5px; font-weight: 800; letter-spacing: 0.03em;
+    color: var(--text-muted); display: flex; align-items: center; gap: 5px;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+.mm-side-tab b { color: var(--c-accent); font-family: var(--font-num); font-weight: 800; }
+.mm-side-tab.active { color: var(--text-primary); background: var(--bg-base); }
+.mm-side-tab:hover:not(.active) { color: var(--text-secondary); }
+.mm-side-tab.is-hidden, .sh-side-tab.is-hidden { display: none; }
+
+.mm-comment-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.mm-comment-panel .sh-comment-list { flex: 1; min-height: 0; }
+
+@media (min-width: 701px) {
+    .media-modal-playlist .mm-drag-handle { display: none; }
+    .media-modal-playlist .mm-playlist-list { max-height: none !important; flex: 1; }
+}
+@media (max-width: 700px) {
+    .media-modal-playlist .mm-side-tabs { padding: 10px 12px 8px; }
+    .ve-action-bar { padding: 10px 14px; gap: 8px; }
+    .ve-share-group { margin-left: 0; width: 100%; justify-content: flex-end; }
+    .ve-action-btn { font-size: 11.5px; padding: 7px 12px; }
+}
+
+@media (max-width: 700px) {
+    .media-modal-playlist .mm-comment-panel,
+    .media-modal-playlist .ve-livechat-panel { max-height: 46vh; min-height: 220px; }
+    .media-modal-playlist .mm-comment-panel .sh-comment-list { max-height: 38vh; }
+    .ve-livechat-frame { min-height: 200px; }
 }

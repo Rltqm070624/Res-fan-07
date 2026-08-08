@@ -654,8 +654,8 @@ html[data-theme="light"] .sh-modal-wrapper { background: #FFFFFF; }
 @media (max-width: 700px) {
     .media-modal-wrapper { width: 94%; height: 86vh; max-width: 94%; }
     .media-modal-body { flex-direction: column; min-height: 0; }
-    .media-modal-video-col { border-right: none; }
-    .media-modal-playlist { width: 100%; border-top: 1px solid var(--border-light); }
+    .media-modal-video-col { border-right: none; min-height: 34vh; flex-shrink: 0; }
+    .media-modal-playlist { width: 100%; border-top: 1px solid var(--border-light); min-height: 0; }
     .media-modal-head { padding: 18px 50px 12px 20px; }
     .media-modal-nav { padding: 12px 16px; }
     .mm-drag-handle { cursor: grab; padding: 10px 0 8px; align-items: center; }
@@ -774,7 +774,7 @@ html[data-theme="dark"] .ve-share-btn[data-share="x"] img { filter: invert(1); }
 
 @media (max-width: 700px) {
     .media-modal-playlist .mm-comment-panel,
-    .media-modal-playlist .ve-livechat-panel { max-height: 46vh; min-height: 220px; }
-    .media-modal-playlist .mm-comment-panel .sh-comment-list { max-height: 38vh; }
+    .media-modal-playlist .ve-livechat-panel { max-height: 40vh; min-height: 200px; }
+    .media-modal-playlist .mm-comment-panel .sh-comment-list { max-height: 32vh; }
     .ve-livechat-frame { min-height: 200px; }
 }

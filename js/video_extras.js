@@ -299,12 +299,19 @@ function veShare(kind, vid, btnEl) {
 const veLiveCache = {};
 const veLiveStatusCache = {}; // vid -> 'live' | 'ended' | 'none'
 
-// 유튜브는 "진행 중인 라이브 채팅"과 "끝난 라이브의 채팅 다시보기"를 서로 다른 엔드포인트로 제공한다.
-// 지금까지는 항상 live_chat(진행 중 전용)만 써서, 끝난 라이브/최초공개 영상에서
-// "채팅을 사용할 수 없는 실시간 스트림입니다" 오류가 났었다. 종료된 영상은 live_chat_replay를 써야 한다.
-function veLiveChatUrl(vid, status) {
-    const path = status === 'live' ? 'live_chat' : 'live_chat_replay';
-    return `https://www.youtube.com/${path}?v=${encodeURIComponent(vid)}&embed_domain=${encodeURIComponent(location.hostname)}`;
+// 유튜브 공식 문서 기준: 실시간 채팅 iframe 임베드(live_chat)는
+//  1) "라이브가 진행 중일 때만" 공식 지원되고, 방송이 끝난 뒤의 "채팅 다시보기"를 위한
+//     공식 임베드 엔드포인트는 따로 존재하지 않는다(live_chat_replay는 실제로 없는 주소라
+//     "Something went wrong" 오류가 났음 — 이전 수정이 잘못된 정보였음, 원복).
+//  2) 모바일 웹 브라우저에서는 애초에 채팅 임베드 자체를 지원하지 않는다.
+// 그래서 (a) 모바일이거나 (b) 방송이 이미 끝난 경우엔 iframe을 아예 시도하지 않고,
+// 유튜브로 바로 가는 안내만 보여준다 (veRenderLiveChat 참고).
+function veIsMobileViewport() {
+    return !!(window.matchMedia && window.matchMedia('(max-width: 700px)').matches);
+}
+
+function veLiveChatUrl(vid) {
+    return `https://www.youtube.com/live_chat?v=${encodeURIComponent(vid)}&embed_domain=${encodeURIComponent(location.hostname)}`;
 }
 
 async function veGetLiveStatus(vid) {
@@ -346,15 +353,28 @@ async function veRenderLiveChat(containerId, vid) {
     if (!el) return;
     el.innerHTML = `<div class="sh-comment-loading">채팅 불러오는 중...</div>`;
 
-    const status = await veGetLiveStatus(vid);
-    // 화면이 바뀌었으면(다른 영상/탭 전환) 중단
-    if (!el.isConnected) return;
+    const openLink = `<a href="${veWatchUrl(vid)}" target="_blank" rel="noopener">유튜브에서 바로 보기 →</a>`;
 
-    const src = veLiveChatUrl(vid, status);
+    // 모바일 웹은 유튜브가 채팅 임베드 자체를 지원하지 않으므로 iframe을 시도하지 않는다.
+    if (veIsMobileViewport()) {
+        el.innerHTML = `<div class="ve-livechat-none">모바일 웹에서는 유튜브 정책상 채팅을 화면에 직접 띄울 수 없어요.<br>${openLink}</div>`;
+        return;
+    }
+
+    const status = await veGetLiveStatus(vid);
+    if (!el.isConnected) return; // 그 사이 다른 영상/탭으로 바뀌었으면 중단
+
+    // 끝난 라이브/최초공개는 채팅 다시보기를 임베드할 공식 방법이 없어 iframe을 시도하지 않는다.
+    if (status !== 'live') {
+        el.innerHTML = `<div class="ve-livechat-none">방송이 끝난 영상은 채팅 다시보기를 이 화면에 직접 띄울 수 없어요.<br>유튜브에서는 채팅 다시보기를 볼 수 있어요.<br>${openLink}</div>`;
+        return;
+    }
+
+    const src = veLiveChatUrl(vid);
     el.innerHTML = `<iframe class="ve-livechat-frame" src="${src}"
         frameborder="0" title="실시간 채팅"></iframe>
         <div class="ve-livechat-fallback">
-            채팅이 보이지 않으면 <a href="${veWatchUrl(vid)}" target="_blank" rel="noopener">유튜브에서 바로 보기 →</a>
+            채팅이 보이지 않으면 ${openLink}
         </div>`;
 }
 

@@ -619,6 +619,93 @@ function loadMmVideo(index) {
     if (modalDate) modalDate.textContent = item.sub ? `${escapeHtml(item.sub)} · ${item.date}` : (item.date || '');
     updateMmNavButtons();
     highlightMmPlaylistActive();
+
+    mmSetupExtras(item);
+    mmSwitchSideTab('playlist');
+}
+
+// -----------------------------------------------------
+// 풀영상 모달 - 댓글 / 원본보기 / 공유 / 실시간채팅
+// -----------------------------------------------------
+let mmActiveSideTab = 'playlist';
+
+function mmCurrentItem() {
+    return mmPlaylist[mmIndex] || null;
+}
+
+function mmSwitchSideTab(tab) {
+    mmActiveSideTab = tab;
+    const map = {
+        playlist: ['mmTabPlaylistBtn', 'mmPlaylistList'],
+        comments: ['mmTabCommentsBtn', 'mmCommentPanel'],
+        chat:     ['mmTabChatBtn', 'mmLiveChatPanel']
+    };
+    Object.keys(map).forEach(key => {
+        const [btnId, panelId] = map[key];
+        const btn = document.getElementById(btnId);
+        const panel = document.getElementById(panelId);
+        if (btn) btn.classList.toggle('active', key === tab);
+        if (panel) panel.style.display = (key === tab) ? (key === 'playlist' ? '' : 'flex') : 'none';
+    });
+
+    const item = mmCurrentItem();
+    if (!item) return;
+
+    if (tab === 'comments') mmLoadComments(mmGetCommentOrder());
+    if (tab === 'chat' && typeof veRenderLiveChat === 'function') veRenderLiveChat('mmLiveChatPanel', item.vid);
+}
+
+function mmGetCommentOrder() {
+    return typeof veGetCommentOrder === 'function' ? veGetCommentOrder('mmCommentList') : 'relevance';
+}
+
+function mmLoadComments(order) {
+    const item = mmCurrentItem();
+    if (!item || typeof veLoadComments !== 'function') return;
+
+    const bar = document.getElementById('mmCommentSortBar');
+    if (bar) {
+        if (!bar.querySelector('.ve-comment-sortbar')) {
+            bar.innerHTML = veCommentSortBarHtml('mmCommentList', 'mmSetCommentOrder');
+        }
+        veUpdateSortBar(bar, order);
+    }
+
+    veLoadComments({
+        vid: item.vid,
+        listId: 'mmCommentList',
+        order: order,
+        onCount: (n) => {
+            const countEl = document.getElementById('mmCommentCount');
+            if (countEl) countEl.textContent = n;
+        }
+    });
+}
+
+function mmSetCommentOrder(order) {
+    mmLoadComments(order);
+}
+
+function mmSetupExtras(item) {
+    const bar = document.getElementById('mediaModalActions');
+    if (bar && typeof veRenderActionBar === 'function') {
+        bar.dataset.title = item.title || mediaCardTitle(item) || '';
+        veRenderActionBar('mediaModalActions', item.vid, bar.dataset.title);
+    }
+    if (typeof veResetComments === 'function') veResetComments('mmCommentList');
+    if (typeof veClearLiveChat === 'function') veClearLiveChat('mmLiveChatPanel');
+
+    const chatBtn = document.getElementById('mmTabChatBtn');
+    if (chatBtn) {
+        chatBtn.classList.add('is-hidden');
+        if (typeof veCheckLive === 'function') {
+            veCheckLive(item.vid, !!item.isLive).then(isLive => {
+                const cur = mmCurrentItem();
+                if (!cur || cur.vid !== item.vid) return;
+                chatBtn.classList.toggle('is-hidden', !isLive);
+            });
+        }
+    }
 }
 
 function updateMmNavButtons() {
@@ -673,6 +760,7 @@ function mediaClosePlayer() {
     if (modal) modal.classList.remove('active');
     if (backdrop) backdrop.classList.remove('active');
     if (modalMedia) modalMedia.innerHTML = '';
+    if (typeof veClearLiveChat === 'function') veClearLiveChat('mmLiveChatPanel');
     document.body.style.overflow = '';
 }
 
